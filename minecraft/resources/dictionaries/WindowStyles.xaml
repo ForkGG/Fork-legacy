@@ -1,0 +1,108 @@
+﻿<ResourceDictionary x:Class="nihilus.WindowStyles"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="DefaultWindow" TargetType="{x:Type Window}">
+        <Setter Property="WindowChrome.WindowChrome">
+            <Setter.Value>
+                <WindowChrome CaptionHeight="30"
+                              CornerRadius="0"
+                              GlassFrameThickness="0,0,0,1"
+                              ResizeBorderThickness="5"
+                              NonClientFrameEdges="None"
+                              UseAeroCaptionButtons="False" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Window}">
+                    <Border Background="{DynamicResource backgroundDefault}">
+                        <Border.Style>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Setter Property="BorderBrush" Value="{DynamicResource outerBorder}"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=WindowState}" Value="Maximized">
+                                        <Setter Property="BorderThickness" Value="8"/>
+                                        <Setter Property="BorderBrush" Value="{x:Null}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+
+                        <DockPanel>
+                            <DockPanel Height="30" LastChildFill="False" DockPanel.Dock="Top">
+                                <Image
+                                    DockPanel.Dock="Left"
+                                    Width="auto"
+                                    Height="20"
+                                    Margin="5"
+                                    Source="/resources/images/title.png"/>
+
+                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                                    <!-- Minimize Button -->
+                                    <Button Style="{DynamicResource Borderless}" Width="50" Click="BtnMinimizeClick" WindowChrome.IsHitTestVisibleInChrome="True">
+                                        <Image Width="10" Height="10" Source="/resources/images/minimize.png" />
+                                    </Button>
+
+                                    <!-- Maximize Button -->
+                                    <Button Style="{DynamicResource Borderless}" Width="50" Click="BtnMaximizeClick" WindowChrome.IsHitTestVisibleInChrome="True">
+                                        <Image Width="10" Height="10">
+                                            <Image.Style>
+                                                <Style TargetType="{x:Type Image}">
+                                                    <Setter Property="Source" Value="/resources/images/maximize2.png" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=WindowState}" Value="Maximized">
+                                                            <Setter Property="Source" Value="/resources/images/maximize1.png"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
+                                    </Button>
+
+                                    <!-- Close Button -->
+                                    <Button Style="{DynamicResource CloseButton}" Width="50" Click="BtnCloseClick" WindowChrome.IsHitTestVisibleInChrome="True">
+                                        <Image Width="10" Height="10" Source="/resources/images/close.png" />
+                                    </Button>
+                                </StackPanel>
+                            </DockPanel>
+
+                            <ContentPresenter Content="{TemplateBinding Content}" />
+                        </DockPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="DialogWindow" TargetType="{x:Type Window}">
+        <Setter Property="WindowChrome.WindowChrome">
+            <Setter.Value>
+                <WindowChrome CaptionHeight="30"
+                              CornerRadius="0"
+                              GlassFrameThickness="0,0,0,1"
+                              ResizeBorderThickness="0"
+                              NonClientFrameEdges="None"
+                              UseAeroCaptionButtons="False" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Window}">
+                    <Border BorderThickness="1" BorderBrush="{DynamicResource outerBorder}">
+                        <DockPanel Background="{DynamicResource backgroundDefault}">
+                            <DockPanel Height="30" DockPanel.Dock="Top" LastChildFill="False">
+                                <!-- Close Button -->
+                                <Button Style="{DynamicResource CloseButton}" DockPanel.Dock="Right" Width="50" Click="BtnCloseClick" WindowChrome.IsHitTestVisibleInChrome="True">
+                                    <Image Width="10" Height="10" Source="/resources/images/close.png" />
+                                </Button>
+                            </DockPanel>
+                            <ContentPresenter Content="{TemplateBinding Content}" />
+                        </DockPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

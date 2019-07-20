@@ -1,0 +1,32 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!-- order by brightness, from dark to light -->
+    <SolidColorBrush x:Key="backgroundDarker" Color="Black"/>
+    <SolidColorBrush x:Key="backgroundDark" Color="#FF111111"/>
+    <SolidColorBrush x:Key="backgroundDefault" Color="#212121"/>
+    <SolidColorBrush x:Key="backgroundLight" Color="#424242" />
+
+    <!-- order by brightness, from dark to light -->
+    <SolidColorBrush x:Key="inputDefault" Color="#303030"/>
+
+    <!-- order by brightness, from dark to light -->
+    <SolidColorBrush x:Key="buttonDefault" Color="#FF222222"/>
+    <SolidColorBrush x:Key="buttonHover" Color="#FF444444"/>
+
+    <!-- order by brightness, from dark to light -->
+    <SolidColorBrush x:Key="accentDark" Color="#FFBF8800" />
+    <SolidColorBrush x:Key="accentDefault" Color="#FFC78D00" />
+    <SolidColorBrush x:Key="accentLight" Color="#FFD89900" />
+
+    <!-- order by brightness, from dark to light -->
+    <SolidColorBrush x:Key="foregroundDefault" Color="#FFF3F3F3" />
+    <SolidColorBrush x:Key="foregroundDisabled" Color="#424242"/>
+
+
+    <SolidColorBrush x:Key="tabHover" Color="#FF333333"/>
+    <SolidColorBrush x:Key="tabSelected" Color="#FF666666"/>
+
+    <SolidColorBrush x:Key="outerBorder" Color="#FF595858"/>
+    <SolidColorBrush x:Key="errorBorder" Color="Red"/>
+</ResourceDictionary>
