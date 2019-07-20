@@ -7,7 +7,7 @@
     <ProjectGuid>{BECDDBAE-422F-46C8-90E8-371C7B8B296D}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>arma</RootNamespace>
-    <AssemblyName>arma</AssemblyName>
+    <AssemblyName>nihilus</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -55,7 +55,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainWindow.xaml">
+    <Compile Include="View\Resources\Dictionaries\WindowStyles.xaml.cs">
+      <DependentUpon>WindowStyles.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -63,10 +66,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\Resources\Dictionaries\Colors\DarkTheme.xaml" />
+    <Page Include="View\Resources\Dictionaries\WindowStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -86,6 +94,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="bin\Debug\nihilus.exe.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -93,6 +102,22 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Release\" />
+    <Folder Include="Model\Data\" />
+    <Folder Include="Model\Logic\" />
+    <Folder Include="obj\" />
+    <Folder Include="ViewModel\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\nihilus.exe" />
+    <Content Include="bin\Debug\nihilus.pdb" />
+    <Resource Include="View\Resources\Images\title.png" />
+    <Resource Include="View\Resources\Images\minimize.png" />
+    <Resource Include="View\Resources\Images\maximize2.png" />
+    <Resource Include="View\Resources\Images\maximize1.png" />
+    <Resource Include="View\Resources\Images\close.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

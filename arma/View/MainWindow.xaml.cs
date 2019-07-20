@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace arma
+namespace arma.View
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -23,6 +23,11 @@ namespace arma
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void AddServer_Click(object sender, RoutedEventArgs routedEventArgs)
+        {
+            
         }
     }
 }
