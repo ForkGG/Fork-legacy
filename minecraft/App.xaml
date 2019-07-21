@@ -2,16 +2,16 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:nihilus"
-             StartupUri="xaml/MainWindow.xaml"
+             StartupUri="View/Xaml/MainWindow.xaml"
              Exit="ExitApplication">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="resources/dictionaries/Styles.xaml" />
-                <ResourceDictionary Source="resources/dictionaries/WindowStyles.xaml" />
-                <ResourceDictionary Source="resources/dictionaries/ButtonStyles.xaml" />
-                <ResourceDictionary Source="resources/dictionaries/DarkTheme.xaml"/>
-                <ResourceDictionary Source="resources/dictionaries/RadioButtonStyles.xaml" />
+                <ResourceDictionary Source="View/Resources/dictionaries/Styles.xaml" />
+                <ResourceDictionary Source="View/Resources/dictionaries/WindowStyles.xaml" />
+                <ResourceDictionary Source="View/Resources/dictionaries/ButtonStyles.xaml" />
+                <ResourceDictionary Source="View/Resources/dictionaries/DarkTheme.xaml"/>
+                <ResourceDictionary Source="View/Resources/dictionaries/RadioButtonStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

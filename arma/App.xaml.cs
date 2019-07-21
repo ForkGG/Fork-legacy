@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
+using nihilus.Logic.Manager;
 
-namespace arma
+namespace nihilus
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application
     {
+        private void ExitApplication(object sender, ExitEventArgs exitEventArgs)
+        {
+            ApplicationManager.Instance.ExitApplication();
+        }
     }
 }

@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Media;
 
-namespace arma.View.Resources.Dictionaries
+namespace nihilus
 {
     public partial class WindowStyles : ResourceDictionary
     {

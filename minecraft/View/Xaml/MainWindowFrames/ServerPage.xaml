@@ -1,0 +1,141 @@
+﻿<Page x:Class="nihilus.View.Xaml.MainWindowFrames.ServerPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:converter="clr-namespace:nihilus.Converter"
+      xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="1000"
+      Title="ServerPage">
+    <Page.Resources>
+        <converter:ListToStringConverter x:Key="ListToStringConverter"/>
+    </Page.Resources>
+    <Grid >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="8*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Column="0" Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="3*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Graphs -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <lvc:CartesianChart Series="{Binding CPUList}" Hoverable="False" DataTooltip="{x:Null}">
+                    <lvc:CartesianChart.ToolTip>
+                        <TextBlock Text="The total and this servers CPU usage over the past 100 seconds"></TextBlock>
+                    </lvc:CartesianChart.ToolTip>
+                    <lvc:CartesianChart.AxisY>
+                        <lvc:Axis Style="{StaticResource yAxisCPU}" Title="CPU usage"/>
+                    </lvc:CartesianChart.AxisY>
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis Style="{StaticResource xAxisCPU}"/>
+                    </lvc:CartesianChart.AxisX>
+                </lvc:CartesianChart>
+                <lvc:CartesianChart Grid.Column="1" Series="{Binding MEMList}" Hoverable="False" DataTooltip="{x:Null}">
+                    <lvc:CartesianChart.ToolTip>
+                        <TextBlock Text="The total and this servers RAM usage over the past 100 seconds"></TextBlock>
+                    </lvc:CartesianChart.ToolTip>
+                    <lvc:CartesianChart.AxisY>
+                        <lvc:Axis Title="Memory usage" MinValue="0" MaxValue="{Binding Server.JavaSettings.MaxRam}"/>
+                    </lvc:CartesianChart.AxisY>
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis Style="{StaticResource xAxisCPU}"/>
+                    </lvc:CartesianChart.AxisX>
+                </lvc:CartesianChart>
+            </Grid>
+
+            <!-- Console -->
+            <DockPanel Grid.Row="1">
+                <Label Content="Console" FontWeight="Bold" DockPanel.Dock="Top" />
+                <DockPanel>
+                    <TextBox DockPanel.Dock="Bottom" Text="{Binding ConsoleIn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderBrush="{DynamicResource backgroundLight}">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding Path=ReadConsoleIn}"></KeyBinding>
+                        </TextBox.InputBindings>
+                    </TextBox>
+                    <Border DockPanel.Dock="Top" BorderThickness="1" BorderBrush="{DynamicResource backgroundLight}">
+                        <ScrollViewer Margin="3 3 3 3" x:Name="ScrollViewer" ScrollChanged="ScrollViewer_ScrollChanged">
+                            <TextBlock Text="{Binding Path=ConsoleOutList, Converter={StaticResource ListToStringConverter}}" TextWrapping="Wrap"></TextBlock>
+                        </ScrollViewer>
+                    </Border>
+                </DockPanel>
+            </DockPanel>
+        </Grid>
+        <!-- Playerlist -->
+        <DockPanel Grid.Row="0" Grid.Column="1" Margin="5 0 0 0">
+            <Label Content="Playerlist" FontWeight="Bold" DockPanel.Dock="Top" />
+            <Border BorderThickness="1" BorderBrush="{DynamicResource backgroundLight}">
+                <ListView ItemsSource="{Binding PlayerList}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="2" BorderBrush="{x:Null}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="3*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Source="{Binding Head}" MinHeight="20px" MinWidth="20px" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <Label Content="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <!--ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Ban Player" Checked="PlayerList_Ban"/>
+                            <MenuItem Header="OP Player" Click="PlayerList_OP"/>
+                            <MenuItem Header="Kick Player" Click="PlayerList_Kick"/>
+                        </ContextMenu>
+                    <ListView.ContextMenu-->
+                </ListView>
+            </Border>
+        </DockPanel>
+
+        <Grid Grid.Row="1" Grid.Column="0" Margin="0 10 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <!-- Address Info -->
+            <DockPanel >
+                <Label Content="Adress Info" FontWeight="Bold" DockPanel.Dock="Top" />
+                <StackPanel Orientation="Horizontal">
+                    <Border BorderThickness="1" Height="25" BorderBrush="{DynamicResource backgroundLight}">
+                        <TextBox Text="{Binding AddressInfo}" VerticalAlignment="Center" Width="300" Style="{StaticResource SelectOnly}"/>
+                    </Border>
+                </StackPanel>
+            </DockPanel>
+
+            <!-- Empty -->
+            <DockPanel Grid.Column="1">
+                <Label Content="" FontWeight="Bold" DockPanel.Dock="Top" />
+
+            </DockPanel>
+        </Grid>
+
+        <!-- Controls -->
+        <DockPanel Grid.Row="1" Grid.Column="1" Margin="5 10 0 0" x:Name="Controls" Visibility="Visible">
+            <Label Content="Controls" FontWeight="Bold" DockPanel.Dock="Top" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Margin="5 0 10 0" Height="25" x:Name="StartStopButton" Click="StartStopButton_Click" Style="{StaticResource StartStopButton}"></Button>
+                <Button Grid.Column="1" Margin="10 0 5 0" Height="25" x:Name="SettingsButton" Click="SettingsButton_Click">Settings</Button>
+            </Grid>
+        </DockPanel>
+    </Grid>
+</Page>

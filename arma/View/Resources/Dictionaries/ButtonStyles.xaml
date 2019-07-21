@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:arma.View.Resources.Dictionaries">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
     <!-- default style, applies to all buttons -->
     <Style x:Key="DefaultButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
@@ -25,7 +25,7 @@
         </Style.Triggers>
     </Style>
     <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}"></Style>
-
+    
     <!-- for borderless buttons -->
     <Style x:Key="Borderless" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="BorderThickness" Value="0" />
@@ -35,8 +35,9 @@
     <Style x:Key="CloseButton" TargetType="Button" BasedOn="{StaticResource Borderless}">
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource AccentDefault}"/>
+                <Setter Property="Background" Value="{DynamicResource accentDefault}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
+    
 </ResourceDictionary>
