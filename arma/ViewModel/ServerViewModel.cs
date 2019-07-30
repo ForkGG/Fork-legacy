@@ -82,7 +82,6 @@ namespace nihilus.ViewModel
             ConsoleOutList = new ObservableCollection<string>();
             PlayerList = new ObservableCollection<Player>();
             ConsoleOutList.CollectionChanged += ConsoleOutChanged;
-            UpdateAddressInfo();
             ServerPage = new ServerPage(this);
         }
 
@@ -92,17 +91,11 @@ namespace nihilus.ViewModel
             ServerPage = new StartPage();
         }
 
-        private void UpdateAddressInfo()
-        {
-            AddressInfo = externalIP + ":" + Server.ServerSettings.ServerPort;
-        }
-
         public void UpdateSettings()
         {
-            UpdateAddressInfo();
             new Thread(() =>
             {
-                new FileWriter().WriteServerSettings(Server.Name,Server.ServerSettings.SettingsDictionary);
+                new FileWriter().WriteServerSettings(Server.Name,Server.ServerSettings.Settings);
             }).Start();
         }
 

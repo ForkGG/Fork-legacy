@@ -11,7 +11,6 @@ namespace nihilus.Logic.Model
         
         public String Name { get; set; }
         public ServerVersion Version { get; set; }
-        public ServerJavaSettings JavaSettings { get; set; }
         [XmlIgnore]
         public ServerSettings ServerSettings {
             get
@@ -23,10 +22,9 @@ namespace nihilus.Logic.Model
             set => serverSettings = value;
         }
 
-        public Server(String name, ServerVersion version, ServerSettings serverSettings, ServerJavaSettings javaSettings) {
+        public Server(String name, ServerVersion version, ServerSettings serverSettings) {
             Name = name;
             Version = version;
-            JavaSettings = javaSettings;
             ServerSettings = serverSettings;
         }
 
