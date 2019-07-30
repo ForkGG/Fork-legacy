@@ -111,7 +111,6 @@
     <Compile Include="Logic\Model\FullStats.cs" />
     <Compile Include="Logic\Model\Player.cs" />
     <Compile Include="Logic\Model\ServerStatus.cs" />
-    <Compile Include="Logic\Model\ServerJavaSettings.cs" />
     <Compile Include="Logic\Persistence\FileReader.cs" />
     <Compile Include="Logic\Persistence\FileWriter.cs" />
     <Compile Include="Logic\Query\Query.cs" />

@@ -40,7 +40,7 @@ namespace nihilus.xaml.AddServer
             string name = serverName.Text;
             //TODO check if inputs are valid / server not existing
             
-            ServerManager.Instance.CreateServer(selectedVersion, viewModel.ServerSettings, new ServerJavaSettings());
+            ServerManager.Instance.CreateServer(selectedVersion, viewModel.ServerSettings);
             
             // Close the current window
             this.Close();
