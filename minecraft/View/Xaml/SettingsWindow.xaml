@@ -174,30 +174,7 @@
                                     </Grid>
                                 </StackPanel>
                                 <StackPanel>
-                                    <CheckBox x:Name="chkQuery" Content="Enable query" Margin="0 0 0 5" IsChecked="{Binding ServerSettings.EnableQuery}"/>
-                                    <StackPanel Margin="10 0 0 0">
-                                        <StackPanel.Style>
-                                            <Style TargetType="StackPanel">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding ElementName=chkQuery, Path=IsChecked}" Value="True">
-                                                        <Setter Property="IsEnabled" Value="True"></Setter>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding ElementName=chkQuery, Path=IsChecked}" Value="False">
-                                                        <Setter Property="IsEnabled" Value="False"></Setter>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </StackPanel.Style>
-                                        <Grid Margin="0 0 0 5">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="3*"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <!-- TODO text color when disabled -->
-                                            <Label Content="query port"/>
-                                            <TextBox VerticalAlignment="Center" Grid.Column="1" Text="{Binding ServerSettings.QueryPort}"></TextBox>
-                                        </Grid>
-                                    </StackPanel>
+                                    
                                     <Label Content="Ressource Pack URL"></Label>
                                     <TextBox Text="{Binding ServerSettings.ResourcePack}"></TextBox>
                                 </StackPanel>
