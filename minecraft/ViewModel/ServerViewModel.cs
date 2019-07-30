@@ -40,7 +40,10 @@ namespace nihilus.ViewModel
 
         public ConsoleReader ConsoleReader;
         public ObservableCollection<string> ConsoleOutList { get; }
-        public ObservableCollection<Player> PlayerList { get; set; }
+        public ObservableCollection<Player> PlayerList { get; set; } = new ObservableCollection<Player>();
+        public ObservableCollection<Player> BanList { get; set; } = new ObservableCollection<Player>();
+        public ObservableCollection<Player> OPList { get; set; } = new ObservableCollection<Player>();
+        public ObservableCollection<Player> WhiteList { get; set; } = new ObservableCollection<Player>();
         public SeriesCollection CPUList { get; set; } = new SeriesCollection();
         public SeriesCollection MEMList { get; set; } = new SeriesCollection();
         public string ConsoleIn { get; set; } = "";
@@ -80,7 +83,6 @@ namespace nihilus.ViewModel
             Server = server;
             CurrentStatus = ServerStatus.STOPPED;
             ConsoleOutList = new ObservableCollection<string>();
-            PlayerList = new ObservableCollection<Player>();
             ConsoleOutList.CollectionChanged += ConsoleOutChanged;
             UpdateAddressInfo();
             ServerPage = new ServerPage(this);

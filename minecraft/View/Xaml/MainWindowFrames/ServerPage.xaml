@@ -13,7 +13,7 @@
     </Page.Resources>
     <Grid >
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2.5*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -74,36 +74,72 @@
             </DockPanel>
         </Grid>
         <!-- Playerlist -->
-        <DockPanel Grid.Row="0" Grid.Column="1" Margin="5 0 0 0">
-            <Label Content="Playerlist" FontWeight="Bold" DockPanel.Dock="Top" />
-            <Border BorderThickness="1" BorderBrush="{DynamicResource backgroundLight}">
-                <ListView ItemsSource="{Binding PlayerList}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Border BorderThickness="2" BorderBrush="{x:Null}">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="3*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Image Source="{Binding Head}" MinHeight="20px" MinWidth="20px" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    <Label Content="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                    <!--ListView.ContextMenu>
+        <TabControl Grid.Row="0" Grid.Column="1" Margin="5 0 0 0" BorderBrush="{x:Null}">
+            <!-- Playerlist -->
+            <TabItem Header="Playerlist" BorderBrush="{x:Null}">
+                <Border BorderThickness="1">
+                    <ListView ItemsSource="{Binding PlayerList}" x:Name="Playerlist">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderThickness="2" BorderBrush="{x:Null}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="3*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Image Source="{Binding Head}" MinHeight="20px" MinWidth="20px" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <Label Content="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                        <!--ListView.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="Ban Player" Checked="PlayerList_Ban"/>
                             <MenuItem Header="OP Player" Click="PlayerList_OP"/>
                             <MenuItem Header="Kick Player" Click="PlayerList_Kick"/>
                         </ContextMenu>
                     <ListView.ContextMenu-->
-                </ListView>
-            </Border>
-        </DockPanel>
+                    </ListView>
+                </Border>
+            </TabItem>
+            <!-- OP-List -->
+            <TabItem Header="OP-List">
+                <DockPanel>
+                    <Button DockPanel.Dock="Bottom" Content="Add Player" Margin="0 10 0 0" Width="120">
+                        
+                    </Button>
+                    <ListView DockPanel.Dock="Top" ItemsSource="{Binding OPList}">
+                        
+                    </ListView>
+                </DockPanel>
+            </TabItem>
+            <!-- Ban-List -->
+            <TabItem Header="Ban-List">
+                <DockPanel>
+                    <Button DockPanel.Dock="Bottom" Content="Add Player" Margin="0 10 0 0" Width="120">
 
-        <Grid Grid.Row="1" Grid.Column="0" Margin="0 10 0 0">
+                    </Button>
+                    <ListView DockPanel.Dock="Top" ItemsSource="{Binding BanList}">
+
+                    </ListView>
+                </DockPanel>
+            </TabItem>
+            <!-- Whitelist -->
+            <TabItem Header="Whitelist">
+                <DockPanel>
+                    <Button DockPanel.Dock="Bottom" Content="Add Player" Margin="0 10 0 0" Width="120">
+
+                    </Button>
+                    <ListView DockPanel.Dock="Top" ItemsSource="{Binding WhiteList}">
+
+                    </ListView>
+                </DockPanel>
+            </TabItem>
+        </TabControl>
+                
+
+                <Grid Grid.Row="1" Grid.Column="0" Margin="0 10 0 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -120,8 +156,6 @@
 
             <!-- Empty -->
             <DockPanel Grid.Column="1">
-                <Label Content="" FontWeight="Bold" DockPanel.Dock="Top" />
-
             </DockPanel>
         </Grid>
 
