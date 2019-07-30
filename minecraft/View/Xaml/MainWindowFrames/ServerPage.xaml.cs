@@ -20,7 +20,8 @@ namespace nihilus.View.Xaml.MainWindowFrames
         {
             this.viewModel = viewModel;
             DataContext = viewModel;
-            InitializeComponent();
+            InitializeComponent();       
+            Console.WriteLine("Playerlist Height="+Playerlist.ActualHeight+"\nPlayerlist Width="+Playerlist.ActualWidth);
         }
 
         private void StartStopButton_Click(object sender, RoutedEventArgs e)
