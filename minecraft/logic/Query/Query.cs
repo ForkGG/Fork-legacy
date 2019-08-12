@@ -98,7 +98,13 @@ namespace nihilus.Logic.Query
             DateTime endTimeout = DateTime.Now.AddMilliseconds(timeoutPing);
 
             // Receiving data async
-            udpClient.BeginReceive(ReceiveCallback, receivePoint);
+            try
+            {
+                udpClient.BeginReceive(ReceiveCallback, receivePoint);
+            } catch(Exception e)
+            {
+                Console.WriteLine("Query encountered an excepption while connecting to server\nThe server query is probably disabled or the server stopped!\n"+e.Message);
+            }
 
             while (!messageReceived)
             {
