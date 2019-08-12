@@ -25,6 +25,11 @@ namespace nihilus.Logic.CustomConsole
                         {
                             viewModel.CurrentStatus = ServerStatus.RUNNING;
                         }
+
+                        if (line.ToLower().Contains("whitelist add")||line.ToLower().Contains("whitelist"))
+                        {
+                            viewModel.UpdateWhiteListRead();
+                        }
                         viewModel.ConsoleOutList.Add(line);
                     }
                 }

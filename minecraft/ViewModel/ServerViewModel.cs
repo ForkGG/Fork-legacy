@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -6,8 +7,10 @@ using System.Diagnostics;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using LiveCharts;
 using LiveCharts.Wpf;
 using nihilus.Annotations;
@@ -86,6 +89,13 @@ namespace nihilus.ViewModel
             ConsoleOutList.CollectionChanged += ConsoleOutChanged;
             UpdateAddressInfo();
             ServerPage = new ServerPage(this);
+            UpdateWhiteListRead();
+            WhiteList.CollectionChanged += WhiteListChanged;
+            WhiteList.CollectionChanged += UpdateWhiteListWrite;
+            BanList.CollectionChanged += BanListChanged;
+            //TODO write
+            OPList.CollectionChanged += OPListChanged;
+            //TODO write
         }
 
         private ServerViewModel()
@@ -99,6 +109,14 @@ namespace nihilus.ViewModel
             AddressInfo = externalIP + ":" + Server.ServerSettings.ServerPort;
         }
 
+        private void UpdateWhiteListWrite(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            new Thread(() =>
+            {
+                new FileWriter().WriteWhitelist(Server.Name, new List<Player>(WhiteList));
+            }).Start();
+        }
+
         public void UpdateSettings()
         {
             UpdateAddressInfo();
@@ -107,6 +125,33 @@ namespace nihilus.ViewModel
                 new FileWriter().WriteServerSettings(Server.Name,Server.ServerSettings.SettingsDictionary);
             }).Start();
         }
+
+        public bool PlayerExists(string name)
+        {
+            //TODO
+            return true;
+        }
+
+        public void AddPlayerToWhiteList(string name)
+        {
+            new Thread(() =>
+            {
+                Player p = new Player(name);
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, 
+                    new Action(()=>WhiteList.Add(p)));
+            }).Start();
+        }
+
+        public void UpdateWhiteListRead()
+        {
+            new Thread(() =>
+            {
+                List<Player> whitelistedPlayers = new FileReader().ReadWhiteList(Server.Name);
+                WhiteList = new ObservableCollection<Player>(whitelistedPlayers);
+                WhiteList.CollectionChanged += WhiteListChanged;
+                WhiteList.CollectionChanged += UpdateWhiteListWrite;
+            }).Start();
+        } 
 
         public void TrackPerformance(Process p)
         {
@@ -161,10 +206,21 @@ namespace nihilus.ViewModel
             raisePropertyChanged(nameof(CPUList));
         }
 
-
         private void MEMListChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             raisePropertyChanged(nameof(MEMList));
+        }
+        private void WhiteListChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            raisePropertyChanged(nameof(WhiteList));
+        }
+        private void BanListChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            raisePropertyChanged(nameof(BanList));
+        }
+        private void OPListChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            raisePropertyChanged(nameof(OPList));
         }
 
         
