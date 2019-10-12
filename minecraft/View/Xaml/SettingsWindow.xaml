@@ -210,14 +210,14 @@
                                     </Grid>
                                 </Border>
                                 <Border BorderThickness="8" DockPanel.Dock="Top"/>
-                                <Button Content="Regenerate Nether" DockPanel.Dock="Top"></Button>
+                                <Button Content="Regenerate Nether" DockPanel.Dock="Top" Click="Btn_RegenerateNether" IsEnabled="False"></Button>
                                 <Border BorderThickness="8" DockPanel.Dock="Top"/>
-                                <Button Content="Regenerate End" DockPanel.Dock="Top"/>
+                                <Button Content="Regenerate End" DockPanel.Dock="Top" Click="Btn_RegenerateEnd" IsEnabled="False"/>
                                 <Border BorderThickness="8" DockPanel.Dock="Top"/>
                                 <ComboBox ItemsSource="{Binding Versions}" DockPanel.Dock="Top"/>
                                 <Border BorderThickness="2" DockPanel.Dock="Top"/>
-                                <Button Content="Change Version" DockPanel.Dock="Top"></Button>
-                                <Button Content="Delete Server" DockPanel.Dock="Bottom" Foreground="Red"></Button>
+                                <Button Content="Change Version" DockPanel.Dock="Top" Click="Btn_ChangeVersion" IsEnabled="False"></Button>
+                                <Button Content="Delete Server" DockPanel.Dock="Bottom" Foreground="Red" Click="Btn_Delete"></Button>
                             </DockPanel>
                         </Border>
                     </Grid>
