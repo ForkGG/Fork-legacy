@@ -53,12 +53,13 @@ namespace nihilus.Logic.Manager
         public ObservableCollection<ServerViewModel> Servers { set; get; }
         
 
-        public void CreateServer(ServerVersion serverVersion, ServerSettings serverSettings, ServerJavaSettings javaSettings)
+        public void CreateServer(ServerVersion serverVersion, ServerSettings serverSettings)
         {
-            string name = serverSettings.LevelName;
+            //TODO
+            /*string name = serverSettings.LevelName;
             serverNames.Add(name);
             
-            Server server = new Server(name, serverVersion, serverSettings, javaSettings);
+            Server server = new Server(name, serverVersion, serverSettings);
             server.Name = name;
             server.Version = serverVersion;
 
@@ -71,12 +72,13 @@ namespace nihilus.Logic.Manager
             ServerViewModel viewModel = new ServerViewModel(server);
             Servers.Add(viewModel);
             ApplicationManager.Instance.MainViewModel.SelectedServer = viewModel;
-            StartServer(viewModel);
+            StartServer(viewModel);*/
         }
 
         public void StartServer(ServerViewModel viewModel)
         {
-            viewModel.ConsoleOutList.Clear();
+            //TODO
+            /*viewModel.ConsoleOutList.Clear();
             DirectoryInfo directoryInfo = new DirectoryInfo(viewModel.Server.Name);
             if (!directoryInfo.Exists)
             {
@@ -110,7 +112,7 @@ namespace nihilus.Logic.Manager
             }).Start();
             viewModel.ConsoleReader = consoleReader;
             ApplicationManager.Instance.ActiveServers[viewModel.Server]= process;
-            new Thread(() => { new QueryStatsWorker(viewModel); }).Start();
+            new Thread(() => { new QueryStatsWorker(viewModel); }).Start();*/
         }
 
         public void StopServer(Server server)

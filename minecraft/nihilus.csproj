@@ -62,7 +62,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
@@ -122,6 +122,12 @@
     <Compile Include="View\Resources\dictionaries\WindowStyles.xaml.cs">
       <DependentUpon>WindowStyles.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Xaml\Lists\AddRemoveList.xaml.cs">
+      <DependentUpon>AddRemoveList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Xaml\Lists\Playerlist.xaml.cs">
+      <DependentUpon>Playerlist.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Xaml\MainWindowFrames\ServerPage.xaml.cs">
       <DependentUpon>ServerPage.xaml</DependentUpon>
     </Compile>
@@ -159,6 +165,14 @@
     </Page>
     <Page Include="View\Resources\dictionaries\DarkTheme.xaml">
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Xaml\Lists\AddRemoveList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Xaml\Lists\Playerlist.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Xaml\MainWindow.xaml" />
     <Compile Include="Logic\Manager\ServerManager.cs" />

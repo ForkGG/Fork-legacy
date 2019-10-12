@@ -74,26 +74,34 @@ namespace nihilus.View.Xaml.MainWindowFrames
         }
         #endregion autoscrolling
 
-        private void ListViewItem_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        private void AddToWhiteList_Click(object sender, RoutedEventArgs e)
         {
-            Trace.WriteLine("Preview MouseRightButtonDown");
-
-            e.Handled = true;
+            AddPlayerInput.Visibility = Visibility.Visible;
         }
 
-        private void PlayerList_Kick(object sender, RoutedEventArgs e)
+        private void AddPlayerAddButton_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (viewModel.PlayerExists(AddPlayerInputTextBox.Text))
+            {
+                viewModel.AddPlayerToWhiteList(AddPlayerInputTextBox.Text);
+            }
+            else
+            {
+                //TODO
+            }
+            
+            AddPlayerCloseButton_Click(sender,e);
         }
 
-        private void PlayerList_OP(object sender, RoutedEventArgs e)
+        private void AddPlayerCloseButton_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            AddPlayerInput.Visibility = Visibility.Collapsed;
+            AddPlayerInputTextBox.Text = "";
         }
 
-        private void PlayerList_Ban(object sender, RoutedEventArgs e)
+        private void AddPlayer_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            throw new NotImplementedException();
+            AddPlayerCloseButton_Click(sender,e);
         }
     }
 }

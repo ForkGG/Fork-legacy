@@ -27,9 +27,21 @@ namespace nihilus.Logic.Model
             Name = name;
             new Thread(() =>
             {
-                RetrieveUid();
-                RetrieveHead();
+                try
+                {
+                    RetrieveUid();
+                    RetrieveHead();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error while retrieving player information from mojang servers:\n"+e.Message);
+                }
             }).Start();
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
 
         private void RetrieveUid()

@@ -34,7 +34,6 @@ namespace nihilus.Logic.Model
         public int QueryPort
         {
             get => int.Parse(SettingsDictionary["query.port"]);
-            set => SettingsDictionary["query.port"] = value.ToString();
         }
 
         public string GeneratorSettings
@@ -173,7 +172,10 @@ namespace nihilus.Logic.Model
         public int ServerPort
         {
             get => int.Parse(SettingsDictionary["server-port"]);
-            set => SettingsDictionary["server-port"] = value.ToString();
+            set {
+                SettingsDictionary["server-port"] = value.ToString();
+                SettingsDictionary["query.port"] = value.ToString();
+            }
         }
 
         public string ServerIp
@@ -292,7 +294,7 @@ namespace nihilus.Logic.Model
         private void InitializeValues(string levelname)
         {
             SpawnProtection = 16;
-            QueryPort = 25565;
+            SettingsDictionary["query.port"] = "25565";
             OpPermissionLevel = 4;
             MaxPlayers = 20;
             NetworkCompressionThreshold = 256;
@@ -318,7 +320,7 @@ namespace nihilus.Logic.Model
             AllowNether = true;
             EnforceWhitelist = false;
             BcastConsoleToOps = true;
-            EnableQuery = false;
+            EnableQuery = true;
             SpawnMonsters = true;
             BcastRconToOps = true;
             Pvp = true;
