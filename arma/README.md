@@ -1,5 +1,7 @@
+# !!This part of nihilus is currently not under development!!
+
 # Nihilus
-Minecraft Server Manager GUI
+Arma Server Manager GUI
 
 ## Installation
 - Download the [latest release](https://github.com/ChristianKern97/nihilus/releases)
