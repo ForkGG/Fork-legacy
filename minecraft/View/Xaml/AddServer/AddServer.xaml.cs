@@ -42,7 +42,8 @@ namespace nihilus.xaml.AddServer
             //TODO check if inputs are valid / server not existing
             
             bool createServerSuccess = await ServerManager.Instance.CreateServerAsync(selectedVersion, viewModel.ServerSettings, new ServerJavaSettings(), viewModel);
-            Console.WriteLine(createServerSuccess);
+            
+            //TODO Do something if creating fails
 
             // Close the current window
             this.Close();

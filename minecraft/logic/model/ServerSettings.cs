@@ -291,6 +291,11 @@ namespace nihilus.Logic.Model
             SettingsDictionary = settingsDictionary;
         }
 
+        public ServerSettings(ServerSettings serverSettings)
+        {
+            SettingsDictionary = new Dictionary<string, string>(serverSettings.SettingsDictionary);
+        }
+
         private void InitializeValues(string levelname)
         {
             SpawnProtection = 16;

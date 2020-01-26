@@ -11,5 +11,13 @@ namespace nihilus.Logic.Model
         public string StartupParameters { get; set; } = "";
         
         public ServerJavaSettings(){}
+
+        public ServerJavaSettings(ServerJavaSettings javaSettings)
+        {
+            MaxRam = javaSettings.MaxRam;
+            MinRam = javaSettings.MinRam;
+            JavaPath = javaSettings.JavaPath;
+            StartupParameters = javaSettings.StartupParameters;
+        }
     }
 }

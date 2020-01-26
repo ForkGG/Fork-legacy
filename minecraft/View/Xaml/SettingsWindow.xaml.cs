@@ -19,6 +19,7 @@ namespace nihilus.View.Xaml
         public SettingsWindow(ServerViewModel viewModel)
         {
             this.viewModel = viewModel;
+            viewModel.Server.CreateBackup();
             DataContext = this.viewModel;
             InitializeComponent();
         }
@@ -26,7 +27,17 @@ namespace nihilus.View.Xaml
         private void Btn_Apply(object sender, RoutedEventArgs e)
         {
             Close();
+            
+            //Write changes to File
             viewModel.UpdateSettings();
+        }
+
+        private void Btn_Cancel(object sender, RoutedEventArgs e)
+        {
+            Close();
+            
+            //Undo changes
+            viewModel.Server.ApplyBackup();
         }
 
         private async void Btn_Delete(object sender, RoutedEventArgs e)

@@ -134,8 +134,10 @@
     <Compile Include="Logic\Manager\ApplicationManager.cs" />
     <Compile Include="Logic\Model\FullStats.cs" />
     <Compile Include="Logic\Model\Player.cs" />
+    <Compile Include="Logic\Model\ServerRestart.cs" />
     <Compile Include="Logic\Model\ServerStatus.cs" />
     <Compile Include="Logic\Model\ServerJavaSettings.cs" />
+    <Compile Include="Logic\Model\SimpleTime.cs" />
     <Compile Include="Logic\Persistence\FileReader.cs" />
     <Compile Include="Logic\Persistence\FileWriter.cs" />
     <Compile Include="Logic\Query\Query.cs" />
@@ -147,6 +149,7 @@
     <Compile Include="View\Resources\dictionaries\WindowStyles.xaml.cs">
       <DependentUpon>WindowStyles.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Xaml\Converter\SimpleTimeToStringConverter.cs" />
     <Compile Include="View\Xaml\Lists\AddRemoveList.xaml.cs">
       <DependentUpon>AddRemoveList.xaml</DependentUpon>
     </Compile>

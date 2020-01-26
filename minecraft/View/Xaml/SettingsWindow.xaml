@@ -5,13 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:nihilus.xaml"
         xmlns:val="clr-namespace:nihilus.xaml.ValidationRules"
+        xmlns:converter="clr-namespace:nihilus.View.Xaml.Converter"
         mc:Ignorable="d"
         Title="SettingsWindow" Height="450" Width="800" Style="{StaticResource DialogWindowNoClose}" ResizeMode="NoResize">
+    <Window.Resources>
+        <converter:SimpleTimeToStringConverter x:Key="SimpleTimeToStringConverter"/>
+    </Window.Resources>
     <Border Padding="5 15 5 5">
         <Grid>
             <DockPanel>
                 <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Content="Cancel" IsCancel="True" Margin="0 0 5 0" />
+                    <Button Content="Cancel" Margin="0 0 5 0" Click="Btn_Cancel"/>
                     <Button Content="Apply" IsDefault="True" Margin="5 0 0 0" Click="Btn_Apply" />
                 </StackPanel>
                 <TabControl Margin="0 0 0 5">
@@ -214,17 +218,17 @@
                                                 <RowDefinition Height="*" />
                                             </Grid.RowDefinitions>
                                             <!-- TODO Add viewmodel bindings -->
-                                            <CheckBox>
-                                                <TextBox MinWidth="40" Text="00:00" />
+                                            <CheckBox IsChecked="{Binding Server.Restart1.Enabled}">
+                                                <TextBox MinWidth="40" Text="{Binding Path=Server.Restart1.Time, Converter={StaticResource SimpleTimeToStringConverter}, Mode=TwoWay}" />
                                             </CheckBox>
-                                            <CheckBox Grid.Row="1" Margin="0 5 0 0">
-                                                <TextBox MinWidth="40" Text="12:00" />
+                                            <CheckBox Grid.Row="1" Margin="0 5 0 0" IsChecked="{Binding Server.Restart2.Enabled}">
+                                                <TextBox MinWidth="40" Text="{Binding Path=Server.Restart2.Time, Converter={StaticResource SimpleTimeToStringConverter}, Mode=TwoWay}" />
                                             </CheckBox>
-                                            <CheckBox Grid.Column="1">
-                                                <TextBox MinWidth="40" Text="06:00" />
+                                            <CheckBox Grid.Column="1" IsChecked="{Binding Server.Restart3.Enabled}">
+                                                <TextBox MinWidth="40" Text="{Binding Path=Server.Restart3.Time, Converter={StaticResource SimpleTimeToStringConverter}, Mode=TwoWay}" />
                                             </CheckBox>
-                                            <CheckBox Grid.Row="1" Grid.Column="1" Margin="0 5 0 0">
-                                                <TextBox MinWidth="40" Text="18:00" />
+                                            <CheckBox Grid.Row="1" Grid.Column="1" Margin="0 5 0 0" IsChecked="{Binding Server.Restart4.Enabled}">
+                                                <TextBox MinWidth="40" Text="{Binding Path=Server.Restart4.Time, Converter={StaticResource SimpleTimeToStringConverter}, Mode=TwoWay}" />
                                             </CheckBox>
                                         </Grid>
                                     </Border>

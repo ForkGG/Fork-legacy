@@ -2,12 +2,12 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:converter="clr-namespace:nihilus.Converter"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:converter1="clr-namespace:nihilus.View.Xaml.Converter"
         mc:Ignorable="d"
         Title="nihilus" Height="720" Width="1200" Style="{StaticResource DefaultWindow}">
     <Window.Resources>
-        <converter:ListToStringConverter x:Key="ListToStringConverter"/>
+        <converter1:ListToStringConverter x:Key="ListToStringConverter"/>
     </Window.Resources>
     <Border Padding="0 10 10 10" Background="{StaticResource backgroundDefault}">
         <Grid>
