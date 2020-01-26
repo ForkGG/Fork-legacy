@@ -181,18 +181,39 @@ namespace nihilus.Logic.Manager
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                throw;
                 return false;
             }
         }
 
         private bool DeleteServer(ServerViewModel serverViewModel)
         {
-            DirectoryInfo deletedDirectory = Directory.CreateDirectory(Path.Combine("backup","deleted"));
-            DirectoryInfo serverDirectory = new DirectoryInfo(serverViewModel.Server.Name);
-            ZipFile.CreateFromDirectory(serverViewModel.Server.Name,Path.Combine(deletedDirectory.FullName,serverViewModel.Server.Name+".zip"));
-            serverDirectory.Delete(true);
-            return !serverDirectory.Exists && File.Exists(Path.Combine(deletedDirectory.FullName,serverViewModel.Server.Name+".zip"));
+            try
+            {
+                if (serverViewModel.CurrentStatus != ServerStatus.STOPPED)
+                {
+                    StopServer(serverViewModel.Server);
+                    while (serverViewModel.CurrentStatus != ServerStatus.STOPPED)
+                    {
+                        Thread.Sleep(500);
+                    }
+                }
+
+                DirectoryInfo deletedDirectory = Directory.CreateDirectory(Path.Combine("backup","deleted"));
+                if (File.Exists(Path.Combine(deletedDirectory.FullName,serverViewModel.Server.Name+".zip")))
+                {
+                    File.Delete(Path.Combine(deletedDirectory.FullName,serverViewModel.Server.Name+".zip"));
+                }
+                DirectoryInfo serverDirectory = new DirectoryInfo(serverViewModel.Server.Name);
+                ZipFile.CreateFromDirectory(serverViewModel.Server.Name,Path.Combine(deletedDirectory.FullName,serverViewModel.Server.Name+".zip"));
+                serverDirectory.Delete(true);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+            
         }
     }
 }

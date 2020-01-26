@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Windows;
 using System.IO.Compression;
 using nihilus.Logic.Manager;
@@ -29,8 +30,13 @@ namespace nihilus.View.Xaml
         private async void Btn_Delete(object sender, RoutedEventArgs e)
         {
             Close();
-            ApplicationManager.Instance.MainViewModel.Servers.Remove(viewModel); //This shouldn't be here
-            await ServerManager.Instance.DeleteServerAsync(viewModel);
+            bool success = await ServerManager.Instance.DeleteServerAsync(viewModel);
+            if(!success)
+                Console.WriteLine("Problem while deleting "+viewModel.Server.Name);
+            else
+            {
+                ApplicationManager.Instance.MainViewModel.Servers.Remove(viewModel); //This shouldn't be here
+            }
         }
 
         private void Btn_ChangeVersion(object sender, RoutedEventArgs e)
