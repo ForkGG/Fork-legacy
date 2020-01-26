@@ -34,7 +34,6 @@ namespace nihilus.ViewModel
         {
             VanillaServerVersions = new ObservableCollection<ServerVersion>(VersionManager.Instance.VanillaVersions);
             SpigotServerVersions = new ObservableCollection<ServerVersion>(VersionManager.Instance.SpigotVersions);
-            SpigotServerVersions.Add(new ServerVersion());
         }
 
         public void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)

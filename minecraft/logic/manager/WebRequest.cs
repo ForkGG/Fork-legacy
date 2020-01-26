@@ -37,6 +37,8 @@ namespace nihilus.Logic.Manager
                 
                 vanillaVersions.Add(version);
             }
+            vanillaVersions.Sort();
+            vanillaVersions.Reverse();
 
             return vanillaVersions;
         }
