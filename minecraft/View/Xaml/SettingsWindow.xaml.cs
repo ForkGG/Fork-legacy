@@ -1,7 +1,8 @@
 ﻿
 using System;
 using System.Windows;
-using System.IO.Compression;
+using System.Windows.Media.Animation;
+using System.Windows.Shapes;
 using nihilus.Logic.Manager;
 using nihilus.Logic.Model;
 using nihilus.ViewModel;
@@ -53,16 +54,52 @@ namespace nihilus.View.Xaml
             Close();          
         }
 
-        private void Btn_RegenerateEnd(object sender, RoutedEventArgs e)
+        private async void Btn_RegenerateEnd(object sender, RoutedEventArgs e)
         {
-            throw new System.NotImplementedException();
-            //TODO: Delete and save DIM1
+            bool success = await ServerManager.Instance.DeleteDimensionAsync("DIM1", viewModel.Server);
+            DoubleAnimation doubleAnimation = new DoubleAnimation();
+            doubleAnimation.From = 0.0;
+            doubleAnimation.To = 0.4;
+            doubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(500));
+            doubleAnimation.AutoReverse = true;
+            Rectangle target;
+            if (success)
+            {
+                target = RegEndSucc;
+            }
+            else
+            {
+                target = RegEndFail;
+            }
+            Storyboard.SetTarget(doubleAnimation, target);
+            Storyboard.SetTargetProperty(doubleAnimation,new PropertyPath(OpacityProperty));
+            Storyboard storyboard = new Storyboard();
+            storyboard.Children.Add(doubleAnimation);
+            storyboard.Begin();
         }
 
-        private void Btn_RegenerateNether(object sender, RoutedEventArgs e)
+        private async void Btn_RegenerateNether(object sender, RoutedEventArgs e)
         {
-            throw new System.NotImplementedException();
-            //TODO: Delete and save DIM-1
+            bool success = await ServerManager.Instance.DeleteDimensionAsync("DIM-1", viewModel.Server);
+            DoubleAnimation doubleAnimation = new DoubleAnimation();
+            doubleAnimation.From = 0.0;
+            doubleAnimation.To = 0.4;
+            doubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(500));
+            doubleAnimation.AutoReverse = true;
+            Rectangle target;
+            if (success)
+            {
+                target = RegNetherSucc;
+            }
+            else
+            {
+                target = RegNetherFail;
+            }
+            Storyboard.SetTarget(doubleAnimation, target);
+            Storyboard.SetTargetProperty(doubleAnimation,new PropertyPath(OpacityProperty));
+            Storyboard storyboard = new Storyboard();
+            storyboard.Children.Add(doubleAnimation);
+            storyboard.Begin();
         }
     }
 }

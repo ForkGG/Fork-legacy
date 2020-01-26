@@ -229,11 +229,17 @@
                                         </Grid>
                                     </Border>
                                     <Border BorderThickness="8" DockPanel.Dock="Top" />
-                                    <Button Content="Regenerate Nether" DockPanel.Dock="Top"
-                                            Click="Btn_RegenerateNether" IsEnabled="False" />
+                                    <Grid DockPanel.Dock="Top">
+                                        <Button Content="Regenerate Nether" Click="Btn_RegenerateNether"/>
+                                        <Rectangle x:Name="RegNetherSucc" Fill="Green" IsHitTestVisible="False" Opacity="0"></Rectangle>
+                                        <Rectangle x:Name="RegNetherFail" Fill="Red" IsHitTestVisible="False" Opacity="0"></Rectangle>
+                                    </Grid>
                                     <Border BorderThickness="8" DockPanel.Dock="Top" />
-                                    <Button Content="Regenerate End" DockPanel.Dock="Top" Click="Btn_RegenerateEnd"
-                                            IsEnabled="False" />
+                                    <Grid DockPanel.Dock="Top">
+                                        <Button Content="Regenerate End" DockPanel.Dock="Top" Click="Btn_RegenerateEnd"/>
+                                        <Rectangle x:Name="RegEndSucc" Fill="Green" IsHitTestVisible="False" Opacity="0"></Rectangle>
+                                        <Rectangle x:Name="RegEndFail" Fill="Red" IsHitTestVisible="False" Opacity="0"></Rectangle>
+                                    </Grid>
                                     <Border BorderThickness="8" DockPanel.Dock="Top" />
                                     <ComboBox x:Name="VersionSelector" ItemsSource="{Binding Versions}"
                                               DockPanel.Dock="Top" SelectedIndex="0"/>

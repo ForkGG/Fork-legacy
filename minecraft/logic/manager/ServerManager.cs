@@ -127,6 +127,14 @@ namespace nihilus.Logic.Manager
             return result;
         }
 
+        public async Task<bool> DeleteDimensionAsync(string dimension, Server server)
+        {
+            Task<bool> t = new Task<bool>(()=> DeleteDimension(dimension,server));
+            t.Start();
+            bool result = await t;
+            return result;
+        }
+
         public string NextDefaultServerName()
         {
             long i = 0;
@@ -268,6 +276,21 @@ namespace nihilus.Logic.Manager
                 Console.WriteLine(e);
                 return false;
             } 
+        }
+
+        private bool DeleteDimension(string dimension, Server server)
+        {
+            DirectoryInfo dimensionDir = new DirectoryInfo(Path.Combine(server.Name,server.Name,dimension));
+            if (!dimensionDir.Exists)
+            {
+                return true;
+            }
+            DirectoryInfo dimBackups = Directory.CreateDirectory(Path.Combine(server.Name, server.Name, "DimensionBackups"));
+            string timeStamp = DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year + "_" +
+                               DateTime.Now.Hour + "-" + DateTime.Now.Minute;
+            ZipFile.CreateFromDirectory(dimensionDir.FullName, Path.Combine(dimBackups.FullName, dimension +"_" + timeStamp + ".zip"));
+            dimensionDir.Delete(true);
+            return !dimensionDir.Exists;
         }
     }
 }
