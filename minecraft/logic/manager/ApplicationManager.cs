@@ -24,6 +24,7 @@ namespace nihilus.Logic.Manager
         }
         private ApplicationManager()
         {
+            Console.WriteLine("Welcome to nihilus Server Manager");
             MainViewModel = new MainViewModel();
         }
         

@@ -6,6 +6,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using nihilus.Logic.Model;
 using nihilus.ViewModel;
+using Newtonsoft.Json;
 
 namespace nihilus.Logic.Persistence
 {

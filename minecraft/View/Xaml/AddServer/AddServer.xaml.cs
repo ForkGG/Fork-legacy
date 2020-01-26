@@ -20,7 +20,7 @@ namespace nihilus.xaml.AddServer
         {
             InitializeComponent();
             this.DataContext = viewModel;
-            Console.WriteLine(versionComboBox.ItemsSource);
+            //Console.WriteLine(versionComboBox.ItemsSource);
 
         }
 
@@ -34,14 +34,16 @@ namespace nihilus.xaml.AddServer
             versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding{Source = viewModel.SpigotServerVersions});
         }
 
-        private void BtnApply_OnClick(object sender, RoutedEventArgs e)
+        private async void BtnApply_OnClick(object sender, RoutedEventArgs e)
         {
+            Overlay.Visibility = Visibility.Visible;
             ServerVersion selectedVersion = (ServerVersion) versionComboBox.SelectedValue;
             string name = serverName.Text;
             //TODO check if inputs are valid / server not existing
             
-            ServerManager.Instance.CreateServer(selectedVersion, viewModel.ServerSettings, new ServerJavaSettings());
-            
+            bool createServerSuccess = await ServerManager.Instance.CreateServerAsync(selectedVersion, viewModel.ServerSettings, new ServerJavaSettings(), viewModel);
+            Console.WriteLine(createServerSuccess);
+
             // Close the current window
             this.Close();
         }

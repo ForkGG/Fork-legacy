@@ -6,6 +6,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 using nihilus.Logic.BackgroundWorker;
 using nihilus.Logic.CustomConsole;
 using nihilus.Logic.Model;
@@ -24,8 +26,8 @@ namespace nihilus.Logic.Manager
             {
                 Servers = Serializer.Instance.LoadServers();
             }
-            
-            if(Servers == null)
+
+            if (Servers == null)
             {
                 Servers = new ObservableCollection<ServerViewModel>();
             }
@@ -41,37 +43,26 @@ namespace nihilus.Logic.Manager
 
         public static ServerManager Instance
         {
-            get {
+            get
+            {
                 if (instance == null)
                     instance = new ServerManager();
                 return instance;
             }
         }
-        
+
         private HashSet<string> serverNames;
-        
+
         public ObservableCollection<ServerViewModel> Servers { set; get; }
-        
 
-        public void CreateServer(ServerVersion serverVersion, ServerSettings serverSettings, ServerJavaSettings javaSettings)
+
+        public async Task<bool> CreateServerAsync(ServerVersion serverVersion, ServerSettings serverSettings,
+            ServerJavaSettings javaSettings, AddServerViewModel addServerViewModel)
         {
-            string name = serverSettings.LevelName;
-            serverNames.Add(name);
-            
-            Server server = new Server(name, serverVersion, serverSettings, javaSettings);
-            server.Name = name;
-            server.Version = serverVersion;
-
-            DirectoryInfo directoryInfo = Directory.CreateDirectory(name);
-            WebClient webClient = new WebClient();
-            webClient.DownloadFile(serverVersion.JarLink,directoryInfo.Name+"/server.jar");
-            new FileWriter().WriteEula(directoryInfo.Name);
-            new FileWriter().WriteServerSettings(directoryInfo.Name, serverSettings.SettingsDictionary);
-            
-            ServerViewModel viewModel = new ServerViewModel(server);
-            Servers.Add(viewModel);
-            ApplicationManager.Instance.MainViewModel.SelectedServer = viewModel;
-            StartServer(viewModel);
+            Task<bool> t = new Task<bool>(() => CreateServer(serverVersion, serverSettings, javaSettings, addServerViewModel));
+            t.Start();
+            bool r = await t;
+            return r;
         }
 
         public void StartServer(ServerViewModel viewModel)
@@ -82,7 +73,7 @@ namespace nihilus.Logic.Manager
             {
                 return;
             }
-            
+
             Process process = new Process();
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
@@ -92,7 +83,8 @@ namespace nihilus.Logic.Manager
                 RedirectStandardOutput = true,
                 FileName = "java.exe",
                 WorkingDirectory = directoryInfo.Name,
-                Arguments = "-Xmx"+viewModel.Server.JavaSettings.MaxRam+"m -Xms"+viewModel.Server.JavaSettings.MinRam+"m -jar server.jar nogui",
+                Arguments = "-Xmx" + viewModel.Server.JavaSettings.MaxRam + "m -Xms" +
+                            viewModel.Server.JavaSettings.MinRam + "m -jar server.jar nogui",
                 WindowStyle = ProcessWindowStyle.Hidden,
                 CreateNoWindow = true
             };
@@ -109,7 +101,7 @@ namespace nihilus.Logic.Manager
                 viewModel.CurrentStatus = ServerStatus.STOPPED;
             }).Start();
             viewModel.ConsoleReader = consoleReader;
-            ApplicationManager.Instance.ActiveServers[viewModel.Server]= process;
+            ApplicationManager.Instance.ActiveServers[viewModel.Server] = process;
             new Thread(() => { new QueryStatsWorker(viewModel); }).Start();
         }
 
@@ -136,6 +128,53 @@ namespace nihilus.Logic.Manager
         private void ServerListChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             Serializer.Instance.StoreServers(Servers);
+        }
+
+        private bool CreateServer(ServerVersion serverVersion, ServerSettings serverSettings,
+            ServerJavaSettings javaSettings, AddServerViewModel addServerViewModel)
+        {
+            try
+            {
+                string name = serverSettings.LevelName;
+                serverNames.Add(name);
+
+                Server server = new Server(name, serverVersion, serverSettings, javaSettings);
+                server.Name = name;
+                server.Version = serverVersion;
+
+                DirectoryInfo directoryInfo = Directory.CreateDirectory(name);
+                Thread thread = new Thread(() =>
+                {
+                    WebClient webClient = new WebClient();
+                    webClient.DownloadProgressChanged += addServerViewModel.DownloadProgressChanged;
+                    webClient.DownloadFileCompleted += addServerViewModel.DownloadCompletedHandler;
+                    webClient.DownloadFileAsync(new Uri(serverVersion.JarLink), directoryInfo.Name + "/server.jar");
+                });
+                thread.Start();
+                while (true)
+                {
+                    if (addServerViewModel.DownloadCompleted)
+                    {
+                        Console.WriteLine("Finished downloading server.jar");
+                        break;
+                    }
+                    Thread.Sleep(500);
+                }
+
+                new FileWriter().WriteEula(directoryInfo.Name);
+                new FileWriter().WriteServerSettings(directoryInfo.Name, serverSettings.SettingsDictionary);
+
+                ServerViewModel viewModel = new ServerViewModel(server);
+                Application.Current.Dispatcher.Invoke(new Action(() => Servers.Add(viewModel)));
+                ApplicationManager.Instance.MainViewModel.SelectedServer = viewModel;
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+                return false;
+            }
         }
     }
 }
