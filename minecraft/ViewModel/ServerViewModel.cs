@@ -216,7 +216,7 @@ namespace nihilus.ViewModel
             double bytesIn = double.Parse(e.BytesReceived.ToString());
             double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
             DownloadProgress = bytesIn / totalBytes * 100;
-            DownloadProgressReadable = Math.Round(DownloadProgress, 1)+"%";
+            DownloadProgressReadable = Math.Round(DownloadProgress, 0)+"%";
         }
 
         public void DownloadCompletedHandler(object sender, AsyncCompletedEventArgs e)
