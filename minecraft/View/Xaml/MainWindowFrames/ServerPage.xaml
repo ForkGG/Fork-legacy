@@ -35,7 +35,7 @@
                     </Grid.ColumnDefinitions>
                     <lvc:CartesianChart Series="{Binding CPUList}" Hoverable="False" DataTooltip="{x:Null}">
                         <lvc:CartesianChart.ToolTip>
-                            <TextBlock Text="The total and this servers CPU usage over the past 100 seconds"></TextBlock>
+                            <TextBlock Text="The total and this servers CPU usage"></TextBlock>
                         </lvc:CartesianChart.ToolTip>
                         <lvc:CartesianChart.AxisY>
                             <lvc:Axis Style="{StaticResource yAxisCPU}" Title="CPU usage"/>
@@ -46,7 +46,7 @@
                     </lvc:CartesianChart>
                     <lvc:CartesianChart Grid.Column="1" Series="{Binding MEMList}" Hoverable="False" DataTooltip="{x:Null}">
                         <lvc:CartesianChart.ToolTip>
-                            <TextBlock Text="The total and this servers RAM usage over the past 100 seconds"></TextBlock>
+                            <TextBlock Text="This servers RAM usage"></TextBlock>
                         </lvc:CartesianChart.ToolTip>
                         <lvc:CartesianChart.AxisY>
                             <lvc:Axis Title="Memory usage" MinValue="0" MaxValue="{Binding Server.JavaSettings.MaxRam}"/>
