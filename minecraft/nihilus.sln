@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.28922.388
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nihilus", "nihilus.csproj", "{3CC25DA4-D84C-4B40-99FF-004EB14D8FE0}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "NihilusInstaller", "..\NihilusInstaller\NihilusInstaller.vdproj", "{8AB1032A-57B1-4ADF-B5DB-DA8E22147867}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{3CC25DA4-D84C-4B40-99FF-004EB14D8FE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CC25DA4-D84C-4B40-99FF-004EB14D8FE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CC25DA4-D84C-4B40-99FF-004EB14D8FE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AB1032A-57B1-4ADF-B5DB-DA8E22147867}.Debug|Any CPU.ActiveCfg = Debug
+		{8AB1032A-57B1-4ADF-B5DB-DA8E22147867}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
