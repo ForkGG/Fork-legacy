@@ -1,5 +1,6 @@
 ﻿
 using System.Windows;
+using System.IO.Compression;
 using nihilus.Logic.Manager;
 using nihilus.ViewModel;
 
@@ -25,14 +26,11 @@ namespace nihilus.View.Xaml
             viewModel.UpdateSettings();
         }
 
-        private void Btn_Delete(object sender, RoutedEventArgs e)
+        private async void Btn_Delete(object sender, RoutedEventArgs e)
         {
             Close();
-            ApplicationManager.Instance.MainViewModel.Servers.Remove(viewModel);
-            
-            /*
-             * TODO: save world in zip
-             */
+            ApplicationManager.Instance.MainViewModel.Servers.Remove(viewModel); //This shouldn't be here
+            await ServerManager.Instance.DeleteServerAsync(viewModel);
         }
 
         private void Btn_ChangeVersion(object sender, RoutedEventArgs e)
@@ -43,11 +41,13 @@ namespace nihilus.View.Xaml
         private void Btn_RegenerateEnd(object sender, RoutedEventArgs e)
         {
             throw new System.NotImplementedException();
+            //TODO: Delete and save DIM1
         }
 
         private void Btn_RegenerateNether(object sender, RoutedEventArgs e)
         {
             throw new System.NotImplementedException();
+            //TODO: Delete and save DIM-1
         }
     }
 }

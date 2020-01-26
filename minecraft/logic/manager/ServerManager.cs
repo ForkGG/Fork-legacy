@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -110,6 +111,14 @@ namespace nihilus.Logic.Manager
             ApplicationManager.Instance.ActiveServers[server].StandardInput.WriteLine("stop");
         }
 
+        public async Task<bool> DeleteServerAsync(ServerViewModel serverViewModel)
+        {
+            Task<bool> t = new Task<bool>(() => DeleteServer(serverViewModel));
+            t.Start();
+            bool result = await t;
+            return result;
+        }
+
         public string NextDefaultServerName()
         {
             long i = 0;
@@ -175,6 +184,15 @@ namespace nihilus.Logic.Manager
                 throw;
                 return false;
             }
+        }
+
+        private bool DeleteServer(ServerViewModel serverViewModel)
+        {
+            DirectoryInfo deletedDirectory = Directory.CreateDirectory(Path.Combine("backup","deleted"));
+            DirectoryInfo serverDirectory = new DirectoryInfo(serverViewModel.Server.Name);
+            ZipFile.CreateFromDirectory(serverViewModel.Server.Name,Path.Combine(deletedDirectory.FullName,serverViewModel.Server.Name+".zip"));
+            serverDirectory.Delete(true);
+            return !serverDirectory.Exists && File.Exists(Path.Combine(deletedDirectory.FullName,serverViewModel.Server.Name+".zip"));
         }
     }
 }
