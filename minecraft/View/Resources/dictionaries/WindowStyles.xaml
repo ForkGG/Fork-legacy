@@ -105,4 +105,30 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style x:Key="DialogWindowNoClose" TargetType="{x:Type Window}">
+        <Setter Property="WindowChrome.WindowChrome">
+            <Setter.Value>
+                <WindowChrome CaptionHeight="30"
+                              CornerRadius="0"
+                              GlassFrameThickness="0,0,0,1"
+                              ResizeBorderThickness="0"
+                              NonClientFrameEdges="None"
+                              UseAeroCaptionButtons="False" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Window}">
+                    <Border BorderThickness="1" BorderBrush="{DynamicResource outerBorder}">
+                        <DockPanel Background="{DynamicResource backgroundDefault}">
+                            <DockPanel Height="10" DockPanel.Dock="Top" LastChildFill="False">
+                            </DockPanel>
+                            <ContentPresenter Content="{TemplateBinding Content}" />
+                        </DockPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

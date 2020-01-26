@@ -88,7 +88,7 @@ namespace nihilus.ViewModel
             ConsoleOutList = new ObservableCollection<string>();
             ConsoleOutList.CollectionChanged += ConsoleOutChanged;
             UpdateAddressInfo();
-            ServerPage = new ServerPage(this);
+            Application.Current.Dispatcher.Invoke(new Action(()=>ServerPage = new ServerPage(this)));
             UpdateWhiteListRead();
             WhiteList.CollectionChanged += WhiteListChanged;
             WhiteList.CollectionChanged += UpdateWhiteListWrite;
