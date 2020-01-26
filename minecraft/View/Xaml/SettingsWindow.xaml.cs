@@ -3,6 +3,7 @@ using System;
 using System.Windows;
 using System.IO.Compression;
 using nihilus.Logic.Manager;
+using nihilus.Logic.Model;
 using nihilus.ViewModel;
 
 namespace nihilus.View.Xaml
@@ -17,7 +18,7 @@ namespace nihilus.View.Xaml
         public SettingsWindow(ServerViewModel viewModel)
         {
             this.viewModel = viewModel;
-            DataContext = this.viewModel.Server;
+            DataContext = this.viewModel;
             InitializeComponent();
         }
 
@@ -39,9 +40,17 @@ namespace nihilus.View.Xaml
             }
         }
 
-        private void Btn_ChangeVersion(object sender, RoutedEventArgs e)
+        private async void Btn_ChangeVersion(object sender, RoutedEventArgs e)
         {
-            throw new System.NotImplementedException();
+            Overlay.Visibility = Visibility.Visible;
+            bool success = await ServerManager.Instance.ChangeServerVersionAsync((ServerVersion) VersionSelector.SelectedValue, viewModel);
+            if (!success)
+            {
+                //TODO: Display error
+                return;
+            }
+            
+            Close();          
         }
 
         private void Btn_RegenerateEnd(object sender, RoutedEventArgs e)

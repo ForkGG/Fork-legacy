@@ -119,6 +119,14 @@ namespace nihilus.Logic.Manager
             return result;
         }
 
+        public async Task<bool> ChangeServerVersionAsync(ServerVersion newVersion, ServerViewModel serverViewModel)
+        {
+            Task<bool> t = new Task<bool>(() => ChangeServerVersion(newVersion,serverViewModel));
+            t.Start();
+            bool result = await t;
+            return result;
+        }
+
         public string NextDefaultServerName()
         {
             long i = 0;
@@ -212,8 +220,54 @@ namespace nihilus.Logic.Manager
             {
                 Console.WriteLine(e);
                 return false;
+            }            
+        }
+
+        private bool ChangeServerVersion(ServerVersion newVersion, ServerViewModel serverViewModel)
+        {
+            try
+            {
+                if (serverViewModel.CurrentStatus != ServerStatus.STOPPED)
+                {
+                    StopServer(serverViewModel.Server);
+                    while (serverViewModel.CurrentStatus != ServerStatus.STOPPED)
+                    {
+                        Thread.Sleep(500);
+                    }
+                }
+                
+                //Delete old server.jar
+                File.Delete(Path.Combine(serverViewModel.Server.Name,"server.jar"));
+                
+                //Download new server.jar
+                DirectoryInfo directoryInfo = new DirectoryInfo(serverViewModel.Server.Name);
+                Thread thread = new Thread(() =>
+                {
+                    WebClient webClient = new WebClient();
+                    webClient.DownloadProgressChanged += serverViewModel.DownloadProgressChanged;
+                    webClient.DownloadFileCompleted += serverViewModel.DownloadCompletedHandler;
+                    webClient.DownloadFileAsync(new Uri(newVersion.JarLink), directoryInfo.Name + "/server.jar");
+                });
+                thread.Start();
+                while (true)
+                {
+                    if (serverViewModel.DownloadCompleted)
+                    {
+                        Console.WriteLine("Finished downloading server.jar");
+                        break;
+                    }
+                    Thread.Sleep(500);
+                }
+
+                serverViewModel.Server.Version = newVersion;
+                
+                return true;
             }
-            
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            } 
         }
     }
 }

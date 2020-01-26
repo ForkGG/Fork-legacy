@@ -33,6 +33,7 @@ namespace nihilus.Logic.Manager
                 ServerVersion version = new ServerVersion();
                 version.Version = match.Groups[1].Value;
                 version.JarLink = match.Groups[2].Value;
+                version.Type = ServerVersion.VersionType.Vanilla;
                 
                 vanillaVersions.Add(version);
             }
@@ -45,6 +46,7 @@ namespace nihilus.Logic.Manager
             ServerVersion version = new ServerVersion();
             version.Version = "test";
             version.JarLink = "NOT IMPLEMENTED";
+            version.Type = ServerVersion.VersionType.Spigot;
             
             List<ServerVersion> serverVersions = new List<ServerVersion>();
             serverVersions.Add(version);

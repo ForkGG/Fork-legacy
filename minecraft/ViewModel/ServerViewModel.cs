@@ -16,6 +16,7 @@ using LiveCharts.Wpf;
 using nihilus.Annotations;
 using nihilus.Logic.BackgroundWorker.Performance;
 using nihilus.Logic.CustomConsole;
+using nihilus.Logic.Manager;
 using nihilus.Logic.Model;
 using nihilus.Logic.Persistence;
 using nihilus.View.Xaml.MainWindowFrames;
@@ -47,6 +48,7 @@ namespace nihilus.ViewModel
         public ObservableCollection<Player> BanList { get; set; } = new ObservableCollection<Player>();
         public ObservableCollection<Player> OPList { get; set; } = new ObservableCollection<Player>();
         public ObservableCollection<Player> WhiteList { get; set; } = new ObservableCollection<Player>();
+        public ObservableCollection<ServerVersion> Versions { get; set; } = new ObservableCollection<ServerVersion>();
         public SeriesCollection CPUList { get; set; } = new SeriesCollection();
         public SeriesCollection MEMList { get; set; } = new SeriesCollection();
         public string ConsoleIn { get; set; } = "";
@@ -80,12 +82,25 @@ namespace nihilus.ViewModel
                        }));
             }
         }
+        
+        public double DownloadProgress { get; set; }
+        public string DownloadProgressReadable { get; set; }
+        public bool DownloadCompleted { get; set; }
 
         public ServerViewModel(Server server)
         {
             Server = server;
             CurrentStatus = ServerStatus.STOPPED;
             ConsoleOutList = new ObservableCollection<string>();
+            if (Server.Version.Type == ServerVersion.VersionType.Vanilla)
+            {
+                Versions = new ObservableCollection<ServerVersion>(VersionManager.Instance.VanillaVersions);
+            } else if (Server.Version.Type == ServerVersion.VersionType.Spigot)
+            {
+                Versions = new ObservableCollection<ServerVersion>(VersionManager.Instance.SpigotVersions);
+            }
+            
+            Versions =  new ObservableCollection<ServerVersion>(VersionManager.Instance.VanillaVersions);
             ConsoleOutList.CollectionChanged += ConsoleOutChanged;
             UpdateAddressInfo();
             Application.Current.Dispatcher.Invoke(new Action(()=>ServerPage = new ServerPage(this)));
@@ -194,6 +209,19 @@ namespace nihilus.ViewModel
                 }
             };
             memServer.CollectionChanged += MEMListChanged;
+        }
+        
+        public void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
+            double bytesIn = double.Parse(e.BytesReceived.ToString());
+            double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
+            DownloadProgress = bytesIn / totalBytes * 100;
+            DownloadProgressReadable = Math.Round(DownloadProgress, 1)+"%";
+        }
+
+        public void DownloadCompletedHandler(object sender, AsyncCompletedEventArgs e)
+        {
+            DownloadCompleted = true;
         }
 
         private void ConsoleOutChanged(object sender, NotifyCollectionChangedEventArgs e)
