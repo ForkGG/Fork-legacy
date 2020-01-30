@@ -100,6 +100,7 @@ namespace nihilus.Logic.Manager
 
         private List<ServerVersion> GetVanillaVersionsFromCache(Manifest.VersionType versionType)
         {
+            //TODO File cache
             if (vanillaDict.ContainsKey(versionType)&&VanillaCacheUpToDate(versionType))
             {
                 return vanillaDict[versionType];
