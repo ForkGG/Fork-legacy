@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using nihilus.Logic.Model;
+using nihilus.Logic.Model.MinecraftVersionPojo;
 
 namespace nihilus.Logic.Manager
 {
@@ -30,7 +31,7 @@ namespace nihilus.Logic.Manager
         {
             get 
             {
-                vanillaVersions = new WebRequestManager().GetVanillaVersions();
+                vanillaVersions = WebRequestManager.Instance.GetVanillaVersions(Manifest.VersionType.release);
                 return vanillaVersions;
             }
         }
@@ -42,7 +43,7 @@ namespace nihilus.Logic.Manager
         {
             get 
             {
-                spigotVersions = new WebRequestManager().GetSpigotVersions();
+                spigotVersions = WebRequestManager.Instance.GetSpigotVersions();
                 return spigotVersions;
             }
         }

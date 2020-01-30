@@ -134,6 +134,8 @@
     <Compile Include="Logic\Manager\ApplicationManager.cs" />
     <Compile Include="Logic\Manager\AutoRestartManager.cs" />
     <Compile Include="Logic\Model\FullStats.cs" />
+    <Compile Include="Logic\Model\MinecraftVersionPojo\Manifest.cs" />
+    <Compile Include="Logic\Model\MinecraftVersionPojo\VersionDetails.cs" />
     <Compile Include="Logic\Model\Player.cs" />
     <Compile Include="Logic\Model\ServerRestart.cs" />
     <Compile Include="Logic\Model\ServerStatus.cs" />
@@ -206,7 +208,7 @@
     <Page Include="View\Xaml\MainWindow.xaml" />
     <Compile Include="Logic\Manager\ServerManager.cs" />
     <Compile Include="Logic\Manager\VersionManager.cs" />
-    <Compile Include="Logic\Manager\WebRequest.cs" />
+    <Compile Include="Logic\Manager\WebRequestManager.cs" />
     <Compile Include="Logic\Model\Server.cs" />
     <Compile Include="Logic\Model\ServerSettings.cs" />
     <Compile Include="Logic\Model\ServerVersion.cs" />
