@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Media;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -20,6 +21,7 @@ using nihilus.Logic.Manager;
 using nihilus.Logic.Model;
 using nihilus.Logic.Persistence;
 using nihilus.View.Xaml.MainWindowFrames;
+using Timer = System.Timers.Timer;
 
 namespace nihilus.ViewModel
 {
@@ -54,6 +56,7 @@ namespace nihilus.ViewModel
         public string ConsoleIn { get; set; } = "";
         public ServerStatus CurrentStatus { get; set; }
         public Server Server { get; set; }
+        public string NextRestart { get; set; }
         public string ServerTitle
         {
             get
@@ -130,6 +133,30 @@ namespace nihilus.ViewModel
             {
                 new FileWriter().WriteWhitelist(Server.Name, new List<Player>(WhiteList));
             }).Start();
+        }
+
+        public void SetRestartTime(double time)
+        {
+            if (time < 0)
+            {
+                NextRestart = null;
+                return;
+            }
+            TimeSpan timeSpan = TimeSpan.FromMilliseconds(time);
+            new Thread(() =>
+            {
+                Timer timer = new System.Timers.Timer();
+                timer.Interval = 1000;
+                timer.Elapsed += (sender, args) =>
+                {
+                    timeSpan.Subtract(TimeSpan.FromMilliseconds(1000));
+                    NextRestart = timeSpan.ToString(@"hh\:mm\:ss");
+                    Console.WriteLine("Restart in "+NextRestart);
+                };
+                timer.AutoReset = true;
+                timer.Enabled = true;
+            }).Start();
+            
         }
 
         public void UpdateSettings()

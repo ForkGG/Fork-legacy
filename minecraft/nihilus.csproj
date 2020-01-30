@@ -132,6 +132,7 @@
     <Compile Include="Logic\CustomConsole\ConsoleReader.cs" />
     <Compile Include="Logic\CustomConsole\ConsoleWriter.cs" />
     <Compile Include="Logic\Manager\ApplicationManager.cs" />
+    <Compile Include="Logic\Manager\AutoRestartManager.cs" />
     <Compile Include="Logic\Model\FullStats.cs" />
     <Compile Include="Logic\Model\Player.cs" />
     <Compile Include="Logic\Model\ServerRestart.cs" />

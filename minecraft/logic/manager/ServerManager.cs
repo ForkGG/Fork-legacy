@@ -95,11 +95,15 @@ namespace nihilus.Logic.Manager
             viewModel.CurrentStatus = ServerStatus.STARTING;
             ConsoleWriter consoleWriter = new ConsoleWriter(viewModel, process.StandardOutput, process.StandardError);
             ConsoleReader consoleReader = new ConsoleReader(process.StandardInput, consoleWriter);
+            double nextRestart = AutoRestartManager.Instance.RegisterRestart(viewModel);
+            viewModel.SetRestartTime(nextRestart);
             new Thread(() =>
             {
                 process.WaitForExit();
                 ApplicationManager.Instance.ActiveServers.Remove(viewModel.Server);
                 viewModel.CurrentStatus = ServerStatus.STOPPED;
+                AutoRestartManager.Instance.DisposeRestart(viewModel);
+                viewModel.SetRestartTime(-1d);
             }).Start();
             viewModel.ConsoleReader = consoleReader;
             ApplicationManager.Instance.ActiveServers[viewModel.Server] = process;
@@ -147,6 +151,16 @@ namespace nihilus.Logic.Manager
                     return name;
                 }
             }
+        }
+
+        public void RestartServer(ServerViewModel serverViewModel)
+        {
+            StopServer(serverViewModel.Server);
+            while (serverViewModel.CurrentStatus != ServerStatus.STOPPED)
+            {
+                Thread.Sleep(500);
+            }
+            StartServer(serverViewModel);
         }
 
 

@@ -168,8 +168,12 @@
                     </StackPanel>
                 </DockPanel>
 
-                <!-- Empty -->
+                <!-- Timer -->
                 <DockPanel Grid.Column="1">
+                    <TextBlock DockPanel.Dock="Top">
+                        Next Restart:
+                    </TextBlock>
+                    <TextBlock Text="{Binding NextRestartTime}"></TextBlock>
                 </DockPanel>
             </Grid>
 
