@@ -173,7 +173,7 @@
                     <TextBlock DockPanel.Dock="Top">
                         Next Restart:
                     </TextBlock>
-                    <TextBlock Text="{Binding NextRestartTime}"></TextBlock>
+                    <TextBlock Text="{Binding NextRestart}"></TextBlock>
                 </DockPanel>
             </Grid>
 

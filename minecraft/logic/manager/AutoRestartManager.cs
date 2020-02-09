@@ -92,7 +92,7 @@ namespace nihilus.Logic.Manager
             DateTime restartTime = new DateTime(nowTime.Year,nowTime.Month,nowTime.Day,restart.Time.Hours,restart.Time.Minutes,0);
             if (restartTime < nowTime)
             {
-                restartTime.AddDays(1);
+                restartTime = restartTime.AddDays(1);
             }
             return (restartTime - nowTime).TotalMilliseconds;
         }

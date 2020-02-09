@@ -44,6 +44,8 @@ namespace nihilus.ViewModel
         private ChartValues<double> memServer;
         private MEMTracker memTracker;
 
+        private Timer restartTimer = null;
+
         public ConsoleReader ConsoleReader;
         public ObservableCollection<string> ConsoleOutList { get; }
         public ObservableCollection<Player> PlayerList { get; set; } = new ObservableCollection<Player>();
@@ -139,24 +141,33 @@ namespace nihilus.ViewModel
         {
             if (time < 0)
             {
-                NextRestart = null;
+                restartTimer?.Dispose();
+                NextRestart = "";
                 return;
             }
             TimeSpan timeSpan = TimeSpan.FromMilliseconds(time);
             new Thread(() =>
             {
-                Timer timer = new System.Timers.Timer();
-                timer.Interval = 1000;
-                timer.Elapsed += (sender, args) =>
+                restartTimer = new System.Timers.Timer();
+                restartTimer.Interval = 1000;
+                restartTimer.Elapsed += (sender, args) =>
                 {
-                    timeSpan.Subtract(TimeSpan.FromMilliseconds(1000));
+                    timeSpan = timeSpan.Subtract(TimeSpan.FromMilliseconds(1000));
                     NextRestart = timeSpan.ToString(@"hh\:mm\:ss");
-                    Console.WriteLine("Restart in "+NextRestart);
+                    if (timeSpan.Minutes ==30 && timeSpan.Seconds==0)
+                    {
+                        ApplicationManager.Instance.ActiveServers[Server].StandardInput.WriteLineAsync("/say Next server restart in 30 minutes!");
+                    } else if (timeSpan.Minutes ==5 && timeSpan.Seconds==0)
+                    {
+                        ApplicationManager.Instance.ActiveServers[Server].StandardInput.WriteLineAsync("/say Next server restart in 5 minutes!");
+                    } else if (timeSpan.Minutes == 1 && timeSpan.Seconds==0)
+                    {
+                        ApplicationManager.Instance.ActiveServers[Server].StandardInput.WriteLineAsync("/say Next server restart in 1 minute!");
+                    }
                 };
-                timer.AutoReset = true;
-                timer.Enabled = true;
+                restartTimer.AutoReset = true;
+                restartTimer.Enabled = true;
             }).Start();
-            
         }
 
         public void UpdateSettings()
@@ -165,6 +176,7 @@ namespace nihilus.ViewModel
             new Thread(() =>
             {
                 new FileWriter().WriteServerSettings(Server.Name,Server.ServerSettings.SettingsDictionary);
+                Serializer.Instance.StoreServers(ServerManager.Instance.Servers);
             }).Start();
         }
 
