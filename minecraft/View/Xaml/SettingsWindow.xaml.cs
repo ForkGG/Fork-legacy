@@ -1,6 +1,8 @@
 ﻿
 using System;
+using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using nihilus.Logic.Manager;
@@ -26,6 +28,10 @@ namespace nihilus.View.Xaml
 
         private void Btn_Apply(object sender, RoutedEventArgs e)
         {
+            if (!IsValid(this))
+            {
+                return;
+            }
             Close();
             
             //Write changes to File
@@ -121,6 +127,15 @@ namespace nihilus.View.Xaml
             Storyboard storyboard = new Storyboard();
             storyboard.Children.Add(doubleAnimation);
             storyboard.Begin();
+        }
+
+        //https://stackoverflow.com/a/4650392/10188858
+        private bool IsValid(DependencyObject obj)
+        {
+            return !Validation.GetHasError(obj) &&
+                   LogicalTreeHelper.GetChildren(obj)
+                       .OfType<DependencyObject>()
+                       .All(IsValid);
         }
     }
 }

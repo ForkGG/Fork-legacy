@@ -171,6 +171,7 @@
     </Compile>
     <Compile Include="View\Xaml\ValidationRules\PortValidationRule.cs" />
     <Compile Include="View\Xaml\ValidationRules\PositiveLongValidationRule.cs" />
+    <Compile Include="View\Xaml\ValidationRules\TimeValidationRule.cs" />
     <Page Include="View\Resources\dictionaries\RadioButtonStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

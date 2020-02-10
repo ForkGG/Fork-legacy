@@ -221,22 +221,50 @@
                                                     <RowDefinition Height="*" />
                                                 </Grid.RowDefinitions>
                                                 <CheckBox IsChecked="{Binding Server.Restart1.Enabled}">
-                                                    <TextBox MinWidth="40"
-                                                             Text="{Binding Path=Server.Restart1.Time, Converter={StaticResource SimpleTimeToStringConverter}, Mode=TwoWay}" />
+                                                    <TextBox MinWidth="40">
+                                                        <TextBox.Text>
+                                                            <Binding Path="Server.Restart1.Time" Converter="{StaticResource SimpleTimeToStringConverter}" Mode="TwoWay">
+                                                                <Binding.ValidationRules>
+                                                                    <val:TimeValidationRule ValidationStep="RawProposedValue"/>
+                                                                </Binding.ValidationRules>
+                                                            </Binding>
+                                                        </TextBox.Text>
+                                                    </TextBox>
                                                 </CheckBox>
                                                 <CheckBox Grid.Row="1" Margin="0 5 0 0"
                                                           IsChecked="{Binding Server.Restart2.Enabled}">
-                                                    <TextBox MinWidth="40"
-                                                             Text="{Binding Path=Server.Restart2.Time, Converter={StaticResource SimpleTimeToStringConverter}, Mode=TwoWay}" />
+                                                    <TextBox MinWidth="40">
+                                                        <TextBox.Text>
+                                                        <Binding Path="Server.Restart2.Time" Converter="{StaticResource SimpleTimeToStringConverter}" Mode="TwoWay">
+                                                            <Binding.ValidationRules>
+                                                                <val:TimeValidationRule ValidationStep="RawProposedValue"/>
+                                                            </Binding.ValidationRules>
+                                                        </Binding>
+                                                        </TextBox.Text>
+                                                    </TextBox>
                                                 </CheckBox>
                                                 <CheckBox Grid.Column="1" IsChecked="{Binding Server.Restart3.Enabled}">
-                                                    <TextBox MinWidth="40"
-                                                             Text="{Binding Path=Server.Restart3.Time, Converter={StaticResource SimpleTimeToStringConverter}, Mode=TwoWay}" />
+                                                    <TextBox MinWidth="40">
+                                                        <TextBox.Text>
+                                                            <Binding Path="Server.Restart3.Time" Converter="{StaticResource SimpleTimeToStringConverter}" Mode="TwoWay">
+                                                                <Binding.ValidationRules>
+                                                                    <val:TimeValidationRule ValidationStep="RawProposedValue"/>
+                                                                </Binding.ValidationRules>
+                                                            </Binding>
+                                                        </TextBox.Text>
+                                                    </TextBox>
                                                 </CheckBox>
                                                 <CheckBox Grid.Row="1" Grid.Column="1" Margin="0 5 0 0"
                                                           IsChecked="{Binding Server.Restart4.Enabled}">
-                                                    <TextBox MinWidth="40"
-                                                             Text="{Binding Path=Server.Restart4.Time, Converter={StaticResource SimpleTimeToStringConverter}, Mode=TwoWay}" />
+                                                    <TextBox MinWidth="40">
+                                                        <TextBox.Text>
+                                                            <Binding Path="Server.Restart4.Time" Converter="{StaticResource SimpleTimeToStringConverter}" Mode="TwoWay">
+                                                                <Binding.ValidationRules>
+                                                                    <val:TimeValidationRule ValidationStep="RawProposedValue"/>
+                                                                </Binding.ValidationRules>
+                                                            </Binding>
+                                                        </TextBox.Text>
+                                                    </TextBox>
                                                 </CheckBox>
                                             </Grid>
                                         </Border>
