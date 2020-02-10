@@ -361,22 +361,7 @@
                             </Grid>
                         </TabItem>
                     </TabControl>
-                </DockPanel>
-                <Grid x:Name="Overlay" Grid.Row="0" Grid.ZIndex="2" Width="771" Height="463" VerticalAlignment="Center"
-                      HorizontalAlignment="Center" Visibility="Hidden">
-                    <Rectangle Fill="{DynamicResource backgroundDefault}" Opacity="0.8" Height="473" Width="800"
-                               HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-14,-18,-15,8" />
-                    <StackPanel VerticalAlignment="Center">
-                        <TextBlock TextAlignment="Center" Margin="10 10 10 10">
-                            Downloading new server.jar
-                        </TextBlock>
-                        <Grid Margin="10 0 10 0">
-                            <ProgressBar Value="{Binding DownloadProgress}" Height="20" />
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"
-                                       Text="{Binding DownloadProgressReadable}" Foreground="Black" />
-                        </Grid>
-                    </StackPanel>
-                </Grid>
+                </DockPanel>                
             </Grid>
         </Border>
         <Grid x:Name="DeleteVerification" Visibility="Hidden">
@@ -398,6 +383,21 @@
                         </StackPanel>
                     </Grid>
                 </Border>
+            </StackPanel>
+        </Grid>
+        <Grid x:Name="Overlay" Grid.Row="0" Grid.ZIndex="2" Width="771" Height="463" VerticalAlignment="Center"
+                      HorizontalAlignment="Center" Visibility="Hidden">
+            <Rectangle Fill="{DynamicResource backgroundDark}" Opacity="0.95" Height="473" Width="800"
+                               HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-14,-18,-15,8" />
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock TextAlignment="Center" Margin="10 10 10 10">
+                            Downloading new server.jar
+                </TextBlock>
+                <Grid Margin="10 0 10 0">
+                    <ProgressBar Value="{Binding DownloadProgress}" Height="20" />
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"
+                                       Text="{Binding DownloadProgressReadable}" Foreground="Black" />
+                </Grid>
             </StackPanel>
         </Grid>
     </Grid>
