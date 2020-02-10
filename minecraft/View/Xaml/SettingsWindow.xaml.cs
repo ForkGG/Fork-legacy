@@ -42,6 +42,11 @@ namespace nihilus.View.Xaml
 
         private async void Btn_Delete(object sender, RoutedEventArgs e)
         {
+            DeleteVerification.Visibility = Visibility.Visible;
+        }
+
+        private async void Btn_ConfirmDelete(object sender, RoutedEventArgs e)
+        {
             Close();
             bool success = await ServerManager.Instance.DeleteServerAsync(viewModel);
             if(!success)
@@ -50,6 +55,11 @@ namespace nihilus.View.Xaml
             {
                 ApplicationManager.Instance.MainViewModel.Servers.Remove(viewModel); //This shouldn't be here
             }
+        }
+
+        private void Btn_AbortDelete(object sender, RoutedEventArgs e)
+        {
+            DeleteVerification.Visibility = Visibility.Hidden;
         }
 
         private async void Btn_ChangeVersion(object sender, RoutedEventArgs e)
