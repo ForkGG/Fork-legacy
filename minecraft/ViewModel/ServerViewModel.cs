@@ -58,7 +58,11 @@ namespace nihilus.ViewModel
         public string ConsoleIn { get; set; } = "";
         public ServerStatus CurrentStatus { get; set; }
         public Server Server { get; set; }
-        public string NextRestart { get; set; }
+
+        public bool RestartEnabled { get; set; }
+        public string NextRestartHours { get; set; }
+        public string NextRestartMinutes { get; set; }
+        public string NextRestartSeconds { get; set; }
         public string ServerTitle
         {
             get
@@ -142,7 +146,7 @@ namespace nihilus.ViewModel
             if (time < 0)
             {
                 restartTimer?.Dispose();
-                NextRestart = "";
+                RestartEnabled = false;
                 return;
             }
             TimeSpan timeSpan = TimeSpan.FromMilliseconds(time);
@@ -153,14 +157,17 @@ namespace nihilus.ViewModel
                 restartTimer.Elapsed += (sender, args) =>
                 {
                     timeSpan = timeSpan.Subtract(TimeSpan.FromMilliseconds(1000));
-                    NextRestart = timeSpan.ToString(@"hh\:mm\:ss");
-                    if (timeSpan.Minutes ==30 && timeSpan.Seconds==0)
+                    RestartEnabled = true;
+                    NextRestartHours = timeSpan.Hours.ToString();
+                    NextRestartMinutes = timeSpan.Minutes.ToString();
+                    NextRestartSeconds = timeSpan.Seconds.ToString();
+                    if (timeSpan.Hours == 0 && timeSpan.Minutes == 30 && timeSpan.Seconds == 0)
                     {
                         ApplicationManager.Instance.ActiveServers[Server].StandardInput.WriteLineAsync("/say Next server restart in 30 minutes!");
-                    } else if (timeSpan.Minutes ==5 && timeSpan.Seconds==0)
+                    } else if (timeSpan.Hours == 0 && timeSpan.Minutes ==5 && timeSpan.Seconds==0)
                     {
                         ApplicationManager.Instance.ActiveServers[Server].StandardInput.WriteLineAsync("/say Next server restart in 5 minutes!");
-                    } else if (timeSpan.Minutes == 1 && timeSpan.Seconds==0)
+                    } else if (timeSpan.Hours == 0 && timeSpan.Minutes == 1 && timeSpan.Seconds==0)
                     {
                         ApplicationManager.Instance.ActiveServers[Server].StandardInput.WriteLineAsync("/say Next server restart in 1 minute!");
                     }

@@ -152,6 +152,7 @@
     <Compile Include="View\Resources\dictionaries\WindowStyles.xaml.cs">
       <DependentUpon>WindowStyles.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Xaml\Converter\BoolToVisibilityConverter.cs" />
     <Compile Include="View\Xaml\Converter\SimpleTimeToStringConverter.cs" />
     <Compile Include="View\Xaml\Lists\AddRemoveList.xaml.cs">
       <DependentUpon>AddRemoveList.xaml</DependentUpon>

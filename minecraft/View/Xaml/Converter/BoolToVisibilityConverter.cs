@@ -1,0 +1,31 @@
+using System;
+using System.Globalization;
+using System.Windows;
+using System.Windows.Data;
+
+namespace nihilus.View.Xaml.Converter
+{
+    [ValueConversion(typeof(bool), typeof(Visibility))]
+    public class BoolToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (targetType != typeof(Visibility))
+            {
+                throw new ArgumentException("This converter can only convert bools to Visibility");
+            }
+
+            if ((bool)value)
+            {
+                return Visibility.Visible;
+            }
+
+            return Visibility.Hidden;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
