@@ -24,8 +24,7 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}"></Style>
-    
+
     <!-- for borderless buttons -->
     <Style x:Key="Borderless" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="BorderThickness" Value="0" />
@@ -39,5 +38,7 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    
+    <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}"></Style>
     
 </ResourceDictionary>

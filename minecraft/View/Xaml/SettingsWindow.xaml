@@ -217,7 +217,6 @@
                                                 <RowDefinition Height="*" />
                                                 <RowDefinition Height="*" />
                                             </Grid.RowDefinitions>
-                                            <!-- TODO Add viewmodel bindings -->
                                             <CheckBox IsChecked="{Binding Server.Restart1.Enabled}">
                                                 <TextBox MinWidth="40" Text="{Binding Path=Server.Restart1.Time, Converter={StaticResource SimpleTimeToStringConverter}, Mode=TwoWay}" />
                                             </CheckBox>
@@ -249,8 +248,9 @@
                                               DockPanel.Dock="Top" SelectedIndex="0"/>
                                     <Border BorderThickness="2" DockPanel.Dock="Top" />
                                     <Button Content="Change Version" DockPanel.Dock="Top" Click="Btn_ChangeVersion"/>
-                                    <Button Content="Delete Server" DockPanel.Dock="Bottom" Foreground="Red"
-                                            Click="Btn_Delete" />
+                                    <Button DockPanel.Dock="Bottom" Click="Btn_Delete" >
+                                        <TextBlock Text="Delete Server" Foreground="Red"></TextBlock>
+                                    </Button>
                                 </DockPanel>
                             </Border>
                         </Grid>
