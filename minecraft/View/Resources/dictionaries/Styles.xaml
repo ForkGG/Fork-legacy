@@ -4,6 +4,7 @@
                     xmlns:model="clr-namespace:nihilus.Logic.Model">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ButtonStyles.xaml"></ResourceDictionary>
+        <ResourceDictionary Source="ScrollBarStyle.xaml"></ResourceDictionary>
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="CheckBox">

@@ -68,7 +68,7 @@
                             </TextBox.InputBindings>
                         </TextBox>
                         <Border DockPanel.Dock="Top" BorderThickness="1" BorderBrush="{DynamicResource backgroundLight}">
-                            <ScrollViewer Margin="3 3 3 3" x:Name="ScrollViewer" ScrollChanged="ScrollViewer_ScrollChanged">
+                            <ScrollViewer Margin="3 3 3 3" x:Name="ScrollViewer" ScrollChanged="ScrollViewer_ScrollChanged" Style="{DynamicResource CustomScrollViewer}">
                                 <TextBlock Text="{Binding Path=ConsoleOutList, Converter={StaticResource ListToStringConverter}}" TextWrapping="Wrap"></TextBlock>
                             </ScrollViewer>
                         </Border>
