@@ -46,7 +46,7 @@ namespace nihilus.View.Xaml
             viewModel.Server.ApplyBackup();
         }
 
-        private async void Btn_Delete(object sender, RoutedEventArgs e)
+        private void Btn_Delete(object sender, RoutedEventArgs e)
         {
             DeleteVerification.Visibility = Visibility.Visible;
         }

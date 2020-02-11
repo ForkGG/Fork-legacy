@@ -11,6 +11,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 using LiveCharts;
 using LiveCharts.Wpf;
@@ -21,6 +22,7 @@ using nihilus.Logic.Manager;
 using nihilus.Logic.Model;
 using nihilus.Logic.Persistence;
 using nihilus.View.Xaml.MainWindowFrames;
+using nihilus.Logic;
 using Timer = System.Timers.Timer;
 
 namespace nihilus.ViewModel
@@ -71,7 +73,43 @@ namespace nihilus.ViewModel
                 {
                     return "Home";
                 }
-                return Server + Environment.NewLine + CurrentStatus;
+                return Server + Environment.NewLine + CurrentStatus.FriendlyName();
+            }
+        }
+
+        public string Icon
+        {
+            get
+            {
+                if (isHome)
+                {
+                    return "";
+                }
+                switch (CurrentStatus)
+                {
+                    case ServerStatus.RUNNING:
+                        return "\xe037";
+                    case ServerStatus.STOPPED:
+                        return "\xe047";
+                    case ServerStatus.STARTING:
+                        return "\xe061";
+                    default:
+                        return null;
+                }
+            }
+        }
+
+        public Brush IconColor
+        {
+            get
+            {
+                switch (CurrentStatus)
+                {
+                    case ServerStatus.RUNNING: return Brushes.Green;
+                    case ServerStatus.STOPPED: return Brushes.Red;
+                    case ServerStatus.STARTING: return Brushes.Yellow;
+                    default: return Brushes.White;
+                }
             }
         }
 

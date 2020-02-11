@@ -23,16 +23,16 @@ namespace nihilus.View.Xaml.MainWindowFrames
             InitializeComponent();
         }
 
-        private void StartStopButton_Click(object sender, RoutedEventArgs e)
+        private async void StartStopButton_Click(object sender, RoutedEventArgs e)
         {
-            if (viewModel.CurrentStatus == ServerStatus.RUNNING)
+            if (viewModel.CurrentStatus == ServerStatus.STOPPED)
+            {
+                await ServerManager.Instance.StartServerAsync(viewModel).ConfigureAwait(false);
+            }else if (viewModel.CurrentStatus == ServerStatus.RUNNING)
             {
                 ServerManager.Instance.StopServer(viewModel.Server);
             }
-            else if (viewModel.CurrentStatus == ServerStatus.STOPPED)
-            {
-                ServerManager.Instance.StartServer(viewModel);
-            }
+            
         }
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
@@ -114,7 +114,7 @@ namespace nihilus.View.Xaml.MainWindowFrames
         }
         private void PlayerList_Kick(object sender, RoutedEventArgs e)
         {
-
+            
         }
     }
 }

@@ -13,6 +13,7 @@
                 <ResourceDictionary Source="View/Resources/dictionaries/DarkTheme.xaml"/>
                 <ResourceDictionary Source="View/Resources/dictionaries/RadioButtonStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <FontFamily x:Key="MaterialIO">View/Resources/Fonts/MaterialIcons-Regular.ttf#Material Icons</FontFamily>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

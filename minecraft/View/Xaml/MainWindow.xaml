@@ -17,11 +17,13 @@
             </Grid.ColumnDefinitions>
             <DockPanel Margin="10 0 0 0">
                 <Button Click="AddServer_Click" Margin="0 10 0 5" Height="25" DockPanel.Dock="Bottom">Add Server</Button>
-                <!-- TODO: Loading indicator for Version update -->
-                <ListView ItemsSource="{Binding Servers}" SelectedItem="{Binding SelectedServer}">
+                <ListView ItemsSource="{Binding Servers}" SelectedItem="{Binding SelectedServer}" HorizontalContentAlignment="Stretch">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock MinHeight="35" VerticalAlignment="Center" Text="{Binding ServerTitle}"></TextBlock>
+                            <DockPanel>
+                                <TextBlock Text="{Binding Icon}" FontSize="20" FontFamily="{StaticResource MaterialIO}" VerticalAlignment="Center" Foreground="{Binding IconColor}" DockPanel.Dock="Right"/>
+                                <TextBlock MinHeight="35" VerticalAlignment="Center" Text="{Binding ServerTitle}"></TextBlock>
+                            </DockPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

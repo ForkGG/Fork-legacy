@@ -131,11 +131,12 @@
     <Compile Include="Logic\BackgroundWorker\QueryStatsWorker.cs" />
     <Compile Include="Logic\CustomConsole\ConsoleReader.cs" />
     <Compile Include="Logic\CustomConsole\ConsoleWriter.cs" />
+    <Compile Include="Logic\ExtensionMethods.cs" />
     <Compile Include="Logic\Manager\ApplicationManager.cs" />
     <Compile Include="Logic\Manager\AutoRestartManager.cs" />
     <Compile Include="Logic\Model\FullStats.cs" />
-    <Compile Include="Logic\Model\MinecraftVersionPojo\Manifest.cs" />
-    <Compile Include="Logic\Model\MinecraftVersionPojo\VersionDetails.cs" />
+    <Compile Include="Logic\Model\MinecraftVersionModel\Manifest.cs" />
+    <Compile Include="Logic\Model\MinecraftVersionModel\VersionDetails.cs" />
     <Compile Include="Logic\Model\Player.cs" />
     <Compile Include="Logic\Model\ServerRestart.cs" />
     <Compile Include="Logic\Model\ServerStatus.cs" />
@@ -268,6 +269,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Resource Include="View\Resources\Fonts\MaterialIcons-Regular.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

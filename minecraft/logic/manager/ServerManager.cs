@@ -66,53 +66,17 @@ namespace nihilus.Logic.Manager
             return r;
         }
 
-        public void StartServer(ServerViewModel viewModel)
-        {
-            viewModel.ConsoleOutList.Clear();
-            DirectoryInfo directoryInfo = new DirectoryInfo(viewModel.Server.Name);
-            if (!directoryInfo.Exists)
-            {
-                return;
-            }
-
-            Process process = new Process();
-            ProcessStartInfo startInfo = new ProcessStartInfo
-            {
-                UseShellExecute = false,
-                RedirectStandardError = true,
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true,
-                FileName = "java.exe",
-                WorkingDirectory = directoryInfo.Name,
-                Arguments = "-Xmx" + viewModel.Server.JavaSettings.MaxRam + "m -Xms" +
-                            viewModel.Server.JavaSettings.MinRam + "m -jar server.jar nogui",
-                WindowStyle = ProcessWindowStyle.Hidden,
-                CreateNoWindow = true
-            };
-            process.StartInfo = startInfo;
-            process.Start();
-            Application.Current.Dispatcher.Invoke(() => viewModel.TrackPerformance(process));
-            viewModel.CurrentStatus = ServerStatus.STARTING;
-            ConsoleWriter consoleWriter = new ConsoleWriter(viewModel, process.StandardOutput, process.StandardError);
-            ConsoleReader consoleReader = new ConsoleReader(process.StandardInput, consoleWriter);
-            double nextRestart = AutoRestartManager.Instance.RegisterRestart(viewModel);
-            viewModel.SetRestartTime(nextRestart);
-            new Thread(() =>
-            {
-                process.WaitForExit();
-                ApplicationManager.Instance.ActiveServers.Remove(viewModel.Server);
-                viewModel.CurrentStatus = ServerStatus.STOPPED;
-                AutoRestartManager.Instance.DisposeRestart(viewModel);
-                viewModel.SetRestartTime(-1d);
-            }).Start();
-            viewModel.ConsoleReader = consoleReader;
-            ApplicationManager.Instance.ActiveServers[viewModel.Server] = process;
-            new Thread(() => { new QueryStatsWorker(viewModel); }).Start();
-        }
-
         public void StopServer(Server server)
         {
             ApplicationManager.Instance.ActiveServers[server].StandardInput.WriteLine("stop");
+        }
+
+        public async Task<bool> StartServerAsync(ServerViewModel serverViewModel)
+        {
+            Task<bool> t = new Task<bool>(()=> StartServer(serverViewModel));
+            t.Start();
+            bool result = await t;
+            return result;
         }
 
         public async Task<bool> DeleteServerAsync(ServerViewModel serverViewModel)
@@ -305,6 +269,51 @@ namespace nihilus.Logic.Manager
             ZipFile.CreateFromDirectory(dimensionDir.FullName, Path.Combine(dimBackups.FullName, dimension +"_" + timeStamp + ".zip"));
             dimensionDir.Delete(true);
             return !dimensionDir.Exists;
+        }
+        
+        private bool StartServer(ServerViewModel viewModel)
+        {
+            viewModel.ConsoleOutList.Clear();
+            DirectoryInfo directoryInfo = new DirectoryInfo(viewModel.Server.Name);
+            if (!directoryInfo.Exists)
+            {
+                return false;
+            }
+
+            Process process = new Process();
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                UseShellExecute = false,
+                RedirectStandardError = true,
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                FileName = "java.exe",
+                WorkingDirectory = directoryInfo.Name,
+                Arguments = "-Xmx" + viewModel.Server.JavaSettings.MaxRam + "m -Xms" +
+                            viewModel.Server.JavaSettings.MinRam + "m -jar server.jar nogui",
+                WindowStyle = ProcessWindowStyle.Hidden,
+                CreateNoWindow = true
+            };
+            process.StartInfo = startInfo;
+            process.Start();
+            Application.Current.Dispatcher.Invoke(() => viewModel.TrackPerformance(process));
+            viewModel.CurrentStatus = ServerStatus.STARTING;
+            ConsoleWriter consoleWriter = new ConsoleWriter(viewModel, process.StandardOutput, process.StandardError);
+            ConsoleReader consoleReader = new ConsoleReader(process.StandardInput, consoleWriter);
+            double nextRestart = AutoRestartManager.Instance.RegisterRestart(viewModel);
+            viewModel.SetRestartTime(nextRestart);
+            new Thread(() =>
+            {
+                process.WaitForExit();
+                ApplicationManager.Instance.ActiveServers.Remove(viewModel.Server);
+                viewModel.CurrentStatus = ServerStatus.STOPPED;
+                AutoRestartManager.Instance.DisposeRestart(viewModel);
+                viewModel.SetRestartTime(-1d);
+            }).Start();
+            viewModel.ConsoleReader = consoleReader;
+            ApplicationManager.Instance.ActiveServers[viewModel.Server] = process;
+            new Thread(() => { new QueryStatsWorker(viewModel); }).Start();
+            return true;
         }
     }
 }
