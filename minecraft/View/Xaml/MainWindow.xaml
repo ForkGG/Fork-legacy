@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:converter1="clr-namespace:nihilus.View.Xaml.Converter"
         mc:Ignorable="d"
-        Title="nihilus" Height="720" Width="1200" Style="{StaticResource DefaultWindow}">
+        Title="Nihilus" Height="720" Width="1200" Style="{StaticResource DefaultWindow}" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <converter1:ListToStringConverter x:Key="ListToStringConverter"/>
     </Window.Resources>

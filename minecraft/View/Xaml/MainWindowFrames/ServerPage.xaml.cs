@@ -103,5 +103,18 @@ namespace nihilus.View.Xaml.MainWindowFrames
         {
             AddPlayerCloseButton_Click(sender,e);
         }
+
+        private void PlayerList_Ban(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void PlayerList_OP(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void PlayerList_Kick(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

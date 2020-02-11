@@ -11,6 +11,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Newtonsoft.Json;
+using Color = System.Drawing.Color;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -20,23 +21,20 @@ namespace nihilus.Logic.Model
     {
         public string Name { get; set; }
         public string Uid { get; set; }
-        public ImageSource Head { get; set; }
+        public string Head { get; set; }
 
         public Player(string name)
         {
             Name = name;
-            new Thread(() =>
+            try
             {
-                try
-                {
-                    RetrieveUid();
-                    RetrieveHead();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Error while retrieving player information from mojang servers:\n"+e.Message);
-                }
-            }).Start();
+                RetrieveUid();
+                RetrieveHead();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error while retrieving player information from mojang servers:\n" + e.Message);
+            }
         }
 
         public override string ToString()
@@ -49,7 +47,7 @@ namespace nihilus.Logic.Model
             var client = new HttpClient();
             var uri = new Uri("https://api.mojang.com/users/profiles/minecraft/" + Name);
             var response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
-            while (response.StatusCode==(HttpStatusCode)429)
+            while (response.StatusCode == (HttpStatusCode) 429)
             {
                 Thread.Sleep(5000);
                 response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
@@ -66,9 +64,9 @@ namespace nihilus.Logic.Model
         private void RetrieveHead()
         {
             var client = new HttpClient();
-            var uri = new Uri("https://sessionserver.mojang.com/session/minecraft/profile/"+Uid);
+            var uri = new Uri("https://sessionserver.mojang.com/session/minecraft/profile/" + Uid);
             var response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
-            while (response.StatusCode==(HttpStatusCode)429)
+            while (response.StatusCode == (HttpStatusCode) 429)
             {
                 Thread.Sleep(5000);
                 response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
@@ -79,19 +77,19 @@ namespace nihilus.Logic.Model
             Stream respStream = response.Content.ReadAsStreamAsync().Result;
             string fullProfileString = new StreamReader(respStream).ReadToEnd();
             FullProfile fullProfile = JsonConvert.DeserializeObject<FullProfile>(fullProfileString);
-            RetrieveImageFromBase64(fullProfile.properties[0].value);
+            Head = RetrieveImageFromBase64(fullProfile.properties[0].value);
         }
 
-        private void RetrieveImageFromBase64(string base64String)
+        private string RetrieveImageFromBase64(string base64String)
         {
             var profileJson = Convert.FromBase64String(base64String);
             string profileJsonString = Encoding.UTF8.GetString(profileJson);
             Profile profile = JsonConvert.DeserializeObject<Profile>(profileJsonString);
-            
+
             var client = new HttpClient();
             var uri = new Uri(profile.textures.SKIN.url);
             var response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
-            while (response.StatusCode==(HttpStatusCode)429)
+            while (response.StatusCode == (HttpStatusCode) 429)
             {
                 Thread.Sleep(5000);
                 response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
@@ -101,33 +99,36 @@ namespace nihilus.Logic.Model
 
             Stream respStream = response.Content.ReadAsStreamAsync().Result;
             Image image = Image.FromStream(respStream);
-            
-            Bitmap headBmp = new Bitmap(8,8);
-            Bitmap skinBmp = new Bitmap(image);
-            headBmp = skinBmp.Clone(new Rectangle(8, 8, 8, 8),skinBmp.PixelFormat);
-            //headBmp.Save("icon"+profile.profileName+".jpg");
 
-            Head = BitmapToImageSource(headBmp);
+            Bitmap skinBmp = new Bitmap(image);
+            Bitmap headBmp = skinBmp.Clone(new Rectangle(8, 8, 8, 8), skinBmp.PixelFormat);
+            Bitmap overlayHead = skinBmp.Clone(new Rectangle(40, 8, 8, 8), skinBmp.PixelFormat);
+            
+            //Remove Transparency
+            Bitmap b = new Bitmap(8,8);
+            Graphics g = Graphics.FromImage(b);
+            g.Clear(Color.Black);
+            g.DrawImage(headBmp,0,0);
+            g.DrawImage(overlayHead,0,0);
+            
+            
+            //Write .jpg file
+            Directory.CreateDirectory("players");
+            string path = Path.Combine("players", profile.profileName + ".jpg");
+            path = new DirectoryInfo(path).FullName;
+            b.Save(path);
+            
+            //Dispose
+            headBmp.Dispose();
+            skinBmp.Dispose();
+            b.Dispose();
+            
+            return path;
             //System.Console.WriteLine(profile.profileName+"s Head has a width of "+Head.Width+" and a Height of "+Head.Height);
         }
-        
-        private BitmapImage BitmapToImageSource(Bitmap bitmap)
-        {
-            using (MemoryStream memory = new MemoryStream())
-            {
-                bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
-                memory.Position = 0;
-                BitmapImage bitmapimage = new BitmapImage();
-                bitmapimage.BeginInit();
-                bitmapimage.StreamSource = memory;
-                bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapimage.EndInit();
 
-                return bitmapimage;
-            }
-        }
-        
-        
+
+
         private class NameUid
         {
             public string name { get; set; }
@@ -146,7 +147,7 @@ namespace nihilus.Logic.Model
             public string name { get; set; }
             public string value { get; set; }
         }
-        
+
         private class Profile
         {
             public long timestamp { get; set; }
@@ -154,7 +155,7 @@ namespace nihilus.Logic.Model
             public string profileName { get; set; }
             public Textures textures { get; set; }
         }
-        
+
         private class Textures
         {
             public Skin SKIN { get; set; }

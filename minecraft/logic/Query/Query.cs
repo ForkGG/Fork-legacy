@@ -36,14 +36,14 @@ namespace nihilus.Logic.Query
 
         public Query(string serverIp, int serverPort)
         {
-            this.serverIp = serverIp;
+            this.serverIp = "localhost";
             this.serverPort = serverPort;
 
             //Setup connection
             //TODO may throw socketException
             serverIpAddresses = Dns.GetHostAddresses(serverIp);
             receivePoint = new IPEndPoint(IPAddress.Any, serverPort);
-            endPoint = new IPEndPoint(serverIpAddresses.First(), serverPort);
+            endPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), serverPort);
             udpClient = new UdpClient();
         }
         protected Query(){}
@@ -54,7 +54,7 @@ namespace nihilus.Logic.Query
             {
                 Ping p = new Ping();
                 // Sending ping to server
-                PingReply reply = p.Send(serverIp, 3000);
+                PingReply reply = p.Send("localhost", 3000);
 
                 // If not reply, server is offline
                 if (reply == null) return false;
@@ -65,8 +65,9 @@ namespace nihilus.Logic.Query
                 // Return if the server is OK or not
                 return reply.Status == IPStatus.Success;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                throw;
                 return false;
             }
         }

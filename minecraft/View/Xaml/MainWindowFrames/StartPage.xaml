@@ -8,6 +8,6 @@
       Title="StartPage">
 
     <Grid>
-        <Label Content="Welcome to nihilus server manager" FontWeight="Bold" FontSize="20px" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Label Content="Welcome to Nihilus server manager" FontWeight="Bold" FontSize="20px" HorizontalAlignment="Center" VerticalAlignment="Center"/>
     </Grid>
 </Page>

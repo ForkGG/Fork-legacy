@@ -89,19 +89,19 @@
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="3*"/>
                                             </Grid.ColumnDefinitions>
-                                            <Image Source="{Binding Head}" MinHeight="20px" MinWidth="20px" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            <Image Source="{Binding Head}" MinHeight="20px" MinWidth="20px" Stretch="Fill" RenderOptions.BitmapScalingMode="NearestNeighbor" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                             <Label Content="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
                                         </Grid>
+                                        <Border.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="Ban Player" Click="PlayerList_Ban"/>
+                                                <MenuItem Header="OP Player" Click="PlayerList_OP"/>
+                                                <MenuItem Header="Kick Player" Click="PlayerList_Kick"/>
+                                            </ContextMenu>
+                                        </Border.ContextMenu>
                                     </Border>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
-                            <!--ListView.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="Ban Player" Checked="PlayerList_Ban"/>
-                                <MenuItem Header="OP Player" Click="PlayerList_OP"/>
-                                <MenuItem Header="Kick Player" Click="PlayerList_Kick"/>
-                            </ContextMenu>
-                        <ListView.ContextMenu-->
                         </ListView>
                     </Border>
                 </TabItem>

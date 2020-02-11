@@ -40,7 +40,7 @@ namespace nihilus.Logic.BackgroundWorker
                     List<Player> players = new List<Player>(viewModel.PlayerList);
                     foreach (Player player in players)
                     {
-                        if (player.Name.Equals(name))
+                        if (player.Name.Equals(name, StringComparison.InvariantCulture))
                         {
                             found = true;
                             break;
