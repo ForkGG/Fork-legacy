@@ -2,8 +2,8 @@
 Minecraft Server Manager GUI
 
 ## Installation
-- Download the [latest release](https://github.com/ChristianKern97/nihilus/releases)
-- Extract the Release.zip
+- Download the [latest installer](https://github.com/ChristianKern97/nihilus/releases)
+- Run the installer
 - Run nihilus.exe
 
 ## Roadmap
@@ -12,13 +12,14 @@ Minecraft Server Manager GUI
    - [x] Add, Start/Stop servers
    - [x] Console
    - [x] Performance monitors
-   - [ ] Settings (Tooltips and Controls tab)
+   - [x] Playerlist
+   - [x] Whitelist, Banlist, OP list
+   - [x] Settings
+   - [ ] Tooltips in Settings Window
    - [ ] Home screen
-   - [ ] Playerlist
-   - [ ] Whitelist, Banlist, OP list
    - [ ] Firewall management
  - Some visual improvments
- - Major Bugfixes
+ - Crash- and Bugfixes
  
 #### After v1.0
  - More visual improvments
