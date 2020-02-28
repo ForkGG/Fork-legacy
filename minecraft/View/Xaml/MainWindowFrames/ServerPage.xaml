@@ -5,12 +5,14 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
       xmlns:converter1="clr-namespace:nihilus.View.Xaml.Converter"
+      xmlns:helper="clr-namespace:nihilus.View.Resources.Helper"
       mc:Ignorable="d" 
       d:DesignHeight="600" d:DesignWidth="1000"
       Title="ServerPage">
     <Page.Resources>
         <converter1:ListToStringConverter x:Key="ListToStringConverter"/>
         <converter1:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converter1:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
     </Page.Resources>
     <Grid>
         <Grid>
@@ -76,7 +78,7 @@
                 </DockPanel>
             </Grid>
             <!-- Playerlist -->
-            <TabControl Grid.Row="0" Grid.Column="1" Margin="5 0 0 0" BorderBrush="{x:Null}">
+            <TabControl x:Name="PlayerControl" Grid.Row="0" Grid.Column="1" Margin="5 0 0 0" BorderBrush="{x:Null}">
                 <!-- Playerlist -->
                 <TabItem Header="Playerlist" BorderBrush="{x:Null}">
                     <Border BorderThickness="1">
@@ -93,10 +95,11 @@
                                             <Label Content="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
                                         </Grid>
                                         <Border.ContextMenu>
-                                            <ContextMenu>
-                                                <MenuItem Header="Ban Player" Click="PlayerList_Ban"/>
-                                                <MenuItem Header="OP Player" Click="PlayerList_OP"/>
-                                                <MenuItem Header="Kick Player" Click="PlayerList_Kick"/>
+                                            <ContextMenu IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}, Path=ServerRunning}">
+                                                <MenuItem Header="Ban Player" Click="Player_Ban" CommandParameter="{Binding Name}" />
+                                                <MenuItem Header="OP Player" Click="Player_OP" CommandParameter="{Binding Name}" />
+                                                <!-- TODO Deop? -->
+                                                <MenuItem Header="Kick Player" Click="Player_Kick" CommandParameter="{Binding Name}" />
                                             </ContextMenu>
                                         </Border.ContextMenu>
                                     </Border>
@@ -108,46 +111,99 @@
                 <!-- OP-List -->
                 <TabItem Header="OP-List">
                     <DockPanel>
-                        <Button DockPanel.Dock="Bottom" Content="Add Player" Margin="0 10 0 0" Width="120">
-
-                        </Button>
                         <ListView DockPanel.Dock="Top" ItemsSource="{Binding OPList}">
-
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderThickness="2" BorderBrush="{x:Null}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="3*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Image Source="{Binding Head}" MinHeight="20px" MinWidth="20px" Stretch="Fill" RenderOptions.BitmapScalingMode="NearestNeighbor" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            <Label Content="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
+                                        </Grid>
+                                        <Border.ContextMenu>
+                                            <ContextMenu IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}, Path=ServerRunning}">
+                                                <MenuItem Header="De-Op Player" Click="Player_Deop" CommandParameter="{Binding Name}"/>
+                                            </ContextMenu>
+                                        </Border.ContextMenu>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
                         </ListView>
                     </DockPanel>
                 </TabItem>
                 <!-- Ban-List -->
                 <TabItem Header="Ban-List">
                     <DockPanel>
-                        <Button DockPanel.Dock="Bottom" Content="Add Player" Margin="0 10 0 0" Width="120">
-
-                        </Button>
                         <ListView DockPanel.Dock="Top" ItemsSource="{Binding BanList}">
-
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderThickness="2" BorderBrush="{x:Null}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="3*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Image Source="{Binding Head}" MinHeight="20px" MinWidth="20px" Stretch="Fill" RenderOptions.BitmapScalingMode="NearestNeighbor" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            <Label Content="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
+                                        </Grid>
+                                        <Border.ContextMenu>
+                                            <ContextMenu IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}, Path=ServerRunning}">
+                                                <MenuItem Header="Un-Ban Player" Click="Player_Unban" CommandParameter="{Binding Name}"/>
+                                            </ContextMenu>
+                                        </Border.ContextMenu>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
                         </ListView>
                     </DockPanel>
                 </TabItem>
                 <!-- Whitelist -->
                 <TabItem Header="Whitelist">
                     <DockPanel>
-                        <Button DockPanel.Dock="Bottom" Content="Add Player" Margin="0 10 0 0" Width="120" Click="AddToWhiteList_Click"/>
+                        <Button DockPanel.Dock="Bottom" Content="Add Player" Margin="0 10 0 0" Width="120" Click="AddToWhiteList_Click" IsEnabled="{Binding ServerRunning}"/>
+                        <TextBlock Margin="0 5 0 0" Text="Whitelist is not enabled in the server settings" HorizontalAlignment="Center" Foreground="Orange" DockPanel.Dock="Bottom" Visibility="{Binding Server.ServerSettings.Whitelist, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
                         <ListView DockPanel.Dock="Top" ItemsSource="{Binding WhiteList}">
-
+                            <ListView.Resources>
+                                <helper:BindingProxy x:Key="ServerRunningBinding" Data="{Binding}"/>
+                            </ListView.Resources>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderThickness="2" BorderBrush="{x:Null}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="3*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Image Source="{Binding Head}" MinHeight="20px" MinWidth="20px" Stretch="Fill" RenderOptions.BitmapScalingMode="NearestNeighbor" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            <Label Content="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
+                                        </Grid>
+                                        <Border.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="Remove Player" Click="Player_Unwhitelist" CommandParameter="{Binding Name}" IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}">
+                                                </MenuItem>
+                                            </ContextMenu>
+                                        </Border.ContextMenu>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
                         </ListView>
                     </DockPanel>
                 </TabItem>
             </TabControl>
             <!-- Add Player Popups -->
-            <Grid x:Name="AddPlayerInput" Visibility="Collapsed" Grid.Column="1">
-                <Grid Background="Black" Opacity="0" UIElement.PreviewMouseDown="AddPlayer_PreviewMouseDown" />
+            <Grid x:Name="WhitelistPlayerInput" Visibility="Collapsed" Grid.Column="1">
+                <Grid Background="Black" Opacity="0" UIElement.PreviewMouseDown="WhitelistPlayer_PreviewMouseDown" />
                 <Border MinWidth="250" BorderThickness="1" HorizontalAlignment="Center" VerticalAlignment="Bottom"
                         Background="{DynamicResource backgroundDefault}" BorderBrush="{DynamicResource outerBorder}" CornerRadius="2,2,2,2" >
                     <StackPanel>
-                        <TextBlock Margin="5" Text="Enter name of the player to add:" FontWeight="Bold" FontFamily="Cambria" />
-                        <TextBox MinWidth="150" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="AddPlayerInputTextBox" BorderBrush="{DynamicResource backgroundLight}"/>
+                        <TextBlock Margin="5" Text="Player to be whitelisted:" HorizontalAlignment="Center" />
+                        <TextBox Margin="5 0 5 5" MinWidth="150" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="WhitelistPlayerName" BorderBrush="{DynamicResource backgroundLight}"/>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Button Margin="5" Content="Add" IsDefault="True" Style="{DynamicResource DefaultButtonStyle}" Click="AddPlayerAddButton_Click"/>
-                            <Button Margin="5" Content="Cancel" IsCancel="True" Click="AddPlayerCloseButton_Click" />
+                            <Button Width="50" Margin="5" Content="Cancel" IsCancel="True" Click="WhitelistPlayerAbort_Click" />
+                            <Button Width="50" Margin="5" Content="Add" IsDefault="True" Style="{DynamicResource DefaultButtonStyle}" Click="WhitelistPlayerConfirm_Click"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>

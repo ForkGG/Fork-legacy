@@ -1,6 +1,9 @@
+using System;
 using System.Globalization;
 using System.Linq;
+using System.Security.Claims;
 using nihilus.Logic.Model;
+using nihilus.Logic.RoleManagement;
 
 namespace nihilus.Logic
 {
@@ -16,6 +19,28 @@ namespace nihilus.Logic
                 case ServerStatus.STARTING: return "Starting";
                 case ServerStatus.STOPPED: return "Stopped";
                 default: return "Horrible Failure!!!";
+            }
+        }
+
+        public static string JsonName(this RoleType roleType)
+        {
+            switch (roleType)
+            {
+                case RoleType.WHITELIST: return "whitelist.json";
+                case RoleType.BAN_LIST: return "banned-players.json";
+                case RoleType.OP_LIST: return "ops.json";
+                default: throw new ArgumentException("Undefined enum entry in RoleType.JsonName()");
+            }
+        }
+
+        public static string TxtName(this RoleType roleType)
+        {
+            switch (roleType)
+            {
+                case RoleType.WHITELIST: return "white-list.txt";
+                case RoleType.OP_LIST: return "ops.txt"; 
+                case RoleType.BAN_LIST: return "banned-players.txt"; 
+                default: throw new ArgumentException("Undefined enum entry in RoleType.TxtName()");
             }
         }
     }

@@ -21,7 +21,7 @@
 
     <!-- order by brightness, from dark to light -->
     <SolidColorBrush x:Key="foregroundDefault" Color="#FFF3F3F3" />
-    <SolidColorBrush x:Key="foregroundDisabled" Color="#424242"/>
+    <SolidColorBrush x:Key="foregroundDisabled" Color="#8c8c8c"/>
 
 
     <SolidColorBrush x:Key="tabHover" Color="#FF333333"/>

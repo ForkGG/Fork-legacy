@@ -13,6 +13,7 @@ using nihilus.Logic.BackgroundWorker;
 using nihilus.Logic.CustomConsole;
 using nihilus.Logic.Model;
 using nihilus.Logic.Persistence;
+using nihilus.Logic.RoleManagement;
 using nihilus.ViewModel;
 
 namespace nihilus.Logic.Manager
@@ -301,6 +302,7 @@ namespace nihilus.Logic.Manager
             ConsoleWriter consoleWriter = new ConsoleWriter(viewModel, process.StandardOutput, process.StandardError);
             ConsoleReader consoleReader = new ConsoleReader(process.StandardInput, consoleWriter);
             double nextRestart = AutoRestartManager.Instance.RegisterRestart(viewModel);
+            
             viewModel.SetRestartTime(nextRestart);
             new Thread(() =>
             {

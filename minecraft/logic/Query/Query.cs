@@ -112,7 +112,9 @@ namespace nihilus.Logic.Query
                 Thread.Sleep(100);
                 if (DateTime.Now > endTimeout)
                 {
-                    throw new TimeoutException("The server does not respond at specified port");
+                    //throw new TimeoutException("The server does not respond at specified port");
+                    Console.WriteLine("The server "+serverIp+":"+serverPort+" does not respond.");
+                    return new byte[]{};
                 }
             }
 

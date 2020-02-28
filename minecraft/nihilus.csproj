@@ -134,6 +134,7 @@
     <Compile Include="Logic\ExtensionMethods.cs" />
     <Compile Include="Logic\Manager\ApplicationManager.cs" />
     <Compile Include="Logic\Manager\AutoRestartManager.cs" />
+    <Compile Include="Logic\Manager\PlayerManager.cs" />
     <Compile Include="Logic\Model\FullStats.cs" />
     <Compile Include="Logic\Model\MinecraftVersionModel\Manifest.cs" />
     <Compile Include="Logic\Model\MinecraftVersionModel\VersionDetails.cs" />
@@ -144,7 +145,12 @@
     <Compile Include="Logic\Model\SimpleTime.cs" />
     <Compile Include="Logic\Persistence\FileReader.cs" />
     <Compile Include="Logic\Persistence\FileWriter.cs" />
+    <Compile Include="Logic\Persistence\PersistencePO\BannedPlayer.cs" />
+    <Compile Include="Logic\Persistence\PersistencePO\OPPlayer.cs" />
+    <Compile Include="Logic\Persistence\PersistencePO\WhitelistedPlayer.cs" />
     <Compile Include="Logic\Query\Query.cs" />
+    <Compile Include="Logic\RoleManagement\RoleUpdater.cs" />
+    <Compile Include="Logic\RoleManagement\RoleType.cs" />
     <Compile Include="Logic\Utils\ByteUtils.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
@@ -153,14 +159,9 @@
     <Compile Include="View\Resources\dictionaries\WindowStyles.xaml.cs">
       <DependentUpon>WindowStyles.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Resources\Helper\BindingProxy.cs" />
     <Compile Include="View\Xaml\Converter\BoolToVisibilityConverter.cs" />
     <Compile Include="View\Xaml\Converter\SimpleTimeToStringConverter.cs" />
-    <Compile Include="View\Xaml\Lists\AddRemoveList.xaml.cs">
-      <DependentUpon>AddRemoveList.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Xaml\Lists\Playerlist.xaml.cs">
-      <DependentUpon>Playerlist.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\Xaml\MainWindowFrames\ServerPage.xaml.cs">
       <DependentUpon>ServerPage.xaml</DependentUpon>
     </Compile>
@@ -173,6 +174,7 @@
     <Compile Include="View\Xaml\ValidationRules\PortValidationRule.cs" />
     <Compile Include="View\Xaml\ValidationRules\PositiveLongValidationRule.cs" />
     <Compile Include="View\Xaml\ValidationRules\TimeValidationRule.cs" />
+    <Page Include="View\Resources\dictionaries\ContextMenuStyle.xaml" />
     <Page Include="View\Resources\dictionaries\RadioButtonStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -203,14 +205,6 @@
     </Page>
     <Page Include="View\Resources\dictionaries\DarkTheme.xaml">
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\Xaml\Lists\AddRemoveList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Xaml\Lists\Playerlist.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Xaml\MainWindow.xaml" />
     <Compile Include="Logic\Manager\ServerManager.cs" />

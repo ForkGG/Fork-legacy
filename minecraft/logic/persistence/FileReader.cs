@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using nihilus.Logic.Model;
+using nihilus.Logic.Persistence.PersistencePO;
 
 namespace nihilus.Logic.Persistence
 {
@@ -37,27 +39,134 @@ namespace nihilus.Logic.Persistence
             }
         }
 
-        public List<Player> ReadWhiteList(string folderPath)
+        public static List<string> ReadWhiteListTxT(string path)
         {
-            List<Player> players = new List<Player>();
-
-            if (!File.Exists(folderPath+"/white-list.txt"))
+            List<string> list = new List<string>();
+            if (!File.Exists(path))
             {
-                return players;
+                return new List<string>();
             }
-            
-            using (var fs = new FileStream(folderPath+"/white-list.txt", FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 0x1000, FileOptions.SequentialScan))
-            using (var sr = new StreamReader(fs, Encoding.UTF8))
+            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite); 
+            using (StreamReader sr = new StreamReader(fs))
             {
                 string line;
-                while ((line = sr.ReadLine()) != null)
+                while ((line = sr.ReadLine())!=null)
                 {
-                    players.Add(new Player(line));
+                    if (line.StartsWith("#")||line.Length==0)
+                    {
+                        continue;
+                    }
+                    if (line.EndsWith(","))
+                    {
+                        line = line.Remove(line.Length - 1);
+                    }
+                    list.Add(line);
                 }
             }
-            
-            
-            return players;
+            return list;
+        }
+
+        public static List<string> ReadWhiteListJson(string path)
+        {
+            if (!File.Exists(path))
+            {
+                return new List<string>();
+            }
+            string json;
+            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                using (StreamReader sr = new StreamReader(fs))
+                {
+                    json = sr.ReadToEnd();
+                }
+            }
+            List<WhitelistedPlayer> playerList = JsonConvert.DeserializeObject<List<WhitelistedPlayer>>(json);
+            List<string> names = new List<string>();
+            foreach (WhitelistedPlayer player in playerList)
+            {
+                names.Add(player.name);
+            }
+            return names;
+        }
+
+        public static List<string> ReadOPListTxT(string path)
+        {
+            //Using WhiteList method to avoid code duplication
+            return ReadWhiteListTxT(path);
+        }
+
+        public static List<string> ReadOPListJson(string path)
+        {
+            if (!File.Exists(path))
+            {
+                return new List<string>();
+            }
+            string json;
+            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                using (StreamReader sr = new StreamReader(fs))
+                {
+                    json = sr.ReadToEnd();
+                }
+            }
+            List<OPPlayer> playerList = JsonConvert.DeserializeObject<List<OPPlayer>>(json);
+            List<string> names = new List<string>();
+            foreach (OPPlayer player in playerList)
+            {
+                names.Add(player.name);
+            }
+            return names;
+        }
+
+        public static List<string> ReadBanListTxT(string path)
+        {
+            if (!File.Exists(path))
+            {
+                return new List<string>();
+            }
+            List<string> list = new List<string>();
+            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite); 
+            using (StreamReader sr = new StreamReader(fs))
+            {
+                string line;
+                while ((line = sr.ReadLine())!=null)
+                {
+                    if (line.StartsWith("#")||line.Length==0)
+                    {
+                        continue;
+                    }
+                    string[] splittedLine = line.Split('|');
+                    if (splittedLine.Length!=5)
+                    {
+                        continue;
+                    }
+                    list.Add(splittedLine[0]);
+                }
+            }
+            return list;
+        }
+
+        public static List<string> ReadBanListJson(string path)
+        {
+            if (!File.Exists(path))
+            {
+                return new List<string>();
+            }
+            string json;
+            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                using (StreamReader sr = new StreamReader(fs))
+                {
+                    json = sr.ReadToEnd();
+                }
+            }
+            List<BannedPlayer> playerList = JsonConvert.DeserializeObject<List<BannedPlayer>>(json);
+            List<string> names = new List<string>();
+            foreach (BannedPlayer player in playerList)
+            {
+                names.Add(player.name);
+            }
+            return names;
         }
     }
 }

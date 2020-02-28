@@ -45,36 +45,5 @@ namespace nihilus.Logic.Persistence
             }
             File.WriteAllLines(folderPath+ "/server.properties", lines, Encoding.UTF8);
         }
-
-        public void WriteWhitelist(string folderPath, List<Player> whitelistedPlayers)
-        {
-            //Write white-list.txt
-            List<string> lines = new List<string>();
-            foreach (Player player in whitelistedPlayers)
-            {
-                lines.Add(player.Name);
-            }
-            File.WriteAllLines(folderPath+"/white-list.txt", lines, Encoding.UTF8);
-            
-            //Write white-list.json
-            lines.Clear();
-            lines.Add("[");
-            foreach (Player player in whitelistedPlayers)
-            {
-                lines.Add("  {");
-                lines.Add("    \"uuid\": \""+player.Uid+"\",");
-                lines.Add("    \"name\": \""+player.Name+"\"");
-                if (whitelistedPlayers.Last()==player)
-                {
-                    lines.Add("  }");
-                }
-                else
-                {
-                    lines.Add("  },");
-                }
-            }
-            lines.Add("]");
-            File.WriteAllLines(folderPath+"/whitelist.json", lines, Encoding.UTF8);
-        }
     }
 }

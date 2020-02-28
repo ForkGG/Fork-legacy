@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using nihilus.Logic.Model;
@@ -25,11 +26,7 @@ namespace nihilus.Logic.CustomConsole
                         {
                             viewModel.CurrentStatus = ServerStatus.RUNNING;
                         }
-
-                        if (line.ToLower().Contains("whitelist add")||line.ToLower().Contains("whitelist"))
-                        {
-                            viewModel.UpdateWhiteListRead();
-                        }
+                        viewModel.RoleInputHandler(line);
                         viewModel.ConsoleOutList.Add(line);
                     }
                 }

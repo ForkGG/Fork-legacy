@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using LiveCharts;
 using nihilus.Logic.Manager;
 using nihilus.Logic.Model;
 using nihilus.ViewModel;
@@ -20,6 +21,7 @@ namespace nihilus.View.Xaml.MainWindowFrames
         {
             this.viewModel = viewModel;
             DataContext = viewModel;
+            
             InitializeComponent();
         }
 
@@ -27,7 +29,7 @@ namespace nihilus.View.Xaml.MainWindowFrames
         {
             if (viewModel.CurrentStatus == ServerStatus.STOPPED)
             {
-                await ServerManager.Instance.StartServerAsync(viewModel).ConfigureAwait(false);
+                await ServerManager.Instance.StartServerAsync(viewModel).ConfigureAwait(true);
             }else if (viewModel.CurrentStatus == ServerStatus.RUNNING)
             {
                 ServerManager.Instance.StopServer(viewModel.Server);
@@ -76,45 +78,63 @@ namespace nihilus.View.Xaml.MainWindowFrames
 
         private void AddToWhiteList_Click(object sender, RoutedEventArgs e)
         {
-            AddPlayerInput.Visibility = Visibility.Visible;
+            WhitelistPlayerInput.Visibility = Visibility.Visible;
         }
 
-        private void AddPlayerAddButton_Click(object sender, RoutedEventArgs e)
+        private void WhitelistPlayerConfirm_Click(object sender, RoutedEventArgs e)
         {
-            if (viewModel.PlayerExists(AddPlayerInputTextBox.Text))
-            {
-                viewModel.AddPlayerToWhiteList(AddPlayerInputTextBox.Text);
-            }
-            else
-            {
-                //TODO
-            }
+            PlayerManager.Instance.WhitelistPlayer(viewModel,WhitelistPlayerName.Text);
             
-            AddPlayerCloseButton_Click(sender,e);
+            WhitelistPlayerAbort_Click(sender,e);
         }
 
-        private void AddPlayerCloseButton_Click(object sender, RoutedEventArgs e)
+        private void WhitelistPlayerAbort_Click(object sender, RoutedEventArgs e)
         {
-            AddPlayerInput.Visibility = Visibility.Collapsed;
-            AddPlayerInputTextBox.Text = "";
+            WhitelistPlayerInput.Visibility = Visibility.Collapsed;
+            WhitelistPlayerName.Text = "";
         }
 
-        private void AddPlayer_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private void WhitelistPlayer_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            AddPlayerCloseButton_Click(sender,e);
+            WhitelistPlayerAbort_Click(sender,e);
         }
 
-        private void PlayerList_Ban(object sender, RoutedEventArgs e)
+        private void Player_Ban(object sender, RoutedEventArgs e)
         {
-
+            MenuItem item = sender as MenuItem;
+            string name = item.CommandParameter as string;
+            PlayerManager.Instance.BanPlayer(viewModel,name);
         }
-        private void PlayerList_OP(object sender, RoutedEventArgs e)
+        private void Player_OP(object sender, RoutedEventArgs e)
         {
-
+            MenuItem item = sender as MenuItem;
+            string name = item.CommandParameter as string;
+            PlayerManager.Instance.OpPlayer(viewModel,name);
         }
-        private void PlayerList_Kick(object sender, RoutedEventArgs e)
+        private void Player_Kick(object sender, RoutedEventArgs e)
         {
-            
+            MenuItem item = sender as MenuItem;
+            string name = item.CommandParameter as string;
+            PlayerManager.Instance.KickPlayer(viewModel,name);
+        }
+        private void Player_Deop(object sender, RoutedEventArgs e)
+        {
+            MenuItem item = sender as MenuItem;
+            string name = item.CommandParameter as string;
+            PlayerManager.Instance.DeopPlayer(viewModel,name);
+        }
+        private void Player_Unban(object sender, RoutedEventArgs e)
+        {
+            MenuItem item = sender as MenuItem;
+            string name = item.CommandParameter as string;
+            PlayerManager.Instance.UnBanPlayer(viewModel,name);
+        }
+        
+        private void Player_Unwhitelist(object sender, RoutedEventArgs e)
+        {
+            MenuItem item = sender as MenuItem;
+            string name = item.CommandParameter as string;
+            PlayerManager.Instance.UnWhitelistPlayer(viewModel,name);
         }
     }
 }

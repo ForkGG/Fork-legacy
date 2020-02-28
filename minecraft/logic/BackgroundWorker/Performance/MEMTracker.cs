@@ -29,9 +29,9 @@ namespace nihilus.Logic.BackgroundWorker.Performance
             {
                 while (!interrupted && !p.HasExited)
                 {
-                    float value = memCounter.NextValue()/(1024*1024);
                     try
                     {
+                        float value = memCounter.NextValue()/(1024*1024);
                         Application.Current.Dispatcher.Invoke(() =>
                         {
                             chartValues.Add(value);

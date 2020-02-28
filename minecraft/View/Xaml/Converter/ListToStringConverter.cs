@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows.Data;
@@ -14,7 +15,8 @@ namespace nihilus.View.Xaml.Converter
             {
                 throw new InvalidOperationException("Target of conversion must be string");
             }
-            string returnString = String.Join("\r\n",(ObservableCollection<string>)value);
+            List<string> strings = new List<string>((ObservableCollection<string>)value);
+            string returnString = String.Join("\r\n",strings);
 
             return returnString;
         }

@@ -11,6 +11,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Newtonsoft.Json;
+using nihilus.Logic.Manager;
 using Color = System.Drawing.Color;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
@@ -22,19 +23,13 @@ namespace nihilus.Logic.Model
         public string Name { get; set; }
         public string Uid { get; set; }
         public string Head { get; set; }
+        public Player Self => this;
 
         public Player(string name)
         {
             Name = name;
-            try
-            {
-                RetrieveUid();
-                RetrieveHead();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error while retrieving player information from mojang servers:\n" + e.Message);
-            }
+            RetrieveUid();
+            RetrieveHead();
         }
 
         public override string ToString()
@@ -44,6 +39,12 @@ namespace nihilus.Logic.Model
 
         private void RetrieveUid()
         {
+            string cachedUid = UidFromCache(Name);
+            if (cachedUid!=null)
+            {
+                Uid = cachedUid;
+                return;
+            }
             var client = new HttpClient();
             var uri = new Uri("https://api.mojang.com/users/profiles/minecraft/" + Name);
             var response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
@@ -61,15 +62,70 @@ namespace nihilus.Logic.Model
             Uid = nameUid.id;
         }
 
+        private void CacheProfileJson(FullProfile profile)
+        {
+            DirectoryInfo dirInfo= Directory.CreateDirectory(Path.Combine("players",profile.id));
+            string json = JsonConvert.SerializeObject(profile);
+            using (FileStream fs =File.Create(Path.Combine(dirInfo.FullName,"profile.json")))
+            using (StreamWriter sw = new StreamWriter(fs))
+            {
+                sw.WriteLine(json);
+            }
+        }
+        private string UidFromCache(string uid)
+        {
+            string path = Path.Combine("players", uid, "profile.json");
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
+            if (File.GetCreationTime(path).AddDays(2)<DateTime.Now)
+            {
+                return null;
+            }
+            FullProfile profile = JsonConvert.DeserializeObject<FullProfile>(File.ReadAllText(path));
+            return profile.id;
+        }
+
+        private string HeadFromCache(string uid)
+        {
+            string path = Path.Combine("players", uid, "head.jpg");
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
+            if (File.GetCreationTime(path).AddDays(2)<DateTime.Now)
+            {
+                return null;
+            }
+
+            return Path.GetFullPath(path);
+        }
+
         private void RetrieveHead()
         {
+            string cachedHead = HeadFromCache(Uid);
+            if (cachedHead!=null)
+            {
+                Head = cachedHead;
+                return;
+            }
             var client = new HttpClient();
             var uri = new Uri("https://sessionserver.mojang.com/session/minecraft/profile/" + Uid);
             var response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
             while (response.StatusCode == (HttpStatusCode) 429)
             {
                 Thread.Sleep(5000);
-                response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
+                try
+                {
+                    response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
+                } catch(Exception e)
+                {
+                    Console.WriteLine("Error while retrieving Player Head for " + Name+": "+e.Message+".  Aborting...");
+                    return;
+                }
             }
 
             response.EnsureSuccessStatusCode();
@@ -77,6 +133,7 @@ namespace nihilus.Logic.Model
             Stream respStream = response.Content.ReadAsStreamAsync().Result;
             string fullProfileString = new StreamReader(respStream).ReadToEnd();
             FullProfile fullProfile = JsonConvert.DeserializeObject<FullProfile>(fullProfileString);
+            CacheProfileJson(fullProfile);
             Head = RetrieveImageFromBase64(fullProfile.properties[0].value);
         }
 
@@ -87,6 +144,7 @@ namespace nihilus.Logic.Model
             Profile profile = JsonConvert.DeserializeObject<Profile>(profileJsonString);
 
             var client = new HttpClient();
+            //TODO implement default skin for people without skin
             var uri = new Uri(profile.textures.SKIN.url);
             var response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
             while (response.StatusCode == (HttpStatusCode) 429)
@@ -113,8 +171,8 @@ namespace nihilus.Logic.Model
             
             
             //Write .jpg file
-            Directory.CreateDirectory("players");
-            string path = Path.Combine("players", profile.profileName + ".jpg");
+            Directory.CreateDirectory(Path.Combine("players",profile.profileId));
+            string path = Path.Combine("players",profile.profileId,"head.jpg");
             path = new DirectoryInfo(path).FullName;
             b.Save(path);
             
@@ -124,7 +182,6 @@ namespace nihilus.Logic.Model
             b.Dispose();
             
             return path;
-            //System.Console.WriteLine(profile.profileName+"s Head has a width of "+Head.Width+" and a Height of "+Head.Height);
         }
 
 

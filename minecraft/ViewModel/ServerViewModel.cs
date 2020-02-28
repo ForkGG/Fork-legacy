@@ -23,6 +23,7 @@ using nihilus.Logic.Model;
 using nihilus.Logic.Persistence;
 using nihilus.View.Xaml.MainWindowFrames;
 using nihilus.Logic;
+using nihilus.Logic.RoleManagement;
 using Timer = System.Timers.Timer;
 
 namespace nihilus.ViewModel
@@ -36,7 +37,7 @@ namespace nihilus.ViewModel
             return homeViewModel;
         }
 
-        private string externalIP =  new WebClient().DownloadString("http://icanhazip.com").Trim();
+        private string externalIP = new WebClient().DownloadString("http://icanhazip.com").Trim();
         private bool isHome;
 
         private ChartValues<double> cpuTotal;
@@ -47,6 +48,10 @@ namespace nihilus.ViewModel
         private MEMTracker memTracker;
 
         private Timer restartTimer = null;
+
+        private RoleUpdater whitelistUpdater;
+        private RoleUpdater banlistUpdater;
+        private RoleUpdater oplistUpdater;
 
         public ConsoleReader ConsoleReader;
         public ObservableCollection<string> ConsoleOutList { get; }
@@ -65,6 +70,7 @@ namespace nihilus.ViewModel
         public string NextRestartHours { get; set; }
         public string NextRestartMinutes { get; set; }
         public string NextRestartSeconds { get; set; }
+
         public string ServerTitle
         {
             get
@@ -73,6 +79,7 @@ namespace nihilus.ViewModel
                 {
                     return "Home";
                 }
+
                 return Server + Environment.NewLine + CurrentStatus.FriendlyName();
             }
         }
@@ -85,6 +92,7 @@ namespace nihilus.ViewModel
                 {
                     return "";
                 }
+
                 switch (CurrentStatus)
                 {
                     case ServerStatus.RUNNING:
@@ -113,10 +121,13 @@ namespace nihilus.ViewModel
             }
         }
 
+        public bool ServerRunning => CurrentStatus == ServerStatus.RUNNING;
+
         public string AddressInfo { get; set; }
         public Page ServerPage { get; set; }
 
         private ICommand readConsoleIn;
+
         public ICommand ReadConsoleIn
         {
             get
@@ -129,7 +140,7 @@ namespace nihilus.ViewModel
                        }));
             }
         }
-        
+
         public double DownloadProgress { get; set; }
         public string DownloadProgressReadable { get; set; }
         public bool DownloadCompleted { get; set; }
@@ -142,22 +153,33 @@ namespace nihilus.ViewModel
             if (Server.Version.Type == ServerVersion.VersionType.Vanilla)
             {
                 Versions = new ObservableCollection<ServerVersion>(VersionManager.Instance.VanillaVersions);
-            } else if (Server.Version.Type == ServerVersion.VersionType.Spigot)
+            }
+            else if (Server.Version.Type == ServerVersion.VersionType.Spigot)
             {
                 Versions = new ObservableCollection<ServerVersion>(VersionManager.Instance.SpigotVersions);
             }
-            
-            Versions =  new ObservableCollection<ServerVersion>(VersionManager.Instance.VanillaVersions);
+
+            Versions = new ObservableCollection<ServerVersion>(VersionManager.Instance.VanillaVersions);
             ConsoleOutList.CollectionChanged += ConsoleOutChanged;
             UpdateAddressInfo();
-            Application.Current.Dispatcher.Invoke(new Action(()=>ServerPage = new ServerPage(this)));
-            UpdateWhiteListRead();
+            Application.Current.Dispatcher.Invoke(new Action(() => ServerPage = new ServerPage(this)));
+
             WhiteList.CollectionChanged += WhiteListChanged;
-            WhiteList.CollectionChanged += UpdateWhiteListWrite;
             BanList.CollectionChanged += BanListChanged;
-            //TODO write
             OPList.CollectionChanged += OPListChanged;
-            //TODO write
+            new Thread(() =>
+            {
+                RoleUpdater.InitializeList(RoleType.WHITELIST, WhiteList, Server);
+                RoleUpdater.InitializeList(RoleType.BAN_LIST, BanList, Server);
+                RoleUpdater.InitializeList(RoleType.OP_LIST, OPList, Server);
+                Console.WriteLine("Finished reading Role-lists");
+
+                whitelistUpdater = new RoleUpdater(RoleType.WHITELIST, WhiteList,Server.Version);
+                banlistUpdater = new RoleUpdater(RoleType.BAN_LIST, BanList,Server.Version);
+                oplistUpdater = new RoleUpdater(RoleType.OP_LIST, OPList,Server.Version);
+            }).Start();
+
+            Console.WriteLine("Server ViewModel for " + server + " initialized.");
         }
 
         private ServerViewModel()
@@ -171,11 +193,13 @@ namespace nihilus.ViewModel
             AddressInfo = externalIP + ":" + Server.ServerSettings.ServerPort;
         }
 
-        private void UpdateWhiteListWrite(object sender, NotifyCollectionChangedEventArgs e)
+        public void RoleInputHandler(string line)
         {
             new Thread(() =>
             {
-                new FileWriter().WriteWhitelist(Server.Name, new List<Player>(WhiteList));
+                whitelistUpdater.HandleOutputLine(line);
+                banlistUpdater.HandleOutputLine(line);
+                oplistUpdater.HandleOutputLine(line);
             }).Start();
         }
 
@@ -187,6 +211,7 @@ namespace nihilus.ViewModel
                 RestartEnabled = false;
                 return;
             }
+
             TimeSpan timeSpan = TimeSpan.FromMilliseconds(time);
             new Thread(() =>
             {
@@ -201,13 +226,18 @@ namespace nihilus.ViewModel
                     NextRestartSeconds = timeSpan.Seconds.ToString();
                     if (timeSpan.Hours == 0 && timeSpan.Minutes == 30 && timeSpan.Seconds == 0)
                     {
-                        ApplicationManager.Instance.ActiveServers[Server].StandardInput.WriteLineAsync("/say Next server restart in 30 minutes!");
-                    } else if (timeSpan.Hours == 0 && timeSpan.Minutes ==5 && timeSpan.Seconds==0)
+                        ApplicationManager.Instance.ActiveServers[Server].StandardInput
+                            .WriteLineAsync("/say Next server restart in 30 minutes!");
+                    }
+                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 5 && timeSpan.Seconds == 0)
                     {
-                        ApplicationManager.Instance.ActiveServers[Server].StandardInput.WriteLineAsync("/say Next server restart in 5 minutes!");
-                    } else if (timeSpan.Hours == 0 && timeSpan.Minutes == 1 && timeSpan.Seconds==0)
+                        ApplicationManager.Instance.ActiveServers[Server].StandardInput
+                            .WriteLineAsync("/say Next server restart in 5 minutes!");
+                    }
+                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 1 && timeSpan.Seconds == 0)
                     {
-                        ApplicationManager.Instance.ActiveServers[Server].StandardInput.WriteLineAsync("/say Next server restart in 1 minute!");
+                        ApplicationManager.Instance.ActiveServers[Server].StandardInput
+                            .WriteLineAsync("/say Next server restart in 1 minute!");
                     }
                 };
                 restartTimer.AutoReset = true;
@@ -220,48 +250,21 @@ namespace nihilus.ViewModel
             UpdateAddressInfo();
             new Thread(() =>
             {
-                new FileWriter().WriteServerSettings(Server.Name,Server.ServerSettings.SettingsDictionary);
+                new FileWriter().WriteServerSettings(Server.Name, Server.ServerSettings.SettingsDictionary);
                 Serializer.Instance.StoreServers(ServerManager.Instance.Servers);
             }).Start();
         }
-
-        public bool PlayerExists(string name)
-        {
-            //TODO
-            return true;
-        }
-
-        public void AddPlayerToWhiteList(string name)
-        {
-            new Thread(() =>
-            {
-                Player p = new Player(name);
-                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, 
-                    new Action(()=>WhiteList.Add(p)));
-            }).Start();
-        }
-
-        public void UpdateWhiteListRead()
-        {
-            new Thread(() =>
-            {
-                List<Player> whitelistedPlayers = new FileReader().ReadWhiteList(Server.Name);
-                WhiteList = new ObservableCollection<Player>(whitelistedPlayers);
-                WhiteList.CollectionChanged += WhiteListChanged;
-                WhiteList.CollectionChanged += UpdateWhiteListWrite;
-            }).Start();
-        } 
 
         public void TrackPerformance(Process p)
         {
             // Track CPU usage
             cpuTracker?.StopThreads();
-            
+
             cpuTracker = new CPUTracker();
             cpuTotal = new ChartValues<double>();
-            cpuTracker.TrackTotal(p, cpuTotal,102);
+            cpuTracker.TrackTotal(p, cpuTotal, 102);
             cpuServer = new ChartValues<double>();
-            cpuTracker.TrackP(p,cpuServer, 102);
+            cpuTracker.TrackP(p, cpuServer, 102);
 
             CPUList = new SeriesCollection
             {
@@ -276,15 +279,15 @@ namespace nihilus.ViewModel
             };
             cpuTotal.CollectionChanged += CPUListChanged;
             cpuServer.CollectionChanged += CPUListChanged;
-            
-            
+
+
             // Track memory usage
             memTracker?.StopThreads();
-            
+
             memTracker = new MEMTracker();
             memServer = new ChartValues<double>();
-            memTracker.TrackP(p,memServer,102);
-            
+            memTracker.TrackP(p, memServer, 102);
+
             MEMList = new SeriesCollection
             {
                 new LineSeries
@@ -294,13 +297,13 @@ namespace nihilus.ViewModel
             };
             memServer.CollectionChanged += MEMListChanged;
         }
-        
+
         public void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             double bytesIn = double.Parse(e.BytesReceived.ToString());
             double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
             DownloadProgress = bytesIn / totalBytes * 100;
-            DownloadProgressReadable = Math.Round(DownloadProgress, 0)+"%";
+            DownloadProgressReadable = Math.Round(DownloadProgress, 0) + "%";
         }
 
         public void DownloadCompletedHandler(object sender, AsyncCompletedEventArgs e)
@@ -322,21 +325,23 @@ namespace nihilus.ViewModel
         {
             raisePropertyChanged(nameof(MEMList));
         }
+
         private void WhiteListChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             raisePropertyChanged(nameof(WhiteList));
         }
+
         private void BanListChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             raisePropertyChanged(nameof(BanList));
         }
+
         private void OPListChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             raisePropertyChanged(nameof(OPList));
         }
 
-        
-        
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
@@ -344,8 +349,8 @@ namespace nihilus.ViewModel
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        
-        
+
+
         private class ActionCommand : ICommand
         {
             private readonly Action _action;

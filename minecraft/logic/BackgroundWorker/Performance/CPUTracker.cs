@@ -28,9 +28,9 @@ namespace nihilus.Logic.BackgroundWorker.Performance
             {
                 while (!interrupted && !p.HasExited)
                 {
-                    double value = cpuCounter.NextValue();
                     try
                     {
+                        double value = cpuCounter.NextValue();
                         Application.Current.Dispatcher.Invoke(() =>
                         {
                             chartValues.Add(value);
@@ -61,9 +61,9 @@ namespace nihilus.Logic.BackgroundWorker.Performance
                 float processorCount = Environment.ProcessorCount;
                 while (!interrupted && !p.HasExited)
                 {
-                    double value = cpuCounter.NextValue()/processorCount;
                     try
                     {
+                        double value = cpuCounter.NextValue() / processorCount;
                         Application.Current.Dispatcher.Invoke(() =>
                         {
                             chartValues.Add(value);
