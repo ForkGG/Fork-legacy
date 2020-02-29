@@ -122,7 +122,7 @@ namespace nihilus.Logic.RoleManagement
             string path;
             if (server.Version.CompareTo(new ServerVersion{Version="1.7.5"})<=0)
             {
-                path = Path.Combine(new DirectoryInfo(server.Name).FullName,roleType.TxtName());
+                path = Path.Combine(new DirectoryInfo(Path.Combine(App.ApplicationPath, server.Name)).FullName,roleType.TxtName());
                 switch (roleType)
                 {
                     case RoleType.WHITELIST:
@@ -140,7 +140,7 @@ namespace nihilus.Logic.RoleManagement
             }
             else
             {
-                path = Path.Combine(new DirectoryInfo(server.Name).FullName,roleType.JsonName());
+                path = Path.Combine(new DirectoryInfo(Path.Combine(App.ApplicationPath, server.Name)).FullName,roleType.JsonName());
                 switch (roleType)
                 {
                     case RoleType.WHITELIST:

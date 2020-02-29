@@ -25,7 +25,7 @@ namespace nihilus.Logic.Persistence
                 date,
                 "eula=true"
             };
-            File.WriteAllLines(folderPath+"/eula.txt",lines,Encoding.UTF8);
+            File.WriteAllLines(Path.Combine(folderPath, "eula.txt"),lines,Encoding.UTF8);
         }
 
         public void WriteServerSettings(string folderPath, Dictionary<string, string> serverSettings)
@@ -43,7 +43,7 @@ namespace nihilus.Logic.Persistence
             {
                 lines.Add(setting+"="+serverSettings[setting]);
             }
-            File.WriteAllLines(folderPath+ "/server.properties", lines, Encoding.UTF8);
+            File.WriteAllLines(Path.Combine(folderPath,"server.properties"), lines, Encoding.UTF8);
         }
     }
 }

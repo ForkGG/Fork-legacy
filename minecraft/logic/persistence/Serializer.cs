@@ -37,7 +37,7 @@ namespace nihilus.Logic.Persistence
                 }
                 servers.Add(viewModel.Server);
             }
-            SerializeObject(servers,"persistence/servers.xml");
+            SerializeObject(servers,Path.Combine(App.ApplicationPath,"persistence","servers.xml"));
         }
 
         public ObservableCollection<ServerViewModel> LoadServers()
@@ -45,7 +45,7 @@ namespace nihilus.Logic.Persistence
             ObservableCollection<ServerViewModel> serverViewModels = new ObservableCollection<ServerViewModel>();
             
             
-            List<Server> servers = DeSerializeObject <List<Server>>("persistence/servers.xml");
+            List<Server> servers = DeSerializeObject <List<Server>>(Path.Combine(App.ApplicationPath,"persistence","servers.xml"));
             if (servers == null)
             {
                 return serverViewModels;
@@ -70,7 +70,7 @@ namespace nihilus.Logic.Persistence
             if (serializableObject == null) { return; }
 
             fileName.Trim();
-            string folder = fileName.Substring(0, fileName.LastIndexOf("/"));
+            string folder = fileName.Substring(0, fileName.LastIndexOf("\\"));
             if (!new DirectoryInfo(folder).Exists)
             {
                 Directory.CreateDirectory(folder);

@@ -24,7 +24,7 @@ namespace nihilus.Logic.Manager
 
         private ServerManager()
         {
-            if (new DirectoryInfo("persistence").Exists)
+            if (new DirectoryInfo(Path.Combine(App.ApplicationPath,"persistence")).Exists)
             {
                 Servers = Serializer.Instance.LoadServers();
             }
@@ -146,13 +146,13 @@ namespace nihilus.Logic.Manager
                 server.Name = name;
                 server.Version = serverVersion;
 
-                DirectoryInfo directoryInfo = Directory.CreateDirectory(name);
+                DirectoryInfo directoryInfo = Directory.CreateDirectory(Path.Combine(App.ApplicationPath,name));
                 Thread thread = new Thread(() =>
                 {
                     WebClient webClient = new WebClient();
                     webClient.DownloadProgressChanged += addServerViewModel.DownloadProgressChanged;
                     webClient.DownloadFileCompleted += addServerViewModel.DownloadCompletedHandler;
-                    webClient.DownloadFileAsync(new Uri(serverVersion.JarLink), directoryInfo.Name + "/server.jar");
+                    webClient.DownloadFileAsync(new Uri(serverVersion.JarLink), Path.Combine(directoryInfo.FullName, "server.jar"));                                    
                 });
                 thread.Start();
                 while (true)
@@ -165,8 +165,8 @@ namespace nihilus.Logic.Manager
                     Thread.Sleep(500);
                 }
 
-                new FileWriter().WriteEula(directoryInfo.Name);
-                new FileWriter().WriteServerSettings(directoryInfo.Name, serverSettings.SettingsDictionary);
+                new FileWriter().WriteEula(Path.Combine(App.ApplicationPath,directoryInfo.Name));
+                new FileWriter().WriteServerSettings(Path.Combine(App.ApplicationPath,directoryInfo.Name), serverSettings.SettingsDictionary);
 
                 ServerViewModel viewModel = new ServerViewModel(server);
                 Application.Current.Dispatcher.Invoke(new Action(() => Servers.Add(viewModel)));
@@ -175,7 +175,7 @@ namespace nihilus.Logic.Manager
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(e.StackTrace);
                 return false;
             }
         }
@@ -193,19 +193,19 @@ namespace nihilus.Logic.Manager
                     }
                 }
 
-                DirectoryInfo deletedDirectory = Directory.CreateDirectory(Path.Combine("backup","deleted"));
+                DirectoryInfo deletedDirectory = Directory.CreateDirectory(Path.Combine(App.ApplicationPath,"backup","deleted"));
                 if (File.Exists(Path.Combine(deletedDirectory.FullName,serverViewModel.Server.Name+".zip")))
                 {
                     File.Delete(Path.Combine(deletedDirectory.FullName,serverViewModel.Server.Name+".zip"));
                 }
-                DirectoryInfo serverDirectory = new DirectoryInfo(serverViewModel.Server.Name);
-                ZipFile.CreateFromDirectory(serverViewModel.Server.Name,Path.Combine(deletedDirectory.FullName,serverViewModel.Server.Name+".zip"));
+                DirectoryInfo serverDirectory = new DirectoryInfo(Path.Combine(App.ApplicationPath,serverViewModel.Server.Name));
+                ZipFile.CreateFromDirectory(serverDirectory.FullName,Path.Combine(deletedDirectory.FullName,serverViewModel.Server.Name+".zip"));
                 serverDirectory.Delete(true);
                 return true;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(e.StackTrace);
                 return false;
             }            
         }
@@ -224,10 +224,10 @@ namespace nihilus.Logic.Manager
                 }
                 
                 //Delete old server.jar
-                File.Delete(Path.Combine(serverViewModel.Server.Name,"server.jar"));
+                File.Delete(Path.Combine(App.ApplicationPath,serverViewModel.Server.Name,"server.jar"));
                 
                 //Download new server.jar
-                DirectoryInfo directoryInfo = new DirectoryInfo(serverViewModel.Server.Name);
+                DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ApplicationPath,serverViewModel.Server.Name));
                 Thread thread = new Thread(() =>
                 {
                     WebClient webClient = new WebClient();
@@ -259,12 +259,12 @@ namespace nihilus.Logic.Manager
 
         private bool DeleteDimension(string dimension, Server server)
         {
-            DirectoryInfo dimensionDir = new DirectoryInfo(Path.Combine(server.Name,server.Name,dimension));
+            DirectoryInfo dimensionDir = new DirectoryInfo(Path.Combine(App.ApplicationPath,server.Name,server.Name,dimension));
             if (!dimensionDir.Exists)
             {
                 return true;
             }
-            DirectoryInfo dimBackups = Directory.CreateDirectory(Path.Combine(server.Name, server.Name, "DimensionBackups"));
+            DirectoryInfo dimBackups = Directory.CreateDirectory(Path.Combine(App.ApplicationPath,server.Name, server.Name, "DimensionBackups"));
             string timeStamp = DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year + "_" +
                                DateTime.Now.Hour + "-" + DateTime.Now.Minute;
             ZipFile.CreateFromDirectory(dimensionDir.FullName, Path.Combine(dimBackups.FullName, dimension +"_" + timeStamp + ".zip"));
@@ -275,7 +275,7 @@ namespace nihilus.Logic.Manager
         private bool StartServer(ServerViewModel viewModel)
         {
             viewModel.ConsoleOutList.Clear();
-            DirectoryInfo directoryInfo = new DirectoryInfo(viewModel.Server.Name);
+            DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ApplicationPath,viewModel.Server.Name));
             if (!directoryInfo.Exists)
             {
                 return false;
@@ -289,7 +289,7 @@ namespace nihilus.Logic.Manager
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
                 FileName = "java.exe",
-                WorkingDirectory = directoryInfo.Name,
+                WorkingDirectory = directoryInfo.FullName,
                 Arguments = "-Xmx" + viewModel.Server.JavaSettings.MaxRam + "m -Xms" +
                             viewModel.Server.JavaSettings.MinRam + "m -jar server.jar nogui",
                 WindowStyle = ProcessWindowStyle.Hidden,

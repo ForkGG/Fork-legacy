@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Media;
 using System.Net;
 using System.Runtime.CompilerServices;
@@ -250,7 +251,7 @@ namespace nihilus.ViewModel
             UpdateAddressInfo();
             new Thread(() =>
             {
-                new FileWriter().WriteServerSettings(Server.Name, Server.ServerSettings.SettingsDictionary);
+                new FileWriter().WriteServerSettings(Path.Combine(App.ApplicationPath,Server.Name), Server.ServerSettings.SettingsDictionary);
                 Serializer.Instance.StoreServers(ServerManager.Instance.Servers);
             }).Start();
         }

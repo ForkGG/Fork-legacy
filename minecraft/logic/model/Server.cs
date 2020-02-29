@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Xml.Serialization;
 using nihilus.Logic.Persistence;
 
@@ -30,7 +31,7 @@ namespace nihilus.Logic.Model
             get
             {
                 if (serverSettings == null)
-                    serverSettings = new ServerSettings(new FileReader().ReadServerSettings(Name));
+                    serverSettings = new ServerSettings(new FileReader().ReadServerSettings(Path.Combine(App.ApplicationPath,Name)));
                 return serverSettings;
             }
             set => serverSettings = value;

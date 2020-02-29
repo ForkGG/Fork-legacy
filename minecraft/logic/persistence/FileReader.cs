@@ -16,7 +16,7 @@ namespace nihilus.Logic.Persistence
             Dictionary<string, string> serverSettings = new Dictionary<string, string>();
             try
             {   // Open the text file using a stream reader.
-                using (StreamReader sr = new StreamReader(folderPath+"/server.properties"))
+                using (StreamReader sr = new StreamReader(Path.Combine(folderPath, "server.properties")))
                 {
                     string line;
                     while ((line = sr.ReadLine())!=null)
