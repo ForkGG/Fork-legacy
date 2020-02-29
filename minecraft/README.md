@@ -2,7 +2,7 @@
 Minecraft Server Manager GUI
 
 ## Installation
-- Download the [latest installer](https://github.com/ChristianKern97/nihilus/releases)
+- Download the [latest installer](https://github.com/ChristianKern97/nihilus/releases) (Versions prior to v0.4-MC are not working anymore)
 - Run the installer
 - Run nihilus.exe
 
