@@ -21,6 +21,8 @@ namespace nihilus.Logic.Model
 {
     public class Player
     {
+        private bool offlineChar = false;
+        
         public string Name { get; set; }
         public string Uid { get; set; }
         public string Head { get; set; }
@@ -30,7 +32,14 @@ namespace nihilus.Logic.Model
         {
             Name = name;
             RetrieveUid();
-            RetrieveHead();
+            if (offlineChar)
+            {
+                Head = SetOfflineHead();
+            }
+            else
+            {
+                RetrieveHead();
+            }
         }
 
         public override string ToString()
@@ -56,10 +65,20 @@ namespace nihilus.Logic.Model
             }
 
             response.EnsureSuccessStatusCode();
+            
+            
+            //Exception for user not found: Response 204
+            if (response.StatusCode == HttpStatusCode.NoContent)
+            {
+                Uid = Name;
+                offlineChar = true;
+                return;
+            }
 
             Stream respStream = response.Content.ReadAsStreamAsync().Result;
             string nameUidString = new StreamReader(respStream).ReadToEnd();
             NameUid nameUid = JsonConvert.DeserializeObject<NameUid>(nameUidString);
+            
             Uid = nameUid.id;
         }
 
@@ -190,6 +209,19 @@ namespace nihilus.Logic.Model
             b.Dispose();
             
             return path;
+        }
+
+        private string SetOfflineHead()
+        {
+            Image defaultHead = Resources.DeafultHead;
+             Bitmap b = new Bitmap(defaultHead);
+             Directory.CreateDirectory(Path.Combine(App.ApplicationPath,"players",Name));
+             string path = Path.Combine(App.ApplicationPath,"players",Name,"head.jpg");
+             path = new DirectoryInfo(path).FullName;
+             b.Save(path);
+             b.Dispose();
+            
+             return path;
         }
 
 
