@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Newtonsoft.Json;
 using nihilus.Logic.Manager;
+using nihilus.Properties;
 using Color = System.Drawing.Color;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
@@ -142,43 +143,50 @@ namespace nihilus.Logic.Model
             var profileJson = Convert.FromBase64String(base64String);
             string profileJsonString = Encoding.UTF8.GetString(profileJson);
             Profile profile = JsonConvert.DeserializeObject<Profile>(profileJsonString);
+            Bitmap b;
 
-            var client = new HttpClient();
-            //TODO implement default skin for people without skin
-            var uri = new Uri(profile.textures.SKIN.url);
-            var response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
-            while (response.StatusCode == (HttpStatusCode) 429)
+            if (profile.textures.SKIN == null)
             {
-                Thread.Sleep(5000);
-                response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
+                Image defaultHead = Resources.DeafultHead;
+                b = new Bitmap(defaultHead);
             }
+            else
+            {
+                var client = new HttpClient();
+                //TODO implement default skin for people without skin
+                var uri = new Uri(profile.textures.SKIN.url);
+                var response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
+                while (response.StatusCode == (HttpStatusCode) 429)
+                {
+                    Thread.Sleep(5000);
+                    response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
+                }
 
-            response.EnsureSuccessStatusCode();
+                response.EnsureSuccessStatusCode();
 
-            Stream respStream = response.Content.ReadAsStreamAsync().Result;
-            Image image = Image.FromStream(respStream);
+                Stream respStream = response.Content.ReadAsStreamAsync().Result;
+                Image image = Image.FromStream(respStream);
 
-            Bitmap skinBmp = new Bitmap(image);
-            Bitmap headBmp = skinBmp.Clone(new Rectangle(8, 8, 8, 8), skinBmp.PixelFormat);
-            Bitmap overlayHead = skinBmp.Clone(new Rectangle(40, 8, 8, 8), skinBmp.PixelFormat);
+                Bitmap skinBmp = new Bitmap(image);
+                Bitmap headBmp = skinBmp.Clone(new Rectangle(8, 8, 8, 8), skinBmp.PixelFormat);
+                Bitmap overlayHead = skinBmp.Clone(new Rectangle(40, 8, 8, 8), skinBmp.PixelFormat);
             
-            //Remove Transparency
-            Bitmap b = new Bitmap(8,8);
-            Graphics g = Graphics.FromImage(b);
-            g.Clear(Color.Black);
-            g.DrawImage(headBmp,0,0);
-            g.DrawImage(overlayHead,0,0);
-            
-            
+                //Remove Transparency
+                b = new Bitmap(8,8);
+                Graphics g = Graphics.FromImage(b);
+                g.Clear(Color.Black);
+                g.DrawImage(headBmp,0,0);
+                g.DrawImage(overlayHead,0,0);
+                
+                //Dispose
+                headBmp.Dispose();
+                skinBmp.Dispose();
+            }
             //Write .jpg file
-            Directory.CreateDirectory(Path.Combine("players",profile.profileId));
-            string path = Path.Combine("players",profile.profileId,"head.jpg");
+            Directory.CreateDirectory(Path.Combine(App.ApplicationPath,"players",profile.profileId));
+            string path = Path.Combine(App.ApplicationPath,"players",profile.profileId,"head.jpg");
             path = new DirectoryInfo(path).FullName;
             b.Save(path);
-            
-            //Dispose
-            headBmp.Dispose();
-            skinBmp.Dispose();
             b.Dispose();
             
             return path;
