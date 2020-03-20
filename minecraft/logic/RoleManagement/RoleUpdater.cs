@@ -73,7 +73,7 @@ namespace nihilus.Logic.RoleManagement
             }
         }
 
-        public void HandleOutputLine(string line)
+        public async void HandleOutputLine(string line)
         {
             Match addMatch = regexAdd.Match(line);
             if (addMatch.Success)
@@ -87,7 +87,7 @@ namespace nihilus.Logic.RoleManagement
                 }
                 string name = addMatch.Groups[1].Value;
                 Console.WriteLine("Player "+name+" added to a list");
-                Player p = new Player(name);
+                Player p = await PlayerManager.Instance.GetPlayer(name);
                 Application.Current.Dispatcher.Invoke(() => playerList.Add(p),DispatcherPriority.Background);
                 return;
             }
@@ -116,7 +116,7 @@ namespace nihilus.Logic.RoleManagement
             }
         }
 
-        public static void InitializeList(RoleType roleType, ObservableCollection<Player> playerList, Server server)
+        public static async void InitializeList(RoleType roleType, ObservableCollection<Player> playerList, Server server)
         {
             List<string> names;
             string path;
@@ -160,7 +160,8 @@ namespace nihilus.Logic.RoleManagement
             Dispatcher viewDisp = Application.Current.Dispatcher;
             foreach (string name in names)
             {
-                Player p = new Player(name);
+                Player p = await PlayerManager.Instance.GetPlayer(name);
+                //Player p = new Player(name);
                 viewDisp.Invoke(() => playerList.Add(p), DispatcherPriority.Background);
             }
         }

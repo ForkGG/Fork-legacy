@@ -26,6 +26,8 @@ namespace nihilus.Logic.Model
         public string Name { get; set; }
         public string Uid { get; set; }
         public string Head { get; set; }
+        
+        [JsonIgnore]
         public Player Self => this;
 
         public Player(string name)

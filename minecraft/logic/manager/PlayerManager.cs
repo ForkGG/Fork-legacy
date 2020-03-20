@@ -1,8 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Management.Instrumentation;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using Newtonsoft.Json;
+using nihilus.Annotations;
 using nihilus.Logic.Model;
 using nihilus.ViewModel;
 
@@ -10,6 +15,7 @@ namespace nihilus.Logic.Manager
 {
     public sealed class PlayerManager
     {
+        #region Singleton
         private static PlayerManager instance;
         public static PlayerManager Instance
         {
@@ -22,7 +28,15 @@ namespace nihilus.Logic.Manager
                 return instance;
             }
         }
+        private PlayerManager()
+        {
+            PlayerSet = InitializePlayerSet();
+        }
+        #endregion
 
+        private HashSet<Player> PlayerSet;
+        private string PlayerJsonPath;
+        
         public void WhitelistPlayer(ServerViewModel viewModel, string name)
         {
             if (viewModel.CurrentStatus!= ServerStatus.RUNNING)
@@ -91,6 +105,44 @@ namespace nihilus.Logic.Manager
                 return;
             }
             ApplicationManager.Instance.ActiveServers[viewModel.Server].StandardInput.WriteLine("deop "+name);
+        }
+
+        public async Task<Player> GetPlayer(string name)
+        {
+            foreach (var player in PlayerSet)
+            {
+                if (player.Name.Equals(name))
+                {
+                    return player;
+                }
+            }
+            Player p = await CreatePlayer(name);
+            PlayerSet.Add(p);
+            SafePlayersToFile();
+            return p;
+        }
+
+        private async Task<Player> CreatePlayer(string name)
+        {
+            return new Player(name);
+        }
+
+        private void SafePlayersToFile()
+        {
+            string json = JsonConvert.SerializeObject(PlayerSet);
+            File.WriteAllText(PlayerJsonPath,json);
+        }
+
+        private HashSet<Player> InitializePlayerSet()
+        {
+            DirectoryInfo directoryInfo = Directory.CreateDirectory(Path.Combine(App.ApplicationPath, "players"));
+            PlayerJsonPath = Path.Combine(directoryInfo.FullName, "players.json");
+            if (!File.Exists(PlayerJsonPath))
+            {
+                return new HashSet<Player>();
+            }
+            string json = File.ReadAllText(PlayerJsonPath);
+            return JsonConvert.DeserializeObject<HashSet<Player>>(json);
         }
     }
 }

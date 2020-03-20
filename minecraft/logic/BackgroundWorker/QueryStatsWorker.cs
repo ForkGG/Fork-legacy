@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using nihilus.Logic.Manager;
 using nihilus.Logic.Model;
 using nihilus.ViewModel;
 
@@ -48,11 +50,12 @@ namespace nihilus.Logic.BackgroundWorker
                     }
                     if (!found)
                     {
-                        Player player = new Player(name);
+                        Player player = Task.Run(() => PlayerManager.Instance.GetPlayer(name)).Result;
+                        //Player player = new Player(name);
                         Application.Current.Dispatcher.Invoke(()=>
                         {
                             viewModel.PlayerList.Add(player);
-                            System.Console.WriteLine("Added Player "+player.Name+" to PlayerList");
+                            Console.WriteLine("Added Player "+player.Name+" to PlayerList");
                         });
                     }
                 }
