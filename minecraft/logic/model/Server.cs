@@ -21,7 +21,6 @@ namespace nihilus.Logic.Model
         public ServerVersion Version { get; set; }
         public ServerJavaSettings JavaSettings { get; set; }
         
-        //TODO: Apply restarts
         public ServerRestart Restart1 { get; set; }
         public ServerRestart Restart2 { get; set; }
         public ServerRestart Restart3 { get; set; }

@@ -148,22 +148,26 @@ namespace nihilus.ViewModel
 
         public ServerViewModel(Server server)
         {
-            
+            DateTime start = DateTime.Now;
+            Console.WriteLine("Starting initialization of ViewModel for Server "+server.Name);
             Server = server;
             CurrentStatus = ServerStatus.STOPPED;
             ConsoleOutList = new ObservableCollection<string>();
-            if (Server.Version.Type == ServerVersion.VersionType.Vanilla)
+            new Thread(() =>
             {
-                Versions = new ObservableCollection<ServerVersion>(VersionManager.Instance.VanillaVersions);
-            }
-            else if (Server.Version.Type == ServerVersion.VersionType.Paper)
-            {
-                Versions = new ObservableCollection<ServerVersion>(VersionManager.Instance.PaperVersions);
-            }
-            else if (Server.Version.Type == ServerVersion.VersionType.Spigot)
-            {
-                Versions = new ObservableCollection<ServerVersion>(VersionManager.Instance.SpigotVersions);
-            }
+                if (Server.Version.Type == ServerVersion.VersionType.Vanilla)
+                {
+                    Versions = new ObservableCollection<ServerVersion>(VersionManager.Instance.VanillaVersions);
+                }
+                else if (Server.Version.Type == ServerVersion.VersionType.Paper)
+                {
+                    Versions = new ObservableCollection<ServerVersion>(VersionManager.Instance.PaperVersions);
+                }
+                else if (Server.Version.Type == ServerVersion.VersionType.Spigot)
+                {
+                    Versions = new ObservableCollection<ServerVersion>(VersionManager.Instance.SpigotVersions);
+                } 
+            }).Start();
             
             ConsoleOutList.CollectionChanged += ConsoleOutChanged;
             UpdateAddressInfo();
@@ -184,7 +188,8 @@ namespace nihilus.ViewModel
                 oplistUpdater = new RoleUpdater(RoleType.OP_LIST, OPList,Server.Version);
             }).Start();
 
-            Console.WriteLine("Server ViewModel for " + server + " initialized.");
+            TimeSpan t = DateTime.Now - start;
+            Console.WriteLine("Server ViewModel for " + server + " initialized in "+t.Seconds+"."+t.Milliseconds+"s");
         }
 
         private ServerViewModel()

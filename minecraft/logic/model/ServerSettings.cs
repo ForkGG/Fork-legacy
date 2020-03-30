@@ -288,7 +288,19 @@ namespace nihilus.Logic.Model
 
         public ServerSettings(Dictionary<string, string> settingsDictionary)
         {
-            SettingsDictionary = settingsDictionary;
+            if (settingsDictionary.ContainsKey("LevelName"))
+            {
+                InitializeValues(settingsDictionary["LevelName"]);
+            }
+            else
+            {
+                InitializeValues("world");
+            }
+
+            foreach (KeyValuePair<string,string> keyValuePair in settingsDictionary)
+            {
+                SettingsDictionary[keyValuePair.Key] = keyValuePair.Value;
+            }
         }
 
         public ServerSettings(ServerSettings serverSettings)
