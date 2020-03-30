@@ -13,6 +13,7 @@ namespace nihilus.ViewModel
     {
 
         public ObservableCollection<ServerVersion> VanillaServerVersions { get; set; } 
+        public ObservableCollection<ServerVersion> PaperVersions { get; set; }
         public ObservableCollection<ServerVersion> SpigotServerVersions { get; set; }
         public ServerSettings ServerSettings { get; set; }
         public double DownloadProgress { get; set; }
@@ -26,6 +27,7 @@ namespace nihilus.ViewModel
         public AddServerViewModel()
         {
             VanillaServerVersions = new ObservableCollection<ServerVersion>(VersionManager.Instance.VanillaVersions);
+            PaperVersions = new ObservableCollection<ServerVersion>(VersionManager.Instance.PaperVersions);
             SpigotServerVersions = new ObservableCollection<ServerVersion>(VersionManager.Instance.SpigotVersions);
             ServerSettings = new ServerSettings(ServerManager.Instance.NextDefaultServerName());
         }
@@ -33,6 +35,7 @@ namespace nihilus.ViewModel
         public void UpdateVersions()
         {
             VanillaServerVersions = new ObservableCollection<ServerVersion>(VersionManager.Instance.VanillaVersions);
+            PaperVersions = new ObservableCollection<ServerVersion>(VersionManager.Instance.PaperVersions);
             SpigotServerVersions = new ObservableCollection<ServerVersion>(VersionManager.Instance.SpigotVersions);
         }
 

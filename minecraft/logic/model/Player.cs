@@ -86,7 +86,7 @@ namespace nihilus.Logic.Model
 
         private void CacheProfileJson(FullProfile profile)
         {
-            DirectoryInfo dirInfo= Directory.CreateDirectory(Path.Combine("players",profile.id));
+            DirectoryInfo dirInfo= Directory.CreateDirectory(Path.Combine(App.ApplicationPath,"players",profile.id));
             string json = JsonConvert.SerializeObject(profile);
             using (FileStream fs =File.Create(Path.Combine(dirInfo.FullName,"profile.json")))
             using (StreamWriter sw = new StreamWriter(fs))

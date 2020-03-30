@@ -5,6 +5,8 @@ using System.Net;
 using Newtonsoft.Json;
 using nihilus.Logic.Model;
 using nihilus.Logic.Model.MinecraftVersionPojo;
+using nihilus.Logic.WebRequesters;
+using nihilus.ViewModel;
 
 namespace nihilus.Logic.Manager
 {
@@ -62,6 +64,29 @@ namespace nihilus.Logic.Manager
             vanillaDict[type] = result;
             vanillaCacheAge[type] = DateTime.Now;
             return result;
+        }
+
+        public List<ServerVersion> GetPaperVersions()
+        {
+            PaperWebRequester paperWebRequester = new PaperWebRequester();
+            List<string> versionStrings = paperWebRequester.RequestPaperVersions();
+
+            List<ServerVersion> versions = new List<ServerVersion>();
+            if (versionStrings == null)
+            {
+                Console.Error.WriteLine("[CRITICAL] No Paper versions found!");
+                return versions;
+            }
+            foreach (string version in versionStrings)
+            {
+                ServerVersion serverVersion = new ServerVersion();
+                serverVersion.Type = ServerVersion.VersionType.Paper;
+                serverVersion.Version = version;
+                serverVersion.JarLink = "https://papermc.io/api/v1/paper/" + version + "/latest/download";
+                versions.Add(serverVersion);
+            }
+
+            return versions;
         }
 
         public List<ServerVersion> GetSpigotVersions()

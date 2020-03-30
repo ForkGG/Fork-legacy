@@ -147,6 +147,8 @@
     <Compile Include="Logic\RoleManagement\RoleUpdater.cs" />
     <Compile Include="Logic\RoleManagement\RoleType.cs" />
     <Compile Include="Logic\Utils\ByteUtils.cs" />
+    <Compile Include="Logic\WebRequesters\ResponseCache.cs" />
+    <Compile Include="Logic\WebRequesters\PaperWebRequester.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\ServerViewModel.cs" />
@@ -293,6 +295,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="View\Resources\images\DeafultHead.png" />
+    <Resource Include="View\Resources\images\paper.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Fody.5.0.6\build\Fody.targets" Condition="Exists('packages\Fody.5.0.6\build\Fody.targets')" />

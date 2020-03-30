@@ -148,6 +148,7 @@ namespace nihilus.ViewModel
 
         public ServerViewModel(Server server)
         {
+            
             Server = server;
             CurrentStatus = ServerStatus.STOPPED;
             ConsoleOutList = new ObservableCollection<string>();
@@ -155,12 +156,15 @@ namespace nihilus.ViewModel
             {
                 Versions = new ObservableCollection<ServerVersion>(VersionManager.Instance.VanillaVersions);
             }
+            else if (Server.Version.Type == ServerVersion.VersionType.Paper)
+            {
+                Versions = new ObservableCollection<ServerVersion>(VersionManager.Instance.PaperVersions);
+            }
             else if (Server.Version.Type == ServerVersion.VersionType.Spigot)
             {
                 Versions = new ObservableCollection<ServerVersion>(VersionManager.Instance.SpigotVersions);
             }
-
-            Versions = new ObservableCollection<ServerVersion>(VersionManager.Instance.VanillaVersions);
+            
             ConsoleOutList.CollectionChanged += ConsoleOutChanged;
             UpdateAddressInfo();
             Application.Current.Dispatcher.Invoke(new Action(() => ServerPage = new ServerPage(this)));

@@ -28,6 +28,11 @@ namespace nihilus.xaml.AddServer
         {
             versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding{Source = viewModel.VanillaServerVersions});
         }
+        
+        private void ServerTypePaper_OnClick(object sender, RoutedEventArgs e)
+        {
+            versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding{Source = viewModel.PaperVersions});
+        }
 
         private void ServerTypeSpigot_OnClick(object sender, RoutedEventArgs e)
         {

@@ -20,7 +20,7 @@
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <controls:ExtendedRadioButton Grid.Column="0" IconSource="/View/Resources/images/vanilla.png" Click="ServerTypeVanilla_OnClick" GroupName="serverType" Padding="5" IsChecked="True" Content="Minecraft Vanilla" Description="A plain and basic Minecraft installation" />
-                            <controls:ExtendedRadioButton Grid.Column="1" IconSource="/View/Resources/images/spigot.png" Click="ServerTypeSpigot_OnClick" GroupName="serverType" Padding="5" Content="Minecraft Spigot" Description="Forked from CraftBukkit, Spigot comes with additional features  and performance optimizations for a better Minecraft experience"/>
+                            <controls:ExtendedRadioButton Grid.Column="1" IconSource="/View/Resources/images/paper.png" Click="ServerTypePaper_OnClick" GroupName="serverType" Padding="5" Content="Paper Minecraft" Description="Paper is the next generation of Minecraft server, compatible with Spigot plugins and offering uncompromising performance"/>
                         </Grid>
 
 

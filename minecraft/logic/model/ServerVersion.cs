@@ -9,6 +9,7 @@ namespace nihilus.Logic.Model
         public enum VersionType
         {
             Vanilla,
+            Paper,
             Spigot
         }
 
