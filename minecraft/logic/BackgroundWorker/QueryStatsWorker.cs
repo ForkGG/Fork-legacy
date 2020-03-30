@@ -23,7 +23,7 @@ namespace nihilus.Logic.BackgroundWorker
 
             if (viewModel.CurrentStatus != ServerStatus.RUNNING)
             {
-                System.Console.WriteLine("QueryStatsWorker for server ("+viewModel.Server+") stopped working");
+                Console.WriteLine("QueryStatsWorker for server ("+viewModel.Server+") stopped working");
                 return;
             }
 
@@ -31,9 +31,21 @@ namespace nihilus.Logic.BackgroundWorker
             Query.Query query = new Query.Query(addressinfo[0],int.Parse(addressinfo[1]));
 
             //Update the stats of the server while it is running
-            while (viewModel.CurrentStatus == ServerStatus.RUNNING && query.ServerAvailable())
+            bool QueryCrashed = false;
+            while (viewModel.CurrentStatus == ServerStatus.RUNNING && query.ServerAvailable() && !QueryCrashed)
             {
-                FullStats fs = query.FullServerStats();
+                FullStats fs;
+                try
+                {
+                    fs = query.FullServerStats();
+                }
+                catch (TimeoutException e)
+                {
+                    Console.WriteLine("Query for server "+viewModel.Server.Name+" stopped working with message: "+e.Message);
+                    //TODO provide backup (/list or api.mcsrvstat.us)
+                    return;
+                }
+
                 List<string> playerNames = fs.PlayerList;
 
                 foreach (var name in playerNames)

@@ -85,7 +85,7 @@ namespace nihilus.Logic.Model
         private void CacheProfileJson(FullProfile profile)
         {
             DirectoryInfo dirInfo= Directory.CreateDirectory(Path.Combine(App.ApplicationPath,"players",profile.id));
-            string json = JsonConvert.SerializeObject(profile);
+            string json = JsonConvert.SerializeObject(profile, Formatting.Indented);
             using (FileStream fs =File.Create(Path.Combine(dirInfo.FullName,"profile.json")))
             using (StreamWriter sw = new StreamWriter(fs))
             {
@@ -172,7 +172,6 @@ namespace nihilus.Logic.Model
             else
             {
                 var client = new HttpClient();
-                //TODO implement default skin for people without skin
                 var uri = new Uri(profile.textures.SKIN.url);
                 var response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
                 while (response.StatusCode == (HttpStatusCode) 429)

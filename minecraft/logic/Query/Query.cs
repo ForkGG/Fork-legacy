@@ -67,7 +67,7 @@ namespace nihilus.Logic.Query
             }
             catch (Exception e)
             {
-                throw;
+                Console.WriteLine("Ping to server "+serverIp+":"+serverPort+" failed: "+e.Message);
                 return false;
             }
         }
@@ -112,14 +112,12 @@ namespace nihilus.Logic.Query
                 Thread.Sleep(100);
                 if (DateTime.Now > endTimeout)
                 {
-                    //throw new TimeoutException("The server does not respond at specified port");
-                    Console.WriteLine("The server "+serverIp+":"+serverPort+" does not respond.");
-                    return new byte[]{};
+                    throw new TimeoutException("The server does not respond at specified port");
                 }
             }
 
             // Receiving data sync - Block application if not receive data of port
-            // byte[] outputBytes = udpClient.Receive(ref receivePoint);
+            // outputBytes = udpClient.Receive(ref receivePoint);
 
             // Returning data
             return outputBytes;

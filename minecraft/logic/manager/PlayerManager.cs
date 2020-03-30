@@ -137,7 +137,7 @@ namespace nihilus.Logic.Manager
 
         private void SafePlayersToFile()
         {
-            string json = JsonConvert.SerializeObject(PlayerSet);
+            string json = JsonConvert.SerializeObject(PlayerSet, Formatting.Indented);
             File.WriteAllText(PlayerJsonPath,json);
         }
 
