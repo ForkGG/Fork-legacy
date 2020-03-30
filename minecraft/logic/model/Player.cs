@@ -6,29 +6,27 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
-using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using Newtonsoft.Json;
-using nihilus.Logic.Manager;
 using nihilus.Properties;
 using Color = System.Drawing.Color;
-using Point = System.Drawing.Point;
-using Size = System.Drawing.Size;
 
 namespace nihilus.Logic.Model
 {
     public class Player
     {
-        private bool offlineChar = false;
         
+        public bool offlineChar = false;
         public string Name { get; set; }
         public string Uid { get; set; }
         public string Head { get; set; }
         
         [JsonIgnore]
         public Player Self => this;
+
+        public Player()
+        {
+            
+        }
 
         public Player(string name)
         {

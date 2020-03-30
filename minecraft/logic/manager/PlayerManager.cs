@@ -16,6 +16,8 @@ namespace nihilus.Logic.Manager
     public sealed class PlayerManager
     {
         #region Singleton
+        //Lock to ensure Singleton pattern
+        private static object myLock = new object();
         private static PlayerManager instance;
         public static PlayerManager Instance
         {
@@ -23,7 +25,13 @@ namespace nihilus.Logic.Manager
             {
                 if (instance == null)
                 {
-                    instance = new PlayerManager();
+                    lock (myLock)
+                    {
+                        if (instance == null)
+                        {
+                            instance = new PlayerManager();
+                        }
+                    }
                 }
                 return instance;
             }
@@ -116,13 +124,13 @@ namespace nihilus.Logic.Manager
                     return player;
                 }
             }
-            Player p = await CreatePlayer(name);
+            Player p = Task.Run(()=>CreatePlayer(name)).Result;
             PlayerSet.Add(p);
             SafePlayersToFile();
             return p;
         }
 
-        private async Task<Player> CreatePlayer(string name)
+        private Player CreatePlayer(string name)
         {
             return new Player(name);
         }
