@@ -144,7 +144,8 @@ namespace nihilus.ViewModel
 
         public double DownloadProgress { get; set; }
         public string DownloadProgressReadable { get; set; }
-        public bool DownloadCompleted { get; set; }
+        public bool DownloadCompleted { get; 
+            set; }
 
         public ServerViewModel(Server server)
         {
@@ -319,6 +320,11 @@ namespace nihilus.ViewModel
         public void DownloadCompletedHandler(object sender, AsyncCompletedEventArgs e)
         {
             DownloadCompleted = true;
+        }
+        
+        public void ServerNameChanged()
+        {
+            raisePropertyChanged(nameof(ServerTitle));
         }
 
         private void ConsoleOutChanged(object sender, NotifyCollectionChangedEventArgs e)

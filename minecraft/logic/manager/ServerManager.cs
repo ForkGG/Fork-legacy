@@ -169,7 +169,7 @@ namespace nihilus.Logic.Manager
                 new FileWriter().WriteServerSettings(Path.Combine(App.ApplicationPath,directoryInfo.Name), serverSettings.SettingsDictionary);
 
                 ServerViewModel viewModel = new ServerViewModel(server);
-                Application.Current.Dispatcher.Invoke(new Action(() => Servers.Add(viewModel)));
+                Application.Current.Dispatcher.Invoke(() => Servers.Add(viewModel));
                 ApplicationManager.Instance.MainViewModel.SelectedServer = viewModel;
                 return true;
             }
@@ -222,6 +222,8 @@ namespace nihilus.Logic.Manager
                         Thread.Sleep(500);
                     }
                 }
+
+                serverViewModel.DownloadCompleted = false;
                 
                 //Delete old server.jar
                 File.Delete(Path.Combine(App.ApplicationPath,serverViewModel.Server.Name,"server.jar"));
@@ -233,7 +235,7 @@ namespace nihilus.Logic.Manager
                     WebClient webClient = new WebClient();
                     webClient.DownloadProgressChanged += serverViewModel.DownloadProgressChanged;
                     webClient.DownloadFileCompleted += serverViewModel.DownloadCompletedHandler;
-                    webClient.DownloadFileAsync(new Uri(newVersion.JarLink), directoryInfo.Name + "/server.jar");
+                    webClient.DownloadFileAsync(new Uri(newVersion.JarLink), Path.Combine(directoryInfo.FullName, "server.jar"));
                 });
                 thread.Start();
                 while (true)
@@ -247,6 +249,10 @@ namespace nihilus.Logic.Manager
                 }
 
                 serverViewModel.Server.Version = newVersion;
+                //Update Name in UI
+                serverViewModel.ServerNameChanged();
+                //Update stored name
+                Serializer.Instance.StoreServers(Servers);
                 
                 return true;
             }
