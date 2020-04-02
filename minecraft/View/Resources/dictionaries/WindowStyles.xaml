@@ -5,7 +5,7 @@
     <Style x:Key="DefaultWindow" TargetType="{x:Type Window}">
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
-                <WindowChrome CaptionHeight="30"
+                <WindowChrome CaptionHeight="0"
                               CornerRadius="0"
                               GlassFrameThickness="0,0,0,1"
                               ResizeBorderThickness="5"
@@ -38,6 +38,15 @@
                                     Height="20"
                                     Margin="5"
                                     Source="/View/Resources/images/title.png"/>
+
+                                <Menu IsMainMenu="True" Height="18" Background="{DynamicResource backgroundDefault}">
+                                    <MenuItem Header="_Advanced" Foreground="{DynamicResource foregroundDefault}">
+                                        <MenuItem Header="_Show Console" Foreground="Black"></MenuItem>
+                                        <MenuItem Header="_Close" Foreground="Black"></MenuItem>
+                                    </MenuItem>
+                                </Menu>
+
+
 
                                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
                                     <!-- Minimize Button -->

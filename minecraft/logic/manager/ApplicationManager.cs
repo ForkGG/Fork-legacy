@@ -24,12 +24,14 @@ namespace nihilus.Logic.Manager
         }
         private ApplicationManager()
         {
+            ConsoleViewModel = new ConsoleViewModel();
             Console.WriteLine("Welcome to nihilus Server Manager");
             MainViewModel = new MainViewModel();
         }
         
         
         public MainViewModel MainViewModel { get; }
+        public ConsoleViewModel ConsoleViewModel { get; }
         public Dictionary<Server, Process> ActiveServers { get; set; } = new Dictionary<Server, Process>();
 
         public void ExitApplication()

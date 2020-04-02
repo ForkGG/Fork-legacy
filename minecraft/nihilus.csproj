@@ -121,6 +121,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ExtendedRadioButton.cs" />
+    <Compile Include="Logic\ApplicationConsole\ConsoleManager.cs" />
     <Compile Include="Logic\BackgroundWorker\Performance\CPUTracker.cs" />
     <Compile Include="Logic\BackgroundWorker\Performance\MEMTracker.cs" />
     <Compile Include="Logic\BackgroundWorker\QueryStatsWorker.cs" />
@@ -151,12 +152,16 @@
     <Compile Include="Logic\WebRequesters\PaperWebRequester.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
+    <Compile Include="ViewModel\ConsoleViewModel.cs" />
     <Compile Include="ViewModel\ServerViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="View\Resources\dictionaries\WindowStyles.xaml.cs">
       <DependentUpon>WindowStyles.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Resources\Helper\BindingProxy.cs" />
+    <Compile Include="View\Xaml\Console.xaml.cs">
+      <DependentUpon>Console.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Xaml\Converter\BoolToVisibilityConverter.cs" />
     <Compile Include="View\Xaml\Converter\SimpleTimeToStringConverter.cs" />
     <Compile Include="View\Xaml\MainWindowFrames\ServerPage.xaml.cs">
@@ -202,6 +207,10 @@
     </Page>
     <Page Include="View\Resources\dictionaries\DarkTheme.xaml">
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Xaml\Console.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Xaml\MainWindow.xaml" />
     <Compile Include="Logic\Manager\ServerManager.cs" />
