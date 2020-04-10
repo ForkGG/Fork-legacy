@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using nihilus.Logic.Manager;
 using nihilus.ViewModel;
 
@@ -28,6 +18,7 @@ namespace nihilus.View.Xaml
             InitializeComponent();
             DataContext = viewModel;
             Loaded += Console_Loaded;
+            Closing += Window_Closing;
         }
         
         void Console_Loaded(object sender, RoutedEventArgs e)
@@ -45,6 +36,12 @@ namespace nihilus.View.Xaml
                 InputBlock.Focus();
                 Scroller.ScrollToBottom();
             }
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            this.Hide();
+            e.Cancel = true;
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Windows;
 using nihilus.Logic.Manager;
 using nihilus.ViewModel;
@@ -10,6 +11,7 @@ namespace nihilus.xaml
         public MainWindow()
         {
             InitializeComponent();
+            Closing += OnMainWindowClose;
             viewModel = ApplicationManager.Instance.MainViewModel;
             DataContext = viewModel;
         }
@@ -18,6 +20,11 @@ namespace nihilus.xaml
         {
             AddServer.AddServer addServer = new AddServer.AddServer();
             addServer.ShowDialog();
+        }
+
+        private void OnMainWindowClose(object sender, CancelEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }

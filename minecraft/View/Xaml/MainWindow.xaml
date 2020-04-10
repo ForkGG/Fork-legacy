@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:converter1="clr-namespace:nihilus.View.Xaml.Converter"
+        xmlns:converter1="clr-namespace:nihilus.View.Xaml.Converter"        
         mc:Ignorable="d"
         Title="Nihilus" Height="720" Width="1200" Style="{StaticResource DefaultWindow}" WindowStartupLocation="CenterScreen">
     <Window.Resources>

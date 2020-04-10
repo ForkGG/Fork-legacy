@@ -5,7 +5,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
-using nihilus.Logic.ApplicationConsole;
 using nihilus.Logic.Manager;
 using nihilus.Logic.Model;
 using nihilus.ViewModel;
@@ -57,7 +56,7 @@ namespace nihilus.View.Xaml
             Close();
             bool success = await ServerManager.Instance.DeleteServerAsync(viewModel);
             if(!success)
-                ConsoleManager.Instance.WriteLine("Problem while deleting "+viewModel.Server.Name);
+                System.Console.WriteLine("Problem while deleting "+viewModel.Server.Name);
             else
             {
                 ApplicationManager.Instance.MainViewModel.Servers.Remove(viewModel); //This shouldn't be here

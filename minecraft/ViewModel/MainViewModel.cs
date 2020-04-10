@@ -1,8 +1,11 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using nihilus.Annotations;
+using nihilus.Logic.ApplicationConsole;
 using nihilus.Logic.Manager;
 
 namespace nihilus.ViewModel
@@ -14,6 +17,7 @@ namespace nihilus.ViewModel
 
         public MainViewModel()
         {
+            Console.SetOut(ApplicationManager.ConsoleWriter);
             Servers = ServerManager.Instance.Servers;
             Servers.Insert(0, ServerViewModel.HomeViewModel());
             Servers.CollectionChanged += ServerListChanged;

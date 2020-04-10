@@ -1,11 +1,13 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media;
+using nihilus.View.Xaml;
 
 namespace nihilus
 {
     public partial class WindowStyles : ResourceDictionary
     {
+        private Console Console = new Console();
+        
         private void BtnCloseClick(object sender, RoutedEventArgs e)
         {
             Window window = GetParentWindow((DependencyObject) sender);
@@ -29,6 +31,11 @@ namespace nihilus
         {
             Window window = GetParentWindow((DependencyObject) sender);
             window.WindowState = WindowState.Minimized;
+        }
+
+        private void BtnShowConsoleClick(object sender, RoutedEventArgs e)
+        {
+            Console.Show();
         }
 
         public static Window GetParentWindow(DependencyObject child)

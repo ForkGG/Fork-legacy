@@ -5,7 +5,7 @@
     <Style x:Key="DefaultWindow" TargetType="{x:Type Window}">
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
-                <WindowChrome CaptionHeight="0"
+                <WindowChrome CaptionHeight="30"
                               CornerRadius="0"
                               GlassFrameThickness="0,0,0,1"
                               ResizeBorderThickness="5"
@@ -39,10 +39,10 @@
                                     Margin="5"
                                     Source="/View/Resources/images/title.png"/>
 
-                                <Menu IsMainMenu="True" Height="18" Background="{DynamicResource backgroundDefault}">
+                                <Menu IsMainMenu="True" Height="18" Background="{DynamicResource backgroundDefault}" WindowChrome.IsHitTestVisibleInChrome="True">
                                     <MenuItem Header="_Advanced" Foreground="{DynamicResource foregroundDefault}">
-                                        <MenuItem Header="_Show Console" Foreground="Black"></MenuItem>
-                                        <MenuItem Header="_Close" Foreground="Black"></MenuItem>
+                                        <MenuItem Header="_Show Console" Foreground="Black" Click="BtnShowConsoleClick"></MenuItem>
+                                        <MenuItem Header="_Settings" Foreground="Black" IsEnabled="False"></MenuItem>
                                     </MenuItem>
                                 </Menu>
 

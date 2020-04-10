@@ -79,8 +79,7 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>NihilusKey.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
@@ -121,7 +120,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ExtendedRadioButton.cs" />
-    <Compile Include="Logic\ApplicationConsole\ConsoleManager.cs" />
+    <Compile Include="Logic\ApplicationConsole\ConsoleWriter.cs" />
     <Compile Include="Logic\BackgroundWorker\Performance\CPUTracker.cs" />
     <Compile Include="Logic\BackgroundWorker\Performance\MEMTracker.cs" />
     <Compile Include="Logic\BackgroundWorker\QueryStatsWorker.cs" />
@@ -264,6 +263,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="NihilusKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

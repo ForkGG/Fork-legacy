@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
+using nihilus.Logic.ApplicationConsole;
 using nihilus.Logic.Manager;
 
 namespace nihilus
@@ -24,10 +25,16 @@ namespace nihilus
                     //FileInfo applicationExe = new FileInfo(applicationPath);
                     //applicationPath = applicationExe.Directory.FullName;
                     applicationPath = directoryInfo.FullName;
-                    Console.WriteLine(applicationPath);
+                    Console.WriteLine("Data directory of Nihilus is: "+applicationPath);
                 }
                 return applicationPath;
             }
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            ApplicationManager.ConsoleWriter.AppStarted();
+            base.OnStartup(e);
         }
 
         private void ExitApplication(object sender, ExitEventArgs exitEventArgs)
