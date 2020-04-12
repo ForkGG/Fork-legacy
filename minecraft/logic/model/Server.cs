@@ -80,7 +80,12 @@ namespace nihilus.Logic.Model
 
         public override string ToString()
         {
-            return Name + "("+Version.Version+")";
+            string name = Name;
+            if (Name.Length>10)
+            {
+                name = name.Substring(0, 9);
+            }
+            return name + " ("+Version.Version+")";
         }
     }
 }
