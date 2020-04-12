@@ -29,4 +29,6 @@
 
     <SolidColorBrush x:Key="outerBorder" Color="#FF595858"/>
     <SolidColorBrush x:Key="errorBorder" Color="Red"/>
+
+    <SolidColorBrush x:Key="listViewIndicator" Color="Gray"/>
 </ResourceDictionary>

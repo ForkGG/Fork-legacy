@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:converter1="clr-namespace:nihilus.View.Xaml.Converter"        
         mc:Ignorable="d"
-        Title="Nihilus" Height="720" Width="1200" Style="{StaticResource DefaultWindow}" WindowStartupLocation="CenterScreen">
+        Title="Nihilus" Height="720" Width="1200" MinWidth="950" MinHeight="600" Style="{StaticResource DefaultWindow}" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <converter1:ListToStringConverter x:Key="ListToStringConverter"/>
     </Window.Resources>
@@ -17,16 +17,7 @@
             </Grid.ColumnDefinitions>
             <DockPanel Margin="10 0 0 0">
                 <Button Click="AddServer_Click" Margin="0 10 0 5" Height="25" DockPanel.Dock="Bottom">Add Server</Button>
-                <ListView ItemsSource="{Binding Servers}" SelectedItem="{Binding SelectedServer}" HorizontalContentAlignment="Stretch">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <DockPanel>
-                                <TextBlock Text="{Binding Icon}" FontSize="20" FontFamily="{StaticResource MaterialIO}" VerticalAlignment="Center" Foreground="{Binding IconColor}" DockPanel.Dock="Right"/>
-                                <TextBlock MinHeight="35" VerticalAlignment="Center" Text="{Binding ServerTitle}"></TextBlock>
-                            </DockPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                <ListView Style="{StaticResource ServerListView}" ItemContainerStyle="{StaticResource ServerListItem}" ItemsSource="{Binding Servers}" SelectedItem="{Binding SelectedServer}" HorizontalContentAlignment="Stretch"></ListView>
             </DockPanel>
             <Frame Grid.Column="1" Margin="10 0 0 0" DataContext="{Binding SelectedServer, Mode=TwoWay}" Content="{Binding ServerPage}" NavigationUIVisibility="Hidden"/>
         </Grid>
