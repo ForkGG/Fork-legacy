@@ -116,7 +116,7 @@
                                         <TextBlock Text="{Binding Server}" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="Type: "/>
-                                            <TextBlock Text="{Binding Server.Version.Type}"/>                                                
+                                            <TextBlock Text="{Binding Server.Version.Type}"/>
                                         </StackPanel>
                                         <StackPanel x:Name="PlayerCount" Orientation="Horizontal" Visibility="Collapsed">
                                             <TextBlock Text="Players: "/>
@@ -138,7 +138,7 @@
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsMouseOver" Value="True"/>
-                                <Condition Property="IsSelected" Value="False"/>                              
+                                <Condition Property="IsSelected" Value="False"/>
                             </MultiTrigger.Conditions>
                             <MultiTrigger.Setters>
                                 <Setter TargetName="FrontIndicator" Property="Height" Value="15"/>

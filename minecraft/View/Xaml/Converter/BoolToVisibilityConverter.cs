@@ -40,7 +40,7 @@ namespace nihilus.View.Xaml.Converter
 
             if ((bool)value)
             {
-                return Visibility.Hidden;
+                return Visibility.Collapsed;
             }
 
             return Visibility.Visible;
