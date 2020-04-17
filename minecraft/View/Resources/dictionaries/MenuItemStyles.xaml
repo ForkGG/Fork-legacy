@@ -3,17 +3,12 @@
                     xmlns:local="clr-namespace:nihilus.View.Resources.dictionaries">
     <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}"
        TargetType="{x:Type Separator}">
-        <Setter Property="Height"
-          Value="1" />
-        <Setter Property="Margin"
-          Value="0,4,0,4" />
+        <Setter Property="Height" Value="1" />
+        <Setter Property="Margin" Value="0,4,0,4" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Separator}">
-                    <Border BorderThickness="1">
-                        <Border.BorderBrush>
-                            <SolidColorBrush Color="{DynamicResource backgroundLight}" />
-                        </Border.BorderBrush>
+                    <Border BorderThickness="1" BorderBrush="{DynamicResource backgroundLight}">
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -41,13 +36,9 @@
                     <Border x:Name="SubmenuBorder"
                             SnapsToDevicePixels="True"
                             BorderThickness="1"
-                            Background="{DynamicResource backgroundDefault}">
-                        <Border.BorderBrush>
-                            <SolidColorBrush Color="{DynamicResource borderDefault}" />
-                        </Border.BorderBrush>
-                        <ScrollViewer CanContentScroll="False">
-                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle"/>
-                        </ScrollViewer>
+                            Background="{DynamicResource backgroundDefault}"
+                            BorderBrush="{DynamicResource buttonHover}">
+                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle"/>
                     </Border>
                 </Popup>
             </Grid>
@@ -110,6 +101,7 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto"
                           SharedSizeGroup="Shortcut" />
+                    <ColumnDefinition Width="13"/>
                 </Grid.ColumnDefinitions>
                 <ContentPresenter x:Name="Icon"
                         Margin="6,0,6,0"
@@ -196,23 +188,12 @@
                  Margin="5,2,2,2"
                  DockPanel.Dock="Right" />
                 <Path Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 0 7 L 4 3.5 Z"/>
-                <Popup x:Name="Popup"
-             Placement="Right"
-             HorizontalOffset="-4"
-             IsOpen="{TemplateBinding IsSubmenuOpen}"
-             AllowsTransparency="True"
-             Focusable="False"
-             PopupAnimation="Fade">
-                    <Border x:Name="SubmenuBorder"
-                SnapsToDevicePixels="True"
-                Background="{DynamicResource backgroundDark}"
-                BorderThickness="1">
-                        <Border.BorderBrush>
-                            <SolidColorBrush Color="{DynamicResource borderDefault}" />
-                        </Border.BorderBrush>
+                <Popup x:Name="Popup" Placement="Right" HorizontalOffset="-4" IsOpen="{TemplateBinding IsSubmenuOpen}"
+                       AllowsTransparency="True" Focusable="False" PopupAnimation="Fade">
+                    <Border x:Name="SubmenuBorder" SnapsToDevicePixels="True" Background="{DynamicResource backgroundDark}" 
+                            BorderThickness="1" BorderBrush="{DynamicResource backgroundLight}">
                         <ScrollViewer CanContentScroll="True">
-                            <StackPanel IsItemsHost="True"
-                        KeyboardNavigation.DirectionalNavigation="Cycle" />
+                            <StackPanel IsItemsHost="True"  KeyboardNavigation.DirectionalNavigation="Cycle" />
                         </ScrollViewer>
                     </Border>
                 </Popup>
