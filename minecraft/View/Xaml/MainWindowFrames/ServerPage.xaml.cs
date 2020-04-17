@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using LiveCharts;
 using nihilus.Logic.Manager;
 using nihilus.Logic.Model;
@@ -92,6 +94,26 @@ namespace nihilus.View.Xaml.MainWindowFrames
         {
             WhitelistPlayerInput.Visibility = Visibility.Collapsed;
             WhitelistPlayerName.Text = "";
+        }
+
+        private void CopyIP_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(AddressInfoBox.Text);
+            
+            new Thread(() =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    CopyButton.Content = "Copied";
+                    CopyButton.IsEnabled = false;
+                });
+                Thread.Sleep(1000);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    CopyButton.Content = "Copy";
+                    CopyButton.IsEnabled = true;
+                });
+            }).Start();
         }
 
         private void WhitelistPlayer_PreviewMouseDown(object sender, MouseButtonEventArgs e)
