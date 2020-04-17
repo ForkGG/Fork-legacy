@@ -9,9 +9,11 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using nihilus.Logic.BackgroundWorker;
 using nihilus.Logic.CustomConsole;
 using nihilus.Logic.Model;
+using nihilus.Logic.Model.MinecraftVersionPojo;
 using nihilus.Logic.Persistence;
 using nihilus.Logic.RoleManagement;
 using nihilus.ViewModel;
@@ -96,7 +98,7 @@ namespace nihilus.Logic.Manager
             return result;
         }
 
-        public async Task<bool> DeleteDimensionAsync(string dimension, Server server)
+        public async Task<bool> DeleteDimensionAsync(MinecraftDimension dimension, Server server)
         {
             Task<bool> t = new Task<bool>(()=> DeleteDimension(dimension,server));
             t.Start();
@@ -263,19 +265,41 @@ namespace nihilus.Logic.Manager
             } 
         }
 
-        private bool DeleteDimension(string dimension, Server server)
+        private bool DeleteDimension(MinecraftDimension dimension, Server server)
         {
-            DirectoryInfo dimensionDir = new DirectoryInfo(Path.Combine(App.ApplicationPath,server.Name,server.Name,dimension));
+            DirectoryInfo dimensionDir = GetDimensionFolder(dimension,server);
             if (!dimensionDir.Exists)
             {
                 return true;
             }
-            DirectoryInfo dimBackups = Directory.CreateDirectory(Path.Combine(App.ApplicationPath,server.Name, server.Name, "DimensionBackups"));
+            DirectoryInfo dimBackups = Directory.CreateDirectory(Path.Combine(App.ApplicationPath,server.Name, "DimensionBackups"));
             string timeStamp = DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year + "_" +
                                DateTime.Now.Hour + "-" + DateTime.Now.Minute;
             ZipFile.CreateFromDirectory(dimensionDir.FullName, Path.Combine(dimBackups.FullName, dimension +"_" + timeStamp + ".zip"));
             dimensionDir.Delete(true);
             return !dimensionDir.Exists;
+        }
+
+        private DirectoryInfo GetDimensionFolder(MinecraftDimension dimension, Server server)
+        {
+            switch (server.Version.Type)
+            {
+                case ServerVersion.VersionType.Vanilla:
+                    switch (dimension)
+                    {
+                        case MinecraftDimension.Nether: return new DirectoryInfo(Path.Combine(App.ApplicationPath, server.Name, server.Name,"DIM-1"));
+                        case MinecraftDimension.End: return new DirectoryInfo(Path.Combine(App.ApplicationPath, server.Name, server.Name,"DIM1"));
+                        default: throw new ArgumentException("No implementation for deletion of dimension "+dimension+" on Vanilla servers");
+                    }
+                case ServerVersion.VersionType.Paper:
+                    switch (dimension)
+                    {
+                        case MinecraftDimension.Nether: return new DirectoryInfo(Path.Combine(App.ApplicationPath, server.Name, server.Name+"_nether"));
+                        case MinecraftDimension.End: return new DirectoryInfo(Path.Combine(App.ApplicationPath, server.Name, server.Name+"_the_end"));
+                        default: throw new ArgumentException("No implementation for deletion of dimension "+dimension+" on Paper servers");
+                    }
+                default: throw new ArgumentException("No implementation for deletion of "+server.Version.Type+" dimensions");    
+            }
         }
         
         private bool StartServer(ServerViewModel viewModel)

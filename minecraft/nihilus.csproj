@@ -131,6 +131,7 @@
     <Compile Include="Logic\Manager\AutoRestartManager.cs" />
     <Compile Include="Logic\Manager\PlayerManager.cs" />
     <Compile Include="Logic\Model\FullStats.cs" />
+    <Compile Include="Logic\Model\MinecraftDimension.cs" />
     <Compile Include="Logic\Model\MinecraftVersionModel\Manifest.cs" />
     <Compile Include="Logic\Model\MinecraftVersionModel\VersionDetails.cs" />
     <Compile Include="Logic\Model\Player.cs" />

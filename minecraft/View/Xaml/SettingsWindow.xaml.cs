@@ -83,7 +83,7 @@ namespace nihilus.View.Xaml
 
         private async void Btn_RegenerateEnd(object sender, RoutedEventArgs e)
         {
-            bool success = await ServerManager.Instance.DeleteDimensionAsync("DIM1", viewModel.Server);
+            bool success = await ServerManager.Instance.DeleteDimensionAsync(MinecraftDimension.End, viewModel.Server);
             DoubleAnimation doubleAnimation = new DoubleAnimation();
             doubleAnimation.From = 0.0;
             doubleAnimation.To = 0.4;
@@ -107,7 +107,7 @@ namespace nihilus.View.Xaml
 
         private async void Btn_RegenerateNether(object sender, RoutedEventArgs e)
         {
-            bool success = await ServerManager.Instance.DeleteDimensionAsync("DIM-1", viewModel.Server);
+            bool success = await ServerManager.Instance.DeleteDimensionAsync(MinecraftDimension.Nether, viewModel.Server);
             DoubleAnimation doubleAnimation = new DoubleAnimation();
             doubleAnimation.From = 0.0;
             doubleAnimation.To = 0.4;
