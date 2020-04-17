@@ -54,45 +54,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
-    <!--Style TargetType="ContextMenu" x:Key="DefaultContextMenu">
-        <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="OverridesDefaultStyle" Value="True" />
-        <Setter Property="Grid.IsSharedSizeScope" Value="true" />
-        <Setter Property="HasDropShadow" Value="True" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ContextMenu}">
-                    <Border x:Name="Border"
-                            Background="{DynamicResource foregroundDefault}"
-                            BorderThickness="1" BorderBrush="{DynamicResource backgroundLight}">
-                        <StackPanel IsItemsHost="True"
-                                    KeyboardNavigation.DirectionalNavigation="Cycle" />
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="HasDropShadow" Value="true">
-                            <Setter TargetName="Border" Property="Padding" Value="0,3,0,3" />
-                            <Setter TargetName="Border" Property="CornerRadius" Value="4" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </>
-    <Style TargetType="MenuItem">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="MenuItem">
-                    <Border Name="Border" >
-                        <Grid>
-                            <ContentPresenter Margin="6,3,6,3" ContentSource="Header" RecognizesAccessKey="True" />
-                        </Grid>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="Background" Value="{DynamicResource foregroundDefault}"/>
-    </Style-->
 
     <Style TargetType="ToolTip">
         <Setter Property="Background" Value="{DynamicResource backgroundDefault}" />
@@ -101,37 +62,6 @@
     <Style TargetType="ListView">
         <Setter Property="Background" Value="{DynamicResource backgroundDefault}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource backgroundLight}"/>
-    </Style>
-
-    <Style TargetType="TabControl">
-        <Setter Property="Background" Value="{DynamicResource backgroundDefault}"/>
-    </Style>
-
-    <Style TargetType="TabItem">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="TabItem">
-                    <Grid Name="Panel">
-                        <Border Name="Border" BorderThickness="1,1,1,0" BorderBrush="Gainsboro" CornerRadius="4,4,0,0" Margin="2,0">
-                            <ContentPresenter x:Name="ContentSite" 
-                                    VerticalAlignment="Center" 
-                                    HorizontalAlignment="Center" 
-                                    ContentSource="Header" 
-                                    Margin="10,2"/>
-                        </Border>
-
-                    </Grid>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource tabHover}"/>
-                        </Trigger>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource tabSelected}"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
     </Style>
 
     <Style x:Key="StartStopButton" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">

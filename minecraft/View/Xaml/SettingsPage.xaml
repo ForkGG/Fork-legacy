@@ -15,12 +15,16 @@
         <Border Padding="5 15 5 5">
             <Grid>
                 <DockPanel>
-                    <Button DockPanel.Dock="Top" HorizontalAlignment="Right" IsDefault="True" Style="{DynamicResource Borderless}" Click="Btn_Close" >
-                        <Image Height="15" Width="15" Source="pack://application:,,,/View/Resources/images/close.png"/>
+                    <Button DockPanel.Dock="Top" HorizontalAlignment="Right" Style="{DynamicResource Borderless}" Click="Btn_Close" >
+                            <Image x:Name="CloseImage" Height="15" Width="15" Source="pack://application:,,,/View/Resources/images/close.png"/>
                     </Button>
                     <TabControl Margin="0 0 0 5">
                         <!-- General Settings -->
-                        <TabItem Header="General Settings">
+                        <TabItem>
+                            <TabItem.Header>
+                                <TextBlock Text="General Settings" FontSize="12" Margin="0 0 0 2"/>
+                            </TabItem.Header>
+                            <Border BorderThickness="2" BorderBrush="{DynamicResource backgroundLight}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -91,10 +95,15 @@
                                     </StackPanel>
                                 </Border>
                             </Grid>
+                            </Border>
                         </TabItem>
 
                         <!-- Advanced Settings -->
-                        <TabItem Header="Advanced Settings">
+                        <TabItem>
+                            <TabItem.Header>
+                                <TextBlock Text="Advanced Settings" FontSize="12" Margin="0 0 0 2"/>
+                            </TabItem.Header>
+                            <Border BorderThickness="2" BorderBrush="{DynamicResource backgroundLight}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -294,9 +303,15 @@
                                     </DockPanel>
                                 </Border>
                             </Grid>
+                            </Border>
                         </TabItem>
 
-                        <TabItem Header="Java and Networking">
+                        <!-- Java and Networking Settings -->
+                        <TabItem >
+                            <TabItem.Header>
+                                <TextBlock Text="Java and Networking" FontSize="12" Margin="0 0 0 2"/>
+                            </TabItem.Header>
+                            <Border BorderThickness="2" BorderBrush="{DynamicResource backgroundLight}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -385,6 +400,7 @@
                                     </StackPanel>
                                 </Border>
                             </Grid>
+                            </Border>
                         </TabItem>
                     </TabControl>
                 </DockPanel>                

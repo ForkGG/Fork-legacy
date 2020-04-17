@@ -97,46 +97,44 @@
             <TabControl x:Name="PlayerControl" Grid.Row="0" Grid.Column="1" Margin="5 0 0 0" BorderBrush="{x:Null}">
                 <!-- Playerlist -->
                 <TabItem Header="Playerlist" BorderBrush="{x:Null}">
-                    <Border BorderThickness="1">
-                        <ListView ItemsSource="{Binding PlayerList}" x:Name="Playerlist">
-                            <ListView.Resources>
-                                <helper:BindingProxy x:Key="ServerRunningBinding" Data="{Binding}"/>
-                            </ListView.Resources>
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="Background" Value="Green"/>
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="ListViewItem">
-                                                <Border BorderThickness="2" BorderBrush="{x:Null}">
-                                                    <DockPanel x:Name="PlayerItem">
-                                                        <Image Source="{Binding Head}" MinHeight="25px" MinWidth="25px" Stretch="Fill" Margin="0 0 5 0" RenderOptions.BitmapScalingMode="NearestNeighbor" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                        <Label Content="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
-                                                    </DockPanel>
-                                                    <Border.ContextMenu>
-                                                        <ContextMenu x:Name="WhitelistContextMenu">
-                                                            <MenuItem Header="Ban Player" Click="Player_Ban" CommandParameter="{Binding Name}" IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}" />
-                                                            <MenuItem Header="OP Player" Click="Player_OP" CommandParameter="{Binding Name}" IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}" />
-                                                            <!-- TODO Deop? -->
-                                                            <MenuItem Header="Kick Player" Click="Player_Kick" CommandParameter="{Binding Name}" IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}" />
-                                                        </ContextMenu>
-                                                    </Border.ContextMenu>
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="PlayerItem" Property="Background" Value="{DynamicResource backgroundLight}"/>
-                                                    </Trigger>
-                                                    <Trigger SourceName="WhitelistContextMenu" Property="ContextMenu.IsOpen" Value="True">
-                                                        <Setter TargetName="PlayerItem" Property="Background" Value="{DynamicResource backgroundLight}"/>
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                        </ListView>
-                    </Border>
+                    <ListView ItemsSource="{Binding PlayerList}" x:Name="Playerlist">
+                        <ListView.Resources>
+                            <helper:BindingProxy x:Key="ServerRunningBinding" Data="{Binding}"/>
+                        </ListView.Resources>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Background" Value="Green"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListViewItem">
+                                            <Border BorderThickness="2" BorderBrush="{x:Null}">
+                                                <DockPanel x:Name="PlayerItem">
+                                                    <Image Source="{Binding Head}" MinHeight="25px" MinWidth="25px" Stretch="Fill" Margin="5 0 5 0" RenderOptions.BitmapScalingMode="NearestNeighbor" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    <Label Content="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
+                                                </DockPanel>
+                                                <Border.ContextMenu>
+                                                    <ContextMenu x:Name="WhitelistContextMenu">
+                                                        <MenuItem Header="Ban Player" Click="Player_Ban" CommandParameter="{Binding Name}" IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}" />
+                                                        <MenuItem Header="OP Player" Click="Player_OP" CommandParameter="{Binding Name}" IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}" />
+                                                        <!-- TODO Deop? -->
+                                                        <MenuItem Header="Kick Player" Click="Player_Kick" CommandParameter="{Binding Name}" IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}" />
+                                                    </ContextMenu>
+                                                </Border.ContextMenu>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="PlayerItem" Property="Background" Value="{DynamicResource backgroundLight}"/>
+                                                </Trigger>
+                                                <Trigger SourceName="WhitelistContextMenu" Property="ContextMenu.IsOpen" Value="True">
+                                                    <Setter TargetName="PlayerItem" Property="Background" Value="{DynamicResource backgroundLight}"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
                 </TabItem>
                 <!-- OP-List -->
                 <TabItem Header="OP-List" Height="20.96" VerticalAlignment="Top">
@@ -153,7 +151,7 @@
                                             <ControlTemplate TargetType="ListViewItem">
                                                 <Border BorderThickness="2" BorderBrush="{x:Null}">
                                                     <DockPanel x:Name="PlayerItem">
-                                                        <Image Source="{Binding Head}" MinHeight="25px" MinWidth="25px" Stretch="Fill" Margin="0 0 5 0" RenderOptions.BitmapScalingMode="NearestNeighbor" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        <Image Source="{Binding Head}" MinHeight="25px" MinWidth="25px" Stretch="Fill" Margin="5 0 5 0" RenderOptions.BitmapScalingMode="NearestNeighbor" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                         <Label Content="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
                                                     </DockPanel>
                                                     <Border.ContextMenu>
@@ -193,7 +191,7 @@
                                             <ControlTemplate TargetType="ListViewItem">
                                                 <Border BorderThickness="2" BorderBrush="{x:Null}">
                                                     <DockPanel x:Name="PlayerItem">
-                                                        <Image Source="{Binding Head}" MinHeight="25px" MinWidth="25px" Stretch="Fill" Margin="0 0 5 0" RenderOptions.BitmapScalingMode="NearestNeighbor" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        <Image Source="{Binding Head}" MinHeight="25px" MinWidth="25px" Stretch="Fill" Margin="5 0 5 0" RenderOptions.BitmapScalingMode="NearestNeighbor" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                         <Label Content="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
                                                     </DockPanel>
                                                     <Border.ContextMenu>
@@ -235,7 +233,7 @@
                                             <ControlTemplate TargetType="ListViewItem">
                                                 <Border BorderThickness="2" BorderBrush="{x:Null}">
                                                     <DockPanel x:Name="PlayerItem">
-                                                        <Image Source="{Binding Head}" MinHeight="25px" MinWidth="25px" Stretch="Fill" Margin="0 0 5 0" RenderOptions.BitmapScalingMode="NearestNeighbor" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        <Image Source="{Binding Head}" MinHeight="25px" MinWidth="25px" Stretch="Fill" Margin="5 0 5 0" RenderOptions.BitmapScalingMode="NearestNeighbor" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                         <Label Content="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
                                                     </DockPanel>
                                                     <Border.ContextMenu>
@@ -333,7 +331,8 @@
         </Grid>
         <Grid x:Name="SettingsGrid" Panel.ZIndex="1" Visibility="Collapsed">           
             <Rectangle Fill="{DynamicResource backgroundDefault}" Opacity="0.9" PreviewMouseDown="Settings_PreviewMouseDown"></Rectangle>
-            <Frame Panel.ZIndex="1" Content="{Binding SettingsPage}"/>
+            <Rectangle Panel.ZIndex="1" Fill="{DynamicResource backgroundDefault}" Width="800" Height="440"/>
+            <Frame Panel.ZIndex="2" Content="{Binding SettingsPage}"/>
         </Grid>
     </Grid>
 </Page>

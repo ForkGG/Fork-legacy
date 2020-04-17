@@ -1,0 +1,47 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <Style TargetType="TabControl">
+        <Setter Property="Background" Value="{DynamicResource backgroundDefault}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabControl">
+                    <DockPanel LastChildFill="True">
+                        <TabPanel x:Name="HeaderPanel" Grid.Row="0" Panel.ZIndex="1" Margin="0,0,4,-1" IsItemsHost="True" 
+                                  KeyboardNavigation.TabIndex="1" Background="Transparent" DockPanel.Dock="Top"/>
+                        <Border BorderBrush="{DynamicResource backgroundLight}" BorderThickness="0">
+                            <ContentPresenter x:Name="PART_SelectedContentHost" Margin="0" ContentSource="SelectedContent" />
+                        </Border>
+                    </DockPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="TabItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabItem">
+                    <Grid Name="Panel">
+                        <Border Name="Border" BorderThickness="0" CornerRadius="2 2 0 0" Margin="0 0 0 0">
+                            <ContentPresenter x:Name="ContentSite" 
+                                    VerticalAlignment="Center" 
+                                    HorizontalAlignment="Center" 
+                                    ContentSource="Header" 
+                                    Margin="10,2"/>
+                        </Border>
+
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource tabHover}"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource tabSelected}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
