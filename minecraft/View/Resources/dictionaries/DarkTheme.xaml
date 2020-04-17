@@ -5,6 +5,7 @@
     <SolidColorBrush x:Key="backgroundDarker" Color="Black"/>
     <SolidColorBrush x:Key="backgroundDark" Color="#FF111111"/>
     <SolidColorBrush x:Key="backgroundDefault" Color="#212121"/>
+    <SolidColorBrush x:Key="backgroundSelected" Color="#232323"/>
     <SolidColorBrush x:Key="backgroundLight" Color="#424242" />
 
     <!-- order by brightness, from dark to light -->

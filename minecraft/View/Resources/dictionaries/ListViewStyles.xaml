@@ -134,6 +134,7 @@
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="FrontIndicator" Property="Height" Value="25"/>
                             <Setter TargetName="ServerTitle" Property="Opacity" Value="1"/>
+                            <Setter Property="Background" Value="{DynamicResource backgroundSelected}"/>
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
