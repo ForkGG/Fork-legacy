@@ -64,10 +64,26 @@
                 <DockPanel Grid.Row="1">
                     <Label Content="Console" FontWeight="Bold" DockPanel.Dock="Top" />
                     <DockPanel>
-                        <TextBox DockPanel.Dock="Bottom" Text="{Binding ConsoleIn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderBrush="{DynamicResource backgroundLight}">
+                        <DockPanel.Resources>
+                            <helper:BindingProxy x:Key="ServerRunningBinding" Data="{Binding}"/>
+                        </DockPanel.Resources>
+                        <TextBox DockPanel.Dock="Bottom" Text="{Binding ConsoleIn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}">
                             <TextBox.InputBindings>
                                 <KeyBinding Key="Enter" Command="{Binding Path=ReadConsoleIn}"></KeyBinding>
                             </TextBox.InputBindings>
+                            <TextBox.Style>
+                                <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource buttonHover}"/>
+                                        </Trigger>
+                                        <Trigger Property="IsFocused" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource buttonHover}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
                         </TextBox>
                         <Border DockPanel.Dock="Top" BorderThickness="1" BorderBrush="{DynamicResource backgroundLight}">
                             <ScrollViewer Margin="3 3 3 3" x:Name="ScrollViewer" ScrollChanged="ScrollViewer_ScrollChanged" Style="{DynamicResource CustomScrollViewer}">
