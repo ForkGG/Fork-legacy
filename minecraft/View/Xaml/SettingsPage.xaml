@@ -1,4 +1,4 @@
-﻿<Window x:Class="nihilus.View.Xaml.SettingsWindow"
+﻿<Page x:Class="nihilus.View.Xaml.SettingsPage"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,19 +7,17 @@
         xmlns:val="clr-namespace:nihilus.xaml.ValidationRules"
         xmlns:converter="clr-namespace:nihilus.View.Xaml.Converter"
         mc:Ignorable="d"
-        Title="SettingsWindow" Height="450" Width="800" Style="{StaticResource DialogWindowNoClose}"
-        ResizeMode="NoResize">
-    <Window.Resources>
+        Title="SettingsWindow" Height="450" Width="800">
+    <Page.Resources>
         <converter:SimpleTimeToStringConverter x:Key="SimpleTimeToStringConverter" />
-    </Window.Resources>
+    </Page.Resources>
     <Grid>
         <Border Padding="5 15 5 5">
             <Grid>
                 <DockPanel>
-                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Content="Cancel" Margin="0 0 5 0" Click="Btn_Cancel" />
-                        <Button Content="Apply" IsDefault="True" Margin="5 0 0 0" Click="Btn_Apply" />
-                    </StackPanel>
+                    <Button DockPanel.Dock="Top" HorizontalAlignment="Right" IsDefault="True" Style="{DynamicResource Borderless}" Click="Btn_Close" >
+                        <Image Height="15" Width="15" Source="pack://application:,,,/View/Resources/images/close.png"/>
+                    </Button>
                     <TabControl Margin="0 0 0 5">
                         <!-- General Settings -->
                         <TabItem Header="General Settings">
@@ -393,10 +391,10 @@
             </Grid>
         </Border>
         <Grid x:Name="DeleteVerification" Visibility="Hidden">
-            <Rectangle Fill="{StaticResource backgroundDark}" Opacity="0.95" />
+            <Rectangle Fill="{DynamicResource backgroundDark}" Opacity="0.95" />
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Border BorderBrush="{StaticResource outerBorder}" BorderThickness="2" CornerRadius="1">
-                    <Grid Background="{StaticResource backgroundDefault}">
+                <Border BorderBrush="{DynamicResource outerBorder}" BorderThickness="2" CornerRadius="1">
+                    <Grid Background="{DynamicResource backgroundDefault}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                             <RowDefinition Height="*" />
@@ -429,4 +427,4 @@
             </StackPanel>
         </Grid>
     </Grid>
-</Window>
+</Page>

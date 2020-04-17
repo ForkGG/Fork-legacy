@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
 using System.Windows.Media;
 using LiveCharts;
@@ -25,6 +26,7 @@ namespace nihilus.View.Xaml.MainWindowFrames
             DataContext = viewModel;
             
             InitializeComponent();
+            viewModel.SettingsPage.CloseSettingsEvent += HandleCloseSettingsEvent;
         }
 
         private async void StartStopButton_Click(object sender, RoutedEventArgs e)
@@ -41,8 +43,7 @@ namespace nihilus.View.Xaml.MainWindowFrames
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            SettingsWindow settingsWindow = new SettingsWindow(viewModel);
-            settingsWindow.ShowDialog();
+            SettingsGrid.Visibility = Visibility.Visible;
         }
 
         #region autoscrolling
@@ -121,6 +122,11 @@ namespace nihilus.View.Xaml.MainWindowFrames
             WhitelistPlayerAbort_Click(sender,e);
         }
 
+        private void Settings_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            CloseSettings();
+        }
+
         private void Player_Ban(object sender, RoutedEventArgs e)
         {
             MenuItem item = sender as MenuItem;
@@ -157,6 +163,17 @@ namespace nihilus.View.Xaml.MainWindowFrames
             MenuItem item = sender as MenuItem;
             string name = item.CommandParameter as string;
             PlayerManager.Instance.UnWhitelistPlayer(viewModel,name);
+        }
+
+        private void HandleCloseSettingsEvent(object sender, EventArgs e)
+        {
+            CloseSettings();
+        }
+
+        private void CloseSettings()
+        {
+            SettingsGrid.Visibility = Visibility.Hidden;
+            viewModel.UpdateSettings();
         }
     }
 }

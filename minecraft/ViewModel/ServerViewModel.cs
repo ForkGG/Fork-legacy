@@ -25,6 +25,8 @@ using nihilus.Logic.Persistence;
 using nihilus.View.Xaml.MainWindowFrames;
 using nihilus.Logic;
 using nihilus.Logic.RoleManagement;
+using nihilus.View.Xaml;
+using Console = System.Console;
 using Timer = System.Timers.Timer;
 
 namespace nihilus.ViewModel
@@ -54,6 +56,8 @@ namespace nihilus.ViewModel
         private RoleUpdater banlistUpdater;
         private RoleUpdater oplistUpdater;
 
+        private SettingsPage settingsPage;
+
         public ConsoleReader ConsoleReader;
         public ObservableCollection<string> ConsoleOutList { get; }
         public ObservableCollection<Player> PlayerList { get; set; } = new ObservableCollection<Player>();
@@ -66,6 +70,18 @@ namespace nihilus.ViewModel
         public string ConsoleIn { get; set; } = "";
         public ServerStatus CurrentStatus { get; set; }
         public Server Server { get; set; }
+
+        public SettingsPage SettingsPage
+        {
+            get
+            {
+                if (settingsPage == null)
+                {
+                    settingsPage = new SettingsPage(this);
+                }
+                return settingsPage;
+            }
+        }
 
         public bool RestartEnabled { get; set; }
         public string NextRestartHours { get; set; }

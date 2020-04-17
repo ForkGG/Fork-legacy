@@ -171,8 +171,8 @@
     <Compile Include="View\Xaml\MainWindowFrames\StartPage.xaml.cs">
       <DependentUpon>StartPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Xaml\SettingsWindow.xaml.cs">
-      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    <Compile Include="View\Xaml\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Xaml\ValidationRules\PortValidationRule.cs" />
     <Compile Include="View\Xaml\ValidationRules\PositiveLongValidationRule.cs" />
@@ -250,7 +250,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Xaml\SettingsWindow.xaml">
+    <Page Include="View\Xaml\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

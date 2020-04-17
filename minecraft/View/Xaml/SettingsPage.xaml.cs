@@ -14,36 +14,23 @@ namespace nihilus.View.Xaml
     /// <summary>
     /// Interaction logic for SettingsWindow.xaml
     /// </summary>
-    public partial class SettingsWindow : Window
+    public partial class SettingsPage : Page
     {
         private ServerViewModel viewModel;
+
+        public event EventHandler CloseSettingsEvent;
         
-        public SettingsWindow(ServerViewModel viewModel)
+        public SettingsPage(ServerViewModel viewModel)
         {
             this.viewModel = viewModel;
-            viewModel.Server.CreateBackup();
             DataContext = this.viewModel;
             InitializeComponent();
         }
 
-        private void Btn_Apply(object sender, RoutedEventArgs e)
+        private void Btn_Close(object sender, RoutedEventArgs e)
         {
-            if (!IsValid(this))
-            {
-                return;
-            }
-            Close();
-            
-            //Write changes to File
+            CloseSettingsEvent?.Invoke(sender, e);
             viewModel.UpdateSettings();
-        }
-
-        private void Btn_Cancel(object sender, RoutedEventArgs e)
-        {
-            Close();
-            
-            //Undo changes
-            viewModel.Server.ApplyBackup();
         }
 
         private void Btn_Delete(object sender, RoutedEventArgs e)
@@ -53,7 +40,7 @@ namespace nihilus.View.Xaml
 
         private async void Btn_ConfirmDelete(object sender, RoutedEventArgs e)
         {
-            Close();
+            //TODO Close();
             bool success = await ServerManager.Instance.DeleteServerAsync(viewModel);
             if(!success)
                 System.Console.WriteLine("Problem while deleting "+viewModel.Server.Name);
@@ -78,7 +65,7 @@ namespace nihilus.View.Xaml
                 return;
             }
             
-            Close();          
+            //TODO Close();          
         }
 
         private async void Btn_RegenerateEnd(object sender, RoutedEventArgs e)
