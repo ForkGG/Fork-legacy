@@ -31,4 +31,7 @@
     <SolidColorBrush x:Key="errorBorder" Color="Red"/>
 
     <SolidColorBrush x:Key="listViewIndicator" Color="Gray"/>
+
+
+    <Color x:Key="borderDefault">Gray</Color>
 </ResourceDictionary>

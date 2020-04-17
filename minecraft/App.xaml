@@ -14,6 +14,7 @@
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/RadioButtonStyles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/ContextMenuStyle.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/ListViewStyles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/MenuItemStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <FontFamily x:Key="MaterialIO">View/Resources/Fonts/MaterialIcons-Regular.ttf#Material Icons</FontFamily>
         </ResourceDictionary>
