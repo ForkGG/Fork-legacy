@@ -3,23 +3,51 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:converter1="clr-namespace:nihilus.View.Xaml.Converter"        
+        xmlns:converter1="clr-namespace:nihilus.View.Xaml.Converter"
         mc:Ignorable="d"
-        Title="Nihilus" Height="720" Width="1200" MinWidth="950" MinHeight="600" Style="{StaticResource DefaultWindow}" WindowStartupLocation="CenterScreen">
+        Title="Nihilus" Height="720" Width="1200" MinWidth="950" MinHeight="600" Style="{StaticResource DefaultWindow}"
+        WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <converter1:ListToStringConverter x:Key="ListToStringConverter"/>
+        <converter1:ListToStringConverter x:Key="ListToStringConverter" />
     </Window.Resources>
     <Border Padding="0 10 10 10" Background="{StaticResource backgroundDefault}">
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="6*"/>
-            </Grid.ColumnDefinitions>
-            <DockPanel Margin="10 0 0 0">
-                <Button Click="AddServer_Click" Margin="0 10 0 5" Height="25" DockPanel.Dock="Bottom">Add Server</Button>
-                <ListView Style="{StaticResource ServerListView}" ItemContainerStyle="{StaticResource ServerListItem}" ItemsSource="{Binding Servers}" SelectedItem="{Binding SelectedServer}" HorizontalContentAlignment="Stretch"></ListView>
-            </DockPanel>
-            <Frame Grid.Column="1" Margin="10 0 0 0" DataContext="{Binding SelectedServer, Mode=TwoWay}" Content="{Binding ServerPage}" NavigationUIVisibility="Hidden"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="6*" />
+                </Grid.ColumnDefinitions>
+                <DockPanel Margin="5 0 0 0">
+                    <Menu Background="{DynamicResource backgroundDefault}" DockPanel.Dock="Bottom">
+                        <MenuItem HorizontalAlignment="Stretch" x:Name="AddServerMenu" Header="Add Server"
+                                  Margin="5 10 5 5" Height="25" DockPanel.Dock="Bottom"
+                                  Style="{StaticResource ExtenderButtonMenu}">
+                            <MenuItem Header="Import Server" Click="ImportServer_Click" IsEnabled="False"
+                                      Style="{DynamicResource ExtenderButtonMenu}">
+                                <MenuItem.Icon>
+                                    <TextBlock FontFamily="{StaticResource MaterialIO}" Text="&#xe884;" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Create Server" Click="CreateServer_Click"
+                                      Style="{DynamicResource ExtenderButtonMenu}">
+                                <MenuItem.Icon>
+                                    <TextBlock FontFamily="{StaticResource MaterialIO}" Text="&#xe145;" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </MenuItem>
+                    </Menu>
+                    <ListView Style="{StaticResource ServerListView}"
+                              ItemContainerStyle="{StaticResource ServerListItem}" ItemsSource="{Binding Servers}"
+                              SelectedItem="{Binding SelectedServer}" HorizontalContentAlignment="Stretch" />
+                </DockPanel>
+                <Frame Grid.Column="1" Margin="10 0 0 0" DataContext="{Binding SelectedServer, Mode=TwoWay}"
+                       Content="{Binding ServerPage}" NavigationUIVisibility="Hidden" />
+            </Grid>
+            <Grid x:Name="CreateServerGrid" Panel.ZIndex="1" Visibility="Collapsed">
+                <Rectangle Fill="{DynamicResource backgroundDefault}" Opacity="0.9"></Rectangle>
+                <Rectangle Panel.ZIndex="1" Fill="{DynamicResource backgroundDefault}" Width="800" Height="440"/>
+                <Frame Panel.ZIndex="2" Content="{Binding SettingsPage}"/>
+            </Grid>
         </Grid>
     </Border>
 </Window>

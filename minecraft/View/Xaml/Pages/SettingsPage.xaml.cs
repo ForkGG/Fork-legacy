@@ -9,7 +9,7 @@ using nihilus.Logic.Manager;
 using nihilus.Logic.Model;
 using nihilus.ViewModel;
 
-namespace nihilus.View.Xaml
+namespace nihilus.View.Xaml.Pages
 {
     /// <summary>
     /// Interaction logic for SettingsWindow.xaml
@@ -30,7 +30,6 @@ namespace nihilus.View.Xaml
         private void Btn_Close(object sender, RoutedEventArgs e)
         {
             CloseSettingsEvent?.Invoke(sender, e);
-            viewModel.UpdateSettings();
         }
 
         private void Btn_Delete(object sender, RoutedEventArgs e)

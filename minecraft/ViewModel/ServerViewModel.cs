@@ -25,7 +25,7 @@ using nihilus.Logic.Persistence;
 using nihilus.View.Xaml.MainWindowFrames;
 using nihilus.Logic;
 using nihilus.Logic.RoleManagement;
-using nihilus.View.Xaml;
+using nihilus.View.Xaml.Pages;
 using Console = System.Console;
 using Timer = System.Timers.Timer;
 

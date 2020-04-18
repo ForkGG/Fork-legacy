@@ -43,6 +43,7 @@ namespace nihilus.Logic.Persistence
             {
                 lines.Add(setting+"="+serverSettings[setting]);
             }
+
             File.WriteAllLines(Path.Combine(folderPath,"server.properties"), lines, Encoding.UTF8);
         }
     }

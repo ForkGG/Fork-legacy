@@ -171,7 +171,7 @@
     <Compile Include="View\Xaml\MainWindowFrames\StartPage.xaml.cs">
       <DependentUpon>StartPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Xaml\SettingsPage.xaml.cs">
+    <Compile Include="View\Xaml\Pages\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Xaml\ValidationRules\PortValidationRule.cs" />
@@ -254,7 +254,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Xaml\SettingsPage.xaml">
+    <Page Include="View\Xaml\Pages\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -16,7 +16,12 @@ namespace nihilus.xaml
             DataContext = viewModel;
         }
 
-        private void AddServer_Click(object sender, RoutedEventArgs e)
+        private void ImportServer_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO
+        }
+
+        private void CreateServer_Click(object sender, RoutedEventArgs e)
         {
             AddServer.AddServer addServer = new AddServer.AddServer();
             addServer.ShowDialog();

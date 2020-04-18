@@ -7,11 +7,15 @@ using System.Runtime.CompilerServices;
 using nihilus.Annotations;
 using nihilus.Logic.ApplicationConsole;
 using nihilus.Logic.Manager;
+using nihilus.View.Xaml.Pages;
 
 namespace nihilus.ViewModel
 {
     public sealed class MainViewModel : INotifyPropertyChanged
     {
+        private CreateServerPage createServerPage;
+        
+        
         public ObservableCollection<ServerViewModel> Servers { get; }
         public ServerViewModel SelectedServer { get; set; }
 
