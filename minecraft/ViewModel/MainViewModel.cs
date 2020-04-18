@@ -8,16 +8,29 @@ using nihilus.Annotations;
 using nihilus.Logic.ApplicationConsole;
 using nihilus.Logic.Manager;
 using nihilus.View.Xaml.Pages;
+using nihilus.xaml;
 
 namespace nihilus.ViewModel
 {
     public sealed class MainViewModel : INotifyPropertyChanged
     {
         private CreateServerPage createServerPage;
-        
-        
+
+        public MainWindow MainWindow { get; set; }
         public ObservableCollection<ServerViewModel> Servers { get; }
         public ServerViewModel SelectedServer { get; set; }
+
+        public CreateServerPage CreateServerPage
+        {
+            get
+            {
+                if (createServerPage == null)
+                {
+                    GenerateCreateServerPage();
+                }
+                return createServerPage;
+            }
+        }
 
         public MainViewModel()
         {
@@ -28,11 +41,23 @@ namespace nihilus.ViewModel
             SelectedServer = Servers[0];
         }
 
-        
+
+        private void GenerateCreateServerPage()
+        {
+            createServerPage = new CreateServerPage();
+            createServerPage.CreateServerCloseEvent += HandleCreateServerClose;
+            createServerPage.CreateServerCloseEvent += MainWindow.HandleCreateServerPageClose;
+            raisePropertyChanged(nameof(createServerPage));
+        }
 
         private void ServerListChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             raisePropertyChanged(nameof(Servers));
+        }
+
+        private void HandleCreateServerClose(object sender, EventArgs e)
+        {
+            GenerateCreateServerPage();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -42,7 +67,5 @@ namespace nihilus.ViewModel
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        
     }
 }

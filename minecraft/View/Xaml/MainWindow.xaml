@@ -46,7 +46,7 @@
             <Grid x:Name="CreateServerGrid" Panel.ZIndex="1" Visibility="Collapsed">
                 <Rectangle Fill="{DynamicResource backgroundDefault}" Opacity="0.9"></Rectangle>
                 <Rectangle Panel.ZIndex="1" Fill="{DynamicResource backgroundDefault}" Width="800" Height="440"/>
-                <Frame Panel.ZIndex="2" Content="{Binding SettingsPage}"/>
+                <Frame NavigationUIVisibility="Hidden" Panel.ZIndex="2" Content="{Binding CreateServerPage}"/>
             </Grid>
         </Grid>
     </Border>

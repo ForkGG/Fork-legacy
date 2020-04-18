@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Windows;
 using nihilus.Logic.Manager;
@@ -13,6 +14,7 @@ namespace nihilus.xaml
             InitializeComponent();
             Closing += OnMainWindowClose;
             viewModel = ApplicationManager.Instance.MainViewModel;
+            viewModel.MainWindow = this;
             DataContext = viewModel;
         }
 
@@ -23,13 +25,24 @@ namespace nihilus.xaml
 
         private void CreateServer_Click(object sender, RoutedEventArgs e)
         {
-            AddServer.AddServer addServer = new AddServer.AddServer();
-            addServer.ShowDialog();
+            CreateServerGrid.Visibility = Visibility.Visible;
+            //AddServer.AddServer addServer = new AddServer.AddServer();
+            //addServer.ShowDialog();
         }
 
         private void OnMainWindowClose(object sender, CancelEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        public void HandleCreateServerPageClose(object sernder, EventArgs e)
+        {
+            CloseCreateServerPage();
+        }
+
+        private void CloseCreateServerPage()
+        {
+            CreateServerGrid.Visibility = Visibility.Collapsed;
         }
     }
 }

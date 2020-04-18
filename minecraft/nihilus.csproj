@@ -171,6 +171,9 @@
     <Compile Include="View\Xaml\MainWindowFrames\StartPage.xaml.cs">
       <DependentUpon>StartPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Xaml\Pages\CreateServerPage.xaml.cs">
+      <DependentUpon>CreateServerPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Xaml\Pages\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
@@ -214,10 +217,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Xaml\AddServer\AddServer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\Resources\dictionaries\DarkTheme.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -235,9 +234,6 @@
     <Compile Include="Logic\Persistence\Serializer.cs" />
     <Compile Include="ViewModel\AddServerViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="View\Xaml\AddServer\AddServer.xaml.cs">
-      <DependentUpon>AddServer.xaml</DependentUpon>
-    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -318,6 +314,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="View\Resources\images\DeafultHead.png" />
+    <Page Include="View\Xaml\Pages\CreateServerPage.xaml" />
     <Resource Include="View\Resources\images\paper.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
