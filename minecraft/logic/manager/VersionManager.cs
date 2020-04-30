@@ -1,4 +1,10 @@
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
 using nihilus.Logic.Model;
 using nihilus.Logic.Model.MinecraftVersionPojo;
 using nihilus.ViewModel;
@@ -9,7 +15,29 @@ namespace nihilus.Logic.Manager
     {
         private static VersionManager instance = null;
 
-        private VersionManager() { }
+        private VersionManager()
+        {
+            new Task(() =>
+            {
+                List<ServerVersion> versions =
+                    WebRequestManager.Instance.GetVanillaVersions(Manifest.VersionType.release);
+                foreach (var version in versions)
+                {
+                    Application.Current?.Dispatcher?.InvokeAsync(() => vanillaVersions.Add(version), DispatcherPriority.Background);
+                }
+                versions = WebRequestManager.Instance.GetPaperVersions();
+                foreach (var version in versions)
+                {
+                    Application.Current?.Dispatcher?.InvokeAsync(() => paperVersions.Add(version));
+                }
+
+                versions = WebRequestManager.Instance.GetSpigotVersions();
+                foreach (var version in versions)
+                {
+                    Application.Current?.Dispatcher?.InvokeAsync(() => spigotVersions.Add(version));
+                }
+            }).Start();
+        }
 
         public static VersionManager Instance
         {
@@ -21,45 +49,24 @@ namespace nihilus.Logic.Manager
             }
         }
 
-        private List<ServerVersion> vanillaVersions = new List<ServerVersion>();
-        private List<ServerVersion> spigotVersions = new List<ServerVersion>();
-        private List<ServerVersion> paperVersions = new List<ServerVersion>();
+        private ObservableCollection<ServerVersion> vanillaVersions = new ObservableCollection<ServerVersion>();
+        private ObservableCollection<ServerVersion> spigotVersions = new ObservableCollection<ServerVersion>();
+        private ObservableCollection<ServerVersion> paperVersions = new ObservableCollection<ServerVersion>();
 
 
         /// <summary>
         /// The property that holds all Minecraft Vanilla Server versions
         /// </summary>
-        public List<ServerVersion> VanillaVersions
-        {
-            get 
-            {
-                vanillaVersions = WebRequestManager.Instance.GetVanillaVersions(Manifest.VersionType.release);
-                return vanillaVersions;
-            }
-        }
-        
+        public ObservableCollection<ServerVersion> VanillaVersions => vanillaVersions;
+
         /// <summary>
         /// The property that holds all PaperMC Server versions
         /// </summary>
-        public List<ServerVersion> PaperVersions
-        {
-            get 
-            {
-                paperVersions = WebRequestManager.Instance.GetPaperVersions();
-                return paperVersions;
-            }
-        }
+        public ObservableCollection<ServerVersion> PaperVersions => paperVersions;
 
         /// <summary>
         /// The property that holds all Minecraft Spigot Server versions
         /// </summary>
-        public List<ServerVersion> SpigotVersions
-        {
-            get 
-            {
-                spigotVersions = WebRequestManager.Instance.GetSpigotVersions();
-                return spigotVersions;
-            }
-        }
+        public ObservableCollection<ServerVersion> SpigotVersions => spigotVersions;
     }
 }

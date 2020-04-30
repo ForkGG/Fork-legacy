@@ -60,10 +60,5 @@ namespace nihilus.View.Xaml.Pages
         {
             CreateServerCloseEvent?.Invoke(sender, e);
         }
-
-        private void BtnRefreshVersions_Click(object sender, RoutedEventArgs e)
-        {
-            viewModel.UpdateVersions();
-        }
     }
 }

@@ -29,6 +29,9 @@ namespace nihilus.Logic.Model
             set => serverSettings = value;
         }
 
+        [XmlIgnore]
+        public string FullName => Name + " (" + Version.Version + ")";
+
         public Server(String name, ServerVersion version, ServerSettings serverSettings, ServerJavaSettings javaSettings) {
             Name = name;
             Version = version;

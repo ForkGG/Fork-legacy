@@ -174,15 +174,15 @@ namespace nihilus.ViewModel
             {
                 if (Server.Version.Type == ServerVersion.VersionType.Vanilla)
                 {
-                    Versions = new ObservableCollection<ServerVersion>(VersionManager.Instance.VanillaVersions);
+                    Versions = VersionManager.Instance.VanillaVersions;
                 }
                 else if (Server.Version.Type == ServerVersion.VersionType.Paper)
                 {
-                    Versions = new ObservableCollection<ServerVersion>(VersionManager.Instance.PaperVersions);
+                    Versions = VersionManager.Instance.PaperVersions;
                 }
                 else if (Server.Version.Type == ServerVersion.VersionType.Spigot)
                 {
-                    Versions = new ObservableCollection<ServerVersion>(VersionManager.Instance.SpigotVersions);
+                    Versions = VersionManager.Instance.SpigotVersions;
                 } 
             }).Start();
             

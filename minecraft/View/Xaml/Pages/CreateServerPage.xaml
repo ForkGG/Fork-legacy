@@ -33,8 +33,7 @@
                         <StackPanel Orientation="Horizontal">
                             <ComboBox Width="100" HorizontalAlignment="Left" Margin="10 0 10 5" x:Name="versionComboBox" 
                               ItemsSource="{Binding VanillaServerVersions}" SelectedIndex="0" IsSynchronizedWithCurrentItem="True"></ComboBox>
-                            <Button Click="BtnRefreshVersions_Click" VerticalAlignment="Top">Refresh</Button>
-                            <!-- TODO: Loading indicator for refresh, drop down with snapshot  -->
+                            <!-- TODO: drop down with snapshot  -->
                         </StackPanel>
 
                         <Label FontWeight="Bold">3. Name your server</Label>

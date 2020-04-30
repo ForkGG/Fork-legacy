@@ -113,7 +113,7 @@
                                 <TextBlock x:Name="ServerTitle" Opacity="0.6" MinHeight="35" VerticalAlignment="Center" Text="{Binding ServerTitle}" Margin="0 0 7 0"></TextBlock>
                                 <DockPanel.ToolTip>
                                     <StackPanel Orientation="Vertical">
-                                        <TextBlock Text="{Binding Server}" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding Server.FullName}" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="Type: "/>
                                             <TextBlock Text="{Binding Server.Version.Type}"/>
@@ -123,6 +123,14 @@
                                             <TextBlock Text="{Binding PlayerList.Count}"/>
                                             <TextBlock Text="/"/>
                                             <TextBlock Text="{Binding Server.ServerSettings.MaxPlayers}"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Gamemode: "/>
+                                            <TextBlock Text="{Binding Server.ServerSettings.CurrGamemode}"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Difficulty: "/>
+                                            <TextBlock Text="{Binding Server.ServerSettings.CurrDifficulty}"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </DockPanel.ToolTip>
@@ -134,7 +142,6 @@
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="FrontIndicator" Property="Height" Value="25"/>
                             <Setter TargetName="ServerTitle" Property="Opacity" Value="1"/>
-                            <Setter Property="Background" Value="{DynamicResource backgroundSelected}"/>
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>

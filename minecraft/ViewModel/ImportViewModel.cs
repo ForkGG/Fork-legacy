@@ -30,17 +30,10 @@ namespace nihilus.ViewModel
         /// </summary>
         public ImportViewModel()
         {
-            VanillaServerVersions = new ObservableCollection<ServerVersion>(VersionManager.Instance.VanillaVersions);
-            PaperVersions = new ObservableCollection<ServerVersion>(VersionManager.Instance.PaperVersions);
-            SpigotServerVersions = new ObservableCollection<ServerVersion>(VersionManager.Instance.SpigotVersions);
+            VanillaServerVersions = VersionManager.Instance.VanillaVersions;
+            PaperVersions = VersionManager.Instance.PaperVersions;
+            SpigotServerVersions = VersionManager.Instance.SpigotVersions;
             ServerSettings = new ServerSettings(ServerManager.Instance.NextDefaultServerName());
-        }
-
-        public void UpdateVersions()
-        {
-            VanillaServerVersions = new ObservableCollection<ServerVersion>(VersionManager.Instance.VanillaVersions);
-            PaperVersions = new ObservableCollection<ServerVersion>(VersionManager.Instance.PaperVersions);
-            SpigotServerVersions = new ObservableCollection<ServerVersion>(VersionManager.Instance.SpigotVersions);
         }
 
         public void UpdateLevelName(string levelName)
