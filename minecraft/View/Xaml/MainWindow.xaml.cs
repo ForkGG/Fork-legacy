@@ -1,8 +1,10 @@
 using System;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Data;
 using nihilus.Logic.Manager;
 using nihilus.ViewModel;
+using Application = System.Windows.Application;
 
 namespace nihilus.xaml
 {
@@ -20,14 +22,12 @@ namespace nihilus.xaml
 
         private void ImportServer_Click(object sender, RoutedEventArgs e)
         {
-            //TODO
+            ImportServerGrid.Visibility = Visibility.Visible;
         }
 
         private void CreateServer_Click(object sender, RoutedEventArgs e)
         {
             CreateServerGrid.Visibility = Visibility.Visible;
-            //AddServer.AddServer addServer = new AddServer.AddServer();
-            //addServer.ShowDialog();
         }
 
         private void OnMainWindowClose(object sender, CancelEventArgs e)
@@ -39,10 +39,27 @@ namespace nihilus.xaml
         {
             CloseCreateServerPage();
         }
+        public void HandleImportPageClose(object sernder, EventArgs e)
+        {
+            CloseImportPage();
+        }
+
+        public void HandleImportPageNext(object sender, EventArgs e)
+        {
+            ImportFrame.SetBinding(ContentProperty, new Binding{Source = viewModel.ImportPage.SecondPage});
+        }
+        public void HandleImportPagePrevious(object sender, EventArgs e)
+        {
+            ImportFrame.SetBinding(ContentProperty, new Binding{Source = viewModel.ImportPage});
+        }
 
         private void CloseCreateServerPage()
         {
             CreateServerGrid.Visibility = Visibility.Collapsed;
+        }
+        private void CloseImportPage()
+        {
+            ImportServerGrid.Visibility = Visibility.Collapsed;
         }
     }
 }

@@ -28,7 +28,7 @@ namespace nihilus.ViewModel
 
         public void WriteLine(string line)
         {
-            Application.Current.Dispatcher.Invoke(() => ConsoleOutput.Add(line));
+            Application.Current?.Dispatcher?.Invoke(() => ConsoleOutput.Add(line));
         }
     }
 }

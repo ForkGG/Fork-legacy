@@ -15,25 +15,29 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PublishUrl>C:\Users\Christian\Desktop\nihilus\</PublishUrl>
+    <PublishUrl>C:\Users\Christian\source\repos\nihilus\NihilusInstaller\Release\ClickOnce\</PublishUrl>
     <Install>true</Install>
-    <InstallFrom>Web</InstallFrom>
-    <UpdateEnabled>true</UpdateEnabled>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>https://nihilus.gg/</InstallUrl>
-    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
-    <WebPage>publish.htm</WebPage>
+    <MapFileExtensions>false</MapFileExtensions>
+    <SupportUrl>https://www.nihilus.gg</SupportUrl>
+    <ErrorReportUrl>https://www.nihilus.gg</ErrorReportUrl>
+    <TargetCulture>en</TargetCulture>
+    <ProductName>Nihilus Server Manager</ProductName>
+    <PublisherName>Christian Kern</PublisherName>
+    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>0.2.1.0</ApplicationVersion>
+    <ApplicationVersion>0.5.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -127,6 +131,8 @@
     <Compile Include="Logic\CustomConsole\ConsoleReader.cs" />
     <Compile Include="Logic\CustomConsole\ConsoleWriter.cs" />
     <Compile Include="Logic\ExtensionMethods.cs" />
+    <Compile Include="Logic\ImportLogic\DirectoryValidator.cs" />
+    <Compile Include="Logic\ImportLogic\FileImporter.cs" />
     <Compile Include="Logic\Manager\ApplicationManager.cs" />
     <Compile Include="Logic\Manager\AutoRestartManager.cs" />
     <Compile Include="Logic\Manager\PlayerManager.cs" />
@@ -153,6 +159,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\ConsoleViewModel.cs" />
+    <Compile Include="ViewModel\ImportViewModel.cs" />
     <Compile Include="ViewModel\ServerViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="View\Resources\dictionaries\WindowStyles.xaml.cs">
@@ -173,6 +180,15 @@
     </Compile>
     <Compile Include="View\Xaml\Pages\CreateServerPage.xaml.cs">
       <DependentUpon>CreateServerPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Xaml\Pages\ImportPages\ImportPage.xaml.cs">
+      <DependentUpon>ImportPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Xaml\Pages\ImportPages\ImportServerPage.xaml.cs">
+      <DependentUpon>ImportServerPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Xaml\Pages\ImportPages\ImportWorldPage.xaml.cs">
+      <DependentUpon>ImportWorldPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Xaml\Pages\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
@@ -250,6 +266,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Xaml\Pages\ImportPages\ImportPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Xaml\Pages\ImportPages\ImportServerPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Xaml\Pages\ImportPages\ImportWorldPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Xaml\Pages\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -314,6 +342,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="View\Resources\images\DeafultHead.png" />
+    <Resource Include="View\Resources\images\ImportServer.png" />
     <Page Include="View\Xaml\Pages\CreateServerPage.xaml" />
     <Resource Include="View\Resources\images\paper.png" />
   </ItemGroup>

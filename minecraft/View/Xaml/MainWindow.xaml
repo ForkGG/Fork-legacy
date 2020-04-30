@@ -22,7 +22,7 @@
                         <MenuItem HorizontalAlignment="Stretch" x:Name="AddServerMenu" Header="Add Server"
                                   Margin="5 10 5 5" Height="25" DockPanel.Dock="Bottom"
                                   Style="{StaticResource ExtenderButtonMenu}">
-                            <MenuItem Header="Import Server" Click="ImportServer_Click" IsEnabled="False"
+                            <MenuItem Header="Import Server" Click="ImportServer_Click"
                                       Style="{DynamicResource ExtenderButtonMenu}">
                                 <MenuItem.Icon>
                                     <TextBlock FontFamily="{StaticResource MaterialIO}" Text="&#xe884;" />
@@ -47,6 +47,11 @@
                 <Rectangle Fill="{DynamicResource backgroundDefault}" Opacity="0.9"></Rectangle>
                 <Rectangle Panel.ZIndex="1" Fill="{DynamicResource backgroundDefault}" Width="800" Height="440"/>
                 <Frame NavigationUIVisibility="Hidden" Panel.ZIndex="2" Content="{Binding CreateServerPage}"/>
+            </Grid>
+            <Grid x:Name="ImportServerGrid" Panel.ZIndex="2" Visibility="Collapsed">
+                <Rectangle Fill="{DynamicResource backgroundDefault}" Opacity="0.9"></Rectangle>
+                <Rectangle Panel.ZIndex="1" Fill="{DynamicResource backgroundDefault}" Width="800" Height="440"/>
+                <Frame x:Name="ImportFrame" NavigationUIVisibility="Hidden" Panel.ZIndex="2" Content="{Binding ImportPage}"/>
             </Grid>
         </Grid>
     </Border>

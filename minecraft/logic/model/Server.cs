@@ -51,7 +51,7 @@ namespace nihilus.Logic.Model
             string name = Name;
             if (Name.Length>10)
             {
-                name = name.Substring(0, 9);
+                name = name.Substring(0, 10);
             }
             return name + " ("+Version.Version+")";
         }

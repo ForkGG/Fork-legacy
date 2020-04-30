@@ -331,7 +331,7 @@ namespace nihilus.Logic.Model
             ResourcePack = "";
             RconPassword = "";
             LevelSeed = "";
-            Motd = "Created with nihilus server manager";
+            Motd = "Created with Nihilus server manager";
 
             ForceGamemode = false;
             AllowNether = true;
