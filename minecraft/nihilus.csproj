@@ -133,6 +133,7 @@
     <Compile Include="Logic\ExtensionMethods.cs" />
     <Compile Include="Logic\ImportLogic\DirectoryValidator.cs" />
     <Compile Include="Logic\ImportLogic\FileImporter.cs" />
+    <Compile Include="Logic\Logging\ErrorLogger.cs" />
     <Compile Include="Logic\Manager\ApplicationManager.cs" />
     <Compile Include="Logic\Manager\AutoRestartManager.cs" />
     <Compile Include="Logic\Manager\PlayerManager.cs" />

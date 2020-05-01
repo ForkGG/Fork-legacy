@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows;
 using nihilus.Logic.Model;
 
 namespace nihilus.Logic.Persistence
@@ -45,6 +47,40 @@ namespace nihilus.Logic.Persistence
             }
 
             File.WriteAllLines(Path.Combine(folderPath,"server.properties"), lines, Encoding.UTF8);
+        }
+
+        public void AppendToConsoleLog(string line)
+        {
+            FileInfo logFile = new FileInfo(Path.Combine(App.ApplicationPath, "logs","consoleLog.txt"));
+            if (!logFile.Exists)
+            {
+                if (!new DirectoryInfo(Path.Combine(App.ApplicationPath,"logs")).Exists)
+                {
+                    Directory.CreateDirectory(Path.Combine(App.ApplicationPath, "logs"));
+                }
+                logFile.Create();
+            }
+            using (StreamWriter sw = logFile.AppendText())
+            {
+                sw.WriteLine(line);
+            }
+        }
+        
+        public void AppendToErrorLog(string line)
+        {
+            FileInfo errorFile = new FileInfo(Path.Combine(App.ApplicationPath, "logs","errorLog.txt"));
+            if (!errorFile.Exists)
+            {
+                if (!new DirectoryInfo(Path.Combine(App.ApplicationPath,"logs")).Exists)
+                {
+                    Directory.CreateDirectory(Path.Combine(App.ApplicationPath, "logs"));
+                }
+                errorFile.Create();
+            }
+            using (StreamWriter sw = errorFile.AppendText())
+            {
+                sw.WriteLine(line);
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
 using nihilus.Logic.ApplicationConsole;
+using nihilus.Logic.Logging;
 using nihilus.Logic.Manager;
 
 namespace nihilus
@@ -34,6 +35,7 @@ namespace nihilus
         protected override void OnStartup(StartupEventArgs e)
         {
             ApplicationManager.ConsoleWriter.AppStarted();
+            ErrorLogger logger = new ErrorLogger();
             base.OnStartup(e);
         }
 

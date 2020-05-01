@@ -56,7 +56,7 @@ namespace nihilus.Logic.Manager
                             process.Kill();
                         } catch (Exception e)
                         {
-
+                            Console.WriteLine(e);
                         }
                     }
                 }
