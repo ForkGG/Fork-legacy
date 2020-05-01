@@ -6,6 +6,10 @@ Minecraft Server Manager GUI
 - Run the installer
 - Run nihilus.exe
 
+## Useful Links:
+- Website: [nihilus.gg](https://www.nihilus.gg)
+- Discord: [Nihilus Discord Server](https://discord.gg/dbqH6x8)
+
 ## Roadmap
 #### Before v1.0:
  - Fully implementing basic funtionality:
