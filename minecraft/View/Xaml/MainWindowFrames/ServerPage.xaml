@@ -110,7 +110,7 @@
                                             <Border BorderThickness="2" BorderBrush="{x:Null}">
                                                 <DockPanel x:Name="PlayerItem">
                                                     <Image Source="{Binding Head}" MinHeight="25px" MinWidth="25px" Stretch="Fill" Margin="5 0 5 0" RenderOptions.BitmapScalingMode="NearestNeighbor" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                    <Label Content="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
                                                 </DockPanel>
                                                 <Border.ContextMenu>
                                                     <ContextMenu x:Name="WhitelistContextMenu">
@@ -152,7 +152,7 @@
                                                 <Border BorderThickness="2" BorderBrush="{x:Null}">
                                                     <DockPanel x:Name="PlayerItem">
                                                         <Image Source="{Binding Head}" MinHeight="25px" MinWidth="25px" Stretch="Fill" Margin="5 0 5 0" RenderOptions.BitmapScalingMode="NearestNeighbor" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                        <Label Content="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
+                                                        <TextBlock Text="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
                                                     </DockPanel>
                                                     <Border.ContextMenu>
                                                         <ContextMenu x:Name="WhitelistContextMenu">
@@ -192,7 +192,7 @@
                                                 <Border BorderThickness="2" BorderBrush="{x:Null}">
                                                     <DockPanel x:Name="PlayerItem">
                                                         <Image Source="{Binding Head}" MinHeight="25px" MinWidth="25px" Stretch="Fill" Margin="5 0 5 0" RenderOptions.BitmapScalingMode="NearestNeighbor" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                        <Label Content="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
+                                                        <TextBlock Text="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
                                                     </DockPanel>
                                                     <Border.ContextMenu>
                                                         <ContextMenu x:Name="WhitelistContextMenu">
@@ -234,7 +234,7 @@
                                                 <Border BorderThickness="2" BorderBrush="{x:Null}">
                                                     <DockPanel x:Name="PlayerItem">
                                                         <Image Source="{Binding Head}" MinHeight="25px" MinWidth="25px" Stretch="Fill" Margin="5 0 5 0" RenderOptions.BitmapScalingMode="NearestNeighbor" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                        <Label Content="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
+                                                        <TextBlock Text="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
                                                     </DockPanel>
                                                     <Border.ContextMenu>
                                                         <ContextMenu x:Name="WhitelistContextMenu">
