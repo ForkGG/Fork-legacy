@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading;
 using nihilus.Logic.Manager;
 using nihilus.Logic.Persistence;
 
@@ -44,7 +45,8 @@ namespace nihilus.Logic.ApplicationConsole
                 {
                     Directory.CreateDirectory(Path.Combine(App.ApplicationPath, "logs"));
                 }
-                logFile.Create();
+                var r = logFile.Create();
+                r.Close();
             }
             
             appStarted = true;
