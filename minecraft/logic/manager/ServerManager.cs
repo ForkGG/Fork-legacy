@@ -193,7 +193,14 @@ namespace nihilus.Logic.Manager
             DirectoryInfo directoryInfo = Directory.CreateDirectory(Path.Combine(serverPath));
             
             //Import server files
-            FileImporter.DirectoryCopy(originalServerDirectory, serverPath, true);
+            Thread copyThread = new Thread(() =>
+            {
+                FileImporter fileImporter = new FileImporter();
+                fileImporter.CopyProgressChanged += importViewModel.CopyProgressChanged;
+                fileImporter.DirectoryCopy(originalServerDirectory, serverPath, true, new List<string>{"server.jar"});
+                Console.WriteLine("Finished copying server files for server "+serverName);
+            });
+            copyThread.Start();
             
             //Download server.jar
             Thread thread = new Thread(() =>
@@ -255,7 +262,7 @@ namespace nihilus.Logic.Manager
                         Path.Combine(directoryInfo.FullName, "server.jar"));
                 });
                 thread.Start();
-                FileImporter.DirectoryCopy(worldSource, Path.Combine(directoryInfo.FullName,name), true);
+                new FileImporter().DirectoryCopy(worldSource, Path.Combine(directoryInfo.FullName,name), true);
                 while (true)
                 {
                     if (viewModel.DownloadCompleted)

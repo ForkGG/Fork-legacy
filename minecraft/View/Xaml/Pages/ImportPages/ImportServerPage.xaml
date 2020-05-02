@@ -125,6 +125,11 @@
             <Rectangle Fill="{DynamicResource backgroundDark}" Opacity="0.95" Height="473" Width="800" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-14,-18,-15,8">
             </Rectangle>
             <StackPanel VerticalAlignment="Center" >
+                <TextBlock TextAlignment="Center" Margin="10" Text="Copying server files"/>
+                <Grid Margin="10 0 10 0">
+                    <ProgressBar Value="{Binding CopyProgress}" Height="20"></ProgressBar>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding CopyProgressReadable}" Foreground="Black"></TextBlock>
+                </Grid>
                 <TextBlock TextAlignment="Center" Margin="10 10 10 10">
                         Downloading server.jar
                 </TextBlock>
