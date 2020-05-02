@@ -154,7 +154,14 @@ namespace nihilus.Logic.Model
             string fullProfileString = new StreamReader(respStream).ReadToEnd();
             FullProfile fullProfile = JsonConvert.DeserializeObject<FullProfile>(fullProfileString);
             CacheProfileJson(fullProfile);
-            Head = RetrieveImageFromBase64(fullProfile.properties[0].value);
+            if (fullProfile.properties.Count == 0)
+            {
+                Head = SetOfflineHead();
+            }
+            else
+            {
+                Head = RetrieveImageFromBase64(fullProfile.properties[0].value);
+            }
         }
 
         private string RetrieveImageFromBase64(string base64String)
