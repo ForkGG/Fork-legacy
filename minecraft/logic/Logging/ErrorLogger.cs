@@ -13,7 +13,13 @@ namespace nihilus.Logic.Logging
         {
             AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
             {
-                fileWriter.AppendToErrorLog("["+DateTime.Now+"] " +eventArgs.Exception.StackTrace+"\n");
+                fileWriter.AppendToErrorLog("["+DateTime.Now+"] [FirstChanceException] " +eventArgs.Exception.StackTrace+"\n");
+            };
+
+            AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
+            {
+                Exception e = eventArgs.ExceptionObject as Exception;
+                fileWriter.AppendToErrorLog("["+DateTime.Now+"] [UnhandledException] " +e?.StackTrace+"\n");
             };
         }
     }
