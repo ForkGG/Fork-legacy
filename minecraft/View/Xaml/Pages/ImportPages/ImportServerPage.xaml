@@ -19,7 +19,7 @@
             </StackPanel>
             <StackPanel x:Name="serverInfoPanel" DockPanel.Dock="Top" Visibility="Hidden">
                 <Label FontWeight="Bold" Margin="0 10 0 0">2. Name your server</Label>
-                <TextBox x:Name="serverName" Text="{Binding Path=ServerSettings.LevelName, Mode=TwoWay}" Width="150" HorizontalAlignment="Left" Margin="10 0 0 5" TextChanged="serverName_TextChanged"/>
+                <TextBox x:Name="serverName" Text="{Binding Path=ServerSettings.LevelName, Mode=OneWay}" Width="150" HorizontalAlignment="Left" Margin="10 0 0 5" TextChanged="serverName_TextChanged"/>
 
                 <Label FontWeight="Bold" Margin="0 10 0 0">3. Configure your server</Label>
                 <Grid>

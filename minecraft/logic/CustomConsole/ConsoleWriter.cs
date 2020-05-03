@@ -39,6 +39,14 @@ namespace nihilus.Logic.CustomConsole
                     string line = errOut.ReadLine();
                     if (line != null)
                     {
+                        // For early minecraft versions
+                        if (line.Contains("For help, type \"help\""))
+                        {
+                            viewModel.CurrentStatus = ServerStatus.RUNNING;
+                        }
+                        viewModel.RoleInputHandler(line);
+                        //
+
                         viewModel.ConsoleOutList.Add(line);
                     }
                 }
