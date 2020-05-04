@@ -8,6 +8,8 @@ using System.Threading;
 using System.Windows;
 using LiveCharts;
 using System.Management;
+using nihilus.Logic.Model;
+using nihilus.ViewModel;
 
 namespace nihilus.Logic.BackgroundWorker.Performance
 {
@@ -16,7 +18,7 @@ namespace nihilus.Logic.BackgroundWorker.Performance
         private bool interrupted = false;
         private List<Thread> threads = new List<Thread>();
 
-        public void TrackTotal(Process p, ChartValues<double> chartValues, int maxLength)
+        public void TrackTotal(Process p, ServerViewModel viewModel)
         {
             PerformanceCounter cpuCounter = new PerformanceCounter
             {
@@ -30,18 +32,11 @@ namespace nihilus.Logic.BackgroundWorker.Performance
                 {
                     try
                     {
-                        double value = cpuCounter.NextValue();
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            chartValues.Add(value);
-                            if (chartValues.Count > maxLength)
-                            {
-                                chartValues.RemoveAt(0);
-                            }
-                        });
+                        viewModel.CPUValueUpdate(cpuCounter.NextValue());
                     } catch(Exception e) { break; }
-                    Thread.Sleep(1000);
+                    Thread.Sleep(500);
                 }
+                viewModel.CPUValueUpdate(0.0);
             });
             t.Start();
             threads.Add(t);
@@ -81,7 +76,7 @@ namespace nihilus.Logic.BackgroundWorker.Performance
             threads.Add(t);
         }
 
-        public string GetProcessInstanceName(int processId)
+        private string GetProcessInstanceName(int processId)
         {
             var process = Process.GetProcessById(processId);
             string processName = Path.GetFileNameWithoutExtension(process.ProcessName);

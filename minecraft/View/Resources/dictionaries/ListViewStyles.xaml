@@ -166,4 +166,93 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style x:Key="customScrollViewer" TargetType="ScrollViewer">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ScrollViewer">
+                    <Grid Background="{TemplateBinding Background}">
+                        <DockPanel Margin="{TemplateBinding Padding}">
+                            <ContentPresenter Margin="0 0 -5 0"/>
+                        </DockPanel>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ServerList v2 template -->
+    <Style x:Key="ServerListViewV2" TargetType="{x:Type ListView}">
+        <Setter Property="Background" Value="{DynamicResource backgroundDefault}"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="10,10,10,10"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListView">
+                    <Border Name="Border" BorderThickness="0">
+                        <ItemsPresenter/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsGrouping" Value="True">
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Resources>
+            <!-- Makes selection stay when focus lost (for context menu)-->
+            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Green"/>
+        </Style.Resources>
+    </Style>
+
+    <Style x:Key="ServerListItemV2" TargetType="{x:Type ListViewItem}">
+        <Style.Resources>
+            <FontFamily x:Key="Montserrat-SemiBold">pack://application:,,,/View/Resources/Fonts/Montserrat-SemiBold.ttf#Montserrat SemiBold</FontFamily>
+        </Style.Resources>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Background" Value="{x:Null}"/>
+        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>
+        <Setter Property="Margin" Value="0 5 0 2"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                    <Border BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}">
+                        <StackPanel>
+                            <Grid Width="200" Height="60">
+                                <Border x:Name="background" Background="Transparent" Width="206" CornerRadius="0 8 8 0" Margin="-1 0 -5 0"/>
+                                <DockPanel Panel.ZIndex="1" LastChildFill="True">
+                                    <Ellipse Margin="5 0 0 0" Width="15" Height="15" Fill="{Binding IconColor}"/>
+                                    <Border Height="40" Width="40" Background="Transparent" Margin="5 0 10 0">
+                                        <Image Source="{Binding Icon}" Width="25" Height="25" RenderOptions.BitmapScalingMode="Linear"/>
+                                    </Border>
+                                    <TextBlock x:Name="title" Text="{Binding Server.Name}" VerticalAlignment="Center" FontSize="20" FontFamily="{StaticResource Montserrat-SemiBold}" Foreground="{DynamicResource textUnselected}"/>
+                                </DockPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="background" Property="Background" Value="{DynamicResource tabSelected}"/>
+                            <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                                <Condition Property="IsSelected" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="background" Property="Background" Value="{DynamicResource tabHover}"/>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

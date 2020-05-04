@@ -13,6 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using LiveCharts;
 using LiveCharts.Wpf;
@@ -25,7 +26,7 @@ using nihilus.Logic.Persistence;
 using nihilus.View.Xaml.MainWindowFrames;
 using nihilus.Logic;
 using nihilus.Logic.RoleManagement;
-using nihilus.View.Xaml.Pages;
+using nihilus.View.Xaml2.Pages;
 using Console = System.Console;
 using Timer = System.Timers.Timer;
 
@@ -33,30 +34,18 @@ namespace nihilus.ViewModel
 {
     public class ServerViewModel : INotifyPropertyChanged
     {
-        public static ServerViewModel HomeViewModel()
-        {
-            ServerViewModel homeViewModel = new ServerViewModel();
-
-            return homeViewModel;
-        }
-
         private string externalIP = new WebClient().DownloadString("http://icanhazip.com").Trim();
-        private bool isHome;
 
-        private ChartValues<double> cpuTotal;
-        private ChartValues<double> cpuServer;
         private CPUTracker cpuTracker;
-
-        private ChartValues<double> memServer;
+        private double cpuValue;
         private MEMTracker memTracker;
+        private double memValue;
 
         private Timer restartTimer = null;
 
         private RoleUpdater whitelistUpdater;
         private RoleUpdater banlistUpdater;
         private RoleUpdater oplistUpdater;
-
-        private SettingsPage settingsPage;
 
         public ConsoleReader ConsoleReader;
         public ObservableCollection<string> ConsoleOutList { get; }
@@ -65,62 +54,39 @@ namespace nihilus.ViewModel
         public ObservableCollection<Player> OPList { get; set; } = new ObservableCollection<Player>();
         public ObservableCollection<Player> WhiteList { get; set; } = new ObservableCollection<Player>();
         public ObservableCollection<ServerVersion> Versions { get; set; } = new ObservableCollection<ServerVersion>();
-        public SeriesCollection CPUList { get; set; } = new SeriesCollection();
-        public SeriesCollection MEMList { get; set; } = new SeriesCollection();
         public string ConsoleIn { get; set; } = "";
         public ServerStatus CurrentStatus { get; set; }
         public Server Server { get; set; }
-
-        public SettingsPage SettingsPage
-        {
-            get
-            {
-                if (settingsPage == null)
-                {
-                    settingsPage = new SettingsPage(this);
-                }
-                return settingsPage;
-            }
-        }
 
         public bool RestartEnabled { get; set; }
         public string NextRestartHours { get; set; }
         public string NextRestartMinutes { get; set; }
         public string NextRestartSeconds { get; set; }
 
-        public string ServerTitle
+        public string ServerTitle => Server.Name + " - " + Server.Version.Type + " " + Server.Version.Version;
+
+        public ImageSource Icon
         {
             get
             {
-                if (isHome)
+                BitmapImage bi3 = new BitmapImage();
+                bi3.BeginInit();
+                switch (Server.Version.Type)
                 {
-                    return "Home";
-                }
-
-                return Server + Environment.NewLine + CurrentStatus.FriendlyName();
-            }
-        }
-
-        public string Icon
-        {
-            get
-            {
-                if (isHome)
-                {
-                    return "";
-                }
-
-                switch (CurrentStatus)
-                {
-                    case ServerStatus.RUNNING:
-                        return "\xe037";
-                    case ServerStatus.STOPPED:
-                        return "\xe047";
-                    case ServerStatus.STARTING:
-                        return "\xe061";
+                    case ServerVersion.VersionType.Vanilla:
+                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/BukkitIcon.png");
+                        break;
+                    case ServerVersion.VersionType.Paper:
+                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/PaperIcon.png");
+                        break;
+                    case ServerVersion.VersionType.Spigot:
+                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/SpigotIcon.png");
+                        break;
                     default:
                         return null;
                 }
+                bi3.EndInit();
+                return bi3;
             }
         }
 
@@ -141,7 +107,15 @@ namespace nihilus.ViewModel
         public bool ServerRunning => CurrentStatus == ServerStatus.RUNNING;
 
         public string AddressInfo { get; set; }
+
+        public string CPUValue => Math.Round(cpuValue,0) + "%";
+        public double CPUValueRaw => cpuValue;
+
+        public string MemValue => Math.Round(memValue/Server.JavaSettings.MaxRam *100,0) + "%";
+        public double MemValueRaw => memValue/Server.JavaSettings.MaxRam *100;
         public Page ServerPage { get; set; }
+        public Page ConsolePage { get; set; }
+        public Page SettingsPage { get; set; }
 
         private ICommand readConsoleIn;
 
@@ -188,7 +162,9 @@ namespace nihilus.ViewModel
             
             ConsoleOutList.CollectionChanged += ConsoleOutChanged;
             UpdateAddressInfo();
-            Application.Current.Dispatcher.Invoke(new Action(() => ServerPage = new ServerPage(this)));
+            Application.Current.Dispatcher.Invoke(new Action(() => ServerPage = new View.Xaml2.Pages.ServerPage(this)));
+            Application.Current.Dispatcher.Invoke(new Action(() => ConsolePage = new View.Xaml2.Pages.ConsolePage(this)));
+            //Application.Current.Dispatcher.Invoke(new Action(() => SettingsPage = new View.Xaml2.Pages.ConsolePage(this)));
 
             WhiteList.CollectionChanged += WhiteListChanged;
             BanList.CollectionChanged += BanListChanged;
@@ -207,12 +183,6 @@ namespace nihilus.ViewModel
 
             TimeSpan t = DateTime.Now - start;
             Console.WriteLine("Server ViewModel for " + server + " initialized in "+t.Seconds+"."+t.Milliseconds+"s");
-        }
-
-        private ServerViewModel()
-        {
-            isHome = true;
-            ServerPage = new StartPage();
         }
 
         private void UpdateAddressInfo()
@@ -288,41 +258,28 @@ namespace nihilus.ViewModel
             cpuTracker?.StopThreads();
 
             cpuTracker = new CPUTracker();
-            cpuTotal = new ChartValues<double>();
-            cpuTracker.TrackTotal(p, cpuTotal, 102);
-            cpuServer = new ChartValues<double>();
-            cpuTracker.TrackP(p, cpuServer, 102);
-
-            CPUList = new SeriesCollection
-            {
-                new LineSeries
-                {
-                    Values = cpuTotal
-                },
-                new LineSeries
-                {
-                    Values = cpuServer
-                }
-            };
-            cpuTotal.CollectionChanged += CPUListChanged;
-            cpuServer.CollectionChanged += CPUListChanged;
+            cpuTracker.TrackTotal(p, this);
 
 
             // Track memory usage
             memTracker?.StopThreads();
 
             memTracker = new MEMTracker();
-            memServer = new ChartValues<double>();
-            memTracker.TrackP(p, memServer, 102);
+            memTracker.TrackP(p, this);
+        }
 
-            MEMList = new SeriesCollection
-            {
-                new LineSeries
-                {
-                    Values = memServer
-                }
-            };
-            memServer.CollectionChanged += MEMListChanged;
+        public void CPUValueUpdate(double value)
+        {
+            cpuValue = value;
+            raisePropertyChanged(nameof(CPUValue));
+            raisePropertyChanged(nameof(CPUValueRaw));
+        }
+
+        public void MemValueUpdate(double value)
+        {
+            memValue = value;
+            raisePropertyChanged(nameof(MemValue));
+            raisePropertyChanged(nameof(MemValueRaw));
         }
 
         public void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
@@ -346,16 +303,6 @@ namespace nihilus.ViewModel
         private void ConsoleOutChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             raisePropertyChanged(nameof(ConsoleOutList));
-        }
-
-        private void CPUListChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            raisePropertyChanged(nameof(CPUList));
-        }
-
-        private void MEMListChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            raisePropertyChanged(nameof(MEMList));
         }
 
         private void WhiteListChanged(object sender, NotifyCollectionChangedEventArgs e)

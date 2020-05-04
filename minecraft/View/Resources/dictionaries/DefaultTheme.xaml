@@ -1,0 +1,53 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- order by brightness, from dark to light -->
+    <SolidColorBrush x:Key="backgroundDarker" Color="#1B1D2D"/>
+    <SolidColorBrush x:Key="backgroundDark" Color="#1F2234"/>
+    <SolidColorBrush x:Key="backgroundDefault" Color="#272A41"/>
+    <SolidColorBrush x:Key="backgroundSelected" Color="#232323"/>
+    <SolidColorBrush x:Key="backgroundLight" Color="#424242" />
+
+    <!-- order by brightness, from dark to light -->
+    <SolidColorBrush x:Key="inputDefault" Color="#303030"/>
+
+    <!-- Button Colors -->
+    <SolidColorBrush x:Key="buttonDefault" Color="#1F2234"/>
+    <SolidColorBrush x:Key="buttonHover" Color="#FF444444"/>
+    <SolidColorBrush x:Key="buttonBgrDefault" Color="#565B7A"/>
+    <SolidColorBrush x:Key="buttonBgrRed" Color="#8F5252"/>
+    <SolidColorBrush x:Key="buttonBgrRedHover" Color="DarkRed"/>
+    <SolidColorBrush x:Key="buttonBgrYellow" Color="#EBED78"/>
+    <SolidColorBrush x:Key="buttonBgrYellowHover" Color="Yellow"/>
+    <SolidColorBrush x:Key="buttonBgrGreen" Color="#5EED80"/>
+    <SolidColorBrush x:Key="buttonBgrGreenHover" Color="DarkGreen"/>
+    <SolidColorBrush x:Key="buttonBgrBlue" Color="#5E93ED"/>
+
+
+    <!-- order by brightness, from dark to light -->
+    <SolidColorBrush x:Key="accentDark" Color="#FFBF8800" />
+    <SolidColorBrush x:Key="accentDefault" Color="#FFC78D00" />
+    <SolidColorBrush x:Key="accentLight" Color="#FFD89900" />
+
+    <!-- order by brightness, from dark to light -->
+    <SolidColorBrush x:Key="foregroundDefault" Color="#FFF3F3F3" />
+    <SolidColorBrush x:Key="foregroundDisabled" Color="#8c8c8c"/>
+    
+    <!-- Text Colors -->
+    <SolidColorBrush x:Key="textDefault" Color="#9DA7E2" />
+    <SolidColorBrush x:Key="textHeader" Color="#8FB2BC" />
+    <SolidColorBrush x:Key="textUnselected" Color="#565B7A" />
+    <SolidColorBrush x:Key="textSelected" Color="#F9EFD7" />
+    <SolidColorBrush x:Key="textTerminal" Color="#FFFFFF" />
+
+
+    <SolidColorBrush x:Key="tabHover" Color="LightBlue"/>
+    <SolidColorBrush x:Key="tabSelected" Color="#374FC3"/>
+
+    <SolidColorBrush x:Key="outerBorder" Color="#1B1D2D"/>
+    <SolidColorBrush x:Key="errorBorder" Color="Red"/>
+
+    <SolidColorBrush x:Key="listViewIndicator" Color="Gray"/>
+
+
+    <Color x:Key="borderDefault">Gray</Color>
+</ResourceDictionary>

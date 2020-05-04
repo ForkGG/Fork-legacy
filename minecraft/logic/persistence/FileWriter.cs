@@ -48,23 +48,6 @@ namespace nihilus.Logic.Persistence
 
             File.WriteAllLines(Path.Combine(folderPath,"server.properties"), lines, Encoding.UTF8);
         }
-
-        public void AppendToConsoleLog(string line)
-        {
-            FileInfo logFile = new FileInfo(Path.Combine(App.ApplicationPath, "logs","consoleLog.txt"));
-            if (!logFile.Exists)
-            {
-                if (!new DirectoryInfo(Path.Combine(App.ApplicationPath,"logs")).Exists)
-                {
-                    Directory.CreateDirectory(Path.Combine(App.ApplicationPath, "logs"));
-                }
-                logFile.Create();
-            }
-            using (StreamWriter sw = logFile.AppendText())
-            {
-                sw.WriteLine(line);
-            }
-        }
         
         public void AppendToErrorLog(string line)
         {
@@ -77,9 +60,20 @@ namespace nihilus.Logic.Persistence
                 }
                 errorFile.Create();
             }
-            using (StreamWriter sw = errorFile.AppendText())
+
+            try
             {
-                sw.WriteLine(line);
+                using (StreamWriter sw = errorFile.AppendText())
+                {
+                    sw.WriteLine(line);
+                }
+            }
+            catch (Exception e)
+            {
+                if (typeof(Exception) != typeof(IOException))
+                {
+                    Console.WriteLine(e.StackTrace);
+                }
             }
         }
     }

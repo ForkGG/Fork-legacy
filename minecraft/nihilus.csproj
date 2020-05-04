@@ -168,10 +168,24 @@
     </Compile>
     <Compile Include="View\Resources\Helper\BindingProxy.cs" />
     <Compile Include="View\Resources\ViewBase\ServerListView.cs" />
+    <Compile Include="View\Xaml2\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Xaml2\Pages\ConsolePage.xaml.cs">
+      <DependentUpon>ConsolePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Xaml2\Pages\CreatePage.xaml.cs">
+      <DependentUpon>CreatePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Xaml2\Pages\ServerPage.xaml.cs">
+      <DependentUpon>ServerPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Xaml2\Shapes\UsageIndicatorBackground.cs" />
     <Compile Include="View\Xaml\Console.xaml.cs">
       <DependentUpon>Console.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Xaml\Converter\BoolToVisibilityConverter.cs" />
+    <Compile Include="View\Xaml\Converter\PercentageToColorConverter.cs" />
     <Compile Include="View\Xaml\Converter\SimpleTimeToStringConverter.cs" />
     <Compile Include="View\Xaml\MainWindowFrames\ServerPage.xaml.cs">
       <DependentUpon>ServerPage.xaml</DependentUpon>
@@ -198,6 +212,10 @@
     <Compile Include="View\Xaml\ValidationRules\PositiveLongValidationRule.cs" />
     <Compile Include="View\Xaml\ValidationRules\TimeValidationRule.cs" />
     <Page Include="View\Resources\dictionaries\ContextMenuStyle.xaml" />
+    <Page Include="View\Resources\dictionaries\DefaultTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Resources\dictionaries\ListViewStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -236,6 +254,22 @@
     </Page>
     <Page Include="View\Resources\dictionaries\DarkTheme.xaml">
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Xaml2\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Xaml2\Pages\ConsolePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Xaml2\Pages\CreatePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Xaml2\Pages\ServerPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Xaml\Console.xaml">
       <SubType>Designer</SubType>
@@ -308,6 +342,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Resource Include="View\Resources\Fonts\Montserrat-Bold.ttf" />
+    <Resource Include="View\Resources\Fonts\Montserrat-Medium.ttf" />
+    <Resource Include="View\Resources\Fonts\Montserrat-SemiBold.ttf" />
     <Resource Include="View\Resources\Fonts\MaterialIcons-Regular.ttf" />
   </ItemGroup>
   <ItemGroup>
@@ -342,7 +379,16 @@
     <Resource Include="favicon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="View\Resources\images\Start.png" />
+    <Resource Include="View\Resources\images\PaperIcon.png" />
+    <Resource Include="View\Resources\images\SpigotIcon.png" />
+    <Resource Include="View\Resources\images\Restart.png" />
+    <Resource Include="View\Resources\images\Stop.png" />
+    <Resource Include="View\Resources\images\Create.png" />
+    <Resource Include="View\Resources\images\BukkitIcon.png" />
     <Content Include="View\Resources\images\DeafultHead.png" />
+    <Resource Include="View\Resources\images\Import.png" />
+    <Resource Include="View\Resources\images\Delete.png" />
     <Resource Include="View\Resources\images\ImportServer.png" />
     <Page Include="View\Xaml\Pages\CreateServerPage.xaml" />
     <Resource Include="View\Resources\images\paper.png" />

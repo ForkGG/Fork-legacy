@@ -2,15 +2,15 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:nihilus"
-             StartupUri="View/Xaml/MainWindow.xaml"
+             StartupUri="View/Xaml2/MainWindow.xaml"
              Exit="ExitApplication">
-    <Application.Resources>
+    <Application.Resources>        
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/Styles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/WindowStyles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/ButtonStyles.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/DarkTheme.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/DefaultTheme.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/RadioButtonStyles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/ContextMenuStyle.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/ListViewStyles.xaml" />
@@ -18,6 +18,9 @@
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/TabControlStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <FontFamily x:Key="MaterialIO">View/Resources/Fonts/MaterialIcons-Regular.ttf#Material Icons</FontFamily>
+            <FontFamily x:Key="Montserrat-Medium">View/Resources/Fonts/Montserrat-Medium.ttf#Montserrat Medium</FontFamily>
+            <FontFamily x:Key="Montserrat-Bold">View/Resources/Fonts/Montserrat-Bold.ttf#Montserrat</FontFamily>
+            <FontFamily x:Key="Montserrat-SemiBold">View/Resources/Fonts/Montserrat-SemiBold.ttf#Montserrat SemiBold</FontFamily>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

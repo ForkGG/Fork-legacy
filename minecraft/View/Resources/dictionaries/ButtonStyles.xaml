@@ -39,6 +39,19 @@
         </Style.Triggers>
     </Style>
     
+    <!-- TextButton -->
+    <Style x:Key="TextButton" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Background" Value="{DynamicResource buttonDefault}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource buttonBgrDefault}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Background" Value="Transparent"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
     <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}"></Style>
     
 </ResourceDictionary>

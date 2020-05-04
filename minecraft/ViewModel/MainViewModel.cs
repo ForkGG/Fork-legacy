@@ -54,7 +54,7 @@ namespace nihilus.ViewModel
             
             ImportViewModel = new ImportViewModel();
             Servers = ServerManager.Instance.Servers;
-            Servers.Insert(0, ServerViewModel.HomeViewModel());
+            //Servers.Insert(0, ServerViewModel.HomeViewModel());
             Servers.CollectionChanged += ServerListChanged;
             SelectedServer = Servers[0];
         }

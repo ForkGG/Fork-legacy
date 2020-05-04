@@ -26,7 +26,7 @@ namespace nihilus.View.Xaml.MainWindowFrames
             DataContext = viewModel;
             
             InitializeComponent();
-            viewModel.SettingsPage.CloseSettingsEvent += HandleCloseSettingsEvent;
+            //viewModel.SettingsPage.CloseSettingsEvent += HandleCloseSettingsEvent;
         }
 
         private async void StartStopButton_Click(object sender, RoutedEventArgs e)
