@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:nihilus.View.Xaml2.Controls"
         xmlns:local="clr-namespace:nihilus.View.Xaml2"
-        mc:Ignorable="d" MinWidth="1000" MinHeight="400"
+        mc:Ignorable="d" MinWidth="1080" MinHeight="400"
         Title="Nihilus" Height="720" Width="1200" Style="{StaticResource DefaultWindowV2}">
     <DockPanel Background="{DynamicResource backgroundDefault}">
         <Grid Background="{DynamicResource backgroundDark}">
@@ -14,7 +15,7 @@
                 <RowDefinition Height="1.6*" MinHeight="120"/>
             </Grid.RowDefinitions>
             <Grid>
-                <Image Source="pack://application:,,,/View/Resources/images/paper.png"/>
+                <Image Source="pack://application:,,,/View/Resources/images/paperSymbol.png"/>
             </Grid>
             <Grid Grid.Row="1" VerticalAlignment="Top">
                 <StackPanel>
@@ -27,74 +28,30 @@
             </Grid>
             <DockPanel Grid.Row="2" LastChildFill="False">
                 <Grid  DockPanel.Dock="Bottom"  Background="{DynamicResource backgroundDarker}">
-                    <Label Content="v0.5.1" HorizontalAlignment="Center"/>
+                    <Label HorizontalAlignment="Center" FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="16">
+                        <TextBlock Text="v0.5.1" Foreground="{DynamicResource textUnselected}"/>
+                    </Label>
                 </Grid>
                 <Grid DockPanel.Dock="Bottom" Margin="10">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 10">
-                        <Button Margin="0 0 10 0" VerticalAlignment="Bottom">                            
-                            <Button.Style>
-                                <Style TargetType="{x:Type Button}">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate>
-                                                <Border x:Name="imageBorder" Background="{DynamicResource buttonBgrDefault}" CornerRadius="8" Width="45" Height="45">                                                    
-                                                    <Image Source="pack://application:,,,/View/Resources/images/Delete.png" Width="21" Height="24" RenderOptions.BitmapScalingMode="Linear"/>
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="imageBorder" Property="Background" Value="{DynamicResource buttonBgrRed}"/>
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                        <Button Margin="0 0 10 0" VerticalAlignment="Bottom">
-                            <Button.Style>
-                                <Style TargetType="{x:Type Button}">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate>
-                                                <Border x:Name="imageBorder" Background="{DynamicResource buttonBgrDefault}" CornerRadius="8" Width="60" Height="60">
-                                                    <Image Source="pack://application:,,,/View/Resources/images/Create.png" Width="38.4" Height="24.8" RenderOptions.BitmapScalingMode="Linear" Margin="-1 0 0 0"/>
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="imageBorder" Property="Background" Value="{DynamicResource buttonBgrGreen}"/>
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                        <Button Margin="0 0 10 0" VerticalAlignment="Bottom">
-                            <Button.Style>
-                                <Style TargetType="{x:Type Button}">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate>
-                                                <Border x:Name="imageBorder" Background="{DynamicResource buttonBgrDefault}" CornerRadius="8" Width="45" Height="45">
-                                                    <Image Source="pack://application:,,,/View/Resources/images/Import.png" Width="21" Height="24" RenderOptions.BitmapScalingMode="Linear"/>
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="imageBorder" Property="Background" Value="{DynamicResource buttonBgrBlue}"/>
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </Button.Style>
-                        </Button>
+                        <controls:IconButton Margin="0 0 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrRed}"
+                                             Width="40" Height="40" IconWidth="21" IconHeight="24"
+                                             IconSource="pack://application:,,,/View/Resources/images/Icons/Delete.png"
+                                             HoverIconSource="pack://application:,,,/View/Resources/images/Icons/DeleteW.png"/>
+                        <controls:IconButton Margin="0 0 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrGreen}"
+                                             Width="50" Height="50" IconWidth="38.4" IconHeight="24.8"
+                                             IconSource="pack://application:,,,/View/Resources/images/Icons/Create.png"
+                                             HoverIconSource="pack://application:,,,/View/Resources/images/Icons/CreateW.png"/>
+                        <controls:IconButton Margin="0 0 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrBlue}"
+                                             Width="40" Height="40" IconWidth="21" IconHeight="24"
+                                             IconSource="pack://application:,,,/View/Resources/images/Icons/Import.png"
+                                             HoverIconSource="pack://application:,,,/View/Resources/images/Icons/ImportW.png"/>                        
                     </StackPanel>
                 </Grid>
             </DockPanel>
         </Grid>
-        <Frame Grid.Column="1" DataContext="{Binding SelectedServer, Mode=TwoWay}" Content="{Binding ServerPage}" NavigationUIVisibility="Hidden"></Frame>
+        <Frame Grid.Column="1" DataContext="{Binding SelectedServer, Mode=TwoWay}"
+                       Content="{Binding ServerPage}" NavigationUIVisibility="Hidden" />
+        <!-- Grid.Column="1" Content="{Binding CreatePage}" NavigationUIVisibility="Hidden"/-->
     </DockPanel>
 </Window>

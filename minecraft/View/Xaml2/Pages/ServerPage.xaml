@@ -4,82 +4,102 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:nihilus.View.Xaml2.Pages"
+      xmlns:converter="clr-namespace:nihilus.View.Xaml.Converter"      
+      xmlns:model="clr-namespace:nihilus.Logic.Model"
+      xmlns:controls="clr-namespace:nihilus.View.Xaml2.Controls"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="700"
       Title="ServerPage">
+    <Page.Resources>
+        <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Page.Resources>
     <Grid>
         <DockPanel LastChildFill="True">
+            <Grid DockPanel.Dock="Bottom" Height="80">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Adress Info -->
+                <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Left" Orientation="Horizontal"  Margin="0 0 0 15">
+                    <Rectangle Width="15" Height="15" Margin="20 0 10 0" Fill="{DynamicResource tabSelected}"/>
+                    <Border Background="{DynamicResource backgroundDark}" CornerRadius="3" Height="35">
+                        <TextBlock x:Name="AddressInfoBox" Text="{Binding AddressInfo}" VerticalAlignment="Center" FontSize="20" Margin="10 7"></TextBlock>
+                    </Border>
+                    <Button x:Name="CopyButton" Click="CopyIP_Click" Width="89"  Margin="10 0 10 0" Style="{DynamicResource TextButton}">
+                        <TextBlock x:Name="CopyButtonText" Text="Copy" FontSize="20" Margin="3 0" FontFamily="{DynamicResource Montserrat-Medium}"/>
+                    </Button>
+                </StackPanel>
+
+                <!-- Restart Timer -->
+                <Grid Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 0 15" Visibility="{Binding RestartEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Hours" FontSize="10" Grid.Column="1" FontFamily="{DynamicResource Montserrat-SemiBold}" Margin="0 0 0 2"/>
+                    <TextBlock Text="Minutes" FontSize="10" Grid.Column="3" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                    <TextBlock Text="Seconds" FontSize="10" Grid.Column="5" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+
+                    <TextBlock Text="Restart in " FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="18" Grid.Row="1" VerticalAlignment="Center"/>
+                    <Border Width="32" Height="32" Grid.Row="1" Grid.Column="1" Background="{DynamicResource backgroundDark}">
+                        <TextBlock Text="{Binding NextRestartHours}" FontSize="18" TextAlignment="Center"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <TextBlock Text="  : " FontSize="18" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                    <Border Width="32" Height="32" Grid.Row="1" Grid.Column="3" Background="{DynamicResource backgroundDark}">
+                        <TextBlock Text="{Binding NextRestartMinutes}" FontSize="18" TextAlignment="Center"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <TextBlock Text=" : " FontSize="18" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                    <Border Width="32" Height="32" Grid.Row="1" Grid.Column="5" Background="{DynamicResource backgroundDark}">
+                        <TextBlock Text="{Binding NextRestartSeconds}" FontSize="18" TextAlignment="Center"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </Grid>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <controls:IconButton x:Name="StartStopButton" Margin="10" VerticalAlignment="Bottom" Click="ButtonStartStop_Click"
+                                         Width="55" Height="55" IconWidth="25.2" IconHeight="28.8" Style="{DynamicResource StartStopIconButton}">
+                    </controls:IconButton>
+
+                    <controls:IconButton Margin="10" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrYellow}" 
+                                         Width="55" Height="55" IconWidth="25.2" IconHeight="28.8" Visibility="Collapsed"
+                                         IconSource="pack://application:,,,/View/Resources/images/Icons/Restart.png"
+                                         HoverIconSource="pack://application:,,,/View/Resources/images/Icons/RestartW.png"/>
+                </StackPanel>
+            </Grid>
+            
             <StackPanel Margin="5 0 0 0" DockPanel.Dock="Left" VerticalAlignment="Center">
-                <RadioButton Margin="10" IsChecked="True" GroupName="MenuTabs">
-                    <RadioButton.Style>
-                        <Style TargetType="{x:Type RadioButton}">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type RadioButton}">
-                                        <Border x:Name="imageBorder" Background="{DynamicResource buttonBgrDefault}" Height="50" Width="50" CornerRadius="8">
-                                            <Image Source="pack://application:,,,/View/Resources/images/Import.png" Width="21" Height="24" RenderOptions.BitmapScalingMode="Linear"/>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="imageBorder" Property="Background" Value="{DynamicResource tabHover}"/>
-                                            </Trigger>
-                                            <Trigger Property="IsChecked" Value="True">
-                                                <Setter TargetName="imageBorder" Property="Background" Value="{DynamicResource tabSelected}"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </RadioButton.Style>
-                </RadioButton>
-                <RadioButton Margin="10" GroupName="MenuTabs">
-                    <RadioButton.Style>
-                        <Style TargetType="{x:Type RadioButton}">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type RadioButton}">
-                                        <Border x:Name="imageBorder" Background="{DynamicResource buttonBgrDefault}" Height="50" Width="50" CornerRadius="8">
-                                            <Image Source="pack://application:,,,/View/Resources/images/Import.png" Width="21" Height="24" RenderOptions.BitmapScalingMode="Linear"/>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="imageBorder" Property="Background" Value="{DynamicResource tabHover}"/>
-                                            </Trigger>
-                                            <Trigger Property="IsChecked" Value="True">
-                                                <Setter TargetName="imageBorder" Property="Background" Value="{DynamicResource tabSelected}"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </RadioButton.Style>
-                </RadioButton>
-                <RadioButton Margin="10" GroupName="MenuTabs">
-                    <RadioButton.Style>
-                        <Style TargetType="{x:Type RadioButton}">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type RadioButton}">
-                                        <Border x:Name="imageBorder" Background="{DynamicResource buttonBgrDefault}" Height="50" Width="50" CornerRadius="8">
-                                            <Image Source="pack://application:,,,/View/Resources/images/Import.png" Width="21" Height="24" RenderOptions.BitmapScalingMode="Linear"/>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="imageBorder" Property="Background" Value="{DynamicResource tabHover}"/>
-                                            </Trigger>
-                                            <Trigger Property="IsChecked" Value="True">
-                                                <Setter TargetName="imageBorder" Property="Background" Value="{DynamicResource tabSelected}"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </RadioButton.Style>
-                </RadioButton>
+                <controls:IconRadioButton Margin="10" IsChecked="True" GroupName="MenuTabs"
+                                          IconSource="pack://application:,,,/View/Resources/images/Icons/Terminal.png"
+                                          HoverIconSource="pack://application:,,,/View/Resources/images/Icons/TerminalW.png"/>
+                <controls:IconRadioButton Margin="10" GroupName="MenuTabs"
+                                          IconSource="pack://application:,,,/View/Resources/images/Icons/Settings.png"
+                                          HoverIconSource="pack://application:,,,/View/Resources/images/Icons/SettingsW.png"/>
+                <controls:IconRadioButton Margin="10" GroupName="MenuTabs"
+                                          IconSource="pack://application:,,,/View/Resources/images/Icons/Folder.png"
+                                          HoverIconSource="pack://application:,,,/View/Resources/images/Icons/FolderW.png"/>
             </StackPanel>
+            
+            <!-- Title -->
+            <Grid DockPanel.Dock="Top" Margin="0 15 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock  Text="{Binding ServerTitle}" HorizontalAlignment="Center" FontSize="30" FontFamily="{DynamicResource Montserrat-Bold}" Foreground="{DynamicResource textSelected}"/>
+            </Grid>
+            
+
             <Frame Content="{Binding ConsolePage}" NavigationUIVisibility="Hidden"></Frame>
         </DockPanel>
     </Grid>

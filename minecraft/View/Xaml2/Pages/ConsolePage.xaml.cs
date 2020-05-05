@@ -34,47 +34,6 @@ namespace nihilus.View.Xaml2.Pages
             DataContext = this.viewModel;
         }
 
-
-        private async void ButtonStartStop_Click(object sender, RoutedEventArgs e)
-        {
-            StartStopButton.IsEnabled = false;
-            if (viewModel.CurrentStatus == ServerStatus.STOPPED)
-            {
-                bool t = await ServerManager.Instance.StartServerAsync(viewModel);
-                if (!t)
-                {
-                    //TODO display error
-                    StartStopButton.IsEnabled = true;
-                    return;
-                }
-            }
-
-            if (viewModel.CurrentStatus == ServerStatus.RUNNING)
-            {
-                ServerManager.Instance.StopServer(viewModel.Server);
-            }
-            StartStopButton.IsEnabled = true;
-        }
-        
-        private void CopyIP_Click(object sender, RoutedEventArgs e)
-        {
-            Clipboard.SetText(AddressInfoBox.Text);
-            
-            new Thread(() =>
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    CopyButtonText.Text = "Copied";
-                    CopyButton.IsEnabled = false;
-                });
-                Thread.Sleep(1000);
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    CopyButtonText.Text = "Copy";
-                    CopyButton.IsEnabled = true;
-                });
-            }).Start();
-        }
         
         #region autoscrolling
         /// <summary>

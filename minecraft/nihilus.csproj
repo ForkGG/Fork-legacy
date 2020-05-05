@@ -168,6 +168,9 @@
     </Compile>
     <Compile Include="View\Resources\Helper\BindingProxy.cs" />
     <Compile Include="View\Resources\ViewBase\ServerListView.cs" />
+    <Compile Include="View\Xaml2\Controls\IconButton.cs" />
+    <Compile Include="View\Xaml2\Controls\IconRadioButton.cs" />
+    <Compile Include="View\Xaml2\Controls\ServerTypeRadioButton.cs" />
     <Compile Include="View\Xaml2\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -352,16 +355,13 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Resources\images\close.png" />
+    <Resource Include="View\Resources\images\Icons\StartW.png" />
     <Resource Include="View\Resources\images\maximize1.png" />
     <Resource Include="View\Resources\images\maximize2.png" />
     <Resource Include="View\Resources\images\minimize.png" />
     <Resource Include="View\Resources\images\title.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="View\Resources\images\spigot.png" />
-    <Resource Include="View\Resources\images\vanilla.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
@@ -379,19 +379,49 @@
     <Resource Include="favicon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="View\Resources\images\Start.png" />
-    <Resource Include="View\Resources\images\PaperIcon.png" />
-    <Resource Include="View\Resources\images\SpigotIcon.png" />
-    <Resource Include="View\Resources\images\Restart.png" />
-    <Resource Include="View\Resources\images\Stop.png" />
-    <Resource Include="View\Resources\images\Create.png" />
-    <Resource Include="View\Resources\images\BukkitIcon.png" />
+    <Resource Include="View\Resources\images\Icons\Paper.png" />
+    <Resource Include="View\Resources\images\Icons\Spigot.png" />
+    <Resource Include="View\Resources\images\paperSymbol.png" />
+    <Resource Include="View\Resources\images\spigotSymbol.png" />
+    <Resource Include="View\Resources\images\vanillaSymbol.png" />
+    <Resource Include="View\Resources\images\Icons\Bukkit.png" />
+    <Resource Include="View\Resources\images\Icons\BukkitD.png" />
+    <Resource Include="View\Resources\images\Icons\BukkitW.png" />
+    <Resource Include="View\Resources\images\Icons\BungeeCord.png" />
+    <Resource Include="View\Resources\images\Icons\BungeeCordD.png" />
+    <Resource Include="View\Resources\images\Icons\BungeeCordW.png" />
+    <Resource Include="View\Resources\images\Icons\Cancel.png" />
+    <Resource Include="View\Resources\images\Icons\CancelW.png" />
+    <Resource Include="View\Resources\images\Icons\Create.png" />
+    <Resource Include="View\Resources\images\Icons\CreateW.png" />
+    <Resource Include="View\Resources\images\Icons\Delete.png" />
+    <Resource Include="View\Resources\images\Icons\DeleteW.png" />
+    <Resource Include="View\Resources\images\Icons\Folder.png" />
+    <Resource Include="View\Resources\images\Icons\FolderW.png" />
+    <Resource Include="View\Resources\images\Icons\Import.png" />
+    <Resource Include="View\Resources\images\Icons\ImportW.png" />
+    <Resource Include="View\Resources\images\Icons\PaperD.png" />
+    <Resource Include="View\Resources\images\Icons\PaperW.png" />
+    <Resource Include="View\Resources\images\Icons\Restart.png" />
+    <Resource Include="View\Resources\images\Icons\RestartW.png" />
+    <Resource Include="View\Resources\images\Icons\Settings.png" />
+    <Resource Include="View\Resources\images\Icons\SettingsW.png" />
+    <Resource Include="View\Resources\images\Icons\SpigotD.png" />
+    <Resource Include="View\Resources\images\Icons\SpigotW.png" />
+    <Resource Include="View\Resources\images\Icons\Start.png" />
+    <Resource Include="View\Resources\images\Icons\Stop.png" />
+    <Resource Include="View\Resources\images\Icons\StopW.png" />
+    <Resource Include="View\Resources\images\Icons\Terminal.png" />
+    <Resource Include="View\Resources\images\Icons\TerminalW.png" />
+    <Resource Include="View\Resources\images\Icons\Vanilla.png" />
+    <Resource Include="View\Resources\images\Icons\VanillaD.png" />
+    <Resource Include="View\Resources\images\Icons\VanillaW.png" />
+    <Resource Include="View\Resources\images\Icons\Waterfall.png" />
+    <Resource Include="View\Resources\images\Icons\WaterfallD.png" />
+    <Resource Include="View\Resources\images\Icons\WaterfallW.png" />
     <Content Include="View\Resources\images\DeafultHead.png" />
-    <Resource Include="View\Resources\images\Import.png" />
-    <Resource Include="View\Resources\images\Delete.png" />
     <Resource Include="View\Resources\images\ImportServer.png" />
     <Page Include="View\Xaml\Pages\CreateServerPage.xaml" />
-    <Resource Include="View\Resources\images\paper.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Fody.5.0.6\build\Fody.targets" Condition="Exists('packages\Fody.5.0.6\build\Fody.targets')" />

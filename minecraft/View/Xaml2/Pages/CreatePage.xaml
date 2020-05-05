@@ -4,10 +4,15 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:nihilus.View.Xaml2.Pages"
+      xmlns:controls="clr-namespace:nihilus.View.Xaml2.Controls"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="CreatePage">
 
+    <Page.Resources>
+        <FontFamily x:Key="Montserrat-Bold">pack://application:,,,/View/Resources/Fonts/Montserrat-Bold.ttf#Montserrat</FontFamily>
+        <FontFamily x:Key="Montserrat-SemiBold">pack://application:,,,/View/Resources/Fonts/Montserrat-Bold.ttf#Montserrat SemiBold</FontFamily>
+    </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -15,12 +20,14 @@
         </Grid.ColumnDefinitions>
         
         <!-- Center Section -->
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                
-            </Grid.RowDefinitions>
-        </Grid>
+        <StackPanel Margin="10 0">
+            <Label Content="Create a server" HorizontalAlignment="Center" FontSize="30" FontFamily="{StaticResource Montserrat-Bold}" Foreground="{DynamicResource textSelected}"/>
+            <Label  Content="Choose A Server Type" Foreground="{DynamicResource textHeader}" FontFamily="{StaticResource Montserrat-SemiBold}" FontSize="23"/>
+            <WrapPanel Margin="20 5" Orientation="Horizontal">
+                <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/VanillaD.png" Header="Vanilla" GroupName="serverTypes" Margin="10 0"/>
+                <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/PaperD.png" Header="Paper" GroupName="serverTypes" Margin="10 0"/>
+            </WrapPanel>
+        </StackPanel>
         
         <!-- Create Button -->
         <DockPanel Grid.Column="1" LastChildFill="False">
@@ -31,7 +38,7 @@
                             <Setter.Value>
                                 <ControlTemplate>
                                     <Border x:Name="imageBorder" Background="{DynamicResource buttonBgrGreen}" CornerRadius="8" Width="60" Height="60">
-                                        <Image Source="pack://application:,,,/View/Resources/images/Create.png" Width="38.4" Height="24.8" RenderOptions.BitmapScalingMode="Linear"/>
+                                        <Image Source="pack://application:,,,/View/Resources/images/Icons/Create.png" Width="38.4" Height="24.8" RenderOptions.BitmapScalingMode="Linear"/>
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">

@@ -27,43 +27,43 @@ namespace nihilus.View.Xaml.Converter
             }
             if (percentage < 10)
             {
-                return (Brush)new BrushConverter().ConvertFromString("#00FF00");
+                return (Brush)new BrushConverter().ConvertFromString("#3FA63F");
             }
             if (percentage < 20)
             {
-                return (Brush)new BrushConverter().ConvertFromString("#66ff00");
+                return (Brush)new BrushConverter().ConvertFromString("#68A63F");
             }
             if (percentage < 30)
             {
-                return (Brush)new BrushConverter().ConvertFromString("#99ff00");
+                return (Brush)new BrushConverter().ConvertFromString("#7DA63F");
             }
             if (percentage < 40)
             {
-                return (Brush)new BrushConverter().ConvertFromString("#ccff00");
+                return (Brush)new BrushConverter().ConvertFromString("#92A63F");
             }
             if (percentage < 50)
             {
-                return (Brush)new BrushConverter().ConvertFromString("#FFFF00");
+                return (Brush)new BrushConverter().ConvertFromString("#A6A63F");
             }
             if (percentage < 60)
             {
-                return (Brush)new BrushConverter().ConvertFromString("#FFCC00");
+                return (Brush)new BrushConverter().ConvertFromString("#A6923F");
             }
             if (percentage < 70)
             {
-                return (Brush)new BrushConverter().ConvertFromString("#ff9900");
+                return (Brush)new BrushConverter().ConvertFromString("#A67D3F");
             }
             if (percentage < 80)
             {
-                return (Brush)new BrushConverter().ConvertFromString("#ff6600");
+                return (Brush)new BrushConverter().ConvertFromString("#A6683F");
             }
             if (percentage < 90)
             {
-                return (Brush)new BrushConverter().ConvertFromString("#FF3300");
+                return (Brush)new BrushConverter().ConvertFromString("#A6543F");
             }
             if (percentage<=100)
             {
-                return (Brush)new BrushConverter().ConvertFromString("#FF0000");
+                return (Brush)new BrushConverter().ConvertFromString("#A63F3F");
             }
 
             throw new ArgumentException("Percentage was not between 0 and 100");

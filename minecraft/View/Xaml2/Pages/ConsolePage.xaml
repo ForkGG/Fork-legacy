@@ -7,89 +7,24 @@
       xmlns:shapes="clr-namespace:nihilus.View.Xaml2.Shapes"
       xmlns:converter="clr-namespace:nihilus.View.Xaml.Converter"
       xmlns:helper="clr-namespace:nihilus.View.Resources.Helper"
-      xmlns:model="clr-namespace:nihilus.Logic.Model"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ConsolePage">
 
     <Page.Resources>
         <FontFamily x:Key="Montserrat-Bold">pack://application:,,,/View/Resources/Fonts/Montserrat-Bold.ttf#Montserrat</FontFamily>
-        <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <converter:ListToStringConverter x:Key="ListToStringConverter"/>
         <converter:PercentageToColorConverter x:Key="PercentageToStringConverter"/>
     </Page.Resources>
     <DockPanel Margin="0 10 0 0">
         
         <!-- Right Part -->
-        <DockPanel DockPanel.Dock="Right">
-            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button x:Name="StartStopButton" Margin="10" VerticalAlignment="Bottom" Click="ButtonStartStop_Click">
-                    <Button.Style>
-                        <Style TargetType="{x:Type Button}">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate>
-                                        <Grid>
-                                            <Border x:Name="imageBorder" Background="{DynamicResource buttonBgrGreen}" CornerRadius="8" Width="45" Height="45"/>
-                                            <Border x:Name="hoverOverlay" Background="AliceBlue" Opacity="0.3" Visibility="Hidden" CornerRadius="8" Width="45" Height="45" Panel.ZIndex="1"/>
-                                            <Border x:Name="hoverField" Background="Transparent" CornerRadius="8" Width="45" Height="45" Panel.ZIndex="3">
-                                                <Image x:Name="startStopImage" Source="pack://application:,,,/View/Resources/images/Stop.png" Width="21" Height="24" RenderOptions.BitmapScalingMode="Linear"/>
-                                            </Border>
-                                        </Grid>                                        
-                                        <ControlTemplate.Triggers>
-                                            <Trigger SourceName="hoverField" Property="IsMouseOver" Value="True">
-                                                <Setter  TargetName="hoverOverlay" Property="Visibility" Value="Visible"/>
-                                            </Trigger>
-                                            <DataTrigger Binding="{Binding CurrentStatus}" Value="{x:Static model:ServerStatus.STOPPED}">
-                                                <Setter TargetName="imageBorder" Property="Background" Value="{DynamicResource buttonBgrGreen}"/>
-                                                <Setter TargetName="startStopImage" Property="Source" Value="pack://application:,,,/View/Resources/images/Start.png"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding CurrentStatus}" Value="{x:Static model:ServerStatus.STARTING}">
-                                                <Setter TargetName="imageBorder" Property="Background" Value="{DynamicResource buttonBgrYellow}"/>
-                                                <Setter TargetName="startStopImage" Property="Source" Value="pack://application:,,,/View/Resources/images/Start.png"/>
-                                                <Setter Property="IsEnabled" Value="False"/>
-                                                <Setter TargetName="hoverOverlay" Property="Opacity" Value="0"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding CurrentStatus}" Value="{x:Static model:ServerStatus.RUNNING}">
-                                                <Setter TargetName="imageBorder" Property="Background" Value="{DynamicResource buttonBgrRed}"/>
-                                                <Setter TargetName="startStopImage" Property="Source" Value="pack://application:,,,/View/Resources/images/Stop.png"/>
-                                            </DataTrigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </Button.Style>
-                </Button>
-                <Button Margin="10" VerticalAlignment="Bottom">
-                    <Button.Style>
-                        <Style TargetType="{x:Type Button}">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate>
-                                        <Border x:Name="imageBorder" Background="{DynamicResource buttonBgrYellow}" CornerRadius="8" Width="45" Height="45">
-                                            <Image Source="pack://application:,,,/View/Resources/images/Restart.png" Width="21" Height="24" RenderOptions.BitmapScalingMode="Linear"/>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="imageBorder" Property="Background" Value="{DynamicResource buttonBgrYellowHover}"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </Button.Style>
-                </Button>
-            </StackPanel>
-            <Rectangle Fill="{DynamicResource backgroundDark}" Width="200"/>
-
+        <DockPanel DockPanel.Dock="Right">            
+            <Rectangle Fill="{DynamicResource backgroundDark}" Width="200" Margin="10 0 0 20"/>
         </DockPanel>
         
         <!-- Center Part -->
         <DockPanel>
-            <TextBlock DockPanel.Dock="Top" Text="{Binding ServerTitle}" HorizontalAlignment="Center" FontSize="30" FontFamily="{StaticResource Montserrat-Bold}" Foreground="{DynamicResource textSelected}"/>
-            
             <!-- Usage monitors -->
             <Grid DockPanel.Dock="Top" Height="60" Margin="20 15 20 0">
                 <Grid.ColumnDefinitions>
@@ -100,7 +35,7 @@
                 <Grid Margin="10 0 10 5">
                     <!-- Background -->
                     <Border Background="{DynamicResource backgroundDark}" CornerRadius="7">
-                        <DockPanel LastChildFill="False">                            
+                        <DockPanel LastChildFill="False">
                             <shapes:UsageIndicatorBackground DockPanel.Dock="Right" Fill="{Binding Path=CPUValueRaw, Converter={StaticResource PercentageToStringConverter}}" Grid.ColumnSpan="2"/>
                         </DockPanel>
                     </Border>
@@ -114,7 +49,7 @@
                             <TextBlock Text="CPU" FontSize="20"/>
                             <TextBlock Text="2 GHz" TextAlignment="Center"/>
                         </StackPanel>
-                        <TextBlock Grid.Column="1" Text="{Binding CPUValue}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 0 5 0" FontSize="20" Foreground="Black"/>
+                        <TextBlock Grid.Column="1" Text="{Binding CPUValue}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 0 5 0" FontSize="20" Foreground="{DynamicResource backgroundDark}"/>
                     </Grid>
                 </Grid>
                 <Grid Grid.Column="1" Margin="10 0 10 5">
@@ -137,7 +72,7 @@
                                 <TextBlock Text=" MB"/>
                             </StackPanel>
                         </StackPanel>
-                        <TextBlock Grid.Column="1" Text="{Binding MemValue}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 0 5 0" FontSize="20" Foreground="Black"/>
+                        <TextBlock Grid.Column="1" Text="{Binding MemValue}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 0 5 0" FontSize="20" Foreground="{DynamicResource backgroundDark}"/>
                     </Grid>
                 </Grid>
                 <Grid Grid.Column="2" Margin="10 0 10 5">
@@ -157,66 +92,14 @@
                             <TextBlock Text="DISK" FontSize="20"/>
                             <TextBlock Text="1 TB" TextAlignment="Center"/>
                         </StackPanel>
-                        <TextBlock Grid.Column="1" Text="0%" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 0 5 0" FontSize="20" Foreground="Black"/>
+                        <TextBlock Grid.Column="1" Text="0%" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 0 5 0" FontSize="20" Foreground="{DynamicResource backgroundDark}"/>
                     </Grid>
                 </Grid>
             </Grid>
-            
-            <!-- Bottom Bar -->
-            <Grid Grid.Row="2" DockPanel.Dock="Bottom" Height="70">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                
-                <!-- Adress Info -->
-                <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal"  Margin="0 0 0 15">
-                    <Border Background="{DynamicResource backgroundDark}" CornerRadius="3" Height="35">
-                        <TextBlock x:Name="AddressInfoBox" Text="{Binding AddressInfo}" VerticalAlignment="Center" FontSize="20" Margin="7"></TextBlock>
-                    </Border>
-                    <Button x:Name="CopyButton" Click="CopyIP_Click" Width="70" Margin="10 0 0 0" Style="{DynamicResource TextButton}">
-                        <TextBlock x:Name="CopyButtonText" Text="Copy" FontSize="18"/>
-                    </Button>
-                </StackPanel>
-                
-                <!-- Restart Timer -->
-                <Grid Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0 0 0 15" Visibility="{Binding RestartEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Label Content="Hours" FontSize="10" Grid.Column="1"/>
-                    <Label Content="Minutes" FontSize="10" Grid.Column="3"/>
-                    <Label Content="Seconds" FontSize="10" Grid.Column="5"/>
 
-                    <Label Content="Scheduled Restart  [" FontSize="14" Grid.Row="1" VerticalAlignment="Center"></Label>
-                    <Border Width="30" Height="30" Grid.Row="1" Grid.Column="1" Background="{DynamicResource backgroundDark}">
-                        <TextBlock Text="{Binding NextRestartHours}" FontSize="18" TextAlignment="Center"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Border>
-                    <TextBlock Text=":" FontSize="14" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <Border Width="30" Height="30" Grid.Row="1" Grid.Column="3" Background="{DynamicResource backgroundDark}">
-                        <TextBlock Text="{Binding NextRestartMinutes}" FontSize="18" TextAlignment="Center"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Border>
-                    <TextBlock Text=":" FontSize="14" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <Border Width="30" Height="30" Grid.Row="1" Grid.Column="5" Background="{DynamicResource backgroundDark}">
-                        <TextBlock Text="{Binding NextRestartSeconds}" FontSize="18" TextAlignment="Center"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Border>
-                    <TextBlock Text="]" FontSize="14" Grid.Row="1" Grid.Column="6" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                </Grid>
-            </Grid>
-            
             <!-- Console -->
             <DockPanel Grid.Row="1">
-                <Border x:Name="consoleInBorder" Margin="10 0 10 10" DockPanel.Dock="Bottom" CornerRadius="10" Background="{DynamicResource backgroundDark}" Height="30">
+                <Border x:Name="consoleInBorder" Margin="10 0 10 10" DockPanel.Dock="Bottom" CornerRadius="10" Background="{DynamicResource backgroundConsole}" Height="30">
                     <Border.Resources>
                         <helper:BindingProxy x:Key="ServerRunningBinding" Data="{Binding}"/>
                     </Border.Resources>
@@ -237,7 +120,7 @@
                         </TextBox.Style>
                     </TextBox>
                 </Border>
-                <Border Margin="10" CornerRadius="10" Background="{DynamicResource backgroundDark}">
+                <Border Margin="10" CornerRadius="10" Background="{DynamicResource backgroundConsole}">
                     <ScrollViewer x:Name="ScrollViewer" Margin="10" ScrollChanged="ScrollViewer_ScrollChanged">
                         <TextBlock FontFamily="Courier New" Foreground="{DynamicResource textTerminal}" Text="{Binding Path=ConsoleOutList, Converter={StaticResource ListToStringConverter}}" TextWrapping="Wrap"></TextBlock>
                     </ScrollViewer>

@@ -26,6 +26,7 @@ using nihilus.Logic.Persistence;
 using nihilus.View.Xaml.MainWindowFrames;
 using nihilus.Logic;
 using nihilus.Logic.RoleManagement;
+using nihilus.View.Xaml.Pages;
 using nihilus.View.Xaml2.Pages;
 using Console = System.Console;
 using Timer = System.Timers.Timer;
@@ -74,13 +75,13 @@ namespace nihilus.ViewModel
                 switch (Server.Version.Type)
                 {
                     case ServerVersion.VersionType.Vanilla:
-                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/BukkitIcon.png");
+                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/Vanilla.png");
                         break;
                     case ServerVersion.VersionType.Paper:
-                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/PaperIcon.png");
+                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/Paper.png");
                         break;
                     case ServerVersion.VersionType.Spigot:
-                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/SpigotIcon.png");
+                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/Spigot.png");
                         break;
                     default:
                         return null;
@@ -89,6 +90,31 @@ namespace nihilus.ViewModel
                 return bi3;
             }
         }
+        public ImageSource IconW
+        {
+            get
+            {
+                BitmapImage bi3 = new BitmapImage();
+                bi3.BeginInit();
+                switch (Server.Version.Type)
+                {
+                    case ServerVersion.VersionType.Vanilla:
+                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/VanillaW.png");
+                        break;
+                    case ServerVersion.VersionType.Paper:
+                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/PaperW.png");
+                        break;
+                    case ServerVersion.VersionType.Spigot:
+                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/SpigotW.png");
+                        break;
+                    default:
+                        return null;
+                }
+                bi3.EndInit();
+                return bi3;
+            }
+        }
+        
 
         public Brush IconColor
         {
@@ -96,9 +122,9 @@ namespace nihilus.ViewModel
             {
                 switch (CurrentStatus)
                 {
-                    case ServerStatus.RUNNING: return Brushes.Green;
-                    case ServerStatus.STOPPED: return Brushes.Red;
-                    case ServerStatus.STARTING: return Brushes.Yellow;
+                    case ServerStatus.RUNNING: return (Brush)new BrushConverter().ConvertFromString("#5EED80");
+                    case ServerStatus.STOPPED: return (Brush)new BrushConverter().ConvertFromString("#565B7A");
+                    case ServerStatus.STARTING: return (Brush)new BrushConverter().ConvertFromString("#EBED78");
                     default: return Brushes.White;
                 }
             }
@@ -163,8 +189,8 @@ namespace nihilus.ViewModel
             ConsoleOutList.CollectionChanged += ConsoleOutChanged;
             UpdateAddressInfo();
             Application.Current.Dispatcher.Invoke(new Action(() => ServerPage = new View.Xaml2.Pages.ServerPage(this)));
-            Application.Current.Dispatcher.Invoke(new Action(() => ConsolePage = new View.Xaml2.Pages.ConsolePage(this)));
-            //Application.Current.Dispatcher.Invoke(new Action(() => SettingsPage = new View.Xaml2.Pages.ConsolePage(this)));
+            Application.Current.Dispatcher.Invoke(new Action(() => ConsolePage = new ConsolePage(this)));
+            //Application.Current.Dispatcher.Invoke(new Action(() => SettingsPage = new View.Xaml2.Pages.SettingsPage()));
 
             WhiteList.CollectionChanged += WhiteListChanged;
             BanList.CollectionChanged += BanListChanged;

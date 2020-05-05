@@ -23,6 +23,7 @@
 
     <Style TargetType="TextBlock">
         <Setter Property="Foreground" Value="{DynamicResource textDefault}" />
+        <Setter Property="FontFamily" Value="{DynamicResource Montserrat-Medium}"/>
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Foreground" Value="{DynamicResource foregroundDisabled}"/>

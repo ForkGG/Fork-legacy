@@ -226,12 +226,12 @@
                 <ControlTemplate TargetType="{x:Type ListViewItem}">
                     <Border BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}">
                         <StackPanel>
-                            <Grid Width="200" Height="60">
-                                <Border x:Name="background" Background="Transparent" Width="206" CornerRadius="0 8 8 0" Margin="-1 0 -5 0"/>
+                            <Grid Width="250" Height="60">
+                                <Border x:Name="background" Background="Transparent" Width="256" CornerRadius="0 8 8 0" Margin="-1 0 -5 0"/>
                                 <DockPanel Panel.ZIndex="1" LastChildFill="True">
-                                    <Ellipse Margin="5 0 0 0" Width="15" Height="15" Fill="{Binding IconColor}"/>
+                                    <Ellipse Margin="10 0 0 0" Width="15" Height="15" Fill="{Binding IconColor}"/>
                                     <Border Height="40" Width="40" Background="Transparent" Margin="5 0 10 0">
-                                        <Image Source="{Binding Icon}" Width="25" Height="25" RenderOptions.BitmapScalingMode="Linear"/>
+                                        <Image x:Name="image" Source="{Binding Icon}" Width="25" Height="25" RenderOptions.BitmapScalingMode="Linear"/>
                                     </Border>
                                     <TextBlock x:Name="title" Text="{Binding Server.Name}" VerticalAlignment="Center" FontSize="20" FontFamily="{StaticResource Montserrat-SemiBold}" Foreground="{DynamicResource textUnselected}"/>
                                 </DockPanel>
@@ -242,14 +242,12 @@
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="background" Property="Background" Value="{DynamicResource tabSelected}"/>
                             <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
+                            <Setter TargetName="image" Property="Source" Value="{Binding IconW}"/>
                         </Trigger>
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsMouseOver" Value="True"/>
-                                <Condition Property="IsSelected" Value="False"/>
-                            </MultiTrigger.Conditions>
-                            <Setter TargetName="background" Property="Background" Value="{DynamicResource tabHover}"/>
-                        </MultiTrigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
+                            <Setter TargetName="image" Property="Source" Value="{Binding IconW}"/>
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

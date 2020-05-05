@@ -38,7 +38,7 @@
                                     Height="20"
                                     Margin="5"
                                     Source="/View/Resources/images/title.png"/-->
-                                <TextBlock Text="Nihilus" DockPanel.Dock="Left" Margin="10 1"/>
+                                <TextBlock Text="Fork" DockPanel.Dock="Left" Margin="10 1"/>
 
                                 <!--Menu Margin="10 0 0 0" IsMainMenu="True" Height="21" Background="{DynamicResource backgroundDefault}" WindowChrome.IsHitTestVisibleInChrome="True">
                                     <MenuItem Header="Advanced" Foreground="{DynamicResource foregroundDefault}">

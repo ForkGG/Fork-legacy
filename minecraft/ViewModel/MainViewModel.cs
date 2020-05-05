@@ -9,6 +9,7 @@ using nihilus.Annotations;
 using nihilus.Logic.ApplicationConsole;
 using nihilus.Logic.Manager;
 using nihilus.View.Xaml.Pages;
+using nihilus.View.Xaml2.Pages;
 using nihilus.xaml;
 
 namespace nihilus.ViewModel
@@ -22,6 +23,8 @@ namespace nihilus.ViewModel
         public ObservableCollection<ServerViewModel> Servers { get; }
         public ServerViewModel SelectedServer { get; set; }
         public ImportViewModel ImportViewModel { get; set; }
+        
+        public CreatePage CreatePage { get; } = new CreatePage();
         
         public CreateServerPage CreateServerPage
         {
