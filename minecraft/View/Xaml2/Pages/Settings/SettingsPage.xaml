@@ -25,7 +25,7 @@
             </DockPanel>
         </Grid>
         <Grid>
-            <Frame x:Name="mcSettings" Content="{Binding McSettingsPage}"/>
+            <Frame x:Name="mcSettings" Content="{Binding VanillaSettingsPage}"/>
             <Frame x:Name="bukkitSettings" Visibility="Hidden"/>
             <Frame x:Name="spigotSettings" Visibility="Hidden"/>
         </Grid> 
