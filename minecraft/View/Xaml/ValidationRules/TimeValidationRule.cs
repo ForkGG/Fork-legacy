@@ -2,7 +2,7 @@ using System.Globalization;
 using System.Windows.Controls;
 using nihilus.Logic.Model;
 
-namespace nihilus.xaml.ValidationRules
+namespace nihilus.View.Xaml.ValidationRules
 {
     public class TimeValidationRule : ValidationRule
     {

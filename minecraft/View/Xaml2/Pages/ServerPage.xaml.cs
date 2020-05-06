@@ -92,6 +92,12 @@ namespace nihilus.View.Xaml2.Pages
 
         private void HideAllPages()
         {
+            //Save settings, if settings is closed
+            if (settingsPage.Visibility == Visibility.Visible)
+            {
+                viewModel.UpdateSettings();
+            }
+            
             foreach (Frame frame in subPages)
             {
                 frame.Visibility = Visibility.Hidden;

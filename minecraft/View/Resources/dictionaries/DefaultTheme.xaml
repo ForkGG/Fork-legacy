@@ -4,6 +4,7 @@
     <SolidColorBrush x:Key="backgroundConsole" Color="#151622" />
     <SolidColorBrush x:Key="backgroundDarker" Color="#1B1D2D"/>
     <SolidColorBrush x:Key="backgroundDark" Color="#1F2234"/>
+    <SolidColorBrush x:Key="backgroundHover" Color="#23253A"/>
     <SolidColorBrush x:Key="backgroundDefault" Color="#272A41"/>
     <SolidColorBrush x:Key="backgroundSelected" Color="#232323"/>
     <SolidColorBrush x:Key="backgroundLight" Color="#424242" />

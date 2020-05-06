@@ -27,7 +27,7 @@ namespace nihilus.View.Xaml2.Controls
 
         public static readonly DependencyProperty IconSourceProperty = DependencyProperty.Register(
             "IconSource", typeof(ImageSource), typeof(IconButton), 
-            new PropertyMetadata(null, OnIconSourceChanged));
+            new PropertyMetadata(null));
         
         public ImageSource HoverIconSource {
             get
@@ -42,7 +42,7 @@ namespace nihilus.View.Xaml2.Controls
         
         public static readonly DependencyProperty HoverIconSourceProperty = DependencyProperty.Register(
             "HoverIconSource", typeof(ImageSource), typeof(IconButton), 
-            new PropertyMetadata(null, OnHoverIconSourceChanged));
+            new PropertyMetadata(null));
         
         public double IconWidth { get
             {
@@ -55,7 +55,7 @@ namespace nihilus.View.Xaml2.Controls
         
         public static readonly DependencyProperty IconWidthProperty = DependencyProperty.Register(
             "IconWidth", typeof(double), typeof(IconButton), 
-            new PropertyMetadata(0.0, OnIconWidthChanged));
+            new PropertyMetadata(0.0));
 
         public double IconHeight
         {
@@ -71,33 +71,11 @@ namespace nihilus.View.Xaml2.Controls
         
         public static readonly DependencyProperty IconHeightProperty = DependencyProperty.Register(
             "IconHeight", typeof(double), typeof(IconButton), 
-            new PropertyMetadata(0.0, OnIconHeightChanged));
+            new PropertyMetadata(0.0));
 
         static IconButton()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(IconButton), new FrameworkPropertyMetadata(typeof(IconButton)));
-        }
-
-        private static void OnIconSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var button = (IconButton) d;
-            button.IconSource = (ImageSource) e.NewValue;
-        }
-        private static void OnHoverIconSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var button = (IconButton) d;
-            button.HoverIconSource = (ImageSource) e.NewValue;
-        }
-        
-        private static void OnIconHeightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var button = (IconButton) d;
-            button.IconHeight = (double) e.NewValue;
-        }
-        private static void OnIconWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var button = (IconButton) d;
-            button.IconWidth = (double) e.NewValue;
         }
     }
 }

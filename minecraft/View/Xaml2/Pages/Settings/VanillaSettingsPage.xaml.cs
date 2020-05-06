@@ -34,7 +34,7 @@ namespace nihilus.View.Xaml2.Pages.Settings
 
         private void VersionChange_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!versionComboBox.SelectedItem.Equals(viewModel.Server.Version))
+            if ((bool) !versionComboBox.SelectedItem?.Equals(viewModel.Server.Version))
             {
                 VersionChangeBtn.Visibility = Visibility.Visible;
             }

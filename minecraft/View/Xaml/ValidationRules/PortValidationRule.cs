@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace nihilus.xaml.ValidationRules
+namespace nihilus.View.Xaml.ValidationRules
 {
     class PortValidationRule : ValidationRule
     {
