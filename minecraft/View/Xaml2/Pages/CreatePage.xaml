@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:nihilus.View.Xaml2.Pages"
       xmlns:controls="clr-namespace:nihilus.View.Xaml2.Controls"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="700" d:DesignWidth="1000"
       Title="CreatePage">
 
     <Page.Resources>
@@ -21,36 +21,111 @@
         
         <!-- Center Section -->
         <StackPanel Margin="10 0">
-            <Label Content="Create a server" HorizontalAlignment="Center" FontSize="30" FontFamily="{StaticResource Montserrat-Bold}" Foreground="{DynamicResource textSelected}"/>
-            <Label  Content="Choose A Server Type" Foreground="{DynamicResource textHeader}" FontFamily="{StaticResource Montserrat-SemiBold}" FontSize="23"/>
+            <TextBlock Text="Create a server" HorizontalAlignment="Center" FontSize="30" FontFamily="{StaticResource Montserrat-Bold}" Foreground="{DynamicResource textSelected}" Margin="15"/>
+            <TextBlock  Text="Choose A Server Type" Foreground="{DynamicResource textHeader}" FontFamily="{StaticResource Montserrat-SemiBold}" FontSize="23" Margin=" 5"/>
             <WrapPanel Margin="20 5" Orientation="Horizontal">
-                <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/VanillaD.png" Header="Vanilla" GroupName="serverTypes" Margin="10 0"/>
-                <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/PaperD.png" Header="Paper" GroupName="serverTypes" Margin="10 0"/>
+                <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/VanillaD.png" 
+                                                HoverIconSource="pack://application:,,,/View/Resources/images/Icons/VanillaW.png"
+                                                Header="Vanilla" GroupName="serverTypes" Margin="10 10" IsChecked="True" />
+                <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/PaperD.png" 
+                                                HoverIconSource="pack://application:,,,/View/Resources/images/Icons/PaperW.png"
+                                                 Header="Paper" GroupName="serverTypes" Margin="10 10"/>
+                <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/SpigotD.png" 
+                                                HoverIconSource="pack://application:,,,/View/Resources/images/Icons/SpigotW.png"
+                                                 Header="Spigot" GroupName="serverTypes" Margin="10 10" IsEnabled="False"/>
+                <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/BukkitD.png" 
+                                                HoverIconSource="pack://application:,,,/View/Resources/images/Icons/BukkitW.png"
+                                                 Header="Bukkit" GroupName="serverTypes" Margin="10 10" IsEnabled="False"/>
+                <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/BungeeCordD.png" 
+                                                HoverIconSource="pack://application:,,,/View/Resources/images/Icons/BungeeCordW.png"
+                                                 Header="BungeeCord" GroupName="serverTypes" Margin="10 10" IsEnabled="False"/>
+                <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/WaterfallD.png" 
+                                                HoverIconSource="pack://application:,,,/View/Resources/images/Icons/WaterfallW.png"
+                                                 Header="Waterfall" GroupName="serverTypes" Margin="10 10" IsEnabled="False"/>
             </WrapPanel>
+            <TextBlock  Text="Choose A Server Version" Foreground="{DynamicResource textHeader}" FontFamily="{StaticResource Montserrat-SemiBold}" FontSize="23" Margin="5 15 5 5"/>
+            <ComboBox Margin="25 5" SelectedIndex="0" Width="120" HorizontalAlignment="Left" ItemContainerStyle="{DynamicResource DefaultComboBoxItem}"
+                      FontFamily="{DynamicResource Montserrat-Bold}" FontSize="17" VerticalAlignment="Center" x:Name="versionComboBox"
+                      ItemsSource="{Binding VanillaServerVersions}" IsSynchronizedWithCurrentItem="True">
+            </ComboBox>
+            <TextBlock  Text="Configure Your Server" Foreground="{DynamicResource textHeader}" FontFamily="{StaticResource Montserrat-SemiBold}" FontSize="23" Margin="5 15 5 5"/>
+            <Grid Margin="25 5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <StackPanel HorizontalAlignment="Center">
+                    <DockPanel Height="40">
+                        <ComboBox DockPanel.Dock="Right" SelectedIndex="0" Width="150" HorizontalAlignment="Left" ItemContainerStyle="{DynamicResource DefaultComboBoxItem}"
+                                FontFamily="{DynamicResource Montserrat-Bold}" FontSize="17" VerticalAlignment="Center" ItemsSource="{Binding ServerSettings.Gamemodes}" 
+                                  SelectedItem="{Binding ServerSettings.CurrGamemode}">
+                        </ComboBox>
+                        <TextBlock Text="Gamemode" TextAlignment="Right" Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0"/>
+                    </DockPanel>
+                    <DockPanel  Height="40">
+                        <ComboBox DockPanel.Dock="Right" SelectedIndex="0" Width="150" HorizontalAlignment="Left" ItemContainerStyle="{DynamicResource DefaultComboBoxItem}"
+                                FontFamily="{DynamicResource Montserrat-Bold}" FontSize="17" VerticalAlignment="Center" ItemsSource="{Binding ServerSettings.Difficulties}" 
+                                  SelectedItem="{Binding ServerSettings.CurrDifficulty}">
+                        </ComboBox>
+                        <TextBlock Text="Difficulty" TextAlignment="Right" Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0"/>
+                    </DockPanel>
+                    <DockPanel Height="40">
+                        <ComboBox DockPanel.Dock="Right" SelectedIndex="0" Width="150" HorizontalAlignment="Left" ItemContainerStyle="{DynamicResource DefaultComboBoxItem}"
+                                FontFamily="{DynamicResource Montserrat-Bold}" FontSize="17" VerticalAlignment="Center" ItemsSource="{Binding ServerSettings.LevelTypes}" 
+                                  SelectedItem="{Binding ServerSettings.CurrLevelType}">
+                        </ComboBox>
+                        <TextBlock Text="Level Type" TextAlignment="Right" Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0"/>
+                    </DockPanel>
+                </StackPanel>
+                <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                    <DockPanel Height="40">
+                        <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26" Background="{DynamicResource buttonBgrDefault}">
+                            <TextBox Margin="5 0" Text="{Binding ServerSettings.MaxPlayers}" Background="{DynamicResource buttonBgrDefault}" BorderThickness="0" 
+                                     Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                     FontSize="17" Height="20"/>
+                        </Border>
+                        <TextBlock Text="Player Slots" TextAlignment="Right" Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0"/>
+                    </DockPanel>
+                    <DockPanel Height="40">
+                        <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26" Background="{DynamicResource buttonBgrDefault}">
+                            <TextBox Margin="5 0" Text="{Binding ServerSettings.ServerPort}" Background="{DynamicResource buttonBgrDefault}" BorderThickness="0" 
+                                     Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                     FontSize="17" Height="20"/>
+                        </Border>
+                        <TextBlock Text="Server Port" TextAlignment="Right" Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0"/>
+                    </DockPanel>
+                    <DockPanel Height="40">
+                        <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26" Background="{DynamicResource buttonBgrDefault}">
+                            <TextBox Margin="5 0" Text="{Binding ServerSettings.LevelSeed}" Background="{DynamicResource buttonBgrDefault}" BorderThickness="0" 
+                                     Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                     FontSize="17" Height="20"/>
+                        </Border>
+                        <TextBlock Text="Level Seed" TextAlignment="Right" Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0"/>
+                    </DockPanel>
+                </StackPanel>
+                <StackPanel Grid.Row="1" HorizontalAlignment="Center" Margin="30">
+                    <CheckBox Margin="5" IsChecked="{Binding ServerSettings.Pvp}" Content="Enable PvP" Style="{DynamicResource DefaultCheckBox}" FontSize="20"/>
+                    <CheckBox Margin="5" IsChecked="{Binding ServerSettings.SpawnNpcs}" Content="Spawn NPCs" Style="{DynamicResource DefaultCheckBox}" FontSize="20"/>
+                    <CheckBox Margin="5" IsChecked="{Binding ServerSettings.SpawnAnimals}" Content="Spawn Animals" Style="{DynamicResource DefaultCheckBox}" FontSize="20"/>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Margin="30">
+                    <CheckBox Margin="5" IsChecked="{Binding ServerSettings.Whitelist}" Content="Use Whitelist" Style="{DynamicResource DefaultCheckBox}" FontSize="20"/>
+                    <CheckBox Margin="5" IsChecked="{Binding ServerSettings.GenerateStructures}" Content="Generate Structures" Style="{DynamicResource DefaultCheckBox}" FontSize="20"/>
+                    <CheckBox Margin="5" IsChecked="{Binding ServerSettings.OnlineMode}" Content="Online Mode" Style="{DynamicResource DefaultCheckBox}" FontSize="20"/>
+                </StackPanel>
+            </Grid>
         </StackPanel>
         
         <!-- Create Button -->
         <DockPanel Grid.Column="1" LastChildFill="False">
-            <Button Margin="10" HorizontalAlignment="Center" DockPanel.Dock="Bottom">
-                <Button.Style>
-                    <Style TargetType="{x:Type Button}">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate>
-                                    <Border x:Name="imageBorder" Background="{DynamicResource buttonBgrGreen}" CornerRadius="8" Width="60" Height="60">
-                                        <Image Source="pack://application:,,,/View/Resources/images/Icons/Create.png" Width="38.4" Height="24.8" RenderOptions.BitmapScalingMode="Linear"/>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="imageBorder" Property="Background" Value="{DynamicResource buttonBgrGreenHover}"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </Button.Style>
-            </Button>
+            <controls:IconButton Margin="20 30" HorizontalAlignment="Center" DockPanel.Dock="Bottom"
+                                 Width="80" Height="80" IconWidth="48" IconHeight="31" Background="{DynamicResource buttonBgrGreen}"
+                                 IconSource="pack://application:,,,/View/Resources/images/Icons/Create.png"
+                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/CreateW.png"/>
         </DockPanel>
     </Grid>
 </Page>

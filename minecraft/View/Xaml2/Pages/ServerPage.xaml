@@ -72,20 +72,20 @@
                     </controls:IconButton>
 
                     <controls:IconButton Margin="10" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrYellow}" 
-                                         Width="55" Height="55" IconWidth="25.2" IconHeight="28.8" Visibility="Collapsed"
+                                         Width="55" Height="55" IconWidth="25.2" IconHeight="28.8" Style="{DynamicResource RestartIconButton}"
                                          IconSource="pack://application:,,,/View/Resources/images/Icons/Restart.png"
                                          HoverIconSource="pack://application:,,,/View/Resources/images/Icons/RestartW.png"/>
                 </StackPanel>
             </Grid>
             
             <StackPanel Margin="5 0 0 0" DockPanel.Dock="Left" VerticalAlignment="Center">
-                <controls:IconRadioButton Margin="10" IsChecked="True" GroupName="MenuTabs"
+                <controls:IconRadioButton Margin="10" IsChecked="True" GroupName="MenuTabs" Click="SelectTerminal"
                                           IconSource="pack://application:,,,/View/Resources/images/Icons/Terminal.png"
                                           HoverIconSource="pack://application:,,,/View/Resources/images/Icons/TerminalW.png"/>
-                <controls:IconRadioButton Margin="10" GroupName="MenuTabs"
+                <controls:IconRadioButton Margin="10" GroupName="MenuTabs" Click="SelectSettings"
                                           IconSource="pack://application:,,,/View/Resources/images/Icons/Settings.png"
                                           HoverIconSource="pack://application:,,,/View/Resources/images/Icons/SettingsW.png"/>
-                <controls:IconRadioButton Margin="10" GroupName="MenuTabs"
+                <controls:IconRadioButton Margin="10" GroupName="MenuTabs" Click="SelectFiles"
                                           IconSource="pack://application:,,,/View/Resources/images/Icons/Folder.png"
                                           HoverIconSource="pack://application:,,,/View/Resources/images/Icons/FolderW.png"/>
             </StackPanel>
@@ -98,9 +98,12 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock  Text="{Binding ServerTitle}" HorizontalAlignment="Center" FontSize="30" FontFamily="{DynamicResource Montserrat-Bold}" Foreground="{DynamicResource textSelected}"/>
             </Grid>
-            
 
-            <Frame Content="{Binding ConsolePage}" NavigationUIVisibility="Hidden"></Frame>
+            <Grid>
+                <Frame x:Name="terminalPage" Content="{Binding ConsolePage}" NavigationUIVisibility="Hidden"></Frame>
+                <Frame x:Name="settingsPage" Visibility="Hidden" Content="{Binding SettingsViewModel.SettingsPage}" NavigationUIVisibility="Hidden"></Frame>
+                <Frame x:Name="filesPage" Visibility="Hidden"/>
+            </Grid>
         </DockPanel>
     </Grid>
 </Page>

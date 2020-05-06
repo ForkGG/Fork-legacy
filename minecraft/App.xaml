@@ -16,6 +16,9 @@
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/ListViewStyles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/MenuItemStyles.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/TabControlStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/ComboBoxStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/TextBlockStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/CheckBoxStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <FontFamily x:Key="MaterialIO">View/Resources/Fonts/MaterialIcons-Regular.ttf#Material Icons</FontFamily>
             <FontFamily x:Key="Montserrat-Medium">View/Resources/Fonts/Montserrat-Medium.ttf#Montserrat Medium</FontFamily>

@@ -53,7 +53,7 @@ namespace nihilus.ViewModel
         public MainViewModel()
         {
             //Writes console to Application Console
-            Console.SetOut(ApplicationManager.ConsoleWriter);
+            //Console.SetOut(ApplicationManager.ConsoleWriter);
             
             ImportViewModel = new ImportViewModel();
             Servers = ServerManager.Instance.Servers;

@@ -79,5 +79,29 @@ namespace nihilus.Logic.Model
 
             throw new ArgumentException("Object is not a Minecraft Version");
         }
+
+        protected bool Equals(ServerVersion other)
+        {
+            return Type == other.Type && Version == other.Version && JarLink == other.JarLink;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((ServerVersion) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = (int) Type;
+                hashCode = (hashCode * 397) ^ (Version != null ? Version.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (JarLink != null ? JarLink.GetHashCode() : 0);
+                return hashCode;
+            }
+        }
     }
 }

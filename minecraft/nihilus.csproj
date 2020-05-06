@@ -163,6 +163,7 @@
     <Compile Include="ViewModel\ImportViewModel.cs" />
     <Compile Include="ViewModel\ServerViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Compile Include="View\Resources\dictionaries\WindowStyles.xaml.cs">
       <DependentUpon>WindowStyles.xaml</DependentUpon>
     </Compile>
@@ -182,6 +183,12 @@
     </Compile>
     <Compile Include="View\Xaml2\Pages\ServerPage.xaml.cs">
       <DependentUpon>ServerPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Xaml2\Pages\Settings\VanillaSettingsPage.xaml.cs">
+      <DependentUpon>VanillaSettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Xaml2\Pages\Settings\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Xaml2\Shapes\UsageIndicatorBackground.cs" />
     <Compile Include="View\Xaml\Console.xaml.cs">
@@ -214,6 +221,14 @@
     <Compile Include="View\Xaml\ValidationRules\PortValidationRule.cs" />
     <Compile Include="View\Xaml\ValidationRules\PositiveLongValidationRule.cs" />
     <Compile Include="View\Xaml\ValidationRules\TimeValidationRule.cs" />
+    <Page Include="View\Resources\dictionaries\CheckBoxStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Resources\dictionaries\ComboBoxStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Resources\dictionaries\ContextMenuStyle.xaml" />
     <Page Include="View\Resources\dictionaries\DefaultTheme.xaml">
       <SubType>Designer</SubType>
@@ -247,6 +262,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Resources\dictionaries\TextBlockStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Resources\dictionaries\WindowStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -271,6 +290,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Xaml2\Pages\ServerPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Xaml2\Pages\Settings\VanillaSettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Xaml2\Pages\Settings\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -355,6 +382,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Resources\images\close.png" />
+    <Resource Include="View\Resources\images\Icons\dudeSmall.png" />
     <Resource Include="View\Resources\images\Icons\StartW.png" />
     <Resource Include="View\Resources\images\maximize1.png" />
     <Resource Include="View\Resources\images\maximize2.png" />
@@ -379,6 +407,8 @@
     <Resource Include="favicon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="View\Resources\images\Icons\DudeHover.png" />
+    <Resource Include="View\Resources\images\Icons\dude.png" />
     <Resource Include="View\Resources\images\Icons\Paper.png" />
     <Resource Include="View\Resources\images\Icons\Spigot.png" />
     <Resource Include="View\Resources\images\paperSymbol.png" />

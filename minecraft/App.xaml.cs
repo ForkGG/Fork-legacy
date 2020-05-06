@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 using nihilus.Logic.ApplicationConsole;
@@ -34,6 +36,7 @@ namespace nihilus
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-us");
             ApplicationManager.ConsoleWriter.AppStarted();
             ErrorLogger logger = new ErrorLogger();
             base.OnStartup(e);

@@ -8,8 +8,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border CornerRadius="2"
-                        Background="{DynamicResource backgroundDarker}"
+                    <Border CornerRadius="4"
+                        Background="{DynamicResource backgroundDark}"
                         BorderThickness="0" />
                 </ControlTemplate>
             </Setter.Value>
@@ -20,7 +20,7 @@
         <Track Name="PART_Track" IsDirectionReversed="true">
             <Track.Thumb>
                 <Thumb  Style="{StaticResource ScrollBarThumb}"
-                        Margin="1,0,1,0"/>
+                        Margin="0"/>
             </Track.Thumb>
         </Track>
     </ControlTemplate>
@@ -46,7 +46,8 @@
                         Value="{StaticResource HorizontalScrollBar}" />
             </Trigger>
             <Trigger Property="Orientation" Value="Vertical">
-                <Setter Property="Width" Value="7" />
+                <Setter Property="Width" Value="30" />
+                <Setter Property="Margin" Value="0 0 0 0"/>
                 <Setter Property="Height" Value="Auto" />
                 <Setter Property="Template"
                         Value="{StaticResource VerticalScrollBar}" />                
@@ -59,22 +60,40 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
-                    <DockPanel Width="Auto">
-                        <ScrollBar Name="PART_VerticalScrollBar"                                   
-                                   DockPanel.Dock="Right"
+                    <Border CornerRadius="4">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>   
+                            <Border Grid.Column="1" Background="Transparent" Width="30"/>
+                            <Border Grid.Column="1" Panel.ZIndex="1" Background="{DynamicResource backgroundDefault}" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+                            <ScrollBar Name="PART_VerticalScrollBar"
+                                   Grid.Column="1"
+                                   Panel.ZIndex="2"
                                    Value="{TemplateBinding VerticalOffset}"
                                    Maximum="{TemplateBinding ScrollableHeight}"
                                    ViewportSize="{TemplateBinding ViewportHeight}"
                                    Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" />
-                        <ScrollBar Name="PART_HorizontalScrollBar"
-                                   Orientation="Horizontal"
-                                   DockPanel.Dock="Bottom"
-                                   Value="{TemplateBinding HorizontalOffset}"
-                                   Maximum="{TemplateBinding ScrollableWidth}"
-                                   ViewportSize="{TemplateBinding ViewportWidth}"
-                                   Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" />
-                        <ScrollContentPresenter DockPanel.Dock="Left" />
-                    </DockPanel>
+
+                            <Border Background="{DynamicResource buttonBgrDefault}" CornerRadius="3" BorderThickness="2" BorderBrush="{DynamicResource buttonBgrDefault}">
+                                <ScrollContentPresenter/>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style x:Key="ConsoleScrollViewer" TargetType="{x:Type ScrollViewer}">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                    <Border CornerRadius="4">
+                        <ScrollContentPresenter/>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

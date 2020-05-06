@@ -25,12 +25,17 @@ namespace nihilus.View.Xaml2.Pages
     public partial class ServerPage : Page
     {
         private ServerViewModel viewModel;
+        private HashSet<Frame> subPages = new HashSet<Frame>();
         
         public ServerPage(ServerViewModel viewModel)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             DataContext = this.viewModel;
+
+            subPages.Add(terminalPage);
+            subPages.Add(settingsPage);
+            subPages.Add(filesPage);
         }
 
         private async void ButtonStartStop_Click(object sender, RoutedEventArgs e)
@@ -67,6 +72,30 @@ namespace nihilus.View.Xaml2.Pages
                     CopyButton.IsEnabled = true;
                 });
             }).Start();
+        }
+        
+        private void SelectTerminal(object sender, RoutedEventArgs e)
+        {
+            HideAllPages();
+            terminalPage.Visibility = Visibility.Visible;
+        }
+        private void SelectSettings(object sender, RoutedEventArgs e)
+        {
+            HideAllPages();
+            settingsPage.Visibility = Visibility.Visible;
+        }
+        private void SelectFiles(object sender, RoutedEventArgs e)
+        {
+            HideAllPages();
+            filesPage.Visibility = Visibility.Visible;
+        }
+
+        private void HideAllPages()
+        {
+            foreach (Frame frame in subPages)
+            {
+                frame.Visibility = Visibility.Hidden;
+            }
         }
     }
 }

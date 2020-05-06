@@ -16,6 +16,11 @@ namespace nihilus.View.Xaml2.Controls
         public static readonly DependencyProperty IconSourceProperty = DependencyProperty.Register(
             "IconSource", typeof(ImageSource), typeof(ServerTypeRadioButton), new PropertyMetadata(null));
         
+        public ImageSource HoverIconSource { get; set; }
+        
+        public static readonly DependencyProperty HoverIconSourceProperty = DependencyProperty.Register(
+            "HoverIconSource", typeof(ImageSource), typeof(ServerTypeRadioButton), new PropertyMetadata(null));
+        
         public string Header { get; set; }
         
         public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register(

@@ -331,7 +331,7 @@ namespace nihilus.Logic.Model
             ResourcePack = "";
             RconPassword = "";
             LevelSeed = "";
-            Motd = "Created with Nihilus server manager";
+            Motd = @"\u00A7aPowered by Fork"+"\n"+@"\u00A77A Minecraft Server Manager";
 
             ForceGamemode = false;
             AllowNether = true;

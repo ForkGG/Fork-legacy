@@ -51,17 +51,19 @@
                 <ControlTemplate>
                     <Border x:Name="background" Background="{DynamicResource buttonBgrDefault}" Height="55" CornerRadius="8">
                         <StackPanel Orientation="Horizontal" Margin="10 0">
-                            <Image Source="{Binding IconSource, RelativeSource={RelativeSource TemplatedParent}}" Margin="5 8 5 8"/>
+                            <Image x:Name="image" Source="{Binding IconSource, RelativeSource={RelativeSource TemplatedParent}}" Margin="5 8 5 8"/>
                             <TextBlock x:Name="header" Margin="5 0 10 0" Text="{Binding Header, RelativeSource={RelativeSource TemplatedParent}}" Foreground="{DynamicResource backgroundDark}" FontSize="23" FontFamily="{StaticResource Montserrat-Bold}" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="header" Property="Foreground" Value="{DynamicResource textSelected}"/>
+                            <Setter TargetName="image" Property="Source" Value="{Binding HoverIconSource, RelativeSource={RelativeSource TemplatedParent}}"/>
                         </Trigger>
                         <Trigger Property="ToggleButton.IsChecked" Value="True">
                             <Setter TargetName="background" Property="Background" Value="{DynamicResource tabSelected}"/>
                             <Setter TargetName="header" Property="Foreground" Value="{DynamicResource textSelected}"/>
+                            <Setter TargetName="image" Property="Source" Value="{Binding HoverIconSource, RelativeSource={RelativeSource TemplatedParent}}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

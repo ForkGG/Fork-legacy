@@ -121,7 +121,7 @@
                     </TextBox>
                 </Border>
                 <Border Margin="10" CornerRadius="10" Background="{DynamicResource backgroundConsole}">
-                    <ScrollViewer x:Name="ScrollViewer" Margin="10" ScrollChanged="ScrollViewer_ScrollChanged">
+                    <ScrollViewer x:Name="ScrollViewer" Margin="10" ScrollChanged="ScrollViewer_ScrollChanged" Style="{DynamicResource ConsoleScrollViewer}">
                         <TextBlock FontFamily="Courier New" Foreground="{DynamicResource textTerminal}" Text="{Binding Path=ConsoleOutList, Converter={StaticResource ListToStringConverter}}" TextWrapping="Wrap"></TextBlock>
                     </ScrollViewer>
                 </Border>                

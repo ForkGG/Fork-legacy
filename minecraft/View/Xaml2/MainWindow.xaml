@@ -8,50 +8,57 @@
         mc:Ignorable="d" MinWidth="1080" MinHeight="400"
         Title="Nihilus" Height="720" Width="1200" Style="{StaticResource DefaultWindowV2}">
     <DockPanel Background="{DynamicResource backgroundDefault}">
-        <Grid Background="{DynamicResource backgroundDark}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="100"/>
-                <RowDefinition Height="5*"/>
-                <RowDefinition Height="1.6*" MinHeight="120"/>
-            </Grid.RowDefinitions>
-            <Grid>
-                <Image Source="pack://application:,,,/View/Resources/images/paperSymbol.png"/>
-            </Grid>
-            <Grid Grid.Row="1" VerticalAlignment="Top">
-                <StackPanel>
-                    <TextBlock Text="Server List" Margin="15 10 10 10" Foreground="{DynamicResource textUnselected}" FontSize="20" FontFamily="{StaticResource Montserrat-SemiBold}"/>
-                    <ListView Margin="0" Background="Transparent" Style="{StaticResource ServerListViewV2}"
-                              ItemContainerStyle="{StaticResource ServerListItemV2}" ItemsSource="{Binding Servers}"
-                              SelectedItem="{Binding SelectedServer}">
-                    </ListView>
-                </StackPanel>
-            </Grid>
-            <DockPanel Grid.Row="2" LastChildFill="False">
-                <Grid  DockPanel.Dock="Bottom"  Background="{DynamicResource backgroundDarker}">
-                    <Label HorizontalAlignment="Center" FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="16">
-                        <TextBlock Text="v0.5.1" Foreground="{DynamicResource textUnselected}"/>
-                    </Label>
+        <Grid>
+            <Border Margin="0 0 5 0" Background="{DynamicResource backgroundDark}"/>
+            <Grid Panel.ZIndex="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="140"/>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="1.6*" MinHeight="120"/>
+                </Grid.RowDefinitions>
+                <Grid Margin="0 0 5 0" Background="{DynamicResource backgroundDark}">
+                    <Image Margin="20" Source="pack://application:,,,/View/Resources/images/Icons/Dude.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                 </Grid>
-                <Grid DockPanel.Dock="Bottom" Margin="10">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 10">
-                        <controls:IconButton Margin="0 0 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrRed}"
-                                             Width="40" Height="40" IconWidth="21" IconHeight="24"
-                                             IconSource="pack://application:,,,/View/Resources/images/Icons/Delete.png"
-                                             HoverIconSource="pack://application:,,,/View/Resources/images/Icons/DeleteW.png"/>
-                        <controls:IconButton Margin="0 0 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrGreen}"
-                                             Width="50" Height="50" IconWidth="38.4" IconHeight="24.8"
-                                             IconSource="pack://application:,,,/View/Resources/images/Icons/Create.png"
-                                             HoverIconSource="pack://application:,,,/View/Resources/images/Icons/CreateW.png"/>
-                        <controls:IconButton Margin="0 0 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrBlue}"
-                                             Width="40" Height="40" IconWidth="21" IconHeight="24"
-                                             IconSource="pack://application:,,,/View/Resources/images/Icons/Import.png"
-                                             HoverIconSource="pack://application:,,,/View/Resources/images/Icons/ImportW.png"/>                        
+                <Grid Grid.Row="1" VerticalAlignment="Top" >
+                    <Border Background="{DynamicResource backgroundDark}" Margin="0 0 5 0"/>
+                    <StackPanel Panel.ZIndex="1">
+                        <TextBlock Text="Server List" Margin="15 10 10 10" Foreground="{DynamicResource textUnselected}" FontSize="20" 
+                               FontFamily="{StaticResource Montserrat-SemiBold}" />
+                        <ListView Margin="0" Background="{DynamicResource backgroundDark}" Style="{StaticResource ServerListViewV2}"
+                              ItemContainerStyle="{StaticResource ServerListItemV2}" ItemsSource="{Binding Servers}"
+                              SelectedItem="{Binding SelectedServer}" SelectionChanged="ServerList_SelectionChanged">
+                        </ListView>
                     </StackPanel>
                 </Grid>
-            </DockPanel>
+                <DockPanel Grid.Row="2" LastChildFill="False" Margin="0 0 5 0" Background="{DynamicResource backgroundDark}">
+                    <Grid  DockPanel.Dock="Bottom"  Background="{DynamicResource backgroundDarker}">
+                        <Label HorizontalAlignment="Center" FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="16">
+                            <TextBlock Text="v0.5.1" Foreground="{DynamicResource textUnselected}"/>
+                        </Label>
+                    </Grid>
+                    <Grid DockPanel.Dock="Bottom" Margin="10">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 10">
+                            <controls:IconButton Margin="0 0 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrRed}"
+                                             Width="40" Height="40" IconWidth="21" IconHeight="24" x:Name="DeleteButton" Click="DeleteServer_Click"
+                                             IconSource="pack://application:,,,/View/Resources/images/Icons/Delete.png"
+                                             HoverIconSource="pack://application:,,,/View/Resources/images/Icons/DeleteW.png"/>
+                            <controls:IconButton Margin="0 0 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrGreen}"
+                                             Width="50" Height="50" IconWidth="38.4" IconHeight="24.8" x:Name="CreateButton" Click="CreateServer_Click"
+                                             IconSource="pack://application:,,,/View/Resources/images/Icons/Create.png"
+                                             HoverIconSource="pack://application:,,,/View/Resources/images/Icons/CreateW.png"/>
+                            <controls:IconButton Margin="0 0 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrBlue}"
+                                             Width="40" Height="40" IconWidth="21" IconHeight="24" x:Name="ImportButton" Click="ImportServer_Click"
+                                             IconSource="pack://application:,,,/View/Resources/images/Icons/Import.png"
+                                             HoverIconSource="pack://application:,,,/View/Resources/images/Icons/ImportW.png"/>
+                        </StackPanel>
+                    </Grid>
+                </DockPanel>
+            </Grid>
         </Grid>
-        <Frame Grid.Column="1" DataContext="{Binding SelectedServer, Mode=TwoWay}"
+        <Grid>
+            <Frame x:Name="ServerPage" Grid.Column="1" DataContext="{Binding SelectedServer, Mode=TwoWay}"
                        Content="{Binding ServerPage}" NavigationUIVisibility="Hidden" />
-        <!-- Grid.Column="1" Content="{Binding CreatePage}" NavigationUIVisibility="Hidden"/-->
+            <Frame x:Name="CreatePage" Grid.Column="1" Content="{Binding CreatePage}" NavigationUIVisibility="Hidden" Visibility="Hidden"/>
+        </Grid>
     </DockPanel>
 </Window>

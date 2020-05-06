@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net;
-using System.Windows.Media.Imaging;
 using nihilus.Logic.Manager;
 using nihilus.Logic.Model;
 

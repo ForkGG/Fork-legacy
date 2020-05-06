@@ -141,7 +141,7 @@ namespace nihilus.ViewModel
         public double MemValueRaw => memValue/Server.JavaSettings.MaxRam *100;
         public Page ServerPage { get; set; }
         public Page ConsolePage { get; set; }
-        public Page SettingsPage { get; set; }
+        public SettingsViewModel SettingsViewModel { get; set; }
 
         private ICommand readConsoleIn;
 
@@ -190,7 +190,7 @@ namespace nihilus.ViewModel
             UpdateAddressInfo();
             Application.Current.Dispatcher.Invoke(new Action(() => ServerPage = new View.Xaml2.Pages.ServerPage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => ConsolePage = new ConsolePage(this)));
-            //Application.Current.Dispatcher.Invoke(new Action(() => SettingsPage = new View.Xaml2.Pages.SettingsPage()));
+            Application.Current.Dispatcher.Invoke(new Action(() => SettingsViewModel = new SettingsViewModel(Server)));
 
             WhiteList.CollectionChanged += WhiteListChanged;
             BanList.CollectionChanged += BanListChanged;

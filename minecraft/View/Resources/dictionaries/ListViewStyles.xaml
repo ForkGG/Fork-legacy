@@ -196,12 +196,11 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ListView">
                     <Border Name="Border" BorderThickness="0">
-                        <ItemsPresenter/>
+                        <ScrollViewer>
+                            <ItemsPresenter/>
+                        </ScrollViewer>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsGrouping" Value="True">
-                            <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
-                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -218,7 +217,7 @@
             <FontFamily x:Key="Montserrat-SemiBold">pack://application:,,,/View/Resources/Fonts/Montserrat-SemiBold.ttf#Montserrat SemiBold</FontFamily>
         </Style.Resources>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="Background" Value="{x:Null}"/>
+        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>
         <Setter Property="Margin" Value="0 5 0 2"/>
         <Setter Property="Template">
@@ -227,7 +226,7 @@
                     <Border BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}">
                         <StackPanel>
                             <Grid Width="250" Height="60">
-                                <Border x:Name="background" Background="Transparent" Width="256" CornerRadius="0 8 8 0" Margin="-1 0 -5 0"/>
+                                <Border x:Name="background" Background="Transparent" Width="251" CornerRadius="0 8 8 0" Margin="-1 0 0 0"/>
                                 <DockPanel Panel.ZIndex="1" LastChildFill="True">
                                     <Ellipse Margin="10 0 0 0" Width="15" Height="15" Fill="{Binding IconColor}"/>
                                     <Border Height="40" Width="40" Background="Transparent" Margin="5 0 10 0">
@@ -247,6 +246,71 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
                             <Setter TargetName="image" Property="Source" Value="{Binding IconW}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- SettingsList template -->
+    <Style x:Key="SettingsListView" TargetType="{x:Type ListView}">
+        <Setter Property="Background" Value="{DynamicResource backgroundDefault}"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="10,10,10,10"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListView">
+                    <Border Name="Border" BorderThickness="0">
+                        <ScrollViewer>
+                            <ItemsPresenter/>
+                        </ScrollViewer>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Resources>
+            <!-- Makes selection stay when focus lost (for context menu)-->
+            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Green"/>
+        </Style.Resources>
+    </Style>
+
+    <Style x:Key="SettingsListItem" TargetType="{x:Type ListViewItem}">
+        <Style.Resources>
+            <FontFamily x:Key="Montserrat-SemiBold">pack://application:,,,/View/Resources/Fonts/Montserrat-SemiBold.ttf#Montserrat SemiBold</FontFamily>
+        </Style.Resources>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>
+        <Setter Property="Margin" Value="0 5 0 2"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                    <Border BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}">
+                        <StackPanel>
+                            <Grid Width="250" Height="60">
+                                <Border x:Name="background" Background="Transparent" Width="250" CornerRadius="8 0 0 8" Margin="0 0 0 0"/>
+                                <DockPanel Panel.ZIndex="1" LastChildFill="True">                                    
+                                    <TextBlock Margin="20 0 0 0" x:Name="title" Text="{TemplateBinding Content}" VerticalAlignment="Center" FontSize="16" FontFamily="{StaticResource Montserrat-SemiBold}" Foreground="{DynamicResource textUnselected}"/>
+                                </DockPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="background" Property="Background" Value="{DynamicResource tabSelected}"/>
+                            <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
