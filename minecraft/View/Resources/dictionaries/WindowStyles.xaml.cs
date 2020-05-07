@@ -6,7 +6,7 @@ namespace nihilus
 {
     public partial class WindowStyles : ResourceDictionary
     {
-        private Console Console = new Console();
+        //private Console Console = new Console();
         
         private void BtnCloseClick(object sender, RoutedEventArgs e)
         {
@@ -35,7 +35,7 @@ namespace nihilus
 
         private void BtnShowConsoleClick(object sender, RoutedEventArgs e)
         {
-            Console.Show();
+            //Console.Show();
         }
 
         public static Window GetParentWindow(DependencyObject child)

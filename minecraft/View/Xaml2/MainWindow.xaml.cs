@@ -50,7 +50,14 @@ namespace nihilus.View.Xaml2
         }
         private void ImportServer_Click(object sender, RoutedEventArgs e)
         {
-            
+            if (ImportPage.Visibility == Visibility.Hidden)
+            {
+                OpenImportServer();
+            }
+            else
+            {
+                CloseImportServer();
+            }
         }
 
         private void OnMainWindowClose(object sender, CancelEventArgs e)
@@ -76,7 +83,7 @@ namespace nihilus.View.Xaml2
 
         private void CloseCreateServer()
         {
-            //Open createServer Frame
+            //Close createServer Frame
             ServerPage.Visibility = Visibility.Visible;
             CreatePage.Visibility = Visibility.Hidden;
             
@@ -89,12 +96,69 @@ namespace nihilus.View.Xaml2
             CreateButton.IconSource = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/Create.png"));
             CreateButton.HoverIconSource = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/CreateW.png"));
         }
+        
+        private void OpenImportServer()
+        {
+            //Open importServer Frame
+            ServerPage.Visibility = Visibility.Hidden;
+            ImportPage.Visibility = Visibility.Visible;
+            
+            //Change Buttons
+            DeleteButton.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
+            DeleteButton.IsEnabled = false;
+            
+            CreateButton.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
+            CreateButton.IsEnabled = false;
+
+            ImportButton.Background = (Brush) Application.Current.FindResource("buttonBgrRed");
+            ImportButton.IconSource = new BitmapImage(new Uri(@"pack://application:,,,/View/Resources/images/Icons/Cancel.png", UriKind.Absolute));
+            ImportButton.HoverIconSource = new BitmapImage(new Uri(@"pack://application:,,,/View/Resources/images/Icons/CancelW.png", UriKind.Absolute));
+            
+            ImportButton.Height = CreateButton.Height;
+            ImportButton.IconHeight = CreateButton.IconHeight;
+            ImportButton.Width = CreateButton.Width;
+            ImportButton.IconWidth = CreateButton.IconWidth;
+            CreateButton.Height = DeleteButton.Height;
+            CreateButton.IconHeight = DeleteButton.IconHeight *1.2;
+            CreateButton.Width = DeleteButton.Width;
+            CreateButton.IconWidth = DeleteButton.IconWidth *1.2;
+        }
+
+        private void CloseImportServer()
+        {
+            //Close importServer Frame
+            ServerPage.Visibility = Visibility.Visible;
+            ImportPage.Visibility = Visibility.Hidden;
+            
+            //Change Buttons
+            DeleteButton.Background = (Brush) Application.Current.FindResource("buttonBgrRed");
+            DeleteButton.IsEnabled = true;
+            CreateButton.Background = (Brush) Application.Current.FindResource("buttonBgrGreen");
+            CreateButton.IsEnabled = true;
+            ImportButton.Background = (Brush) Application.Current.FindResource("buttonBgrBlue");
+            ImportButton.IconSource = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/Import.png"));
+            ImportButton.HoverIconSource = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/ImportW.png"));
+
+            CreateButton.Height = ImportButton.Height;
+            CreateButton.IconHeight = ImportButton.IconHeight;
+            CreateButton.Width = ImportButton.Width;
+            CreateButton.IconWidth = ImportButton.IconWidth;
+            ImportButton.Height = DeleteButton.Height;
+            ImportButton.IconHeight = DeleteButton.IconHeight;
+            ImportButton.Width = DeleteButton.Width;
+            ImportButton.IconWidth = DeleteButton.IconWidth;
+        }
 
         private void ServerList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CreatePage.Visibility == Visibility.Visible)
             {
                 CloseCreateServer();
+            }
+
+            if (ImportPage.Visibility == Visibility.Visible)
+            {
+                CloseImportServer();
             }
         }
     }

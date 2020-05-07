@@ -181,6 +181,9 @@
     <Compile Include="View\Xaml2\Pages\CreatePage.xaml.cs">
       <DependentUpon>CreatePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Xaml2\Pages\ImportPage.xaml.cs">
+      <DependentUpon>ImportPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Xaml2\Pages\ServerPage.xaml.cs">
       <DependentUpon>ServerPage.xaml</DependentUpon>
     </Compile>
@@ -191,33 +194,9 @@
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Xaml2\Shapes\UsageIndicatorBackground.cs" />
-    <Compile Include="View\Xaml\Console.xaml.cs">
-      <DependentUpon>Console.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\Xaml\Converter\BoolToVisibilityConverter.cs" />
     <Compile Include="View\Xaml\Converter\PercentageToColorConverter.cs" />
     <Compile Include="View\Xaml\Converter\SimpleTimeToStringConverter.cs" />
-    <Compile Include="View\Xaml\MainWindowFrames\ServerPage.xaml.cs">
-      <DependentUpon>ServerPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Xaml\MainWindowFrames\StartPage.xaml.cs">
-      <DependentUpon>StartPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Xaml\Pages\CreateServerPage.xaml.cs">
-      <DependentUpon>CreateServerPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Xaml\Pages\ImportPages\ImportPage.xaml.cs">
-      <DependentUpon>ImportPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Xaml\Pages\ImportPages\ImportServerPage.xaml.cs">
-      <DependentUpon>ImportServerPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Xaml\Pages\ImportPages\ImportWorldPage.xaml.cs">
-      <DependentUpon>ImportWorldPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Xaml\Pages\SettingsPage.xaml.cs">
-      <DependentUpon>SettingsPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\Xaml\ValidationRules\PortValidationRule.cs" />
     <Compile Include="View\Xaml\ValidationRules\PositiveLongValidationRule.cs" />
     <Compile Include="View\Xaml\ValidationRules\TimeValidationRule.cs" />
@@ -301,11 +280,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Xaml\Console.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Xaml\MainWindow.xaml" />
     <Compile Include="Logic\Manager\ServerManager.cs" />
     <Compile Include="Logic\Manager\VersionManager.cs" />
     <Compile Include="Logic\Manager\WebRequestManager.cs" />
@@ -320,33 +294,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="View\Xaml\Converter\ListToStringConverter.cs" />
-    <Compile Include="View\Xaml\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-    </Compile>
-    <Page Include="View\Xaml\MainWindowFrames\ServerPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Xaml\MainWindowFrames\StartPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Xaml\Pages\ImportPages\ImportPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Xaml\Pages\ImportPages\ImportServerPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Xaml\Pages\ImportPages\ImportWorldPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Xaml\Pages\SettingsPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -407,6 +354,7 @@
     <Resource Include="favicon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="View\Xaml2\Pages\ImportPage.xaml" />
     <Resource Include="View\Resources\images\Icons\DudeHover.png" />
     <Resource Include="View\Resources\images\Icons\dude.png" />
     <Resource Include="View\Resources\images\Icons\Paper.png" />
@@ -451,7 +399,6 @@
     <Resource Include="View\Resources\images\Icons\WaterfallW.png" />
     <Content Include="View\Resources\images\DeafultHead.png" />
     <Resource Include="View\Resources\images\ImportServer.png" />
-    <Page Include="View\Xaml\Pages\CreateServerPage.xaml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Fody.5.0.6\build\Fody.targets" Condition="Exists('packages\Fody.5.0.6\build\Fody.targets')" />

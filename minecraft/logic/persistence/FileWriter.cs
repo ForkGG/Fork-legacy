@@ -43,7 +43,7 @@ namespace nihilus.Logic.Persistence
             lines.Add(String.Format("#{0:ddd MMM dd HH:mm:ss yyyy}",dt));
             foreach (var setting in serverSettings.Keys)
             {
-                lines.Add(setting+"="+serverSettings[setting].Replace("\n","\\n").Replace("\r","\\r"));
+                lines.Add(setting+"="+serverSettings[setting].Replace("\n","\\n").Replace("\r",""));
             }
 
             File.WriteAllLines(Path.Combine(folderPath,"server.properties"), lines, Encoding.UTF8);

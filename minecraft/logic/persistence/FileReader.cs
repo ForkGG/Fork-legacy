@@ -24,7 +24,7 @@ namespace nihilus.Logic.Persistence
                         if (!line.StartsWith("#"))
                         {
                             string[] args = line.Split('=');
-                            serverSettings.Add(args[0],args[1].Replace("\\n","\n").Replace("\\r","\r"));
+                            serverSettings.Add(args[0],args[1].Replace("\\n","\n"));
                         }
                     }
                 }

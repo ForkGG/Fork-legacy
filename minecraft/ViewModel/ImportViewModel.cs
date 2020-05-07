@@ -6,8 +6,6 @@ using System.Windows.Controls;
 using nihilus.Logic.ImportLogic;
 using nihilus.Logic.Manager;
 using nihilus.Logic.Model;
-using nihilus.View.Xaml.Pages;
-using nihilus.View.Xaml.Pages.ImportPages;
 
 namespace nihilus.ViewModel
 {
@@ -24,9 +22,6 @@ namespace nihilus.ViewModel
         public string CopyProgressReadable { get; set; }
         public bool CopyCompleted { get; set; }
 
-        public event EventHandler ImportNextEvent;
-        public event EventHandler ImportPreviousEvent;
-        public event EventHandler ImportCloseEvent;
 
         /// <summary>
         /// Constructor
@@ -37,11 +32,6 @@ namespace nihilus.ViewModel
             VanillaServerVersions = VersionManager.Instance.VanillaVersions;
             PaperVersions = VersionManager.Instance.PaperVersions;
             SpigotServerVersions = VersionManager.Instance.SpigotVersions;
-            ServerSettings = new ServerSettings(ServerManager.Instance.NextDefaultServerName());
-        }
-
-        public void RegenerateServerSettings()
-        {
             ServerSettings = new ServerSettings(ServerManager.Instance.NextDefaultServerName());
         }
 
@@ -62,19 +52,6 @@ namespace nihilus.ViewModel
         {
             CopyProgress = (double)e.FilesCopied / (double)e.FilesToCopy *100;
             CopyProgressReadable = Math.Round(CopyProgress, 0) + "%";
-        }
-
-        public void RaiseImportNextEvent(object sender, EventArgs e)
-        {
-            ImportNextEvent?.Invoke(sender, e);
-        }
-        public void RaiseImportPreviousEvent(object sender, EventArgs e)
-        {
-            ImportPreviousEvent?.Invoke(sender, e);
-        }
-        public void RaiseImportCloseEvent(object sender, EventArgs e)
-        {
-            ImportCloseEvent?.Invoke(sender, e);
         }
     }
 }

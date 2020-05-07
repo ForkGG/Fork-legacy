@@ -26,13 +26,16 @@
             <WrapPanel Margin="20 5" Orientation="Horizontal">
                 <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/VanillaD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/VanillaW.png"
-                                                Header="Vanilla" GroupName="serverTypes" Margin="10 10" IsChecked="True" />
+                                                Header="Vanilla" GroupName="serverTypes" Margin="10 10" IsChecked="True" 
+                                                Click="ServerTypeVanilla_Click"/>
                 <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/PaperD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/PaperW.png"
-                                                 Header="Paper" GroupName="serverTypes" Margin="10 10"/>
+                                                 Header="Paper" GroupName="serverTypes" Margin="10 10"
+                                                Click="ServerTypePaper_Click"/>
                 <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/SpigotD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/SpigotW.png"
-                                                 Header="Spigot" GroupName="serverTypes" Margin="10 10" IsEnabled="False"/>
+                                                 Header="Spigot" GroupName="serverTypes" Margin="10 10" IsEnabled="False"
+                                                Click="ServerTypeSpigot_Click"/>
                 <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/BukkitD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/BukkitW.png"
                                                  Header="Bukkit" GroupName="serverTypes" Margin="10 10" IsEnabled="False"/>

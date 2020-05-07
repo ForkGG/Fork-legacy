@@ -59,6 +59,7 @@
             <Frame x:Name="ServerPage" Grid.Column="1" DataContext="{Binding SelectedServer, Mode=TwoWay}"
                        Content="{Binding ServerPage}" NavigationUIVisibility="Hidden" />
             <Frame x:Name="CreatePage" Grid.Column="1" Content="{Binding CreatePage}" NavigationUIVisibility="Hidden" Visibility="Hidden"/>
+            <Frame x:Name="ImportPage" Grid.Column="1" Content="{Binding ImportPage}" NavigationUIVisibility="Hidden" Visibility="Hidden"/>
         </Grid>
     </DockPanel>
 </Window>

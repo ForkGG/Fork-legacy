@@ -8,47 +8,23 @@ using System.Windows.Controls;
 using nihilus.Annotations;
 using nihilus.Logic.ApplicationConsole;
 using nihilus.Logic.Manager;
-using nihilus.View.Xaml.Pages;
 using nihilus.View.Xaml2.Pages;
-using nihilus.xaml;
 
 namespace nihilus.ViewModel
 {
     public sealed class MainViewModel : INotifyPropertyChanged
     {
-        private CreateServerPage createServerPage;
         private ImportPage importPage;
 
-        public MainWindow MainWindow { get; set; }
+        //public MainWindow MainWindow { get; set; }
+        
         public ObservableCollection<ServerViewModel> Servers { get; }
         public ServerViewModel SelectedServer { get; set; }
         public ImportViewModel ImportViewModel { get; set; }
         
         public CreatePage CreatePage { get; } = new CreatePage();
+        public ImportPage ImportPage { get; } = new ImportPage();
         
-        public CreateServerPage CreateServerPage
-        {
-            get
-            {
-                if (createServerPage == null)
-                {
-                    GenerateCreateServerPage();
-                }
-                return createServerPage;
-            }
-        }
-        
-        public ImportPage ImportPage
-        {
-            get
-            {
-                if (importPage == null)
-                {
-                    GenerateImportPage();
-                }
-                return importPage;
-            }
-        }
 
         public MainViewModel()
         {
@@ -62,37 +38,9 @@ namespace nihilus.ViewModel
             SelectedServer = Servers[0];
         }
 
-        private void GenerateCreateServerPage()
-        {
-            createServerPage = new CreateServerPage();
-            createServerPage.CreateServerCloseEvent += HandleCreateServerClose;
-            createServerPage.CreateServerCloseEvent += MainWindow.HandleCreateServerPageClose;
-            raisePropertyChanged(nameof(CreateServerPage));
-        }
-        
-        private void GenerateImportPage()
-        {
-            ImportViewModel.RegenerateServerSettings();
-            importPage = new ImportPage(ImportViewModel);
-            ImportViewModel.ImportCloseEvent += HandleImportClose;
-            ImportViewModel.ImportCloseEvent += MainWindow.HandleImportPageClose;
-            ImportViewModel.ImportNextEvent += MainWindow.HandleImportPageNext;
-            ImportViewModel.ImportPreviousEvent += MainWindow.HandleImportPagePrevious;
-            raisePropertyChanged(nameof(ImportPage));
-        }
-
         private void ServerListChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             raisePropertyChanged(nameof(Servers));
-        }
-
-        private void HandleCreateServerClose(object sender, EventArgs e)
-        {
-            GenerateCreateServerPage();
-        }
-        private void HandleImportClose(object sender, EventArgs e)
-        {
-            GenerateImportPage();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

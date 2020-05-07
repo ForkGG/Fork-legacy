@@ -18,8 +18,8 @@
                     <ListView Margin="0" Background="{DynamicResource backgroundDark}" Style="{DynamicResource SettingsListView}"
                               ItemContainerStyle="{DynamicResource SettingsListItem}" >
                         <ListViewItem Content="server.properties" IsSelected="True" Selected="SelectMCSettings"/>
-                        <ListViewItem Content="bukkit.yml" Selected="SelectBukkitSettings"/>
-                        <ListViewItem Content="spigot.yml" Selected="SelectSpigotSettings"/>
+                        <ListViewItem Content="bukkit.yml" IsEnabled="True" Selected="SelectBukkitSettings"/>
+                        <ListViewItem Content="spigot.yml" IsEnabled="False" Selected="SelectSpigotSettings"/>
                     </ListView>
                 </StackPanel>
             </DockPanel>

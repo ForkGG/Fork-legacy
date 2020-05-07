@@ -16,7 +16,7 @@ namespace nihilus.View.Xaml.Converter
                 throw new InvalidOperationException("Target of conversion must be string");
             }
             List<string> strings = new List<string>((ObservableCollection<string>)value);
-            string returnString = String.Join("\r\n",strings);
+            string returnString = String.Join("\n",strings);
 
             return returnString;
         }
