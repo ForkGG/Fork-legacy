@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
+using Brush = System.Windows.Media.Brush;
 using Button = System.Windows.Controls.Button;
 
 namespace nihilus.View.Xaml2.Controls
@@ -73,21 +74,21 @@ namespace nihilus.View.Xaml2.Controls
             "IconHeight", typeof(double), typeof(IconButton), 
             new PropertyMetadata(0.0));
         
-        public bool UseDefaultBackground
+        public Brush HoverBackground
         {
             get
             {
-                return (bool) GetValue(UseDefaultBackgroundProperty);
+                return (Brush) GetValue(HoverBackgroundProperty);
             }
             set
             {
-                SetValue(UseDefaultBackgroundProperty, value);
+                SetValue(HoverBackgroundProperty, value);
             } 
         }
         
-        public static readonly DependencyProperty UseDefaultBackgroundProperty = DependencyProperty.Register(
-            "UseDefaultBackground", typeof(bool), typeof(IconButton), 
-            new PropertyMetadata(false));
+        public static readonly DependencyProperty HoverBackgroundProperty = DependencyProperty.Register(
+            "HoverBackground", typeof(Brush), typeof(IconButton), 
+            new PropertyMetadata(null));
 
         static IconButton()
         {

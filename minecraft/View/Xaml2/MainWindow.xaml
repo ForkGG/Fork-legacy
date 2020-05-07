@@ -17,7 +17,18 @@
                     <RowDefinition Height="1.6*" MinHeight="120"/>
                 </Grid.RowDefinitions>
                 <Grid Margin="0 0 5 0" Background="{DynamicResource backgroundDark}">
-                    <Image Margin="20" Source="pack://application:,,,/View/Resources/images/Icons/Dude.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                    <Image Margin="20" RenderOptions.BitmapScalingMode="HighQuality">
+                        <Image.Style>
+                            <Style TargetType="Image">
+                                <Setter Property="Source" Value="pack://application:,,,/View/Resources/images/Icons/Dude.png"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Source" Value="pack://application:,,,/View/Resources/images/Icons/DudeHover.png"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
                 </Grid>
                 <Grid Grid.Row="1" VerticalAlignment="Center" >
                     <Border Background="{DynamicResource backgroundDark}" Margin="0 0 5 0"/>
@@ -43,16 +54,19 @@
                     </Grid>
                     <Grid DockPanel.Dock="Bottom" Margin="10">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 10">
-                            <controls:IconButton Margin="0 0 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrRed}"
+                            <controls:IconButton Margin="0 0 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrDefault}"
                                              Width="40" Height="40" IconWidth="21" IconHeight="24" x:Name="DeleteButton" Click="DeleteServer_Click"
                                              IconSource="pack://application:,,,/View/Resources/images/Icons/Delete.png"
-                                             HoverIconSource="pack://application:,,,/View/Resources/images/Icons/DeleteW.png"/>
-                            <controls:IconButton Margin="0 0 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrGreen}"
+                                             HoverIconSource="pack://application:,,,/View/Resources/images/Icons/DeleteW.png"
+                                             HoverBackground="{DynamicResource buttonBgrRed}"/>
+                            <controls:IconButton Margin="0 0 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrDefault}"
                                              Width="50" Height="50" IconWidth="38.4" IconHeight="24.8" x:Name="CreateButton" Click="CreateServer_Click"
                                              IconSource="pack://application:,,,/View/Resources/images/Icons/Create.png"
-                                             HoverIconSource="pack://application:,,,/View/Resources/images/Icons/CreateW.png"/>
-                            <controls:IconButton Margin="0 0 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrBlue}"
-                                             Width="40" Height="40" IconWidth="21" IconHeight="24" x:Name="ImportButton" Click="ImportServer_Click"
+                                             HoverIconSource="pack://application:,,,/View/Resources/images/Icons/CreateW.png"
+                                             HoverBackground="{DynamicResource buttonBgrGreen}"/>
+                            <controls:IconButton Margin="0 0 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrDefault}"
+                                             HoverBackground="{DynamicResource buttonBgrBlue}" Width="40" Height="40" IconWidth="21" IconHeight="24" 
+                                             x:Name="ImportButton" Click="ImportServer_Click"
                                              IconSource="pack://application:,,,/View/Resources/images/Icons/Import.png"
                                              HoverIconSource="pack://application:,,,/View/Resources/images/Icons/ImportW.png"/>
                         </StackPanel>

@@ -82,9 +82,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Border x:Name="imageBorder" Background="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}" CornerRadius="8" 
-                            Width="{Binding Width, RelativeSource={RelativeSource TemplatedParent}}" 
-                            Height="{Binding Height, RelativeSource={RelativeSource TemplatedParent}}">
+                    <Border x:Name="imageBorder" Background="{TemplateBinding Background}" CornerRadius="8" 
+                            Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
                         <Image x:Name="image" Source="{Binding IconSource, RelativeSource={RelativeSource TemplatedParent}}" 
                                Width="{Binding IconWidth, RelativeSource={RelativeSource TemplatedParent}}"
                                Height="{Binding IconHeight, RelativeSource={RelativeSource TemplatedParent}}" 
@@ -93,6 +92,7 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="image" Property="Source" Value="{Binding HoverIconSource, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <Setter TargetName="imageBorder" Property="Background" Value="{Binding HoverBackground, RelativeSource={RelativeSource TemplatedParent}}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
