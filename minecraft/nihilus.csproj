@@ -354,6 +354,10 @@
     <Resource Include="favicon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="View\Resources\images\Icons\Plugins.png" />
+    <Resource Include="View\Resources\images\Icons\PluginsW.png" />
+    <Resource Include="View\Resources\images\Icons\World.png" />
+    <Resource Include="View\Resources\images\Icons\WorldW.png" />
     <Page Include="View\Xaml2\Pages\ImportPage.xaml" />
     <Resource Include="View\Resources\images\Icons\DudeHover.png" />
     <Resource Include="View\Resources\images\Icons\dude.png" />
@@ -374,8 +378,6 @@
     <Resource Include="View\Resources\images\Icons\CreateW.png" />
     <Resource Include="View\Resources\images\Icons\Delete.png" />
     <Resource Include="View\Resources\images\Icons\DeleteW.png" />
-    <Resource Include="View\Resources\images\Icons\Folder.png" />
-    <Resource Include="View\Resources\images\Icons\FolderW.png" />
     <Resource Include="View\Resources\images\Icons\Import.png" />
     <Resource Include="View\Resources\images\Icons\ImportW.png" />
     <Resource Include="View\Resources\images\Icons\PaperD.png" />

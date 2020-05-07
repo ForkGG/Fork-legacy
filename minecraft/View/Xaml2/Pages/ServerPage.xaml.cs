@@ -35,7 +35,8 @@ namespace nihilus.View.Xaml2.Pages
 
             subPages.Add(terminalPage);
             subPages.Add(settingsPage);
-            subPages.Add(filesPage);
+            subPages.Add(worldsPage);
+            subPages.Add(pluginsPage);
         }
 
         private async void ButtonStartStop_Click(object sender, RoutedEventArgs e)
@@ -84,10 +85,16 @@ namespace nihilus.View.Xaml2.Pages
             HideAllPages();
             settingsPage.Visibility = Visibility.Visible;
         }
-        private void SelectFiles(object sender, RoutedEventArgs e)
+        private void SelectWorlds(object sender, RoutedEventArgs e)
         {
             HideAllPages();
-            filesPage.Visibility = Visibility.Visible;
+            worldsPage.Visibility = Visibility.Visible;
+        }
+        
+        private void SelectPlugins(object sender, RoutedEventArgs e)
+        {
+            HideAllPages();
+            pluginsPage.Visibility = Visibility.Visible;
         }
 
         private void HideAllPages()

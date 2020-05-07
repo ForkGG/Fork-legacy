@@ -72,6 +72,22 @@ namespace nihilus.View.Xaml2.Controls
         public static readonly DependencyProperty IconHeightProperty = DependencyProperty.Register(
             "IconHeight", typeof(double), typeof(IconButton), 
             new PropertyMetadata(0.0));
+        
+        public bool UseDefaultBackground
+        {
+            get
+            {
+                return (bool) GetValue(UseDefaultBackgroundProperty);
+            }
+            set
+            {
+                SetValue(UseDefaultBackgroundProperty, value);
+            } 
+        }
+        
+        public static readonly DependencyProperty UseDefaultBackgroundProperty = DependencyProperty.Register(
+            "UseDefaultBackground", typeof(bool), typeof(IconButton), 
+            new PropertyMetadata(false));
 
         static IconButton()
         {

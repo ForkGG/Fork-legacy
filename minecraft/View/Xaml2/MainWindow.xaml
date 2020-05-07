@@ -19,7 +19,7 @@
                 <Grid Margin="0 0 5 0" Background="{DynamicResource backgroundDark}">
                     <Image Margin="20" Source="pack://application:,,,/View/Resources/images/Icons/Dude.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                 </Grid>
-                <Grid Grid.Row="1" VerticalAlignment="Top" >
+                <Grid Grid.Row="1" VerticalAlignment="Center" >
                     <Border Background="{DynamicResource backgroundDark}" Margin="0 0 5 0"/>
                     <Grid Panel.ZIndex="1">
                         <Grid.RowDefinitions>
