@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
     <Style x:Key="ScrollBarThumb" TargetType="{x:Type Thumb}">
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -8,8 +9,24 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border CornerRadius="4"
+                    <Border CornerRadius="2"
                         Background="{DynamicResource backgroundDark}"
+                        BorderThickness="0" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ScrollBarThumbLight" TargetType="{x:Type Thumb}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="IsTabStop" Value="false" />
+        <Setter Property="Focusable" Value="false" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Border CornerRadius="2"
+                        Background="{DynamicResource buttonBgrDefault}"
                         BorderThickness="0" />
                 </ControlTemplate>
             </Setter.Value>
@@ -25,6 +42,15 @@
         </Track>
     </ControlTemplate>
 
+    <ControlTemplate x:Key="VerticalScrollBarLight" TargetType="{x:Type ScrollBar}">
+        <Track Name="PART_Track" IsDirectionReversed="true">
+            <Track.Thumb>
+                <Thumb  Style="{StaticResource ScrollBarThumbLight}"
+                        Margin="0"/>
+            </Track.Thumb>
+        </Track>
+    </ControlTemplate>
+
     <ControlTemplate x:Key="HorizontalScrollBar" TargetType="{x:Type ScrollBar}">
         <Track Name="PART_Track"
                 IsDirectionReversed="False">
@@ -35,7 +61,17 @@
         </Track>
     </ControlTemplate>
 
-    <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
+    <ControlTemplate x:Key="HorizontalScrollBarLight" TargetType="{x:Type ScrollBar}">
+        <Track Name="PART_Track"
+                IsDirectionReversed="False">
+            <Track.Thumb>
+                <Thumb Style="{StaticResource ScrollBarThumbLight}"
+                        Margin="0,1,0,1"/>
+            </Track.Thumb>
+        </Track>
+    </ControlTemplate>
+
+    <Style x:Key="BigScrollBar" TargetType="{x:Type ScrollBar}">
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
         <Style.Triggers>
@@ -51,6 +87,46 @@
                 <Setter Property="Height" Value="Auto" />
                 <Setter Property="Template"
                         Value="{StaticResource VerticalScrollBar}" />                
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Style.Triggers>
+            <Trigger Property="Orientation" Value="Horizontal">
+                <Setter Property="Width" Value="Auto" />
+                <Setter Property="Height" Value="7" />
+                <Setter Property="Template"
+                        Value="{StaticResource HorizontalScrollBar}" />
+            </Trigger>
+            <Trigger Property="Orientation" Value="Vertical">
+                <Setter Property="Width" Value="7" />
+                <Setter Property="Margin" Value="0 0 0 0"/>
+                <Setter Property="Height" Value="Auto" />
+                <Setter Property="Template"
+                        Value="{StaticResource VerticalScrollBar}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="DefaultScrollBarLight" TargetType="{x:Type ScrollBar}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Style.Triggers>
+            <Trigger Property="Orientation" Value="Horizontal">
+                <Setter Property="Width" Value="Auto" />
+                <Setter Property="Height" Value="7" />
+                <Setter Property="Template"
+                        Value="{StaticResource HorizontalScrollBarLight}" />
+            </Trigger>
+            <Trigger Property="Orientation" Value="Vertical">
+                <Setter Property="Width" Value="7" />
+                <Setter Property="Margin" Value="0 0 0 0"/>
+                <Setter Property="Height" Value="Auto" />
+                <Setter Property="Template"
+                        Value="{StaticResource VerticalScrollBarLight}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -74,7 +150,8 @@
                                    Value="{TemplateBinding VerticalOffset}"
                                    Maximum="{TemplateBinding ScrollableHeight}"
                                    ViewportSize="{TemplateBinding ViewportHeight}"
-                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" />
+                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" 
+                                   Style="{StaticResource BigScrollBar}"/>
 
                             <Border Background="{DynamicResource buttonBgrDefault}" CornerRadius="3" BorderThickness="2" BorderBrush="{DynamicResource buttonBgrDefault}">
                                 <ScrollContentPresenter/>
@@ -94,6 +171,31 @@
                     <Border CornerRadius="4">
                         <ScrollContentPresenter/>
                     </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+    <Style x:Key="ServerListScrollViewer" TargetType="ScrollViewer">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ScrollViewer">
+                    <Grid Background="{TemplateBinding Background}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <ScrollBar Name="PART_VerticalScrollBar"
+                                   Value="{TemplateBinding VerticalOffset}"
+                                   Maximum="{TemplateBinding ScrollableHeight}"
+                                   ViewportSize="{TemplateBinding ViewportHeight}"
+                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                                   Style="{DynamicResource DefaultScrollBarLight}"/>
+                        <ScrollContentPresenter Grid.Column="1"/>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

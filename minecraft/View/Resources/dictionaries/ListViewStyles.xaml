@@ -87,11 +87,6 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-
-        <Style.Resources>
-            <!-- Makes selection stay when focus lost (for context menu)-->
-            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Green"/>
-        </Style.Resources>
     </Style>
 
     <Style x:Key="ServerListItem" TargetType="{x:Type ListViewItem}">
@@ -167,21 +162,6 @@
         </Setter>
     </Style>
 
-    <Style x:Key="customScrollViewer" TargetType="ScrollViewer">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ScrollViewer">
-                    <Grid Background="{TemplateBinding Background}">
-                        <DockPanel Margin="{TemplateBinding Padding}">
-                            <ContentPresenter Margin="0 0 -5 0"/>
-                        </DockPanel>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <!-- ServerList v2 template -->
     <Style x:Key="ServerListViewV2" TargetType="{x:Type ListView}">
         <Setter Property="Background" Value="{DynamicResource backgroundDefault}"/>
@@ -189,14 +169,15 @@
         <Setter Property="Margin" Value="10,10,10,10"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
-        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
 
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListView">
                     <Border Name="Border" BorderThickness="0">
-                        <ScrollViewer>
+                        <ScrollViewer Style="{DynamicResource ServerListScrollViewer}">
                             <ItemsPresenter/>
                         </ScrollViewer>
                     </Border>
@@ -205,11 +186,6 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-
-        <Style.Resources>
-            <!-- Makes selection stay when focus lost (for context menu)-->
-            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Green"/>
-        </Style.Resources>
     </Style>
 
     <Style x:Key="ServerListItemV2" TargetType="{x:Type ListViewItem}">
@@ -276,11 +252,6 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-
-        <Style.Resources>
-            <!-- Makes selection stay when focus lost (for context menu)-->
-            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Green"/>
-        </Style.Resources>
     </Style>
 
     <Style x:Key="SettingsListItem" TargetType="{x:Type ListViewItem}">

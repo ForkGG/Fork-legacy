@@ -21,14 +21,19 @@
                 </Grid>
                 <Grid Grid.Row="1" VerticalAlignment="Top" >
                     <Border Background="{DynamicResource backgroundDark}" Margin="0 0 5 0"/>
-                    <StackPanel Panel.ZIndex="1">
+                    <Grid Panel.ZIndex="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
                         <TextBlock Text="Server List" Margin="15 10 10 10" Foreground="{DynamicResource textUnselected}" FontSize="20" 
                                FontFamily="{StaticResource Montserrat-SemiBold}" />
-                        <ListView Margin="0" Background="{DynamicResource backgroundDark}" Style="{StaticResource ServerListViewV2}"
+
+                        <ListView Margin="0" Grid.Row="1" Background="{DynamicResource backgroundDark}" Style="{StaticResource ServerListViewV2}"
                               ItemContainerStyle="{StaticResource ServerListItemV2}" ItemsSource="{Binding Servers}"
                               SelectedItem="{Binding SelectedServer}" SelectionChanged="ServerList_SelectionChanged">
                         </ListView>
-                    </StackPanel>
+                    </Grid>
                 </Grid>
                 <DockPanel Grid.Row="2" LastChildFill="False" Margin="0 0 5 0" Background="{DynamicResource backgroundDark}">
                     <Grid  DockPanel.Dock="Bottom"  Background="{DynamicResource backgroundDarker}">
