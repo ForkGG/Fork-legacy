@@ -188,13 +188,13 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <ScrollBar Name="PART_VerticalScrollBar"
+                        <ScrollBar Name="PART_VerticalScrollBar" Panel.ZIndex="1"
                                    Value="{TemplateBinding VerticalOffset}"
                                    Maximum="{TemplateBinding ScrollableHeight}"
                                    ViewportSize="{TemplateBinding ViewportHeight}"
                                    Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
                                    Style="{DynamicResource DefaultScrollBarLight}"/>
-                        <ScrollContentPresenter Grid.Column="1"/>
+                        <ScrollContentPresenter Grid.Column="1" Margin="-7 0 0 0"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
