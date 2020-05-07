@@ -104,10 +104,8 @@ namespace nihilus.View.Xaml2
             ImportPage.Visibility = Visibility.Visible;
             
             //Change Buttons
-            DeleteButton.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
             DeleteButton.IsEnabled = false;
             
-            CreateButton.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
             CreateButton.IsEnabled = false;
 
             ImportButton.Background = (Brush) Application.Current.FindResource("buttonBgrRed");
@@ -131,11 +129,9 @@ namespace nihilus.View.Xaml2
             ImportPage.Visibility = Visibility.Hidden;
             
             //Change Buttons
-            DeleteButton.Background = (Brush) Application.Current.FindResource("buttonBgrRed");
             DeleteButton.IsEnabled = true;
-            CreateButton.Background = (Brush) Application.Current.FindResource("buttonBgrGreen");
             CreateButton.IsEnabled = true;
-            ImportButton.Background = (Brush) Application.Current.FindResource("buttonBgrBlue");
+            
             ImportButton.IconSource = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/Import.png"));
             ImportButton.HoverIconSource = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/ImportW.png"));
 
