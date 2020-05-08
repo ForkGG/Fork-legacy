@@ -66,7 +66,7 @@ namespace nihilus.View.Xaml2.Pages
                 }
                 else
                 {
-                    serverPathBgr.Background = (Brush) Application.Current.FindResource("buttonBgrGreen");
+                    serverPathBgr.Background = (Brush) Application.Current.FindResource("tabSelected");
                     ImportConfirmButton.IsEnabled = true;
                 }
             }

@@ -351,9 +351,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="favicon.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="View\Resources\images\Icons\DudeSelected.png" />
     <Resource Include="View\Resources\images\Icons\DudeSelectedHover.png" />
     <Resource Include="View\Resources\images\Icons\DudeTransparent.png" />
