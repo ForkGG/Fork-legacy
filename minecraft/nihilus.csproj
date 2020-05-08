@@ -77,7 +77,7 @@
     <StartupObject>nihilus.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -403,6 +403,7 @@
     <Resource Include="View\Resources\images\Icons\Waterfall.png" />
     <Resource Include="View\Resources\images\Icons\WaterfallD.png" />
     <Resource Include="View\Resources\images\Icons\WaterfallW.png" />
+    <Resource Include="icon.ico" />
     <Content Include="View\Resources\images\DeafultHead.png" />
     <Resource Include="View\Resources\images\ImportServer.png" />
   </ItemGroup>

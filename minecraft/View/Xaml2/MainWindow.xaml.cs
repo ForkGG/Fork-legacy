@@ -72,11 +72,11 @@ namespace nihilus.View.Xaml2
             CreatePage.Visibility = Visibility.Visible;
             
             //Change Buttons
-            DeleteButton.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
             DeleteButton.IsEnabled = false;
-            ImportButton.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
             ImportButton.IsEnabled = false;
+            
             CreateButton.Background = (Brush) Application.Current.FindResource("buttonBgrRed");
+            CreateButton.HoverBackground = (Brush) Application.Current.FindResource("buttonBgrRed");
             CreateButton.IconSource = new BitmapImage(new Uri(@"pack://application:,,,/View/Resources/images/Icons/Cancel.png", UriKind.Absolute));
             CreateButton.HoverIconSource = new BitmapImage(new Uri(@"pack://application:,,,/View/Resources/images/Icons/CancelW.png", UriKind.Absolute));
         }
@@ -88,11 +88,11 @@ namespace nihilus.View.Xaml2
             CreatePage.Visibility = Visibility.Hidden;
             
             //Change Buttons
-            DeleteButton.Background = (Brush) Application.Current.FindResource("buttonBgrRed");
             DeleteButton.IsEnabled = true;
-            ImportButton.Background = (Brush) Application.Current.FindResource("buttonBgrBlue");
             ImportButton.IsEnabled = true;
-            CreateButton.Background = (Brush) Application.Current.FindResource("buttonBgrGreen");
+            
+            CreateButton.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
+            CreateButton.HoverBackground = (Brush) Application.Current.FindResource("buttonBgrGreen");
             CreateButton.IconSource = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/Create.png"));
             CreateButton.HoverIconSource = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/CreateW.png"));
         }
@@ -109,6 +109,7 @@ namespace nihilus.View.Xaml2
             CreateButton.IsEnabled = false;
 
             ImportButton.Background = (Brush) Application.Current.FindResource("buttonBgrRed");
+            ImportButton.HoverBackground = (Brush) Application.Current.FindResource("buttonBgrRed");
             ImportButton.IconSource = new BitmapImage(new Uri(@"pack://application:,,,/View/Resources/images/Icons/Cancel.png", UriKind.Absolute));
             ImportButton.HoverIconSource = new BitmapImage(new Uri(@"pack://application:,,,/View/Resources/images/Icons/CancelW.png", UriKind.Absolute));
             
@@ -132,6 +133,8 @@ namespace nihilus.View.Xaml2
             DeleteButton.IsEnabled = true;
             CreateButton.IsEnabled = true;
             
+            ImportButton.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
+            ImportButton.HoverBackground = (Brush) Application.Current.FindResource("buttonBgrBlue");
             ImportButton.IconSource = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/Import.png"));
             ImportButton.HoverIconSource = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/ImportW.png"));
 

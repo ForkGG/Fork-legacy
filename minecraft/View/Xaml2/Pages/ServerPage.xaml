@@ -71,7 +71,7 @@
                                          Width="55" Height="55" IconWidth="25.2" IconHeight="28.8" Style="{DynamicResource StartStopIconButton}">
                     </controls:IconButton>
 
-                    <controls:IconButton Margin="10" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrYellow}" 
+                    <controls:IconButton Margin="10" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrYellow}" HoverBackground="{DynamicResource buttonBgrYellow}"
                                          Width="55" Height="55" IconWidth="25.2" IconHeight="28.8" Style="{DynamicResource RestartIconButton}"
                                          IconSource="pack://application:,,,/View/Resources/images/Icons/Restart.png"
                                          HoverIconSource="pack://application:,,,/View/Resources/images/Icons/RestartW.png"/>

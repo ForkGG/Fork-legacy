@@ -61,7 +61,7 @@
         <!-- Create Button -->
         <DockPanel Grid.Column="1" LastChildFill="False">
             <controls:IconButton Margin="20 30" HorizontalAlignment="Center" DockPanel.Dock="Bottom" x:Name="ImportConfirmButton"
-                                 Width="80" Height="80" IconWidth="57.6" IconHeight="37.2" Background="{DynamicResource buttonBgrBlue}"
+                                 Width="80" Height="80" IconWidth="57.6" IconHeight="37.2" Background="{DynamicResource buttonBgrBlue}" HoverBackground="{DynamicResource buttonBgrBlue}"
                                  IconSource="pack://application:,,,/View/Resources/images/Icons/Import.png" IsEnabled="False"
                                  HoverIconSource="pack://application:,,,/View/Resources/images/Icons/ImportW.png"/>
         </DockPanel>
