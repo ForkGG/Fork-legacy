@@ -1,6 +1,6 @@
 using System;
 
-namespace nihilus.Logic.Model
+namespace fork.Logic.Model
 {
     [Serializable]
     public class ServerRestart

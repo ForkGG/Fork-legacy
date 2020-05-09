@@ -7,12 +7,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using nihilus.Logic.Manager;
-using nihilus.Logic.Model;
-using nihilus.Logic.Persistence;
-using nihilus.ViewModel;
+using fork.Logic.Manager;
+using fork.Logic.Model;
+using fork.Logic.Persistence;
+using fork.ViewModel;
 
-namespace nihilus.Logic.RoleManagement
+namespace fork.Logic.RoleManagement
 {
     public class RoleUpdater
     {

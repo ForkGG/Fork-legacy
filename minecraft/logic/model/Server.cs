@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Xml.Serialization;
-using nihilus.Logic.Persistence;
+using fork.Logic.Persistence;
 
-namespace nihilus.Logic.Model
+namespace fork.Logic.Model
 {
     [Serializable]
     public class Server

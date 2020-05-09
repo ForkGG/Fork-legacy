@@ -2,10 +2,10 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net;
-using nihilus.Logic.Manager;
-using nihilus.Logic.Model;
+using fork.Logic.Manager;
+using fork.Logic.Model;
 
-namespace nihilus.ViewModel
+namespace fork.ViewModel
 {
     
     public class AddServerViewModel : BaseViewModel

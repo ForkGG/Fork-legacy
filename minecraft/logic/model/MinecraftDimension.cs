@@ -1,4 +1,4 @@
-namespace nihilus.Logic.Model
+namespace fork.Logic.Model
 {
     public enum MinecraftDimension
     {

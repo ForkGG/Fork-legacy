@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace nihilus.Logic.Model
+namespace fork.Logic.Model
 {
     [Serializable]
     public class ServerVersion : IComparable

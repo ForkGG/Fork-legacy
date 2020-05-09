@@ -4,9 +4,9 @@ using System.IO;
 using System.Net;
 using System.Resources;
 using Newtonsoft.Json;
-using nihilus.Logic.Model.MinecraftVersionPojo;
+using fork.Logic.Model.MinecraftVersionPojo;
 
-namespace nihilus.Logic.WebRequesters
+namespace fork.Logic.WebRequesters
 {
     public class PaperWebRequester
     {

@@ -1,4 +1,4 @@
-namespace nihilus.Logic.RoleManagement
+namespace fork.Logic.RoleManagement
 {
     public enum RoleType
     {

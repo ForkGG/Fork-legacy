@@ -12,11 +12,11 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using nihilus.Logic.Manager;
-using nihilus.ViewModel;
+using fork.Logic.Manager;
+using fork.ViewModel;
 using Brush = System.Windows.Media.Brush;
 
-namespace nihilus.View.Xaml2
+namespace fork.View.Xaml2
 {
     /// <summary>
     /// Interaktionslogik für MainWindow.xaml

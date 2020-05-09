@@ -2,7 +2,7 @@
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace nihilus.View.Xaml2.Shapes
+namespace fork.View.Xaml2.Shapes
 {
     public class UsageIndicatorBackground : Shape
     {

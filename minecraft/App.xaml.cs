@@ -5,11 +5,11 @@ using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
-using nihilus.Logic.ApplicationConsole;
-using nihilus.Logic.Logging;
-using nihilus.Logic.Manager;
+using fork.Logic.ApplicationConsole;
+using fork.Logic.Logging;
+using fork.Logic.Manager;
 
-namespace nihilus
+namespace fork
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -23,12 +23,12 @@ namespace nihilus
             {
                 if (applicationPath == null)
                 {
-                    DirectoryInfo directoryInfo = Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Nihilus"));
+                    DirectoryInfo directoryInfo = Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Fork"));
                     //applicationPath = Assembly.GetExecutingAssembly().Location;
                     //FileInfo applicationExe = new FileInfo(applicationPath);
                     //applicationPath = applicationExe.Directory.FullName;
                     applicationPath = directoryInfo.FullName;
-                    Console.WriteLine("Data directory of Nihilus is: "+applicationPath);
+                    Console.WriteLine("Data directory of Fork is: "+applicationPath);
                 }
                 return applicationPath;
             }

@@ -1,11 +1,11 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Windows.Forms.VisualStyles;
-using nihilus.Logic.Manager;
-using nihilus.Logic.Model;
-using nihilus.View.Xaml2.Pages.Settings;
+using fork.Logic.Manager;
+using fork.Logic.Model;
+using fork.View.Xaml2.Pages.Settings;
 
-namespace nihilus.ViewModel
+namespace fork.ViewModel
 {
     public class SettingsViewModel : BaseViewModel
     {

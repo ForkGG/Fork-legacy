@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
-using nihilus.Logic.Model;
-using nihilus.ViewModel;
+using fork.Logic.Model;
+using fork.ViewModel;
 
-namespace nihilus.Logic.Manager
+namespace fork.Logic.Manager
 {
     public sealed class AutoRestartManager
     {

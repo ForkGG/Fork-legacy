@@ -5,11 +5,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using nihilus.Logic.Model;
-using nihilus.Logic.Model.MinecraftVersionPojo;
-using nihilus.ViewModel;
+using fork.Logic.Model;
+using fork.Logic.Model.MinecraftVersionPojo;
+using fork.ViewModel;
 
-namespace nihilus.Logic.Manager
+namespace fork.Logic.Manager
 {
     public sealed class VersionManager
     {

@@ -5,12 +5,12 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
-using nihilus.Annotations;
-using nihilus.Logic.ApplicationConsole;
-using nihilus.Logic.Manager;
-using nihilus.View.Xaml2.Pages;
+using fork.Annotations;
+using fork.Logic.ApplicationConsole;
+using fork.Logic.Manager;
+using fork.View.Xaml2.Pages;
 
-namespace nihilus.ViewModel
+namespace fork.ViewModel
 {
     public sealed class MainViewModel : INotifyPropertyChanged
     {

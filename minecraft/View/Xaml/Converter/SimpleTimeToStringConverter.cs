@@ -1,9 +1,9 @@
 using System;
 using System.Globalization;
 using System.Windows.Data;
-using nihilus.Logic.Model;
+using fork.Logic.Model;
 
-namespace nihilus.View.Xaml.Converter
+namespace fork.View.Xaml.Converter
 {
     [ValueConversion(typeof(SimpleTime), typeof(string))]
     public class SimpleTimeToStringConverter : IValueConverter

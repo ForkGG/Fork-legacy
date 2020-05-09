@@ -1,6 +1,6 @@
 using System;
 
-namespace nihilus.Logic.Persistence.PersistencePO
+namespace fork.Logic.Persistence.PersistencePO
 {
     public class WhitelistedPlayer
     {

@@ -5,9 +5,9 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading;
-using nihilus.Logic.Model;
+using fork.Logic.Model;
 
-namespace nihilus.Logic.Query
+namespace fork.Logic.Query
 {
     public class Query
     {

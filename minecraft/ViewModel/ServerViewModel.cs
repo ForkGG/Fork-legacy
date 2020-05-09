@@ -12,18 +12,18 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using nihilus.Annotations;
-using nihilus.Logic.BackgroundWorker.Performance;
-using nihilus.Logic.CustomConsole;
-using nihilus.Logic.Manager;
-using nihilus.Logic.Model;
-using nihilus.Logic.Persistence;
-using nihilus.Logic.RoleManagement;
-using nihilus.View.Xaml2.Pages;
+using fork.Annotations;
+using fork.Logic.BackgroundWorker.Performance;
+using fork.Logic.CustomConsole;
+using fork.Logic.Manager;
+using fork.Logic.Model;
+using fork.Logic.Persistence;
+using fork.Logic.RoleManagement;
+using fork.View.Xaml2.Pages;
 using Console = System.Console;
 using Timer = System.Timers.Timer;
 
-namespace nihilus.ViewModel
+namespace fork.ViewModel
 {
     public class ServerViewModel : INotifyPropertyChanged
     {

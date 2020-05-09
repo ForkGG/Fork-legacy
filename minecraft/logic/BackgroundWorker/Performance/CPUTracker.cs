@@ -8,10 +8,10 @@ using System.Threading;
 using System.Windows;
 using LiveCharts;
 using System.Management;
-using nihilus.Logic.Model;
-using nihilus.ViewModel;
+using fork.Logic.Model;
+using fork.ViewModel;
 
-namespace nihilus.Logic.BackgroundWorker.Performance
+namespace fork.Logic.BackgroundWorker.Performance
 {
     public class CPUTracker
     {

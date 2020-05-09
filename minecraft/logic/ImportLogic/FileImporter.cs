@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 
-namespace nihilus.Logic.ImportLogic
+namespace fork.Logic.ImportLogic
 {
     public class FileImporter
     {

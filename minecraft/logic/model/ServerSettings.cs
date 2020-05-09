@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace nihilus.Logic.Model
+namespace fork.Logic.Model
 {
     public class ServerSettings
     {

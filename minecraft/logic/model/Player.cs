@@ -7,10 +7,11 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using Newtonsoft.Json;
-using nihilus.Properties;
+using fork.Properties;
 using Color = System.Drawing.Color;
+using Fork.Properties;
 
-namespace nihilus.Logic.Model
+namespace fork.Logic.Model
 {
     public class Player
     {

@@ -3,11 +3,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net;
 using System.Windows.Controls;
-using nihilus.Logic.ImportLogic;
-using nihilus.Logic.Manager;
-using nihilus.Logic.Model;
+using fork.Logic.ImportLogic;
+using fork.Logic.Manager;
+using fork.Logic.Model;
 
-namespace nihilus.ViewModel
+namespace fork.ViewModel
 {
     public class ImportViewModel : BaseViewModel
     {

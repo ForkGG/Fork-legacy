@@ -1,4 +1,4 @@
-namespace nihilus.Logic.Model.MinecraftVersionPojo
+namespace fork.Logic.Model.MinecraftVersionPojo
 {
     public class VersionDetails
     {

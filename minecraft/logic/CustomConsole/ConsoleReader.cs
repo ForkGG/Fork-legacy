@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace nihilus.Logic.CustomConsole
+namespace fork.Logic.CustomConsole
 {
     public class ConsoleReader
     {

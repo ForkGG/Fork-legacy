@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using nihilus.Logic.Manager;
-using nihilus.Logic.Model;
-using nihilus.ViewModel;
+using fork.Logic.Manager;
+using fork.Logic.Model;
+using fork.ViewModel;
 
-namespace nihilus.Logic.BackgroundWorker
+namespace fork.Logic.BackgroundWorker
 {
     public class QueryStatsWorker
     {

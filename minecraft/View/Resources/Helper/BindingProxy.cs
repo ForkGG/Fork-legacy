@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace nihilus.View.Resources.Helper
+namespace fork.View.Resources.Helper
 {
     //This class is for DataBinding Data, when the context is not inherited (ie. ListView DataTemplates etc.)
     //Source: https://thomaslevesque.com/2011/03/21/wpf-how-to-bind-to-data-when-the-datacontext-is-not-inherited/

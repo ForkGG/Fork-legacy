@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using nihilus.logic.Utils;
+using fork.logic.Utils;
 
-namespace nihilus.Logic.Model
+namespace fork.Logic.Model
 {
     public class FullStats
     {

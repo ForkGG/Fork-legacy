@@ -10,16 +10,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using nihilus.Logic.BackgroundWorker;
-using nihilus.Logic.CustomConsole;
-using nihilus.Logic.ImportLogic;
-using nihilus.Logic.Model;
-using nihilus.Logic.Model.MinecraftVersionPojo;
-using nihilus.Logic.Persistence;
-using nihilus.Logic.RoleManagement;
-using nihilus.ViewModel;
+using fork.Logic.BackgroundWorker;
+using fork.Logic.CustomConsole;
+using fork.Logic.ImportLogic;
+using fork.Logic.Model;
+using fork.Logic.Model.MinecraftVersionPojo;
+using fork.Logic.Persistence;
+using fork.Logic.RoleManagement;
+using fork.ViewModel;
 
-namespace nihilus.Logic.Manager
+namespace fork.Logic.Manager
 {
     public sealed class ServerManager
     {
@@ -231,7 +231,7 @@ namespace nihilus.Logic.Manager
                 Thread.Sleep(500);
             }
 
-            //Add server to Nihilus
+            //Add server to Fork
             ServerViewModel viewModel = new ServerViewModel(server);
             Application.Current.Dispatcher.Invoke(() => Servers.Add(viewModel));
             ApplicationManager.Instance.MainViewModel.SelectedServer = viewModel;

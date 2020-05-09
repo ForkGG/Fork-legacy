@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace nihilus.View.Xaml2.Controls
+namespace fork.View.Xaml2.Controls
 {
     class ServerTypeRadioButton : RadioButton
     {

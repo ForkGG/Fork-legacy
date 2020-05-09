@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using Newtonsoft.Json;
-using nihilus.Logic.Model;
-using nihilus.Logic.Model.MinecraftVersionPojo;
-using nihilus.Logic.WebRequesters;
-using nihilus.ViewModel;
+using fork.Logic.Model;
+using fork.Logic.Model.MinecraftVersionPojo;
+using fork.Logic.WebRequesters;
+using fork.ViewModel;
 
-namespace nihilus.Logic.Manager
+namespace fork.Logic.Manager
 {
     public sealed class WebRequestManager
     {

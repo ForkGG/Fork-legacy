@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace nihilus.Logic.WebRequesters
+namespace fork.Logic.WebRequesters
 {
     public class ResponseCache
     {

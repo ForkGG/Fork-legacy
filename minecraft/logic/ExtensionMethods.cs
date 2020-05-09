@@ -2,10 +2,10 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
-using nihilus.Logic.Model;
-using nihilus.Logic.RoleManagement;
+using fork.Logic.Model;
+using fork.Logic.RoleManagement;
 
-namespace nihilus.Logic
+namespace fork.Logic
 {
     public static class ExtensionMethods
     {

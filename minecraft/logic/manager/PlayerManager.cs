@@ -7,11 +7,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Newtonsoft.Json;
-using nihilus.Annotations;
-using nihilus.Logic.Model;
-using nihilus.ViewModel;
+using fork.Annotations;
+using fork.Logic.Model;
+using fork.ViewModel;
 
-namespace nihilus.Logic.Manager
+namespace fork.Logic.Manager
 {
     public sealed class PlayerManager
     {

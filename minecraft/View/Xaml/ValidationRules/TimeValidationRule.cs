@@ -1,8 +1,8 @@
 using System.Globalization;
 using System.Windows.Controls;
-using nihilus.Logic.Model;
+using fork.Logic.Model;
 
-namespace nihilus.View.Xaml.ValidationRules
+namespace fork.View.Xaml.ValidationRules
 {
     public class TimeValidationRule : ValidationRule
     {

@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-using nihilus.Logic.Model;
-using nihilus.ViewModel;
+using fork.Logic.Model;
+using fork.ViewModel;
 
-namespace nihilus.Logic.CustomConsole
+namespace fork.Logic.CustomConsole
 {
     public class ConsoleWriter
     {

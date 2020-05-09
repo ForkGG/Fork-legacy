@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace nihilus.View.Xaml.Converter
+namespace fork.View.Xaml.Converter
 {
     [ValueConversion(typeof(ObservableCollection<string>), typeof(string))]
     public class ListToStringConverter : IValueConverter

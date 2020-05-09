@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace nihilus.Logic.ImportLogic
+namespace fork.Logic.ImportLogic
 {
     public static class DirectoryValidator
     {

@@ -4,10 +4,10 @@ using System.IO;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using nihilus.Logic.Model;
-using nihilus.Logic.Persistence.PersistencePO;
+using fork.Logic.Model;
+using fork.Logic.Persistence.PersistencePO;
 
-namespace nihilus.Logic.Persistence
+namespace fork.Logic.Persistence
 {
     public class FileReader
     {

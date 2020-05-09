@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Media;
-using nihilus.View.Xaml;
+using fork.View.Xaml;
 
-namespace nihilus
+namespace fork
 {
     public partial class WindowStyles : ResourceDictionary
     {

@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:controls="clr-namespace:nihilus"
-                    xmlns:controls2="clr-namespace:nihilus.View.Xaml2.Controls">
+                    xmlns:controls="clr-namespace:fork"
+                    xmlns:controls2="clr-namespace:fork.View.Xaml2.Controls">
 
     <Style TargetType="RadioButton">
         <Setter Property="Foreground" Value="{DynamicResource foregroundDefault}" />

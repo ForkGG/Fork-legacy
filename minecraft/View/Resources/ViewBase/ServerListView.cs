@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace nihilus.View.Resources.ViewBase
+namespace fork.View.Resources.ViewBase
 {
     public class ServerListView : System.Windows.Controls.ViewBase
     {

@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
-using nihilus.Logic.Model;
+using fork.Logic.Model;
 
-namespace nihilus.View.Xaml.Converter
+namespace fork.View.Xaml.Converter
 {
     [ValueConversion(typeof(double), typeof(Brush))]
     class PercentageToColorConverter : IValueConverter

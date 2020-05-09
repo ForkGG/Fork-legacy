@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using nihilus.ViewModel;
+using fork.ViewModel;
 
-namespace nihilus.View.Xaml2.Pages.Settings
+namespace fork.View.Xaml2.Pages.Settings
 {
     /// <summary>
     /// Interaktionslogik für SettingsPage.xaml

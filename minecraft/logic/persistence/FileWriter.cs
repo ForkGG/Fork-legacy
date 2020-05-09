@@ -6,9 +6,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
-using nihilus.Logic.Model;
+using fork.Logic.Model;
 
-namespace nihilus.Logic.Persistence
+namespace fork.Logic.Persistence
 {
     public class FileWriter
     {

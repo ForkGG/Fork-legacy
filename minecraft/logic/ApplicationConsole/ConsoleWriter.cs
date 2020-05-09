@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
-using nihilus.Logic.Manager;
-using nihilus.Logic.Persistence;
+using fork.Logic.Manager;
+using fork.Logic.Persistence;
 
-namespace nihilus.Logic.ApplicationConsole
+namespace fork.Logic.ApplicationConsole
 {
     public class ConsoleWriter : TextWriter
     {

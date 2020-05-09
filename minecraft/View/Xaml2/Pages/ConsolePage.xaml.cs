@@ -14,11 +14,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using nihilus.Logic.Manager;
-using nihilus.Logic.Model;
-using nihilus.ViewModel;
+using fork.Logic.Manager;
+using fork.Logic.Model;
+using fork.ViewModel;
 
-namespace nihilus.View.Xaml2.Pages
+namespace fork.View.Xaml2.Pages
 {
     /// <summary>
     /// Interaktionslogik für ConsolePage.xaml

@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel;
 
-namespace nihilus.ViewModel
+namespace fork.ViewModel
 {
     public class BaseViewModel : INotifyPropertyChanged
     {

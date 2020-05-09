@@ -4,11 +4,11 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
-using nihilus.Logic.Model;
-using nihilus.ViewModel;
+using fork.Logic.Model;
+using fork.ViewModel;
 using Newtonsoft.Json;
 
-namespace nihilus.Logic.Persistence
+namespace fork.Logic.Persistence
 {
     public sealed class Serializer
     {

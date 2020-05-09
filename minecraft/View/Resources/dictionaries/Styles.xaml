@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-                    xmlns:model="clr-namespace:nihilus.Logic.Model">
+                    xmlns:model="clr-namespace:fork.Logic.Model">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ButtonStyles.xaml"></ResourceDictionary>
         <ResourceDictionary Source="ScrollBarStyle.xaml"></ResourceDictionary>

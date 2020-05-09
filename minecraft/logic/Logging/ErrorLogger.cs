@@ -1,9 +1,9 @@
 using System;
 using System.Data;
 using System.Windows;
-using nihilus.Logic.Persistence;
+using fork.Logic.Persistence;
 
-namespace nihilus.Logic.Logging
+namespace fork.Logic.Logging
 {
     public class ErrorLogger
     {
