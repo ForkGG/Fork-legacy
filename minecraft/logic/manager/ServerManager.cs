@@ -61,11 +61,11 @@ namespace fork.Logic.Manager
         public ObservableCollection<ServerViewModel> Servers { set; get; }
 
 
-        public async Task<bool> CreateServerAsync(ServerVersion serverVersion, ServerSettings serverSettings,
-            ServerJavaSettings javaSettings, AddServerViewModel addServerViewModel)
+        public async Task<bool> CreateServerAsync(string serverName, ServerVersion serverVersion, ServerSettings serverSettings,
+            ServerJavaSettings javaSettings, string worldPath = null)
         {
             Task<bool> t = new Task<bool>(() =>
-                CreateServer(serverVersion, serverSettings, javaSettings, addServerViewModel));
+                CreateServer(serverName, serverVersion, serverSettings, javaSettings, worldPath));
             t.Start();
             bool r = await t;
             return r;
@@ -177,6 +177,7 @@ namespace fork.Logic.Manager
             }
             else
             {
+                //TODO use world name
                 settings = new ServerSettings(serverName);
             }
 
@@ -290,53 +291,44 @@ namespace fork.Logic.Manager
             }
         }
 
-        private bool CreateServer(ServerVersion serverVersion, ServerSettings serverSettings,
-            ServerJavaSettings javaSettings, AddServerViewModel addServerViewModel)
+        private bool CreateServer(string serverName, ServerVersion serverVersion, ServerSettings serverSettings,
+            ServerJavaSettings javaSettings, string worldPath = null)
         {
-            try
+            serverNames.Add(serverName);
+            if (string.IsNullOrEmpty(serverSettings.LevelName))
             {
-                string name = serverSettings.LevelName;
-                serverNames.Add(name);
-
-                Server server = new Server(name, serverVersion, serverSettings, javaSettings);
-                server.Name = name;
-                server.Version = serverVersion;
-
-                DirectoryInfo directoryInfo = Directory.CreateDirectory(Path.Combine(App.ApplicationPath, name));
-                Thread thread = new Thread(() =>
-                {
-                    WebClient webClient = new WebClient();
-                    webClient.DownloadProgressChanged += addServerViewModel.DownloadProgressChanged;
-                    webClient.DownloadFileCompleted += addServerViewModel.DownloadCompletedHandler;
-                    webClient.DownloadFileAsync(new Uri(serverVersion.JarLink),
-                        Path.Combine(directoryInfo.FullName, "server.jar"));
-                });
-                thread.Start();
-                while (true)
-                {
-                    if (addServerViewModel.DownloadCompleted)
-                    {
-                        Console.WriteLine("Finished downloading server.jar for server " + server.Name);
-                        break;
-                    }
-
-                    Thread.Sleep(500);
-                }
-
-                new FileWriter().WriteEula(Path.Combine(App.ApplicationPath, directoryInfo.Name));
-                new FileWriter().WriteServerSettings(Path.Combine(App.ApplicationPath, directoryInfo.Name),
-                    serverSettings.SettingsDictionary);
-
-                ServerViewModel viewModel = new ServerViewModel(server);
-                Application.Current.Dispatcher.Invoke(() => Servers.Add(viewModel));
-                ApplicationManager.Instance.MainViewModel.SelectedServer = viewModel;
-                return true;
+                serverSettings.LevelName = "world";
             }
-            catch (Exception e)
+            Server server = new Server(serverName, serverVersion, serverSettings, javaSettings);
+            ServerViewModel viewModel = new ServerViewModel(server);
+            Application.Current.Dispatcher.Invoke(() => Servers.Add(viewModel));
+            //Select Server
+            ApplicationManager.Instance.MainViewModel.SelectedServer = viewModel;
+            
+            //Download server.jar
+            DirectoryInfo directoryInfo = Directory.CreateDirectory(Path.Combine(App.ApplicationPath, serverName));
+            Thread thread = new Thread(() =>
             {
-                Console.WriteLine(e.StackTrace);
-                return false;
+                WebClient webClient = new WebClient();
+                webClient.DownloadProgressChanged += viewModel.DownloadProgressChanged;
+                webClient.DownloadFileCompleted += viewModel.DownloadCompletedHandler;
+                webClient.DownloadFileAsync(new Uri(serverVersion.JarLink),
+                    Path.Combine(directoryInfo.FullName, "server.jar"));
+            });
+            thread.Start();
+            
+            //Move World Files
+            if (worldPath != null)
+            {
+                new FileImporter().DirectoryCopy(worldPath, Path.Combine(directoryInfo.FullName,server.ServerSettings.LevelName), true);
             }
+            
+            //Writing necessary files
+            new FileWriter().WriteEula(Path.Combine(App.ApplicationPath, directoryInfo.Name));
+            new FileWriter().WriteServerSettings(Path.Combine(App.ApplicationPath, directoryInfo.Name),
+                serverSettings.SettingsDictionary);
+
+            return true;
         }
 
         private bool DeleteServer(ServerViewModel serverViewModel)

@@ -15,8 +15,6 @@ namespace fork.ViewModel
         public ObservableCollection<ServerVersion> PaperVersions { get; set; }
         public ObservableCollection<ServerVersion> SpigotServerVersions { get; set; }
         public ServerSettings ServerSettings { get; set; }
-        public double DownloadProgress { get; set; }
-        public string DownloadProgressReadable { get; set; }
         public bool DownloadCompleted { get; set; }
 
         /// <summary>
@@ -28,20 +26,7 @@ namespace fork.ViewModel
             VanillaServerVersions = VersionManager.Instance.VanillaVersions;
             PaperVersions = VersionManager.Instance.PaperVersions;
             SpigotServerVersions = VersionManager.Instance.SpigotVersions;
-            ServerSettings = new ServerSettings(ServerManager.Instance.NextDefaultServerName());
-        }
-
-        public void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        {
-            double bytesIn = double.Parse(e.BytesReceived.ToString());
-            double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
-            DownloadProgress = bytesIn / totalBytes * 100;
-            DownloadProgressReadable = Math.Round(DownloadProgress, 0)+"%";
-        }
-
-        public void DownloadCompletedHandler(object sender, AsyncCompletedEventArgs e)
-        {
-            DownloadCompleted = true;
+            ServerSettings = new ServerSettings("world");
         }
     }
 }

@@ -14,6 +14,10 @@ namespace fork.Logic.ImportLogic
         public void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs = false,
             List<string> ignoredFiles = null)
         {
+            if (ignoredFiles == null)
+            {
+                ignoredFiles = new List<string>();
+            }
             int filesToCopy = FilesToCopy(sourceDirName, copySubDirs, ignoredFiles);
             eventArgs = new CopyProgressChangedEventArgs(0,null,0,filesToCopy);
             DirectoryCopyInternal(sourceDirName,destDirName,copySubDirs,ignoredFiles);

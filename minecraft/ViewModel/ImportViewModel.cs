@@ -32,7 +32,7 @@ namespace fork.ViewModel
             VanillaServerVersions = VersionManager.Instance.VanillaVersions;
             PaperVersions = VersionManager.Instance.PaperVersions;
             SpigotServerVersions = VersionManager.Instance.SpigotVersions;
-            ServerSettings = new ServerSettings(ServerManager.Instance.NextDefaultServerName());
+            ServerSettings = new ServerSettings("world");
         }
 
         public void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)

@@ -47,7 +47,6 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                             <TextBlock Text="CPU" FontSize="20"/>
-                            <TextBlock Text="2 GHz" TextAlignment="Center"/>
                         </StackPanel>
                         <TextBlock Grid.Column="1" Text="{Binding CPUValue}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 0 5 0" FontSize="20" Foreground="{DynamicResource backgroundDark}"/>
                     </Grid>
@@ -90,7 +89,6 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                             <TextBlock Text="DISK" FontSize="20"/>
-                            <TextBlock Text="1 TB" TextAlignment="Center"/>
                         </StackPanel>
                         <TextBlock Grid.Column="1" Text="0%" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 0 5 0" FontSize="20" Foreground="{DynamicResource backgroundDark}"/>
                     </Grid>

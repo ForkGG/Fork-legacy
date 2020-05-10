@@ -41,7 +41,7 @@
                                FontFamily="{StaticResource Montserrat-SemiBold}" />
 
                         <ListView Margin="0" Grid.Row="1" Background="{DynamicResource backgroundDark}" Style="{StaticResource ServerListViewV2}"
-                              ItemContainerStyle="{StaticResource ServerListItemV2}" ItemsSource="{Binding Servers}"
+                              ItemContainerStyle="{StaticResource ServerListItemV2}" ItemsSource="{Binding Servers}" x:Name="ServerList"
                               SelectedItem="{Binding SelectedServer}" SelectionChanged="ServerList_SelectionChanged">
                         </ListView>
                     </Grid>

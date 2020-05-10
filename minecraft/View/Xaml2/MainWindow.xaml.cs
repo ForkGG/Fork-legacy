@@ -24,6 +24,9 @@ namespace fork.View.Xaml2
     public partial class MainWindow : Window
     {
         private MainViewModel viewModel;
+        private object lastSelected;
+        private bool importOpen;
+        private bool createOpen;
         
         public MainWindow()
         {
@@ -67,6 +70,9 @@ namespace fork.View.Xaml2
 
         private void OpenCreateServer()
         {
+            lastSelected = ServerList.SelectedItem;
+            ServerList.UnselectAll();
+            
             //Open createServer Frame
             ServerPage.Visibility = Visibility.Hidden;
             CreatePage.Visibility = Visibility.Visible;
@@ -79,10 +85,22 @@ namespace fork.View.Xaml2
             CreateButton.HoverBackground = (Brush) Application.Current.FindResource("buttonBgrRed");
             CreateButton.IconSource = new BitmapImage(new Uri(@"pack://application:,,,/View/Resources/images/Icons/Cancel.png", UriKind.Absolute));
             CreateButton.HoverIconSource = new BitmapImage(new Uri(@"pack://application:,,,/View/Resources/images/Icons/CancelW.png", UriKind.Absolute));
+            createOpen = true;
         }
 
         private void CloseCreateServer()
         {
+            if (!createOpen)
+            {
+                return;
+            }
+            createOpen = false;
+            
+            if (ServerList.SelectedItems.Count == 0)
+            {
+                ServerList.SelectedItem = lastSelected;
+            }
+            
             //Close createServer Frame
             ServerPage.Visibility = Visibility.Visible;
             CreatePage.Visibility = Visibility.Hidden;
@@ -95,10 +113,14 @@ namespace fork.View.Xaml2
             CreateButton.HoverBackground = (Brush) Application.Current.FindResource("buttonBgrGreen");
             CreateButton.IconSource = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/Create.png"));
             CreateButton.HoverIconSource = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/CreateW.png"));
+
         }
         
         private void OpenImportServer()
         {
+            lastSelected = ServerList.SelectedItem;
+            ServerList.UnselectAll();
+            
             //Open importServer Frame
             ServerPage.Visibility = Visibility.Hidden;
             ImportPage.Visibility = Visibility.Visible;
@@ -121,10 +143,24 @@ namespace fork.View.Xaml2
             CreateButton.IconHeight = DeleteButton.IconHeight *1.2;
             CreateButton.Width = DeleteButton.Width;
             CreateButton.IconWidth = DeleteButton.IconWidth *1.2;
+
+            importOpen = true;
         }
 
         private void CloseImportServer()
         {
+            //Check if window is already closed
+            if (!importOpen)
+            {
+                return;
+            }
+            importOpen = false;
+            
+            if (ServerList.SelectedItems.Count == 0)
+            {
+                ServerList.SelectedItem = lastSelected;
+            }
+
             //Close importServer Frame
             ServerPage.Visibility = Visibility.Visible;
             ImportPage.Visibility = Visibility.Hidden;
@@ -132,7 +168,7 @@ namespace fork.View.Xaml2
             //Change Buttons
             DeleteButton.IsEnabled = true;
             CreateButton.IsEnabled = true;
-            
+
             ImportButton.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
             ImportButton.HoverBackground = (Brush) Application.Current.FindResource("buttonBgrBlue");
             ImportButton.IconSource = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/Import.png"));

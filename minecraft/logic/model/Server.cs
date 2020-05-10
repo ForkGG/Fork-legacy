@@ -13,6 +13,8 @@ namespace fork.Logic.Model
         public String Name { get; set; }
         public ServerVersion Version { get; set; }
         public ServerJavaSettings JavaSettings { get; set; }
+
+        public bool Initialized { get; set; } = false;
         
         public ServerRestart Restart1 { get; set; }
         public ServerRestart Restart2 { get; set; }

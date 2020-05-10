@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace fork.Logic.Model
 {
@@ -12,6 +13,8 @@ namespace fork.Logic.Model
             Paper,
             Spigot
         }
+
+        private Regex nonNumeric = new Regex(@"[^\d.]");
 
         public VersionType Type { get; set; }
         public string Version { get; set; }
@@ -36,11 +39,13 @@ namespace fork.Logic.Model
             ServerVersion otherVersion = obj as ServerVersion;
             if (otherVersion != null)
             {
-                List<string> thisVersionSub = new List<string>(this.Version.Split('.'));
+                string friendlyVersion = nonNumeric.Replace(this.Version, "");
+                List<string> thisVersionSub = new List<string>(friendlyVersion.Split('.'));
                 this.Version.Split('.');
                 thisVersionSub.Add("0");
                 thisVersionSub.Add("0");
-                List<string> otherVersionSub = new List<string>(otherVersion.Version.Split('.'));
+                string friendlyOtherVersion = nonNumeric.Replace(otherVersion.Version, "");
+                List<string> otherVersionSub = new List<string>(friendlyOtherVersion.Split('.'));
                 otherVersion.Version.Split('.');
                 otherVersionSub.Add("0");
                 otherVersionSub.Add("0");
