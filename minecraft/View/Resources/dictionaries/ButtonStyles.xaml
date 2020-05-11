@@ -109,11 +109,10 @@
                 <Setter Property="HoverIconSource" Value="pack://application:,,,/View/Resources/images/Icons/StopW.png"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding CurrentStatus}" Value="{x:Static model:ServerStatus.STARTING}">
-                <Setter Property="Background" Value="{DynamicResource buttonBgrYellow}"/>
-                <Setter Property="HoverBackground" Value="{DynamicResource buttonBgrYellow}"/>
-                <Setter Property="IconSource" Value="pack://application:,,,/View/Resources/images/Icons/Start.png"/>
-                <Setter Property="HoverIconSource" Value="pack://application:,,,/View/Resources/images/Icons/Start.png"/>
-                <Setter Property="IsEnabled" Value="False"/>
+                <Setter Property="Background" Value="{DynamicResource buttonBgrRed}"/>
+                <Setter Property="HoverBackground" Value="{DynamicResource buttonBgrRed}"/>
+                <Setter Property="IconSource" Value="pack://application:,,,/View/Resources/images/Icons/Stop.png"/>
+                <Setter Property="HoverIconSource" Value="pack://application:,,,/View/Resources/images/Icons/StopW.png"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding CurrentStatus}" Value="{x:Static model:ServerStatus.STOPPED}">
                 <Setter Property="Background" Value="{DynamicResource buttonBgrGreen}"/>

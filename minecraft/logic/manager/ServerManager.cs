@@ -13,6 +13,7 @@ using System.Windows.Media;
 using fork.Logic.BackgroundWorker;
 using fork.Logic.CustomConsole;
 using fork.Logic.ImportLogic;
+using fork.Logic.Logging;
 using fork.Logic.Model;
 using fork.Logic.Model.MinecraftVersionPojo;
 using fork.Logic.Persistence;
@@ -478,6 +479,8 @@ namespace fork.Logic.Manager
         private bool StartServer(ServerViewModel viewModel)
         {
             viewModel.ConsoleOutList.Clear();
+            viewModel.ConsoleOutList.Add("Starting server "+viewModel.Server+" on world: "+ viewModel.Server.ServerSettings.LevelName);
+            Console.WriteLine("Starting server "+viewModel.Server.Name+" on world: "+ viewModel.Server.ServerSettings.LevelName);
             DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ApplicationPath, viewModel.Server.Name));
             if (!directoryInfo.Exists)
             {
@@ -518,6 +521,24 @@ namespace fork.Logic.Manager
             viewModel.ConsoleReader = consoleReader;
             ApplicationManager.Instance.ActiveServers[viewModel.Server] = process;
             new Thread(() => { new QueryStatsWorker(viewModel); }).Start();
+            Console.WriteLine("Started server "+ viewModel.Server);
+            return true;
+        }
+
+        public bool KillServer(ServerViewModel serverViewModel)
+        {
+            Process process = ApplicationManager.Instance.ActiveServers[serverViewModel.Server];
+            try
+            {
+                process?.Kill();
+                serverViewModel.ConsoleOutList.Add("Killed server "+serverViewModel.Server);
+                Console.WriteLine("Killed server "+serverViewModel.Server);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                return false;
+            }
             return true;
         }
     }

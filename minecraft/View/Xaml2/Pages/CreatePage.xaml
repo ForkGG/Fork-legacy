@@ -157,7 +157,7 @@
                                     <CheckBox Margin="5" IsChecked="{Binding ServerSettings.OnlineMode}" Content="Online Mode" Style="{DynamicResource DefaultCheckBox}" FontSize="20"/>
                                 </StackPanel>
                                 <DockPanel Height="40" Grid.Row="2" HorizontalAlignment="Center">
-                                    <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26" Background="{DynamicResource buttonBgrDefault}">
+                                    <Border CornerRadius="4" MaxWidth="200" MinWidth="150" DockPanel.Dock="Right" Height="26" Background="{DynamicResource buttonBgrDefault}">
                                         <TextBox Margin="5 0" Text="" Background="{DynamicResource buttonBgrDefault}" BorderThickness="0" 
                                      Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}"
                                      FontSize="17" Height="20" x:Name="ServerName"/>
@@ -165,7 +165,7 @@
                                     <TextBlock Text="Server Name" TextAlignment="Right" Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0"/>
                                 </DockPanel>
                                 <DockPanel Height="40" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center">
-                                    <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26" Background="{DynamicResource buttonBgrDefault}">
+                                    <Border CornerRadius="4" MaxWidth="200" MinWidth="150" DockPanel.Dock="Right" Height="26" Background="{DynamicResource buttonBgrDefault}">
                                         <TextBox Margin="5 0" Text="{Binding ServerSettings.LevelName}" Background="{DynamicResource buttonBgrDefault}" BorderThickness="0" 
                                      Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}"
                                      FontSize="17" Height="20"/>
