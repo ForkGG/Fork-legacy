@@ -503,7 +503,10 @@ namespace fork.Logic.Manager
             };
             process.StartInfo = startInfo;
             process.Start();
-            Application.Current.Dispatcher.Invoke(() => viewModel.TrackPerformance(process));
+            new Thread(() =>
+            {
+                viewModel.TrackPerformance(process);
+            }).Start();
             viewModel.CurrentStatus = ServerStatus.STARTING;
             ConsoleWriter consoleWriter = new ConsoleWriter(viewModel, process.StandardOutput, process.StandardError);
             ConsoleReader consoleReader = new ConsoleReader(process.StandardInput, consoleWriter);

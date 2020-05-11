@@ -44,8 +44,7 @@ namespace fork.View.Xaml2.Pages
             StartStopButton.IsEnabled = false;
             if (viewModel.CurrentStatus == ServerStatus.STOPPED)
             {
-                await ServerManager.Instance.StartServerAsync(viewModel);
-                //StartStopButton.Background = (Brush) Application.Current.FindResource("buttonBgrYellow");
+                ServerManager.Instance.StartServerAsync(viewModel);
             }
 
             else if (viewModel.CurrentStatus == ServerStatus.STARTING)
