@@ -1,10 +1,13 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using fork.Logic.ImportLogic;
+using fork.Logic.Manager;
+using fork.Logic.Model;
 using fork.ViewModel;
 using Application = System.Windows.Application;
 using Binding = System.Windows.Data.Binding;
@@ -43,6 +46,25 @@ namespace fork.View.Xaml2.Pages
         {
             versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.SpigotServerVersions });
             versionComboBox.SelectedIndex = 0;
+        }
+        
+        private async void BtnApply_Click(object sender, RoutedEventArgs e)
+        {
+            ServerVersion selectedVersion = (ServerVersion)versionComboBox.SelectedValue;
+            //TODO check if inputs are valid / server not existing
+
+            if (lastPath == null )
+            {
+                throw new Exception("Import Button should not be clickable, as path is not valid");
+            }
+            
+            DirectoryInfo oldDir = new DirectoryInfo(lastPath);
+            string serverName = oldDir.Name;
+            ServerValidationInfo validationInfo = DirectoryValidator.ValidateServerDirectory(oldDir);
+
+            bool createServerSuccess = await ServerManager.Instance.ImportServerAsync(selectedVersion, validationInfo, oldDir.FullName, serverName);
+
+            //TODO Do something if creating fails
         }
 
         private void ServerDirPath_MouseDown(object sender, MouseButtonEventArgs e)

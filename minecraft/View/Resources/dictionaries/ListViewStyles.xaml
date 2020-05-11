@@ -208,7 +208,8 @@
                                     <Border Height="40" Width="40" Background="Transparent" Margin="5 0 10 0">
                                         <Image x:Name="image" Source="{Binding Icon}" Width="25" Height="25" RenderOptions.BitmapScalingMode="Linear"/>
                                     </Border>
-                                    <TextBlock x:Name="title" Text="{Binding Server.Name}" VerticalAlignment="Center" FontSize="20" FontFamily="{StaticResource Montserrat-SemiBold}" Foreground="{DynamicResource textUnselected}"/>
+                                    <TextBlock x:Name="title" Text="{Binding Server.Name}" VerticalAlignment="Center" FontSize="20" FontFamily="{StaticResource Montserrat-SemiBold}" 
+                                               Foreground="{DynamicResource textUnselected}" Margin="0 0 10 0"/>
                                 </DockPanel>
                             </Grid>
                         </StackPanel>

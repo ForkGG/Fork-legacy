@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -48,7 +49,7 @@ namespace fork.Logic.Manager
 
             Servers.CollectionChanged += ServerListChanged;
 
-            serverNames = new HashSet<string>();
+            serverNames = new List<string>();
             foreach (ServerViewModel server in Servers)
             {
                 serverNames.Add(server.Server.Name);
@@ -65,7 +66,7 @@ namespace fork.Logic.Manager
             }
         }
 
-        private HashSet<string> serverNames;
+        private List<string> serverNames;
 
         public ObservableCollection<ServerViewModel> Servers { set; get; }
 
@@ -80,20 +81,11 @@ namespace fork.Logic.Manager
             return r;
         }
 
-        public async Task<Server> PrepareServerImportAsync(string serverImportPath, string serverName,
-            ServerVersion serverVersion)
-        {
-            Task<Server> t = new Task<Server>(() => PrepareServerImport(serverImportPath, serverName, serverVersion));
-            t.Start();
-            Server server = await t;
-            return server;
-        }
-
-        public async Task<bool> ImportServerAsync(Server server, ImportViewModel importViewModel,
-            ServerValidationInfo validationInfo, string originalServerDirectory, string serverName)
+        public async Task<bool> ImportServerAsync(ServerVersion version, ServerValidationInfo validationInfo,
+            string originalServerDirectory, string serverName)
         {
             Task<bool> t = new Task<bool>(() =>
-                ImportServer(server, importViewModel, validationInfo, originalServerDirectory, serverName));
+                ImportServer(version, validationInfo, originalServerDirectory, serverName));
             t.Start();
             return await t;
         }
@@ -176,39 +168,48 @@ namespace fork.Logic.Manager
             Serializer.Instance.StoreServers(Servers);
         }
 
-        private Server PrepareServerImport(string serverImportPath, string serverName, ServerVersion version)
+        private bool ImportServer(ServerVersion version, ServerValidationInfo validationInfo,
+            string originalServerDirectory, string serverName)
         {
-            ServerSettings settings;
-            if (new FileInfo(Path.Combine(serverImportPath, "server.properties")).Exists)
+            string serverPath = Path.Combine(App.ApplicationPath, serverName);
+            while (Directory.Exists(serverPath))
             {
-                var settingsDict = new FileReader().ReadServerSettings(serverImportPath);
+                serverPath += "-Copy";
+                serverName += "-Copy";
+            }
+            
+            ServerSettings settings;
+            if (new FileInfo(Path.Combine(originalServerDirectory, "server.properties")).Exists)
+            {
+                var settingsDict = new FileReader().ReadServerSettings(originalServerDirectory);
                 settings = new ServerSettings(settingsDict);
             }
             else
             {
-                //TODO use world name
-                settings = new ServerSettings(serverName);
+                string worldName = validationInfo.Worlds.First().Name;
+                settings = new ServerSettings(worldName);
             }
 
             Server server = new Server(serverName, version, settings, new ServerJavaSettings());
-            return server;
-        }
-
-        private bool ImportServer(Server server, ImportViewModel importViewModel, ServerValidationInfo validationInfo,
-            string originalServerDirectory, string serverName)
-        {
-            server.Name = serverName;
-            string serverPath = Path.Combine(App.ApplicationPath, server.Name);
+            serverNames.Add(serverName);
+            
+            //Add server to Fork
+            ServerViewModel viewModel = new ServerViewModel(server);
+            viewModel.StartImport();
+            Application.Current.Dispatcher.Invoke(() => Servers.Add(viewModel));
+            ApplicationManager.Instance.MainViewModel.SelectedServer = viewModel;
+            
             //Create server directory
-            DirectoryInfo directoryInfo = Directory.CreateDirectory(Path.Combine(serverPath));
+            DirectoryInfo serverDirectory = Directory.CreateDirectory(serverPath);
             
             //Import server files
             Thread copyThread = new Thread(() =>
             {
                 FileImporter fileImporter = new FileImporter();
-                fileImporter.CopyProgressChanged += importViewModel.CopyProgressChanged;
+                fileImporter.CopyProgressChanged += viewModel.CopyProgressChanged;
                 fileImporter.DirectoryCopy(originalServerDirectory, serverPath, true, new List<string>{"server.jar"});
                 Console.WriteLine("Finished copying server files for server "+serverName);
+                viewModel.FinishedCopying();
             });
             copyThread.Start();
             
@@ -216,37 +217,20 @@ namespace fork.Logic.Manager
             Thread thread = new Thread(() =>
             {
                 WebClient webClient = new WebClient();
-                webClient.DownloadProgressChanged += importViewModel.DownloadProgressChanged;
-                webClient.DownloadFileCompleted += importViewModel.DownloadCompletedHandler;
+                webClient.DownloadProgressChanged += viewModel.DownloadProgressChanged;
+                webClient.DownloadFileCompleted += viewModel.DownloadCompletedHandler;
                 webClient.DownloadFileAsync(new Uri(server.Version.JarLink),
-                    Path.Combine(directoryInfo.FullName, "server.jar"));
+                    Path.Combine(serverDirectory.FullName, "server.jar"));
             });
             thread.Start();
-
+            
             if (!validationInfo.EulaTxt)
             {
                 //Write Eula
                 new FileWriter().WriteEula(serverPath);
             }
-
-            //Wait for download to complete
-            while (true)
-            {
-                if (importViewModel.DownloadCompleted)
-                {
-                    Console.WriteLine("Finished downloading server.jar for server " + server.Name);
-                    break;
-                }
-
-                Thread.Sleep(500);
-            }
-
-            //Add server to Fork
-            ServerViewModel viewModel = new ServerViewModel(server);
-            Application.Current.Dispatcher.Invoke(() => Servers.Add(viewModel));
-            ApplicationManager.Instance.MainViewModel.SelectedServer = viewModel;
-
-            //TODO check if download was also complete
+            
+            
             return new DirectoryInfo(serverPath).Exists;
         }
 

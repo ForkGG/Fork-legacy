@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using fork.Annotations;
 using fork.Logic.BackgroundWorker.Performance;
 using fork.Logic.CustomConsole;
+using fork.Logic.ImportLogic;
 using fork.Logic.Manager;
 using fork.Logic.Model;
 using fork.Logic.Persistence;
@@ -151,9 +152,11 @@ namespace fork.ViewModel
         }
 
         public double DownloadProgress { get; set; }
-        public string DownloadProgressReadable { get; set; }
-        public bool DownloadCompleted { get; 
-            set; }
+        public bool DownloadCompleted { get; set; }
+        public double CopyProgress { get; set; }
+        public bool ImportCompleted { get; set; } = true;
+
+        public bool ReadyToUse => Server.Initialized && ImportCompleted;
 
         public ServerViewModel(Server server)
         {
@@ -305,7 +308,7 @@ namespace fork.ViewModel
             double bytesIn = double.Parse(e.BytesReceived.ToString());
             double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
             DownloadProgress = bytesIn / totalBytes * 100;
-            DownloadProgressReadable = Math.Round(DownloadProgress, 0) + "%";
+            //DownloadProgressReadable = Math.Round(DownloadProgress, 0) + "%";
         }
 
         public void DownloadCompletedHandler(object sender, AsyncCompletedEventArgs e)
@@ -315,6 +318,27 @@ namespace fork.ViewModel
             Serializer.Instance.StoreServers(ServerManager.Instance.Servers);
             Console.WriteLine("Finished downloading server.jar for server " + Server.Name);
             raisePropertyChanged(nameof(Server));
+            raisePropertyChanged(nameof(ReadyToUse));
+        }
+
+        public void StartImport()
+        {
+            ImportCompleted = false;
+            raisePropertyChanged(nameof(ImportCompleted));
+            raisePropertyChanged(nameof(ReadyToUse));
+        }
+
+        public void FinishedCopying()
+        {
+            ImportCompleted = true;
+            raisePropertyChanged(nameof(ImportCompleted));
+            raisePropertyChanged(nameof(ReadyToUse));
+        }
+        
+        public void CopyProgressChanged(object sender, FileImporter.CopyProgressChangedEventArgs e)
+        {
+            CopyProgress = (double)e.FilesCopied / (double)e.FilesToCopy *100;
+            //CopyProgressReadable = Math.Round(CopyProgress, 0) + "%";
         }
         
         public void ServerNameChanged()

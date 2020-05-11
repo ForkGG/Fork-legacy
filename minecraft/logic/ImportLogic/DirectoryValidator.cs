@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.IO;
+using System.Windows.Controls;
 
 namespace fork.Logic.ImportLogic
 {
@@ -18,7 +20,7 @@ namespace fork.Logic.ImportLogic
                 WorldValidationInfo info = ValidateWorldDirectory(directory);
                 if (info.IsValid)
                 {
-                    serverValInfo.WorldValidationInfo = info;
+                    serverValInfo.Worlds.Add(info);
                 }
             }
 
@@ -67,6 +69,8 @@ namespace fork.Logic.ImportLogic
                 return worldValInfo;
             }
 
+            worldValInfo.Name = dirInfo.Name;
+
             foreach (DirectoryInfo dir in dirInfo.EnumerateDirectories())
             {
                 if (dir.Name.Equals("data"))
@@ -103,13 +107,14 @@ namespace fork.Logic.ImportLogic
         public bool LevelDat { get; set; }
         public bool SessionLock { get; set; }
         public bool PlayerInfo { get; set; }
+        public string Name { get; set; }
 
         public bool IsValid => Data && Region && LevelDat;
     }
 
     public class ServerValidationInfo
     {
-        public WorldValidationInfo WorldValidationInfo { get; set; } = new WorldValidationInfo();
+        public List<WorldValidationInfo> Worlds { get; } = new List<WorldValidationInfo>();
         public bool ServerProperties { get; set; }
         public bool EulaTxt { get; set; }
         public bool Whitelist { get; set; }
@@ -118,6 +123,6 @@ namespace fork.Logic.ImportLogic
         public bool BukkitYml { get; set; }
         public bool PaperYml { get; set; }
         public bool SpigotYml { get; set; }
-        public bool IsValid => WorldValidationInfo.IsValid;
+        public bool IsValid => Worlds.Count != 0;
     }
 }
