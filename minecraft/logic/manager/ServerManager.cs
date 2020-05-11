@@ -38,6 +38,14 @@ namespace fork.Logic.Manager
                 Servers = new ObservableCollection<ServerViewModel>();
             }
 
+            foreach (ServerViewModel viewModel in Servers)
+            {
+                if (!viewModel.Server.Initialized)
+                {
+                    DownloadJarAsync(viewModel, new DirectoryInfo(Path.Combine(App.ApplicationPath, viewModel.Server.Name)));
+                }
+            }
+
             Servers.CollectionChanged += ServerListChanged;
 
             serverNames = new HashSet<string>();
@@ -308,15 +316,7 @@ namespace fork.Logic.Manager
             
             //Download server.jar
             DirectoryInfo directoryInfo = Directory.CreateDirectory(Path.Combine(App.ApplicationPath, serverName));
-            Thread thread = new Thread(() =>
-            {
-                WebClient webClient = new WebClient();
-                webClient.DownloadProgressChanged += viewModel.DownloadProgressChanged;
-                webClient.DownloadFileCompleted += viewModel.DownloadCompletedHandler;
-                webClient.DownloadFileAsync(new Uri(serverVersion.JarLink),
-                    Path.Combine(directoryInfo.FullName, "server.jar"));
-            });
-            thread.Start();
+            DownloadJarAsync(viewModel,directoryInfo);
             
             //Move World Files
             if (worldPath != null)
@@ -330,6 +330,19 @@ namespace fork.Logic.Manager
                 serverSettings.SettingsDictionary);
 
             return true;
+        }
+
+        private void DownloadJarAsync(ServerViewModel viewModel, DirectoryInfo directoryInfo)
+        {
+            Thread thread = new Thread(() =>
+            {
+                WebClient webClient = new WebClient();
+                webClient.DownloadProgressChanged += viewModel.DownloadProgressChanged;
+                webClient.DownloadFileCompleted += viewModel.DownloadCompletedHandler;
+                webClient.DownloadFileAsync(new Uri(viewModel.Server.Version.JarLink),
+                    Path.Combine(directoryInfo.FullName, "server.jar"));
+            });
+            thread.Start();
         }
 
         private bool DeleteServer(ServerViewModel serverViewModel)

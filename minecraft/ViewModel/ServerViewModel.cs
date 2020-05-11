@@ -311,8 +311,8 @@ namespace fork.ViewModel
         public void DownloadCompletedHandler(object sender, AsyncCompletedEventArgs e)
         {
             DownloadCompleted = true;
-            Serializer.Instance.StoreServers(ServerManager.Instance.Servers);
             Server.Initialized = true;
+            Serializer.Instance.StoreServers(ServerManager.Instance.Servers);
             Console.WriteLine("Finished downloading server.jar for server " + Server.Name);
             raisePropertyChanged(nameof(Server));
         }
