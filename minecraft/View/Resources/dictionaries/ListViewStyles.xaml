@@ -204,13 +204,20 @@
                             <Grid Width="250" Height="60">
                                 <Border x:Name="background" Background="Transparent" Width="251" CornerRadius="0 8 8 0" Margin="-1 0 0 0"/>
                                 <DockPanel Panel.ZIndex="1" LastChildFill="True">
-                                    <Ellipse Margin="10 0 0 0" Width="15" Height="15" Fill="{Binding IconColor}"/>
+                                    <Ellipse Margin="15 0 0 0" Width="15" Height="15" Fill="{Binding IconColor}"/>
                                     <Border Height="40" Width="40" Background="Transparent" Margin="5 0 10 0">
                                         <Image x:Name="image" Source="{Binding Icon}" Width="25" Height="25" RenderOptions.BitmapScalingMode="Linear"/>
                                     </Border>
                                     <TextBlock x:Name="title" Text="{Binding Server.Name}" VerticalAlignment="Center" FontSize="20" FontFamily="{StaticResource Montserrat-SemiBold}" 
-                                               Foreground="{DynamicResource textUnselected}" Margin="0 0 10 0"/>
+                                               Foreground="{DynamicResource textUnselected}" Margin="0 0 15 0"/>
                                 </DockPanel>
+                                <Grid.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Rename" Style="{DynamicResource ContextMenuItem}" IsEnabled="False"/>
+                                        <MenuItem Header="Clone" Style="{DynamicResource ContextMenuItem}" IsEnabled="False"/>
+                                        <MenuItem Header="Delete" Style="{DynamicResource RedContextMenuItem}" IsEnabled="False"/>
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
                             </Grid>
                         </StackPanel>
                     </Border>
