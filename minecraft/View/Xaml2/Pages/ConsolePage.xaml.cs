@@ -33,6 +33,7 @@ namespace fork.View.Xaml2.Pages
             this.viewModel = viewModel;
             DataContext = this.viewModel;
         }
+        
 
         
         #region autoscrolling
@@ -46,7 +47,7 @@ namespace fork.View.Xaml2.Pages
         {
             // User scroll event : set or unset auto-scroll mode
             if (e.ExtentHeightChange == 0)
-            {   // Content unchanged : user scroll event
+            {   // Content unchanged : uSelectPlayerList
                 if (ScrollViewer.VerticalOffset == ScrollViewer.ScrollableHeight)
                 {   // Scroll bar is in bottom
                     // Set auto-scroll mode
@@ -67,5 +68,45 @@ namespace fork.View.Xaml2.Pages
             }
         }
         #endregion autoscrolling
+
+        private void Player_Ban(object sender, RoutedEventArgs e)
+        {
+            MenuItem item = sender as MenuItem;
+            PlayerManager.Instance.BanPlayer(viewModel, item?.CommandParameter as string);
+        }
+        
+        private void Player_OP(object sender, RoutedEventArgs e)
+        {
+            MenuItem item = sender as MenuItem;
+            PlayerManager.Instance.OpPlayer(viewModel, item?.CommandParameter as string);
+        }
+        private void Player_Kick(object sender, RoutedEventArgs e)
+        {
+            MenuItem item = sender as MenuItem;
+            PlayerManager.Instance.KickPlayer(viewModel, item?.CommandParameter as string);
+        }
+        
+        private void Player_Deop(object sender, RoutedEventArgs e)
+        {
+            MenuItem item = sender as MenuItem;
+            PlayerManager.Instance.DeopPlayer(viewModel, item?.CommandParameter as string);
+        }
+
+        private void Player_Unwhitelist(object sender, RoutedEventArgs e)
+        {
+            MenuItem item = sender as MenuItem;
+            PlayerManager.Instance.UnWhitelistPlayer(viewModel, item?.CommandParameter as string);
+        }
+
+        private void AddToWhiteList_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO
+        }
+
+        private void Player_Unban(object sender, RoutedEventArgs e)
+        {
+            MenuItem item = sender as MenuItem;
+            PlayerManager.Instance.UnBanPlayer(viewModel, item?.CommandParameter as string);
+        }
     }
 }

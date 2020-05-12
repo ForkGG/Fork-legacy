@@ -7,6 +7,8 @@
       xmlns:shapes="clr-namespace:fork.View.Xaml2.Shapes"
       xmlns:converter="clr-namespace:fork.View.Xaml.Converter"
       xmlns:helper="clr-namespace:fork.View.Resources.Helper"
+      xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+      xmlns:controls="clr-namespace:fork.View.Xaml2.Controls"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ConsolePage">
@@ -15,13 +17,258 @@
         <FontFamily x:Key="Montserrat-Bold">pack://application:,,,/View/Resources/Fonts/Montserrat-Bold.ttf#Montserrat</FontFamily>
         <converter:ListToStringConverter x:Key="ListToStringConverter"/>
         <converter:PercentageToColorConverter x:Key="PercentageToStringConverter"/>
+        <converter:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
+        <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <CollectionViewSource x:Key="playerList" Source="{Binding PlayerList}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name" Direction="Ascending"/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <CollectionViewSource x:Key="banList" Source="{Binding BanList}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name" Direction="Ascending"/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <CollectionViewSource x:Key="whiteList" Source="{Binding WhiteList}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name" Direction="Ascending"/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
     </Page.Resources>
     <DockPanel Margin="0 10 0 0">
         
         <!-- Right Part -->
-        <DockPanel DockPanel.Dock="Right">            
-            <Rectangle Fill="{DynamicResource backgroundDark}" Width="200" Margin="10 0 0 20"/>
-        </DockPanel>
+        <TabControl DockPanel.Dock="Right" Margin="5" Width="180">
+            <!-- Playerlist -->
+            <TabItem BorderBrush="{x:Null}">
+                <TabItem.Header>
+                    <Image Width="20" Margin="3">
+                        <Image.Style>
+                            <Style TargetType="Image">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="False">
+                                        <Setter Property="Source" Value="pack://application:,,,/View/Resources/images/Icons/PlayerList.png"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Source" Value="pack://application:,,,/View/Resources/images/Icons/PlayerListW.png"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
+                </TabItem.Header>
+                <DockPanel Background="{DynamicResource backgroundDark}">
+                    <TextBlock Text="Playerlist" DockPanel.Dock="Top" Foreground="{DynamicResource textSelected}" TextAlignment="Center" FontSize="15" Margin="0 10 0 5"/>
+                    <ListView ItemsSource="{Binding Source={StaticResource playerList}}" x:Name="Playerlist" BorderThickness="0" Background="Transparent" Margin="10">
+                        <ListView.Resources>
+                            <helper:BindingProxy x:Key="ServerRunningBinding" Data="{Binding}"/>
+                        </ListView.Resources>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Background" Value="Green"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListViewItem">
+                                            <Border BorderThickness="2" Margin="0 1" BorderBrush="{x:Null}">
+                                                <DockPanel>
+                                                    <Border x:Name="border" BorderThickness="1" Margin="5 0" CornerRadius="5">
+                                                        <Grid>
+                                                            <Border Visibility="Hidden">
+                                                                <Border Name="CornersMask" Background="White" CornerRadius="7"/>
+                                                            </Border>
+                                                            <TextBlock>
+                                                                <TextBlock.OpacityMask>
+                                                                    <VisualBrush Visual="{Binding ElementName=CornersMask}"/>
+                                                                </TextBlock.OpacityMask>
+                                                                <Image Source="{Binding Head}" MinHeight="30px" MinWidth="30px" Stretch="Fill" RenderOptions.BitmapScalingMode="NearestNeighbor" 
+                                                                       HorizontalAlignment="Center" VerticalAlignment="Center" RenderOptions.EdgeMode="Aliased"/>
+                                                            </TextBlock>
+                                                            <Border x:Name="overlay" Background="White" Opacity="0.3" CornerRadius="7" Visibility="Hidden"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <TextBlock x:Name="text" Text="{Binding Name}" Grid.Column="1" VerticalAlignment="Center" Foreground="{DynamicResource textSelected}" FontSize="14" Margin="5 0 0 0"/>
+                                                </DockPanel>
+                                                <Border.ContextMenu>
+                                                    <ContextMenu x:Name="WhitelistContextMenu">
+                                                        <MenuItem Header="Ban Player" Click="Player_Ban" CommandParameter="{Binding Name}" IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}" 
+                                                                  Style="{DynamicResource ContextMenuItem}"/>
+                                                        <MenuItem Header="OP Player" Click="Player_OP" CommandParameter="{Binding Name}" IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}" 
+                                                                  Style="{DynamicResource ContextMenuItem}"/>
+                                                        <!-- TODO Deop? -->
+                                                        <MenuItem Header="Kick Player" Click="Player_Kick" CommandParameter="{Binding Name}" IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}" 
+                                                                  Style="{DynamicResource ContextMenuItem}"/>
+                                                    </ContextMenu>
+                                                </Border.ContextMenu>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="text" Property="Foreground" Value="White"/>
+                                                    <Setter TargetName="overlay" Property="Visibility" Value="Visible"/>
+                                                </Trigger>
+                                                <Trigger SourceName="WhitelistContextMenu" Property="ContextMenu.IsOpen" Value="True">
+                                                    <Setter TargetName="text" Property="Foreground" Value="White"/>
+                                                    <Setter TargetName="overlay" Property="Visibility" Value="Visible"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </DockPanel>
+            </TabItem>
+            <!-- Ban-List -->
+            <TabItem>
+                <TabItem.Header>
+                    <Image Width="20" Margin="3">
+                        <Image.Style>
+                            <Style TargetType="Image">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="False">
+                                        <Setter Property="Source" Value="pack://application:,,,/View/Resources/images/Icons/Banned.png"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Source" Value="pack://application:,,,/View/Resources/images/Icons/BannedW.png"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
+                </TabItem.Header>
+                <DockPanel Background="{DynamicResource backgroundDark}">
+                    <TextBlock Text="Banned Players" DockPanel.Dock="Top" Foreground="{DynamicResource textSelected}" TextAlignment="Center" FontSize="15" Margin="0 10 0 5"/>
+                    <ListView DockPanel.Dock="Top" ItemsSource="{Binding Source={StaticResource banList}}" BorderThickness="0" Margin="10" Background="Transparent">
+                        <ListView.Resources>
+                            <helper:BindingProxy x:Key="ServerRunningBinding" Data="{Binding}"/>
+                        </ListView.Resources>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Background" Value="Green"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListViewItem">
+                                            <Border BorderThickness="2" Margin="0 1" BorderBrush="{x:Null}">
+                                                <DockPanel>
+                                                    <Border x:Name="border" BorderThickness="1" Margin="5 0" CornerRadius="5">
+                                                        <Grid>
+                                                            <Border Visibility="Hidden">
+                                                                <Border Name="CornersMask" Background="White" CornerRadius="7"/>
+                                                            </Border>
+                                                            <TextBlock>
+                                                                <TextBlock.OpacityMask>
+                                                                    <VisualBrush Visual="{Binding ElementName=CornersMask}"/>
+                                                                </TextBlock.OpacityMask>
+                                                                <Image Source="{Binding Head}" MinHeight="30px" MinWidth="30px" Stretch="Fill" RenderOptions.BitmapScalingMode="NearestNeighbor" 
+                                                                       HorizontalAlignment="Center" VerticalAlignment="Center" RenderOptions.EdgeMode="Aliased"/>
+                                                            </TextBlock>
+                                                            <Border x:Name="overlay" Background="White" Opacity="0.3" CornerRadius="7" Visibility="Hidden"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <TextBlock x:Name="text" Text="{Binding Name}" Grid.Column="1" VerticalAlignment="Center" Foreground="{DynamicResource textSelected}" FontSize="14" Margin="5 0 0 0"/>
+                                                </DockPanel>
+                                                <Border.ContextMenu>
+                                                    <ContextMenu x:Name="WhitelistContextMenu">
+                                                        <MenuItem Header="Un-Ban Player" Click="Player_Unban" CommandParameter="{Binding Name}" IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}"
+                                                                  Style="{DynamicResource ContextMenuItem}"/>
+                                                    </ContextMenu>
+                                                </Border.ContextMenu>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="text" Property="Foreground" Value="White"/>
+                                                    <Setter TargetName="overlay" Property="Visibility" Value="Visible"/>
+                                                </Trigger>
+                                                <Trigger SourceName="WhitelistContextMenu" Property="ContextMenu.IsOpen" Value="True">
+                                                    <Setter TargetName="text" Property="Foreground" Value="White"/>
+                                                    <Setter TargetName="overlay" Property="Visibility" Value="Visible"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </DockPanel>
+            </TabItem>
+            <!-- Whitelist -->
+            <TabItem Visibility="{Binding Server.ServerSettings.Whitelist, Converter={StaticResource BoolToVisibilityConverter}}">
+                <TabItem.Header>
+                    <Image Width="20" Margin="3">
+                        <Image.Style>
+                            <Style TargetType="Image">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="False">
+                                        <Setter Property="Source" Value="pack://application:,,,/View/Resources/images/Icons/WhiteList.png"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Source" Value="pack://application:,,,/View/Resources/images/Icons/WhiteListW.png"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
+                </TabItem.Header>
+                <DockPanel Background="{DynamicResource backgroundDark}">
+                    <TextBlock Text="Whitelisted Players" DockPanel.Dock="Top" Foreground="{DynamicResource textSelected}" TextAlignment="Center" FontSize="15" Margin="0 10 0 5"/>
+                    <Button DockPanel.Dock="Bottom" Content="Add Player" Margin="0 10 0 0" Width="120" Click="AddToWhiteList_Click" IsEnabled="{Binding ServerRunning}"/>
+                    <ListView DockPanel.Dock="Top" ItemsSource="{Binding Source={StaticResource whiteList}}" BorderThickness="0" Margin="10" Background="Transparent">
+                        <ListView.Resources>
+                            <helper:BindingProxy x:Key="ServerRunningBinding" Data="{Binding}"/>
+                        </ListView.Resources>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Background" Value="Green"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListViewItem">
+                                            <Border BorderThickness="2" Margin="0 1" BorderBrush="{x:Null}">
+                                                <DockPanel>
+                                                    <Border x:Name="border" BorderThickness="1" Margin="5 0" CornerRadius="5">
+                                                        <Grid>
+                                                            <Border Visibility="Hidden">
+                                                                <Border Name="CornersMask" Background="White" CornerRadius="7"/>
+                                                            </Border>
+                                                            <TextBlock>
+                                                                <TextBlock.OpacityMask>
+                                                                    <VisualBrush Visual="{Binding ElementName=CornersMask}"/>
+                                                                </TextBlock.OpacityMask>
+                                                                <Image Source="{Binding Head}" MinHeight="30px" MinWidth="30px" Stretch="Fill" RenderOptions.BitmapScalingMode="NearestNeighbor" 
+                                                                       HorizontalAlignment="Center" VerticalAlignment="Center" RenderOptions.EdgeMode="Aliased"/>
+                                                            </TextBlock>
+                                                            <Border x:Name="overlay" Background="White" Opacity="0.3" CornerRadius="7" Visibility="Hidden"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <TextBlock x:Name="text" Text="{Binding Name}" Grid.Column="1" VerticalAlignment="Center" Foreground="{DynamicResource textSelected}" FontSize="14" Margin="5 0 0 0"/>
+                                                </DockPanel>
+                                                <Border.ContextMenu>
+                                                    <ContextMenu x:Name="WhitelistContextMenu">
+                                                        <MenuItem Header="Remove Player" Click="Player_Unwhitelist" CommandParameter="{Binding Name}"  Style="{DynamicResource ContextMenuItem}"
+                                                                  IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}">
+                                                        </MenuItem>
+                                                    </ContextMenu>
+                                                </Border.ContextMenu>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="text" Property="Foreground" Value="White"/>
+                                                    <Setter TargetName="overlay" Property="Visibility" Value="Visible"/>
+                                                </Trigger>
+                                                <Trigger SourceName="WhitelistContextMenu" Property="ContextMenu.IsOpen" Value="True">
+                                                    <Setter TargetName="text" Property="Foreground" Value="White"/>
+                                                    <Setter TargetName="overlay" Property="Visibility" Value="Visible"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </DockPanel>
+            </TabItem>
+        </TabControl>
         
         <!-- Center Part -->
         <DockPanel>

@@ -9,8 +9,8 @@
                     <DockPanel LastChildFill="True">
                         <TabPanel x:Name="HeaderPanel" Grid.Row="0" Panel.ZIndex="1" Margin="0,0,4,-1" IsItemsHost="True" 
                                   KeyboardNavigation.TabIndex="1" Background="Transparent" DockPanel.Dock="Top"/>
-                        <Border BorderBrush="{DynamicResource backgroundLight}" BorderThickness="0">
-                            <ContentPresenter x:Name="PART_SelectedContentHost" Margin="0" ContentSource="SelectedContent" />
+                        <Border BorderBrush="{DynamicResource backgroundDark}" BorderThickness="3" CornerRadius="5">
+                            <ContentPresenter x:Name="PART_SelectedContentHost" Margin="0" ContentSource="SelectedContent"/>
                         </Border>
                     </DockPanel>
                 </ControlTemplate>
@@ -23,7 +23,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
                     <Grid Name="Panel">
-                        <Border Name="Border" BorderThickness="0" CornerRadius="2 2 0 0" Margin="0 0 0 0">
+                        <Border Name="Border" BorderThickness="0" CornerRadius="5 5 0 0" Margin="10 0 0 0">
                             <ContentPresenter x:Name="ContentSite" 
                                     VerticalAlignment="Center" 
                                     HorizontalAlignment="Center" 
@@ -33,11 +33,14 @@
 
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource tabHover}"/>
-                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource backgroundConsole}"/>
+                        </MultiTrigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource tabSelected}"/>
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource backgroundDark}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

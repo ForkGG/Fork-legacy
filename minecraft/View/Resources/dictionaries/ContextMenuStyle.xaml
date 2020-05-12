@@ -2,28 +2,65 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Style TargetType="{x:Type ContextMenu}">
-        <Setter Property="SnapsToDevicePixels"
-          Value="True" />
-        <Setter Property="OverridesDefaultStyle"
-          Value="True" />
-        <Setter Property="Grid.IsSharedSizeScope"
-          Value="true" />
-        <Setter Property="HasDropShadow"
-          Value="True" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Grid.IsSharedSizeScope" Value="true" />
+        <Setter Property="HasDropShadow" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ContextMenu}">
                     <Border x:Name="Border"
-                        Background="{StaticResource backgroundLight}"
-                        BorderThickness="1">
-                        <Border.BorderBrush>
-                            <SolidColorBrush Color="Gray"/>
-                        </Border.BorderBrush>
-                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle"/>
+                            Background="{DynamicResource backgroundDefault}"
+                            BorderThickness="0"
+                            CornerRadius="10">
+                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle" Margin="0 10"/>
                     </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="MenuItem" x:Key="ContextMenuItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="MenuItem">
+                    <Border x:Name="background" CornerRadius="0" BorderThickness="0" MinWidth="150" Height="40">
+                        <TextBlock x:Name="text" Text="{TemplateBinding Header}" TextAlignment="Center" FontSize="15" Margin="10 5" VerticalAlignment="Center"/>
+                    </Border>
+
                     <ControlTemplate.Triggers>
-                        <Trigger Property="HasDropShadow" Value="true">
-                            <Setter TargetName="Border" Property="CornerRadius"  Value="0" />
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource textUnselected}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="True">
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource textSelected}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="background" Property="Background" Value="{DynamicResource backgroundDarker}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>            
+        </Setter>
+    </Style>
+
+    <Style x:Key="RedContextMenuItem" TargetType="MenuItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="MenuItem">
+                    <Border x:Name="background" CornerRadius="0" BorderThickness="0" MinWidth="150" Height="40">
+                        <TextBlock x:Name="text" Text="{TemplateBinding Header}" TextAlignment="Center" FontSize="15" Margin="10 5" VerticalAlignment="Center"/>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource buttonBgrRed}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="True">
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource buttonBgrRed}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="background" Property="Background" Value="{DynamicResource backgroundDarker}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

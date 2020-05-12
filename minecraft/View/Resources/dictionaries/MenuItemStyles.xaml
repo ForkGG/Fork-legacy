@@ -108,10 +108,7 @@
                         ContentSource="Icon" />
                 <Border x:Name="Check" Width="13" Height="13" Visibility="Collapsed" Margin="6,0,6,0" BorderThickness="1">
                     <Path x:Name="CheckMark" Width="7" Height="7" Visibility="Hidden" SnapsToDevicePixels="False"
-                          StrokeThickness="2" Data="M 0 0 L 7 7 M 0 7 L 7 0">
-                        <Path.Stroke>
-                            <SolidColorBrush Color="Green" />
-                        </Path.Stroke>
+                          StrokeThickness="2" Data="M 0 0 L 7 7 M 0 7 L 7 0" Stroke="{DynamicResource backgroundDefault}">
                     </Path>
                 </Border>
                 <ContentPresenter x:Name="HeaderHost"
@@ -150,13 +147,8 @@
                 <Setter Property="Background" TargetName="Border" Value="{DynamicResource buttonHover}"/>
                 <Setter Property="BorderBrush" TargetName="Border" Value="Transparent"/>
             </Trigger>
-            <Trigger Property="IsEnabled"
-             Value="false">
-                <Setter Property="Foreground">
-                    <Setter.Value>
-                        <SolidColorBrush Color="{DynamicResource borderDefault}" />
-                    </Setter.Value>
-                </Setter>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter Property="Foreground" Value="Green"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -179,7 +171,7 @@
                         ContentSource="Icon" />
                 <ContentPresenter x:Name="HeaderHost"
                         Grid.Column="1"
-                        ContentSource="Header"
+                        ContentSource="Header"                        
                         RecognizesAccessKey="True" />
                 <TextBlock x:Name="InputGestureText"
                  Grid.Column="2"

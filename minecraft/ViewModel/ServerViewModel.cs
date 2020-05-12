@@ -187,6 +187,7 @@ namespace fork.ViewModel
             Application.Current.Dispatcher.Invoke(new Action(() => ConsolePage = new ConsolePage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => SettingsViewModel = new SettingsViewModel(Server)));
 
+            PlayerList.CollectionChanged += PlayerListChanged;
             WhiteList.CollectionChanged += WhiteListChanged;
             BanList.CollectionChanged += BanListChanged;
             OPList.CollectionChanged += OPListChanged;
@@ -351,6 +352,12 @@ namespace fork.ViewModel
             raisePropertyChanged(nameof(ConsoleOutList));
         }
 
+        private void PlayerListChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            
+            raisePropertyChanged(nameof(PlayerList));
+        }
+        
         private void WhiteListChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             raisePropertyChanged(nameof(WhiteList));
