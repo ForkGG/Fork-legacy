@@ -27,8 +27,11 @@ namespace fork.Logic.BackgroundWorker
                 return;
             }
 
-            string[] addressinfo = viewModel.AddressInfo.Split(':');
-            Query.Query query = new Query.Query(addressinfo[0],int.Parse(addressinfo[1]));
+            int indexOfSep = viewModel.AddressInfo.LastIndexOf(':');
+            string ip = viewModel.AddressInfo.Substring(0, indexOfSep);
+            string port = viewModel.AddressInfo.Substring(indexOfSep + 1, viewModel.AddressInfo.Length - indexOfSep -1);
+
+            Query.Query query = new Query.Query(ip,int.Parse(port));
 
             //Update the stats of the server while it is running
             bool QueryCrashed = false;
