@@ -73,7 +73,7 @@
                     </controls:IconButton>
 
                     <controls:IconButton Margin="10" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrYellow}" HoverBackground="{DynamicResource buttonBgrYellow}"
-                                         Width="55" Height="55" IconWidth="25.2" IconHeight="28.8" Style="{DynamicResource RestartIconButton}"
+                                         Width="55" Height="55" IconWidth="25.2" IconHeight="28.8" Style="{DynamicResource RestartIconButton}" Click="RestartButton_Click"
                                          IconSource="pack://application:,,,/View/Resources/images/Icons/Restart.png"
                                          HoverIconSource="pack://application:,,,/View/Resources/images/Icons/RestartW.png"/>
                 </StackPanel>
@@ -106,7 +106,7 @@
             <Grid>
                 <Frame x:Name="terminalPage" Content="{Binding ConsolePage}" NavigationUIVisibility="Hidden"></Frame>
                 <Frame x:Name="settingsPage" Visibility="Hidden" Content="{Binding SettingsViewModel.SettingsPage}" NavigationUIVisibility="Hidden"></Frame>
-                <Frame x:Name="worldsPage" Visibility="Hidden"/>
+                <Frame x:Name="worldsPage" Visibility="Hidden" Content="{Binding WorldsPage}" NavigationUIVisibility="Hidden"/>
                 <Frame x:Name="pluginsPage" Visibility="Hidden"/>
             </Grid>
         </DockPanel>

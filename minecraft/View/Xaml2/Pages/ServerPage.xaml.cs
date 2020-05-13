@@ -114,5 +114,10 @@ namespace fork.View.Xaml2.Pages
                 frame.Visibility = Visibility.Hidden;
             }
         }
+
+        private void RestartButton_Click(object sender, RoutedEventArgs e)
+        {
+            ServerManager.Instance.RestartServerAsync(viewModel);
+        }
     }
 }

@@ -112,6 +112,14 @@ namespace fork.Logic.Manager
             bool result = await t;
             return result;
         }
+        
+        public async Task<bool> RestartServerAsync(ServerViewModel serverViewModel)
+        {
+            Task<bool> t = new Task<bool>(() => RestartServer(serverViewModel));
+            t.Start();
+            bool result = await t;
+            return result;
+        }
 
         public async Task<bool> DeleteServerAsync(ServerViewModel serverViewModel)
         {
@@ -151,7 +159,7 @@ namespace fork.Logic.Manager
             }
         }
 
-        public void RestartServer(ServerViewModel serverViewModel)
+        public bool RestartServer(ServerViewModel serverViewModel)
         {
             StopServer(serverViewModel.Server);
             while (serverViewModel.CurrentStatus != ServerStatus.STOPPED)
@@ -160,6 +168,8 @@ namespace fork.Logic.Manager
             }
 
             StartServer(serverViewModel);
+
+            return true;
         }
 
 
