@@ -21,7 +21,9 @@ using fork.Logic.Model;
 using fork.Logic.Persistence;
 using fork.Logic.RoleManagement;
 using fork.View.Xaml2.Pages;
+using Fork.View.Xaml2.Pages;
 using Console = System.Console;
+using RadioButton = System.Windows.Forms.RadioButton;
 using Timer = System.Timers.Timer;
 
 namespace fork.ViewModel
@@ -40,6 +42,7 @@ namespace fork.ViewModel
         private RoleUpdater whitelistUpdater;
         private RoleUpdater banlistUpdater;
         private RoleUpdater oplistUpdater;
+        private World activeWorld;
 
         public ConsoleReader ConsoleReader;
         public ObservableCollection<string> ConsoleOutList { get; }
@@ -48,6 +51,8 @@ namespace fork.ViewModel
         public ObservableCollection<Player> OPList { get; set; } = new ObservableCollection<Player>();
         public ObservableCollection<Player> WhiteList { get; set; } = new ObservableCollection<Player>();
         public ObservableCollection<ServerVersion> Versions { get; set; } = new ObservableCollection<ServerVersion>();
+        public ObservableCollection<World> Worlds { get; set; }
+        
         public string ConsoleIn { get; set; } = "";
         public ServerStatus CurrentStatus { get; set; }
         public Server Server { get; set; }
@@ -134,6 +139,7 @@ namespace fork.ViewModel
         public double MemValueRaw => memValue/Server.JavaSettings.MaxRam *100;
         public Page ServerPage { get; set; }
         public Page ConsolePage { get; set; }
+        public Page WorldsPage { get; set; }
         public SettingsViewModel SettingsViewModel { get; set; }
 
         private ICommand readConsoleIn;
@@ -185,12 +191,19 @@ namespace fork.ViewModel
             UpdateAddressInfo();
             Application.Current.Dispatcher.Invoke(new Action(() => ServerPage = new View.Xaml2.Pages.ServerPage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => ConsolePage = new ConsolePage(this)));
+            Application.Current.Dispatcher.Invoke(new Action(() => WorldsPage = new WorldsPage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => SettingsViewModel = new SettingsViewModel(Server)));
 
             PlayerList.CollectionChanged += PlayerListChanged;
             WhiteList.CollectionChanged += WhiteListChanged;
             BanList.CollectionChanged += BanListChanged;
             OPList.CollectionChanged += OPListChanged;
+            
+            Worlds = new ObservableCollection<World>();
+            Worlds.CollectionChanged += WorldsChanged;
+            
+            new Thread(InitializeWorldsList).Start();
+            
             new Thread(() =>
             {
                 RoleUpdater.InitializeList(RoleType.WHITELIST, WhiteList, Server);
@@ -290,6 +303,12 @@ namespace fork.ViewModel
             memTracker.TrackP(p, this);
         }
 
+        public void UpdateActiveWorld(World world)
+        {
+            Server.ServerSettings.LevelName = world.Name;
+            UpdateSettings();
+        }
+
         public void CPUValueUpdate(double value)
         {
             cpuValue = value;
@@ -346,6 +365,37 @@ namespace fork.ViewModel
         {
             raisePropertyChanged(nameof(ServerTitle));
         }
+        
+        private void InitializeWorldsList()
+        {
+            DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ApplicationPath,Server.Name));
+            foreach (DirectoryInfo directory in serverDir.EnumerateDirectories())
+            {
+                WorldValidationInfo worldVal = DirectoryValidator.ValidateWorldDirectory(directory);
+                if (worldVal.IsValid)
+                {
+                    World world = new World(worldVal.Name, this);
+                    if (Server.ServerSettings.LevelName.Equals(world.Name))
+                    {
+                        world.IsActive = true;
+                    }
+                    Application.Current.Dispatcher?.Invoke(()=>Worlds.Add(world));
+                }
+            }
+        }
+
+        private World WorldFromName(string worldName)
+        {
+            foreach (World world in Worlds)
+            {
+                if (world.Name.Equals(worldName))
+                {
+                    return world;
+                }
+            }
+
+            return null;
+        }
 
         private void ConsoleOutChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -361,6 +411,11 @@ namespace fork.ViewModel
         private void WhiteListChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             raisePropertyChanged(nameof(WhiteList));
+        }
+        
+        private void WorldsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            raisePropertyChanged(nameof(Worlds));
         }
 
         private void BanListChanged(object sender, NotifyCollectionChangedEventArgs e)

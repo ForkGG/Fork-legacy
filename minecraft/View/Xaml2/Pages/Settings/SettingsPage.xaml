@@ -18,16 +18,26 @@
                     <ListView Margin="0" Background="{DynamicResource backgroundDark}" Style="{DynamicResource SettingsListView}"
                               ItemContainerStyle="{DynamicResource SettingsListItem}" >
                         <ListViewItem Content="server.properties" IsSelected="True" Selected="SelectMCSettings"/>
-                        <ListViewItem Content="bukkit.yml" IsEnabled="True" Selected="SelectBukkitSettings"/>
-                        <ListViewItem Content="spigot.yml" IsEnabled="False" Selected="SelectSpigotSettings"/>
+                        <ListViewItem Content="bukkit.yml" Selected="SelectBukkitSettings"/>
+                        <ListViewItem Content="spigot.yml" Selected="SelectSpigotSettings"/>
                     </ListView>
                 </StackPanel>
             </DockPanel>
         </Grid>
         <Grid>
             <Frame x:Name="mcSettings" Content="{Binding VanillaSettingsPage}"/>
-            <Frame x:Name="bukkitSettings" Visibility="Hidden"/>
-            <Frame x:Name="spigotSettings" Visibility="Hidden"/>
+            <Frame x:Name="bukkitSettings" Visibility="Hidden">
+                <Frame.Content>
+                    <TextBlock Text="Coming soon" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="{DynamicResource Montserrat-SemiBold}"
+                       Foreground="{DynamicResource textSelected}"/>
+                </Frame.Content>
+            </Frame>
+            <Frame x:Name="spigotSettings" Visibility="Hidden">
+                <Frame.Content>
+                    <TextBlock Text="Coming soon" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="{DynamicResource Montserrat-SemiBold}"
+                       Foreground="{DynamicResource textSelected}"/>
+                </Frame.Content>
+            </Frame>
         </Grid> 
     </DockPanel>
 </Page>

@@ -147,6 +147,7 @@
     <Compile Include="Logic\Model\ServerStatus.cs" />
     <Compile Include="Logic\Model\ServerJavaSettings.cs" />
     <Compile Include="Logic\Model\SimpleTime.cs" />
+    <Compile Include="Logic\Model\World.cs" />
     <Compile Include="Logic\Persistence\FileReader.cs" />
     <Compile Include="Logic\Persistence\FileWriter.cs" />
     <Compile Include="Logic\Persistence\PersistencePO\BannedPlayer.cs" />
@@ -193,6 +194,9 @@
     </Compile>
     <Compile Include="View\Xaml2\Pages\Settings\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Xaml2\Pages\WorldsPage.xaml.cs">
+      <DependentUpon>WorldsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Xaml2\Shapes\UsageIndicatorBackground.cs" />
     <Compile Include="View\Xaml\Converter\BoolToVisibilityConverter.cs" />
@@ -295,6 +299,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="View\Xaml\Converter\ListToStringConverter.cs" />
+    <Page Include="View\Xaml2\Pages\WorldsPage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

@@ -7,6 +7,22 @@
         <Setter Property="Foreground" Value="{DynamicResource foregroundDefault}" />
     </Style>
 
+    <Style TargetType="RadioButton" x:Key="CustomRadioButton">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Ellipse x:Name="indicator" Width="20" Height="20" Fill="{DynamicResource backgroundDark}"/>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="indicator" Property="Fill" Value="{DynamicResource tabSelected}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style TargetType="controls:ExtendedRadioButton" BasedOn="{StaticResource {x:Type RadioButton}}">
         <Setter Property="Background" Value="Transparent" />
         
