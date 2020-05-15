@@ -189,7 +189,7 @@ namespace fork.ViewModel
             
             ConsoleOutList.CollectionChanged += ConsoleOutChanged;
             UpdateAddressInfo();
-            Application.Current.Dispatcher.Invoke(new Action(() => ServerPage = new View.Xaml2.Pages.ServerPage(this)));
+            Application.Current.Dispatcher.Invoke(new Action(() => ServerPage = new ServerPage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => ConsolePage = new ConsolePage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => WorldsPage = new WorldsPage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => SettingsViewModel = new SettingsViewModel(Server)));
@@ -209,7 +209,7 @@ namespace fork.ViewModel
                 RoleUpdater.InitializeList(RoleType.WHITELIST, WhiteList, Server);
                 RoleUpdater.InitializeList(RoleType.BAN_LIST, BanList, Server);
                 RoleUpdater.InitializeList(RoleType.OP_LIST, OPList, Server);
-                Console.WriteLine("Finished reading Role-lists");
+                Console.WriteLine("Finished reading Role-lists for "+server);
 
                 whitelistUpdater = new RoleUpdater(RoleType.WHITELIST, WhiteList,Server.Version);
                 banlistUpdater = new RoleUpdater(RoleType.BAN_LIST, BanList,Server.Version);
@@ -366,9 +366,14 @@ namespace fork.ViewModel
             raisePropertyChanged(nameof(ServerTitle));
         }
         
-        private void InitializeWorldsList()
+        public void InitializeWorldsList()
         {
             DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ApplicationPath,Server.Name));
+            if (!serverDir.Exists)
+            {
+                return;
+            }
+            Application.Current.Dispatcher?.Invoke(()=>Worlds.Clear());
             foreach (DirectoryInfo directory in serverDir.EnumerateDirectories())
             {
                 WorldValidationInfo worldVal = DirectoryValidator.ValidateWorldDirectory(directory);
@@ -382,19 +387,6 @@ namespace fork.ViewModel
                     Application.Current.Dispatcher?.Invoke(()=>Worlds.Add(world));
                 }
             }
-        }
-
-        private World WorldFromName(string worldName)
-        {
-            foreach (World world in Worlds)
-            {
-                if (world.Name.Equals(worldName))
-                {
-                    return world;
-                }
-            }
-
-            return null;
         }
 
         private void ConsoleOutChanged(object sender, NotifyCollectionChangedEventArgs e)

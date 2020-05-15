@@ -109,7 +109,7 @@ namespace fork.Logic.ImportLogic
         public bool PlayerInfo { get; set; }
         public string Name { get; set; }
 
-        public bool IsValid => Data && Region && LevelDat;
+        public bool IsValid => Data && Region;
     }
 
     public class ServerValidationInfo

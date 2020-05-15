@@ -11,10 +11,10 @@ namespace fork.Logic.Logging
         
         public ErrorLogger()
         {
-            AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
+            /*AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
             {
                 fileWriter.AppendToErrorLog("["+DateTime.Now+"] [FirstChanceException] " +eventArgs.Exception.StackTrace+"\n");
-            };
+            };*/
 
             AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
             {

@@ -12,6 +12,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using fork.Logic.Manager;
 using fork.ViewModel;
 using Brush = System.Windows.Media.Brush;
@@ -49,7 +50,7 @@ namespace fork.View.Xaml2
         }
         private void DeleteServer_Click(object sender, RoutedEventArgs e)
         {
-            
+            DeleteOverlay.Visibility = Visibility.Visible;
         }
         private void ImportServer_Click(object sender, RoutedEventArgs e)
         {
@@ -186,14 +187,36 @@ namespace fork.View.Xaml2
 
         private void ServerList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (CreatePage.Visibility == Visibility.Visible)
-            {
+            if (CreatePage.Visibility == Visibility.Visible){
                 CloseCreateServer();
             }
 
             if (ImportPage.Visibility == Visibility.Visible)
             {
                 CloseImportServer();
+            }
+        }
+
+        private void Abort_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteOverlay.Visibility = Visibility.Collapsed;
+        }
+        
+        private async void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteOverlay.Visibility = Visibility.Collapsed;
+
+            ServerViewModel serverToDelete = viewModel.SelectedServer;
+            Application.Current.Dispatcher?.Invoke(()=>viewModel.Servers.Remove(serverToDelete), DispatcherPriority.Background); //This shouldn't be here
+            bool success = await ServerManager.Instance.DeleteServerAsync(serverToDelete);
+            if (!success)
+            {
+                Console.WriteLine("Problem while deleting "+viewModel.SelectedServer?.Server?.Name);
+                Application.Current.Dispatcher?.Invoke(()=>viewModel.Servers.Add(serverToDelete), DispatcherPriority.Background); //This shouldn't be here
+            }
+            else
+            {
+                Console.WriteLine("Successfully deleted server "+serverToDelete);
             }
         }
     }

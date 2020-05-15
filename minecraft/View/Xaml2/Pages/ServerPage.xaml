@@ -79,7 +79,7 @@
                 </StackPanel>
             </Grid>
             
-            <StackPanel Margin="5 0 0 0" DockPanel.Dock="Left" VerticalAlignment="Center">
+            <StackPanel Margin="5 50 0 0" DockPanel.Dock="Left" VerticalAlignment="Center">
                 <controls:IconRadioButton Margin="10" IsChecked="True" GroupName="MenuTabs" Click="SelectTerminal"
                                           IconSource="pack://application:,,,/View/Resources/images/Icons/Terminal.png"
                                           HoverIconSource="pack://application:,,,/View/Resources/images/Icons/TerminalW.png"/>
@@ -89,7 +89,7 @@
                 <controls:IconRadioButton Margin="10" GroupName="MenuTabs" Click="SelectWorlds"
                                           IconSource="pack://application:,,,/View/Resources/images/Icons/World.png"
                                           HoverIconSource="pack://application:,,,/View/Resources/images/Icons/WorldW.png"/>
-                <controls:IconRadioButton Margin="10" GroupName="MenuTabs" Click="SelectPlugins"
+                <controls:IconRadioButton Margin="10" GroupName="MenuTabs" Click="SelectPlugins" Visibility="Collapsed"
                                           IconSource="pack://application:,,,/View/Resources/images/Icons/Plugins.png"
                                           HoverIconSource="pack://application:,,,/View/Resources/images/Icons/PluginsW.png"/>
             </StackPanel>

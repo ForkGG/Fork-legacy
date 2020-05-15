@@ -68,7 +68,13 @@ namespace fork.Logic.Manager
 
         private List<string> serverNames;
 
-        public ObservableCollection<ServerViewModel> Servers { set; get; }
+        private ObservableCollection<ServerViewModel> servers;
+
+        public ObservableCollection<ServerViewModel> Servers
+        {
+            get => servers ?? (servers = new ObservableCollection<ServerViewModel>());
+            private set => servers = value;
+        }
 
 
         public async Task<bool> CreateServerAsync(string serverName, ServerVersion serverVersion, ServerSettings serverSettings,
@@ -172,10 +178,10 @@ namespace fork.Logic.Manager
             return true;
         }
 
-
         private void ServerListChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             Serializer.Instance.StoreServers(Servers);
+            ApplicationManager.Instance.MainViewModel.SetServerList(ref servers);
         }
 
         private bool ImportServer(ServerVersion version, ServerValidationInfo validationInfo,
@@ -297,6 +303,12 @@ namespace fork.Logic.Manager
         private bool CreateServer(string serverName, ServerVersion serverVersion, ServerSettings serverSettings,
             ServerJavaSettings javaSettings, string worldPath = null)
         {
+            string serverPath = Path.Combine(App.ApplicationPath, serverName);
+            while (Directory.Exists(serverPath))
+            {
+                serverPath += "-New";
+                serverName += "-New";
+            }
             serverNames.Add(serverName);
             if (string.IsNullOrEmpty(serverSettings.LevelName))
             {
@@ -309,7 +321,7 @@ namespace fork.Logic.Manager
             ApplicationManager.Instance.MainViewModel.SelectedServer = viewModel;
             
             //Download server.jar
-            DirectoryInfo directoryInfo = Directory.CreateDirectory(Path.Combine(App.ApplicationPath, serverName));
+            DirectoryInfo directoryInfo = Directory.CreateDirectory(serverPath);
             DownloadJarAsync(viewModel,directoryInfo);
             
             //Move World Files
@@ -364,6 +376,7 @@ namespace fork.Logic.Manager
                 ZipFile.CreateFromDirectory(serverDirectory.FullName,
                     Path.Combine(deletedDirectory.FullName, serverViewModel.Server.Name + ".zip"));
                 serverDirectory.Delete(true);
+                Servers.Remove(serverViewModel);
                 return true;
             }
             catch (Exception e)
@@ -532,6 +545,16 @@ namespace fork.Logic.Manager
             ApplicationManager.Instance.ActiveServers[viewModel.Server] = process;
             new Thread(() => { new QueryStatsWorker(viewModel); }).Start();
             Console.WriteLine("Started server "+ viewModel.Server);
+            
+            //Register new world if created
+            new Thread(() =>
+            {
+                while (!viewModel.ServerRunning)
+                {
+                    Thread.Sleep(500);
+                }
+                viewModel.InitializeWorldsList();
+            }).Start();
             return true;
         }
 

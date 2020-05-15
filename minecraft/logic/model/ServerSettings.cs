@@ -288,7 +288,7 @@ namespace fork.Logic.Model
 
         public ServerSettings(Dictionary<string, string> settingsDictionary)
         {
-            if (settingsDictionary.ContainsKey("LevelName"))
+            if (settingsDictionary!=null && settingsDictionary.ContainsKey("LevelName"))
             {
                 InitializeValues(settingsDictionary["LevelName"]);
             }

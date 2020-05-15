@@ -32,6 +32,8 @@ namespace fork.View.Xaml2.Pages
             InitializeComponent();
             this.viewModel = viewModel;
             DataContext = this.viewModel;
+
+            PlayerToWhitelist.KeyDown += HandleKeyDownText;
         }
         
 
@@ -100,13 +102,29 @@ namespace fork.View.Xaml2.Pages
 
         private void AddToWhiteList_Click(object sender, RoutedEventArgs e)
         {
-            //TODO
+            AddWhitelistPanel.Visibility = Visibility.Visible;
+            PlayerToWhitelist.Focus();
+        }
+        
+        private void WhitelistAddConfirm_Click(object sender, RoutedEventArgs e)
+        {
+            AddWhitelistPanel.Visibility = Visibility.Collapsed;
+            PlayerManager.Instance.WhitelistPlayer(viewModel,PlayerToWhitelist.Text);
+            PlayerToWhitelist.Text = "";
         }
 
         private void Player_Unban(object sender, RoutedEventArgs e)
         {
             MenuItem item = sender as MenuItem;
             PlayerManager.Instance.UnBanPlayer(viewModel, item?.CommandParameter as string);
+        }
+
+        private void HandleKeyDownText(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                WhitelistAddConfirm_Click(sender, e);
+            }
         }
     }
 }

@@ -4,81 +4,189 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:fork.View.Xaml2.Controls"
+        xmlns:converter="clr-namespace:fork.View.Xaml.Converter"
         xmlns:local="clr-namespace:fork.View.Xaml2"
         mc:Ignorable="d" MinWidth="1080" MinHeight="400"
         Title="Fork" Height="720" Width="1200" Style="{StaticResource DefaultWindowV2}">
-    <DockPanel Background="{DynamicResource backgroundDefault}">
-        <Grid>
-            <Border Margin="0 0 5 0" Background="{DynamicResource backgroundDark}"/>
-            <Grid Panel.ZIndex="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="140"/>
-                    <RowDefinition Height="5*"/>
-                    <RowDefinition Height="1.6*" MinHeight="120"/>
-                </Grid.RowDefinitions>
-                <Grid Margin="0 0 5 0" Background="{DynamicResource backgroundDark}">
-                    <Image Margin="20" RenderOptions.BitmapScalingMode="HighQuality">
-                        <Image.Style>
-                            <Style TargetType="Image">
-                                <Setter Property="Source" Value="pack://application:,,,/View/Resources/images/Icons/DudeTransparent.png"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Source" Value="pack://application:,,,/View/Resources/images/Icons/DudeTransparentHover.png"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Image.Style>
-                    </Image>
-                </Grid>
-                <Grid Grid.Row="1" VerticalAlignment="Center" >
-                    <Border Background="{DynamicResource backgroundDark}" Margin="0 0 5 0"/>
-                    <Grid Panel.ZIndex="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="Server List" Margin="15 10 10 10" Foreground="{DynamicResource textUnselected}" FontSize="20" 
-                               FontFamily="{StaticResource Montserrat-SemiBold}" />
+    <Window.Resources>
+        <converter:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
+        <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Window.Resources>
+    <Grid>
+        <DockPanel Background="{DynamicResource backgroundDefault}">
+            <Grid>
+                <Border Margin="0 0 5 0" Background="{DynamicResource backgroundDark}"/>
+                <Grid Panel.ZIndex="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="140"/>
+                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="1.6*" MinHeight="120"/>
+                    </Grid.RowDefinitions>
+                    <Grid Margin="0 0 5 0" Background="{DynamicResource backgroundDark}">
+                        <Image Margin="20" RenderOptions.BitmapScalingMode="HighQuality">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Setter Property="Source" Value="pack://application:,,,/View/Resources/images/Icons/DudeTransparent.png"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Source" Value="pack://application:,,,/View/Resources/images/Icons/DudeTransparentHover.png"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                    </Grid>
+                    <Grid Grid.Row="1" VerticalAlignment="Center" MinWidth="243">
+                        <Border Background="{DynamicResource backgroundDark}" Margin="0 0 5 0"/>
+                        <Grid Panel.ZIndex="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Server List" Margin="15 10 10 10" Foreground="{DynamicResource textUnselected}" FontSize="20" 
+                               FontFamily="{StaticResource Montserrat-SemiBold}" Visibility="{Binding HasServers, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
-                        <ListView Margin="0" Grid.Row="1" Background="{DynamicResource backgroundDark}" Style="{StaticResource ServerListViewV2}"
-                              ItemContainerStyle="{StaticResource ServerListItemV2}" ItemsSource="{Binding Servers}" x:Name="ServerList"
+                            <ListView Margin="0" Grid.Row="1" Background="{DynamicResource backgroundDark}" Style="{StaticResource ServerListViewV2}"
+                              ItemsSource="{Binding Servers}" x:Name="ServerList"
                               SelectedItem="{Binding SelectedServer}" SelectionChanged="ServerList_SelectionChanged">
-                        </ListView>
+                                <!-- This shouldn't be here, but Event handling is shit -->
+                                <ListView.ItemContainerStyle>
+                                    <Style  TargetType="{x:Type ListViewItem}">
+                                        <Style.Resources>
+                                            <FontFamily x:Key="Montserrat-SemiBold">pack://application:,,,/View/Resources/Fonts/Montserrat-SemiBold.ttf#Montserrat SemiBold</FontFamily>
+                                        </Style.Resources>
+                                        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>
+                                        <Setter Property="Margin" Value="0 5 0 2"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                                    <Border BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}">
+                                                        <StackPanel>
+                                                            <Grid Width="250" Height="60">
+                                                                <Border x:Name="background" Background="Transparent" Width="251" CornerRadius="0 8 8 0" Margin="-1 0 0 0"/>
+                                                                <DockPanel Panel.ZIndex="1" LastChildFill="True">
+                                                                    <Ellipse Margin="15 0 0 0" Width="15" Height="15" Fill="{Binding IconColor}"/>
+                                                                    <Border Height="40" Width="40" Background="Transparent" Margin="5 0 10 0">
+                                                                        <Image x:Name="image" Source="{Binding Icon}" Width="25" Height="25" RenderOptions.BitmapScalingMode="Linear"/>
+                                                                    </Border>
+                                                                    <TextBlock x:Name="title" Text="{Binding Server.Name}" VerticalAlignment="Center" FontSize="20" FontFamily="{StaticResource Montserrat-SemiBold}" 
+                                                                                Foreground="{DynamicResource textUnselected}" Margin="0 0 15 0"/>
+                                                                </DockPanel>
+                                                                <Grid.ContextMenu>
+                                                                    <ContextMenu>
+                                                                        <MenuItem Header="Rename" Style="{DynamicResource ContextMenuItem}" IsEnabled="False"/>
+                                                                        <MenuItem Header="Clone" Style="{DynamicResource ContextMenuItem}" IsEnabled="False"/>
+                                                                        <MenuItem Header="Delete" Style="{DynamicResource RedContextMenuItem}" IsEnabled="True" Click="DeleteServer_Click"/>
+                                                                    </ContextMenu>
+                                                                </Grid.ContextMenu>
+                                                            </Grid>
+                                                        </StackPanel>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsSelected" Value="True">
+                                                            <Setter TargetName="background" Property="Background" Value="{DynamicResource tabSelected}"/>
+                                                            <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
+                                                            <Setter TargetName="image" Property="Source" Value="{Binding IconW}"/>
+                                                        </Trigger>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
+                                                            <Setter TargetName="image" Property="Source" Value="{Binding IconW}"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                            </ListView>
+                        </Grid>
                     </Grid>
-                </Grid>
-                <DockPanel Grid.Row="2" LastChildFill="False" Margin="0 0 5 0" Background="{DynamicResource backgroundDark}">
-                    <Grid  DockPanel.Dock="Bottom"  Background="{DynamicResource backgroundDarker}">
-                        <Label HorizontalAlignment="Center" FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="16">
-                            <TextBlock Text="v0.5.1" Foreground="{DynamicResource textUnselected}"/>
-                        </Label>
-                    </Grid>
-                    <Grid DockPanel.Dock="Bottom" Margin="10">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 10">
-                            <controls:IconButton Margin="0 0 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrDefault}"
+                    <DockPanel Grid.Row="2" LastChildFill="False" Margin="0 0 5 0" Background="{DynamicResource backgroundDark}">
+                        <Grid  DockPanel.Dock="Bottom"  Background="{DynamicResource backgroundDarker}">
+                            <Label HorizontalAlignment="Center" FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="16">
+                                <TextBlock Text="v0.5.1" Foreground="{DynamicResource textUnselected}"/>
+                            </Label>
+                        </Grid>
+                        <Grid DockPanel.Dock="Bottom" Margin="10">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 10">
+                                <controls:IconButton Margin="0 0 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrDefault}"
                                              Width="40" Height="40" IconWidth="21" IconHeight="24" x:Name="DeleteButton" Click="DeleteServer_Click"
                                              IconSource="pack://application:,,,/View/Resources/images/Icons/Delete.png"
                                              HoverIconSource="pack://application:,,,/View/Resources/images/Icons/DeleteW.png"
                                              HoverBackground="{DynamicResource buttonBgrRed}"/>
-                            <controls:IconButton Margin="0 0 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrDefault}"
+                                <controls:IconButton Margin="0 0 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrDefault}"
                                              Width="50" Height="50" IconWidth="38.4" IconHeight="24.8" x:Name="CreateButton" Click="CreateServer_Click"
                                              IconSource="pack://application:,,,/View/Resources/images/Icons/Create.png"
                                              HoverIconSource="pack://application:,,,/View/Resources/images/Icons/CreateW.png"
                                              HoverBackground="{DynamicResource buttonBgrGreen}"/>
-                            <controls:IconButton Margin="0 0 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrDefault}"
+                                <controls:IconButton Margin="0 0 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrDefault}"
                                              HoverBackground="{DynamicResource buttonBgrBlue}" Width="40" Height="40" IconWidth="21" IconHeight="24" 
                                              x:Name="ImportButton" Click="ImportServer_Click"
                                              IconSource="pack://application:,,,/View/Resources/images/Icons/Import.png"
                                              HoverIconSource="pack://application:,,,/View/Resources/images/Icons/ImportW.png"/>
-                        </StackPanel>
-                    </Grid>
-                </DockPanel>
+                            </StackPanel>
+                        </Grid>
+                    </DockPanel>
+                </Grid>
             </Grid>
+            <Grid>
+                <!-- Default screen -->
+                <Grid Visibility="{Binding HasServers, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Text="Welcome to Fork" FontSize="25" FontFamily="{DynamicResource Montserrat-Bold}" Foreground="{DynamicResource textSelected}" Margin="0 0 0 20" TextAlignment="Center"/>
+                        <TextBlock Text="Let's start by creating your first Fork Server" FontSize="20" TextAlignment="Center" Margin="0 20"/>
+                        <DockPanel LastChildFill="False">
+                            <Border DockPanel.Dock="Left" Background="{DynamicResource backgroundDark}" CornerRadius="10" Margin="20" Width="260">
+                                <StackPanel>
+                                    <TextBlock Text="Create a new Server" Margin="20 20 20 10" FontSize="17" TextAlignment="Center"/>
+                                    <controls:IconButton Margin="0 0 0 20" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrDefault}"
+                                             Width="70" Height="70" IconWidth="45" IconHeight="2000" Click="CreateServer_Click"
+                                             IconSource="pack://application:,,,/View/Resources/images/Icons/Create.png"
+                                             HoverIconSource="pack://application:,,,/View/Resources/images/Icons/CreateW.png"
+                                             HoverBackground="{DynamicResource buttonBgrGreen}"/>
+                                </StackPanel>
+                            </Border>
+                            <Border DockPanel.Dock="Right" Background="{DynamicResource backgroundDark}" CornerRadius="10" Margin="20" Width="260">
+                                <StackPanel >
+                                    <TextBlock Text="Import an existing Server" Margin="20 20 20 10" FontSize="17" TextAlignment="Center"/>
+                                    <controls:IconButton Margin="0 0 0 20" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrDefault}"
+                                             HoverBackground="{DynamicResource buttonBgrBlue}" Width="70" Height="70" IconWidth="30" IconHeight="2000"
+                                             Click="ImportServer_Click"
+                                             IconSource="pack://application:,,,/View/Resources/images/Icons/Import.png"
+                                             HoverIconSource="pack://application:,,,/View/Resources/images/Icons/ImportW.png"/>
+                                </StackPanel>
+                            </Border>                            
+                        </DockPanel>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Subscreens -->
+                <Border Visibility="{Binding HasServers, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Frame x:Name="ServerPage" Grid.Column="1" DataContext="{Binding SelectedServer, Mode=TwoWay}"
+                       Content="{Binding ServerPage}" NavigationUIVisibility="Hidden" Background="{DynamicResource backgroundDefault}"/>
+                </Border>
+                <Frame x:Name="CreatePage" Grid.Column="1" Content="{Binding CreatePage}" NavigationUIVisibility="Hidden" Visibility="Hidden" 
+                       Background="{DynamicResource backgroundDefault}"/>
+                <Frame x:Name="ImportPage" Grid.Column="1" Content="{Binding ImportPage}" NavigationUIVisibility="Hidden" Visibility="Hidden" 
+                       Background="{DynamicResource backgroundDefault}"/>
+            </Grid>
+        </DockPanel>
+        <Grid Panel.ZIndex="1" x:Name="DeleteOverlay" Visibility="Collapsed">
+            <Rectangle Fill="#161A38" Opacity="0.9" Margin="-5 0 0 0"/>
+            <StackPanel Panel.ZIndex="1" VerticalAlignment="Center">
+                <TextBlock Text="Are you sure? really?" Margin="0 0 0 5" FontSize="17" HorizontalAlignment="Center" Foreground="{DynamicResource buttonBgrRed}"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5 0 30">
+                    <Button Content="ABORT" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="10" Click="Abort_Click"/>
+                    <Button Content="Delete" Style="{DynamicResource RoundedTextButtonRed}" Width="100" Margin="10" Click="Delete_Click"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="WARNING: This will permanently delete " Margin="0 0 0 20" FontSize="17" Foreground="{DynamicResource buttonBgrRed}"/>
+                    <TextBlock Text="{Binding SelectedServer.Server.Name}" Margin="0 0 0 20" FontSize="17" Foreground="{DynamicResource textSelected}" FontFamily="{DynamicResource Montserrat-Bold}"/>
+                    <TextBlock Text="!" Margin="0 0 0 20" FontSize="17" Foreground="{DynamicResource buttonBgrRed}"/>
+                </StackPanel>
+            </StackPanel>
         </Grid>
-        <Grid>
-            <Frame x:Name="ServerPage" Grid.Column="1" DataContext="{Binding SelectedServer, Mode=TwoWay}"
-                       Content="{Binding ServerPage}" NavigationUIVisibility="Hidden" />
-            <Frame x:Name="CreatePage" Grid.Column="1" Content="{Binding CreatePage}" NavigationUIVisibility="Hidden" Visibility="Hidden"/>
-            <Frame x:Name="ImportPage" Grid.Column="1" Content="{Binding ImportPage}" NavigationUIVisibility="Hidden" Visibility="Hidden"/>
-        </Grid>
-    </DockPanel>
+    </Grid>
 </Window>

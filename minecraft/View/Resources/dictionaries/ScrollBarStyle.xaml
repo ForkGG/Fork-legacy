@@ -192,10 +192,27 @@
                                    Value="{TemplateBinding VerticalOffset}"
                                    Maximum="{TemplateBinding ScrollableHeight}"
                                    ViewportSize="{TemplateBinding ViewportHeight}"
-                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
                                    Style="{DynamicResource DefaultScrollBarLight}"/>
                         <ScrollContentPresenter Grid.Column="1" Margin="-7 0 0 0"/>
+                        <Border x:Name="ScrollBarProp" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
                     </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition SourceName="ScrollBarProp" Property="Visibility" Value="Visible"/>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="PART_VerticalScrollBar" Property="Visibility" Value="Visible"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition SourceName="ScrollBarProp" Property="Visibility" Value="Visible"/>
+                                <Condition Property="IsMouseOver" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="PART_VerticalScrollBar" Property="Visibility" Value="Hidden"/>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

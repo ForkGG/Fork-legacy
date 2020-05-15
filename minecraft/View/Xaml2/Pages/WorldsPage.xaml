@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:controls="clr-namespace:fork.View.Xaml2.Controls"
       xmlns:local="clr-namespace:Fork.View.Xaml2.Pages"
       mc:Ignorable="d"
       Title="WorldsPage" d:DesignHeight="450" d:DesignWidth="800">
@@ -11,11 +12,16 @@
             <Border Background="{DynamicResource backgroundDark}" Margin="35 0 0 0" CornerRadius="5 0 0 5"/>
             <DockPanel Panel.ZIndex="1">
                 <TextBlock Text="Open in File Explorer" DockPanel.Dock="Bottom" TextAlignment="Center" Margin="45 10 10 10" 
-                           PreviewMouseLeftButtonDown="OpenExplorer_PreviewMouseLeftButtonDown" Cursor="Hand">
-                    
+                           PreviewMouseLeftButtonDown="OpenExplorer_PreviewMouseLeftButtonDown" Cursor="Hand">                    
                 </TextBlock>
+                <controls:IconButton Margin="45 10 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrDefault}"
+                                             Width="40" Height="40" IconWidth="21" IconHeight="24" x:Name="CreateWorldButton" Click="ToggleCreateWorld_Click"
+                                             IconSource="pack://application:,,,/View/Resources/images/Icons/Start.png" Visibility="Collapsed"
+                                             HoverIconSource="pack://application:,,,/View/Resources/images/Icons/StartW.png"
+                                             HoverBackground="{DynamicResource buttonBgrBlue}" HorizontalAlignment="Center"
+                                     DockPanel.Dock="Bottom"/>
                 <StackPanel Panel.ZIndex="1">
-                    <TextBlock Text="Worlds" Margin="15 10 10 10" Foreground="{DynamicResource textUnselected}" FontSize="20" 
+                    <TextBlock Text="Worlds" Margin="45 10 10 10" Foreground="{DynamicResource textUnselected}" FontSize="20" 
                                FontFamily="{DynamicResource Montserrat-SemiBold}" HorizontalAlignment="Center"/>
                     <ListView Margin="0" Background="{DynamicResource backgroundDark}" Style="{DynamicResource SettingsListView}"
                               ItemsSource="{Binding Worlds}">
@@ -25,7 +31,6 @@
                                 <Setter Property="Background" Value="Transparent"/>
                                 <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>
                                 <Setter Property="Margin" Value="0 5 0 2"/>
-                                <Setter Property="Focusable" Value="False"/>
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type ListViewItem}">
@@ -42,6 +47,15 @@
                                                     </Grid>
                                                 </StackPanel>
                                             </Border>
+                                            <!--ControlTemplate.Triggers>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter TargetName="background" Property="Background" Value="{DynamicResource tabSelected}"/>
+                                                    <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
+                                                </Trigger>
+                                            </-->
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
@@ -51,9 +65,82 @@
                 </StackPanel>
             </DockPanel>
         </Grid>
-        <Grid>
-            <TextBlock Text="Coming soon" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="{DynamicResource Montserrat-SemiBold}"
-                       Foreground="{DynamicResource textSelected}"/>
+        <Grid Margin="0 0 20 0">
+            
+            <!-- TODO world view-->
+            
+            
+            <Grid x:Name="CreateWorldOverlay">
+                <StackPanel VerticalAlignment="Center">
+                    <!-- Create World -->
+                    <Border CornerRadius="10" Margin="5">
+                        <StackPanel Background="Transparent" Margin="0 10">
+                            <TextBlock Text="Create new World" Foreground="{DynamicResource textHeader}"
+                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="15 0 5 20" />
+                            <StackPanel>
+                                <DockPanel Height="40" Grid.Column="1" Margin="50 0 0 0" HorizontalAlignment="Center">
+                                    <Border CornerRadius="4" Width="150" DockPanel.Dock="Right" Height="26"
+                                    Background="{DynamicResource buttonBgrDefault}">
+                                        <TextBox Margin="5 0" Text="world"
+                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Foreground="{DynamicResource backgroundDark}"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="17" Height="20" />
+                                    </Border>
+                                    <TextBlock Text="World Name" TextAlignment="Right"
+                                       Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
+                                </DockPanel>
+                                <Button x:Name="CreateWorld" Margin="0 20 0 5" Content="Create" Click="CreateWorld_Click"
+                                            Width="120" Style="{DynamicResource RoundedTextButton}" />
+                            </StackPanel>
+                        </StackPanel>
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource backgroundDark}" />
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="False">
+                                        <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+
+                    <!-- Import World -->
+                    <Border CornerRadius="10" Margin="5">
+                        <StackPanel Background="Transparent" Margin="0 10">
+                            <TextBlock Text="Import existing World" Foreground="{DynamicResource textHeader}"
+                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="15 0 5 20" />
+                            <StackPanel>
+                                <StackPanel Margin="25 0 0 0" Height="40" Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="Path"  Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0"/>
+                                    <Border x:Name="serverPathBgr" CornerRadius="4" Height="26" Background="{DynamicResource buttonBgrDefault}">
+                                        <TextBlock Margin="10 0" Text="Click To Select Your World" Background="Transparent"
+                                     Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                     FontSize="17" Height="20" PreviewMouseDown="WorldDirPath_MouseDown" Name="worldFolderPathText"/>
+                                    </Border>
+                                </StackPanel>
+                                <Button x:Name="ImportWorld" Margin="0 20 0 5" Content="Import" Click="ImportWorld_Click"
+                                            Width="120" Style="{DynamicResource RoundedTextButton}" />
+                            </StackPanel>
+                        </StackPanel>
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource backgroundDark}" />
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="False">
+                                        <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+                </StackPanel>
+            </Grid>
         </Grid> 
     </DockPanel>
 </Page>

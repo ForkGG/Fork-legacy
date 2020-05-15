@@ -18,9 +18,10 @@ namespace fork.ViewModel
 
         //public MainWindow MainWindow { get; set; }
         
-        public ObservableCollection<ServerViewModel> Servers { get; }
+        public ObservableCollection<ServerViewModel> Servers { get; set; }
         public ServerViewModel SelectedServer { get; set; }
         public ImportViewModel ImportViewModel { get; set; }
+        public bool HasServers { get; set; }
         
         public CreatePage CreatePage { get; } = new CreatePage();
         public ImportPage ImportPage { get; } = new ImportPage();
@@ -35,7 +36,18 @@ namespace fork.ViewModel
             Servers = ServerManager.Instance.Servers;
             //Servers.Insert(0, ServerViewModel.HomeViewModel());
             Servers.CollectionChanged += ServerListChanged;
-            SelectedServer = Servers[0];
+            if (Servers.Count != 0)
+            {
+                SelectedServer = Servers[0];
+                HasServers = true;
+            }
+        }
+
+        public void SetServerList(ref ObservableCollection<ServerViewModel> servers)
+        {
+            Servers = servers;
+            HasServers = Servers.Count!=0;
+            Servers.CollectionChanged += ServerListChanged;
         }
 
         private void ServerListChanged(object sender, NotifyCollectionChangedEventArgs e)
