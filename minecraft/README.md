@@ -1,14 +1,14 @@
-# Nihilus
+# Fork
 Minecraft Server Manager GUI
 
 ## Installation
-- Download the [latest installer](https://nihilus.gg/downloads/Nihilus_setup.msi) 
+- Download the [latest installer](https://www.fork.gg/downloads/Fork_setup.msi) 
 - Run the installer
 - Run nihilus.exe
 
 ## Useful Links:
-- Website: [nihilus.gg](https://www.nihilus.gg)
-- Discord: [Nihilus Discord Server](https://discord.gg/dbqH6x8)
+- Website: [fork.gg](https://www.fork.gg)
+- Discord: [Fork Discord Server](https://discord.gg/dbqH6x8)
 
 ## Roadmap
 #### Before v1.0:
