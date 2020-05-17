@@ -46,18 +46,18 @@
                                                  Header="Waterfall" GroupName="serverTypes" Margin="10 10" IsEnabled="False"/>
             </WrapPanel>
         </StackPanel>
-        <Border.Style>
-                <Style TargetType="Border">
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource backgroundDark}" />
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="False">
-                            <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Border.Style>
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
             </Border>
 
             <Border CornerRadius="10" Margin="5">
@@ -68,18 +68,18 @@
                       ItemsSource="{Binding VanillaServerVersions}" IsSynchronizedWithCurrentItem="True">
             </ComboBox>
         </StackPanel>
-        <Border.Style>
-                <Style TargetType="Border">
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource backgroundDark}" />
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="False">
-                            <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Border.Style>
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
             </Border>
 
             <Border CornerRadius="10" Margin="5">
@@ -95,17 +95,17 @@
                     </StackPanel>
                 </StackPanel>
                 <Border.Style>
-                <Style TargetType="Border">
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource backgroundDark}" />
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="False">
-                            <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
             </Border>
         </StackPanel>        
 

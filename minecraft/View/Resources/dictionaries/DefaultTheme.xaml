@@ -36,8 +36,10 @@
     <SolidColorBrush x:Key="textHeader" Color="#8FB2BC" />
     <SolidColorBrush x:Key="textUnselected" Color="#565B7A" />
     <SolidColorBrush x:Key="textSelected" Color="#F9EFD7" />
+    <SolidColorBrush x:Key="textLink" Color="#5E93ED" />
     <SolidColorBrush x:Key="textTerminal" Color="#FFFFFF" />
 
+    <SolidColorBrush x:Key="caretColor" Color="#272A41"/>
 
     <SolidColorBrush x:Key="tabHover" Color="LightBlue"/>
     <SolidColorBrush x:Key="tabSelected" Color="#374FC3"/>

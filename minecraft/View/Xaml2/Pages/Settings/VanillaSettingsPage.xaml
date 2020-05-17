@@ -169,9 +169,9 @@
                     <Style TargetType="Border">
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{DynamicResource backgroundDark}" />
+                                <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
                             </Trigger>
-                            <Trigger Property="IsMouseOver" Value="False">
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
                                 <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
                             </Trigger>
                         </Style.Triggers>
@@ -209,9 +209,9 @@
                     <Style TargetType="Border">
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{DynamicResource backgroundDark}" />
+                                <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
                             </Trigger>
-                            <Trigger Property="IsMouseOver" Value="False">
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
                                 <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
                             </Trigger>
                         </Style.Triggers>
@@ -323,9 +323,9 @@
                     <Style TargetType="Border">
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{DynamicResource backgroundDark}" />
+                                <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
                             </Trigger>
-                            <Trigger Property="IsMouseOver" Value="False">
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
                                 <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
                             </Trigger>
                         </Style.Triggers>
@@ -470,9 +470,9 @@
                     <Style TargetType="Border">
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{DynamicResource backgroundDark}" />
+                                <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
                             </Trigger>
-                            <Trigger Property="IsMouseOver" Value="False">
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
                                 <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
                             </Trigger>
                         </Style.Triggers>
@@ -584,9 +584,9 @@
                     <Style TargetType="Border">
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{DynamicResource backgroundDark}" />
+                                <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
                             </Trigger>
-                            <Trigger Property="IsMouseOver" Value="False">
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
                                 <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
                             </Trigger>
                         </Style.Triggers>

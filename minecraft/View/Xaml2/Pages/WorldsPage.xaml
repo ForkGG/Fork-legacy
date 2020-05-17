@@ -12,7 +12,7 @@
             <Border Background="{DynamicResource backgroundDark}" Margin="35 0 0 0" CornerRadius="5 0 0 5"/>
             <DockPanel Panel.ZIndex="1">
                 <TextBlock Text="Open in File Explorer" DockPanel.Dock="Bottom" TextAlignment="Center" Margin="45 10 10 10" 
-                           PreviewMouseLeftButtonDown="OpenExplorer_PreviewMouseLeftButtonDown" Cursor="Hand">                    
+                           PreviewMouseLeftButtonDown="OpenExplorer_PreviewMouseLeftButtonDown" Cursor="Hand" Foreground="{DynamicResource textLink}">                    
                 </TextBlock>
                 <controls:IconButton Margin="45 10 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrDefault}"
                                              Width="40" Height="40" IconWidth="21" IconHeight="24" x:Name="CreateWorldButton" Click="ToggleCreateWorld_Click"
@@ -98,9 +98,9 @@
                             <Style TargetType="Border">
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="{DynamicResource backgroundDark}" />
+                                        <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
                                     </Trigger>
-                                    <Trigger Property="IsMouseOver" Value="False">
+                                    <Trigger Property="IsKeyboardFocusWithin" Value="True">
                                         <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
                                     </Trigger>
                                 </Style.Triggers>
@@ -130,9 +130,9 @@
                             <Style TargetType="Border">
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="{DynamicResource backgroundDark}" />
+                                        <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
                                     </Trigger>
-                                    <Trigger Property="IsMouseOver" Value="False">
+                                    <Trigger Property="IsKeyboardFocusWithin" Value="True">
                                         <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
                                     </Trigger>
                                 </Style.Triggers>

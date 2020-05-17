@@ -34,6 +34,7 @@
     <Style TargetType="TextBox">
         <Setter Property="Background" Value="{DynamicResource inputDefault}" />
         <Setter Property="Foreground" Value="{DynamicResource foregroundDefault}" />
+        <Setter Property="CaretBrush" Value="{DynamicResource caretColor}"/>
         <Style.Triggers>
             <Trigger Property="Validation.HasError" Value="True">
                 <Setter Property="BorderBrush" Value="{DynamicResource errorBorder}"/>
