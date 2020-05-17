@@ -71,7 +71,7 @@
                                                             <Grid Width="250" Height="60">
                                                                 <Border x:Name="background" Background="Transparent" Width="251" CornerRadius="0 8 8 0" Margin="-1 0 0 0"/>
                                                                 <DockPanel Panel.ZIndex="1" LastChildFill="True">
-                                                                    <Ellipse Margin="15 0 0 0" Width="15" Height="15" Fill="{Binding IconColor}"/>
+                                                                    <Ellipse x:Name="dot" Margin="15 0 0 0" Width="15" Height="15" Fill="{Binding IconColor}"/>
                                                                     <Border Height="40" Width="40" Background="Transparent" Margin="5 0 10 0">
                                                                         <Image x:Name="image" Source="{Binding Icon}" Width="25" Height="25" RenderOptions.BitmapScalingMode="Linear"/>
                                                                     </Border>
@@ -93,6 +93,10 @@
                                                             <Setter TargetName="background" Property="Background" Value="{DynamicResource tabSelected}"/>
                                                             <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
                                                             <Setter TargetName="image" Property="Source" Value="{Binding IconW}"/>
+                                                            <Setter TargetName="dot" Property="Fill" Value="{Binding IconColorHovered}"/>
+                                                        </Trigger>
+                                                        <Trigger Property="IsSelected" Value="False">
+                                                            <Setter TargetName="dot" Property="Fill" Value="{Binding IconColor}"/>
                                                         </Trigger>
                                                         <Trigger Property="IsMouseOver" Value="True">
                                                             <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
@@ -199,7 +203,7 @@
             </Grid>
         </DockPanel>
         <Grid Panel.ZIndex="1" x:Name="DeleteOverlay" Visibility="Collapsed">
-            <Rectangle Fill="#161A38" Opacity="0.9" Margin="-5 0 0 0"/>
+            <Rectangle Fill="#1F2234" Opacity="0.9" Margin="-5 0 0 0"/>
             <StackPanel Panel.ZIndex="1" VerticalAlignment="Center">
                 <TextBlock Text="Delete Server" FontSize="28" FontFamily="{DynamicResource Montserrat-Bold}" TextAlignment="Center" Foreground="{DynamicResource buttonBgrRed}" Margin="0 0 0 20"/>
                 <TextBlock Text="WARNING: This action will permanently remove your beloved server" Margin="0 0 0 5" FontSize="17" HorizontalAlignment="Center" Foreground="#f28c8c" FontFamily="{DynamicResource Montserrat-SemiBold}"/>

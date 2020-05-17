@@ -127,6 +127,20 @@ namespace fork.ViewModel
                 }
             }
         }
+        
+        public Brush IconColorHovered
+        {
+            get
+            {
+                switch (CurrentStatus)
+                {
+                    case ServerStatus.RUNNING: return (Brush)new BrushConverter().ConvertFromString("#5EED80");
+                    case ServerStatus.STOPPED: return (Brush)new BrushConverter().ConvertFromString("#1F2234");
+                    case ServerStatus.STARTING: return (Brush)new BrushConverter().ConvertFromString("#EBED78");
+                    default: return Brushes.White;
+                }
+            }
+        }
 
         public bool ServerRunning => CurrentStatus == ServerStatus.RUNNING;
 

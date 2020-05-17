@@ -111,7 +111,7 @@
             </Grid>
         </DockPanel>
         <Grid Panel.ZIndex="1" x:Name="DownloadOverlay" Visibility="{Binding ReadyToUse, Converter={StaticResource InverseBoolToVisibilityConverter}}">
-            <Rectangle Fill="#161A38" Opacity="0.9" Margin="-5 0 0 0"/>
+            <Rectangle Fill="#1F2234" Opacity="0.9" Margin="-5 0 0 0"/>
             <StackPanel Panel.ZIndex="1" VerticalAlignment="Center">
                 <TextBlock Text="Fun Fact: You are awesome" Margin="0 0 0 20" FontSize="15" HorizontalAlignment="Center" Foreground="{DynamicResource textSelected}"/>
 

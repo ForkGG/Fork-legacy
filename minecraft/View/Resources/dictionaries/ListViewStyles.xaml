@@ -204,7 +204,7 @@
                             <Grid Width="250" Height="60">
                                 <Border x:Name="background" Background="Transparent" Width="251" CornerRadius="0 8 8 0" Margin="-1 0 0 0"/>
                                 <DockPanel Panel.ZIndex="1" LastChildFill="True">
-                                    <Ellipse Margin="15 0 0 0" Width="15" Height="15" Fill="{Binding IconColor}"/>
+                                    <Ellipse x:Name="dot" Margin="15 0 0 0" Width="15" Height="15"/>
                                     <Border Height="40" Width="40" Background="Transparent" Margin="5 0 10 0">
                                         <Image x:Name="image" Source="{Binding Icon}" Width="25" Height="25" RenderOptions.BitmapScalingMode="Linear"/>
                                     </Border>
@@ -226,6 +226,10 @@
                             <Setter TargetName="background" Property="Background" Value="{DynamicResource tabSelected}"/>
                             <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
                             <Setter TargetName="image" Property="Source" Value="{Binding IconW}"/>
+                            <Setter TargetName="dot" Property="Fill" Value="{Binding IconColorHovered}"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter TargetName="dot" Property="Fill" Value="{Binding IconColorHovered}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
