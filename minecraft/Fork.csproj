@@ -198,6 +198,8 @@
     <Compile Include="View\Xaml2\Pages\WorldsPage.xaml.cs">
       <DependentUpon>WorldsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Xaml2\Shapes\InnerSpeechBubble.cs" />
+    <Compile Include="View\Xaml2\Shapes\SpeechBubble.cs" />
     <Compile Include="View\Xaml2\Shapes\UsageIndicatorBackground.cs" />
     <Compile Include="View\Xaml\Converter\BoolToVisibilityConverter.cs" />
     <Compile Include="View\Xaml\Converter\PercentageToColorConverter.cs" />
@@ -257,9 +259,6 @@
     <Page Include="View\Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Resources\dictionaries\DarkTheme.xaml">
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\Xaml2\MainWindow.xaml">
       <SubType>Designer</SubType>

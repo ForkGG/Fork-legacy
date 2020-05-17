@@ -217,6 +217,7 @@ namespace fork.View.Xaml2
             else
             {
                 Console.WriteLine("Successfully deleted server "+serverToDelete);
+                ServerList.SelectedIndex = 0;
             }
         }
     }

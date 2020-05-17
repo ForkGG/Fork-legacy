@@ -103,7 +103,23 @@
                                     <RowDefinition />
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
-                                <StackPanel HorizontalAlignment="Center">
+                                <DockPanel Height="40" Grid.Row="0" HorizontalAlignment="Center" Margin="0 0 0 30">
+                                    <Border CornerRadius="4" MaxWidth="200" MinWidth="150" DockPanel.Dock="Right" Height="26" Background="{DynamicResource buttonBgrDefault}">
+                                        <TextBox Margin="5 0" Text="" Background="{DynamicResource buttonBgrDefault}" BorderThickness="0" 
+                                     Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                     FontSize="17" Height="20" x:Name="ServerName"/>
+                                    </Border>
+                                    <TextBlock Text="Server Name" TextAlignment="Right" Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0"/>
+                                </DockPanel>
+                                <DockPanel Height="40" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" Margin="0 0 0 30">
+                                    <Border CornerRadius="4" MaxWidth="200" MinWidth="150" DockPanel.Dock="Right" Height="26" Background="{DynamicResource buttonBgrDefault}">
+                                        <TextBox Margin="5 0" Text="{Binding ServerSettings.LevelName}" Background="{DynamicResource buttonBgrDefault}" BorderThickness="0" 
+                                     Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                     FontSize="17" Height="20"/>
+                                    </Border>
+                                    <TextBlock Text="World Name" TextAlignment="Right" Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0"/>
+                                </DockPanel>
+                                <StackPanel Grid.Row="1" HorizontalAlignment="Center">
                                     <DockPanel Height="40">
                                         <ComboBox DockPanel.Dock="Right" SelectedIndex="0" Width="150" HorizontalAlignment="Left" ItemContainerStyle="{DynamicResource DefaultComboBoxItem}"
                                 FontFamily="{DynamicResource Montserrat-Bold}" FontSize="17" VerticalAlignment="Center" ItemsSource="{Binding ServerSettings.Gamemodes}" 
@@ -126,7 +142,7 @@
                                         <TextBlock Text="Level Type" TextAlignment="Right" Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0"/>
                                     </DockPanel>
                                 </StackPanel>
-                                <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                                <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center">
                                     <DockPanel Height="40">
                                         <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26" Background="{DynamicResource buttonBgrDefault}">
                                             <TextBox Margin="5 0" Text="{Binding ServerSettings.MaxPlayers}" Background="{DynamicResource buttonBgrDefault}" BorderThickness="0" 
@@ -152,32 +168,16 @@
                                         <TextBlock Text="Level Seed" TextAlignment="Right" Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0"/>
                                     </DockPanel>
                                 </StackPanel>
-                                <StackPanel Grid.Row="1" HorizontalAlignment="Center" Margin="30">
+                                <StackPanel Grid.Row="2" HorizontalAlignment="Center" Margin="30 30 30 10">
                                     <CheckBox Margin="5" IsChecked="{Binding ServerSettings.Pvp}" Content="Enable PvP" Style="{DynamicResource DefaultCheckBox}" FontSize="20"/>
                                     <CheckBox Margin="5" IsChecked="{Binding ServerSettings.SpawnNpcs}" Content="Spawn NPCs" Style="{DynamicResource DefaultCheckBox}" FontSize="20"/>
                                     <CheckBox Margin="5" IsChecked="{Binding ServerSettings.SpawnAnimals}" Content="Spawn Animals" Style="{DynamicResource DefaultCheckBox}" FontSize="20"/>
                                 </StackPanel>
-                                <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Margin="30">
+                                <StackPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Margin="30 30 30 10">
                                     <CheckBox Margin="5" IsChecked="{Binding ServerSettings.Whitelist}" Content="Use Whitelist" Style="{DynamicResource DefaultCheckBox}" FontSize="20"/>
                                     <CheckBox Margin="5" IsChecked="{Binding ServerSettings.GenerateStructures}" Content="Generate Structures" Style="{DynamicResource DefaultCheckBox}" FontSize="20"/>
                                     <CheckBox Margin="5" IsChecked="{Binding ServerSettings.OnlineMode}" Content="Online Mode" Style="{DynamicResource DefaultCheckBox}" FontSize="20"/>
-                                </StackPanel>
-                                <DockPanel Height="40" Grid.Row="2" HorizontalAlignment="Center">
-                                    <Border CornerRadius="4" MaxWidth="200" MinWidth="150" DockPanel.Dock="Right" Height="26" Background="{DynamicResource buttonBgrDefault}">
-                                        <TextBox Margin="5 0" Text="" Background="{DynamicResource buttonBgrDefault}" BorderThickness="0" 
-                                     Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                     FontSize="17" Height="20" x:Name="ServerName"/>
-                                    </Border>
-                                    <TextBlock Text="Server Name" TextAlignment="Right" Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0"/>
-                                </DockPanel>
-                                <DockPanel Height="40" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center">
-                                    <Border CornerRadius="4" MaxWidth="200" MinWidth="150" DockPanel.Dock="Right" Height="26" Background="{DynamicResource buttonBgrDefault}">
-                                        <TextBox Margin="5 0" Text="{Binding ServerSettings.LevelName}" Background="{DynamicResource buttonBgrDefault}" BorderThickness="0" 
-                                     Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                     FontSize="17" Height="20"/>
-                                    </Border>
-                                    <TextBlock Text="World Name" TextAlignment="Right" Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0"/>
-                                </DockPanel>
+                                </StackPanel>                                
                             </Grid>
                         </StackPanel>
                         <Border.Style>
