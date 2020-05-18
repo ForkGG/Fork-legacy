@@ -9,12 +9,15 @@ namespace fork.Logic.CustomConsole
 {
     public class ConsoleWriter
     {
-        private ServerViewModel viewModel;
+        public delegate void ConsoleWriteEventHandler(string line, ServerViewModel source);
+        public static event ConsoleWriteEventHandler ConsoleWriteLine;
 
-        public ConsoleWriter(ServerViewModel viewModel, StreamReader stdOut, StreamReader errOut)
+
+        private delegate void CustomWriteEventHandler(string line, ServerViewModel target);
+        private static event CustomWriteEventHandler CustomWriteLine;
+        
+        public static void RegisterApplication(ServerViewModel viewModel, StreamReader stdOut, StreamReader errOut)
         {
-            this.viewModel = viewModel;
-            
             new Thread(() =>
             {
                 while (!stdOut.EndOfStream)
@@ -26,6 +29,7 @@ namespace fork.Logic.CustomConsole
                         {
                             viewModel.CurrentStatus = ServerStatus.RUNNING;
                         }
+                        ConsoleWriteLine?.Invoke(line,viewModel);
                         viewModel.RoleInputHandler(line);
                         viewModel.ConsoleOutList.Add(line);
                     }
@@ -45,17 +49,16 @@ namespace fork.Logic.CustomConsole
                             viewModel.CurrentStatus = ServerStatus.RUNNING;
                         }
                         viewModel.RoleInputHandler(line);
-                        //
-
+                        ConsoleWriteLine?.Invoke(line,viewModel);
                         viewModel.ConsoleOutList.Add(line);
                     }
                 }
             }).Start();
         }
 
-        public void Write(string line)
+        public static void Write(string line, ServerViewModel target)
         {
-            viewModel.ConsoleOutList.Add(line);
+            target.ConsoleOutList.Add(line);
         }
     }
 }

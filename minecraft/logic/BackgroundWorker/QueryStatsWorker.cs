@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using fork.Logic.CustomConsole;
 using fork.Logic.Manager;
 using fork.Logic.Model;
 using fork.ViewModel;
@@ -46,7 +48,7 @@ namespace fork.Logic.BackgroundWorker
                 {
                     Console.WriteLine("Query for server "+viewModel.Server.Name+" stopped working with message: "+e.Message);
                     //TODO provide backup (/list or api.mcsrvstat.us)
-                    return;
+                    break;
                 }
 
                 List<string> playerNames = fs.PlayerList;
@@ -100,8 +102,51 @@ namespace fork.Logic.BackgroundWorker
                 
                 Thread.Sleep(5000);
             }
+            Console.WriteLine("QueryStatsWorker for server ("+viewModel.Server+") stopped working");
 
-            System.Console.WriteLine("QueryStatsWorker for server ("+viewModel.Server+") stopped working");
+            if (viewModel.CurrentStatus == ServerStatus.RUNNING)
+            {
+                Console.WriteLine("Using backup system to track online users");
+                ConsoleWriter.ConsoleWriteLine += HandleConsoleWrite;
+            }
+        }
+
+        
+        private Regex playerJoin = new Regex(@"\[([0-9]+:*)+\] \[Server thread/INFO\]: ([0-9a-zA-Z_]+) joined the game$");
+        private Regex playerLeave = new Regex(@"\[([0-9]+:*)+\] \[Server thread/INFO\]: ([0-9a-zA-Z_]+) left the game$");
+        private async void HandleConsoleWrite(string line, ServerViewModel viewModel)
+        {
+            Match joinMatch = playerJoin.Match(line);
+            if (joinMatch.Success)
+            {
+                string playerName = joinMatch.Groups[2].Value;
+                try
+                {
+                    Player p = await PlayerManager.Instance.GetPlayer(playerName);
+                    Application.Current.Dispatcher?.Invoke(() => viewModel.PlayerList.Add(p));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error finding player " + playerName);
+                }
+                return;
+            }
+
+            Match leaveMatch = playerLeave.Match(line);
+            if (leaveMatch.Success)
+            {
+                string playerName = leaveMatch.Groups[2].Value;
+                try
+                {
+                    Player p = await PlayerManager.Instance.GetPlayer(playerName);
+                    Application.Current.Dispatcher?.Invoke(() => viewModel.PlayerList.Remove(p));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error finding player "+playerName);
+                }
+                return; 
+            }
         }
     }
 }

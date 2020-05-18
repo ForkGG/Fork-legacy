@@ -165,7 +165,7 @@ namespace fork.ViewModel
                 return readConsoleIn
                        ?? (readConsoleIn = new ActionCommand(() =>
                        {
-                           ConsoleReader?.Read(ConsoleIn);
+                           ConsoleReader?.Read(ConsoleIn, this);
                            ConsoleIn = "";
                        }));
             }

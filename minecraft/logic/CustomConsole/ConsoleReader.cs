@@ -1,22 +1,21 @@
 using System.IO;
+using fork.ViewModel;
 
 namespace fork.Logic.CustomConsole
 {
     public class ConsoleReader
     {
         private StreamWriter stdIn;
-        private ConsoleWriter writer;
         
-        public ConsoleReader(StreamWriter stdIn, ConsoleWriter writer)
+        public ConsoleReader(StreamWriter stdIn)
         {
             this.stdIn = stdIn;
-            this.writer = writer;
         }
 
-        public void Read(string line)
+        public void Read(string line, ServerViewModel source)
         {
             stdIn.WriteLine(line);
-            writer.Write(line);
+            ConsoleWriter.Write(line, source);
         }
     }
 }

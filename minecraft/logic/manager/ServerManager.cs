@@ -528,8 +528,8 @@ namespace fork.Logic.Manager
                 viewModel.TrackPerformance(process);
             }).Start();
             viewModel.CurrentStatus = ServerStatus.STARTING;
-            ConsoleWriter consoleWriter = new ConsoleWriter(viewModel, process.StandardOutput, process.StandardError);
-            ConsoleReader consoleReader = new ConsoleReader(process.StandardInput, consoleWriter);
+            ConsoleWriter.RegisterApplication(viewModel, process.StandardOutput, process.StandardError);
+            ConsoleReader consoleReader = new ConsoleReader(process.StandardInput);
             double nextRestart = AutoRestartManager.Instance.RegisterRestart(viewModel);
 
             viewModel.SetRestartTime(nextRestart);
