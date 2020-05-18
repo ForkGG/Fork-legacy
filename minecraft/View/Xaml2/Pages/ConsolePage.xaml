@@ -381,8 +381,24 @@
                     </TextBox>
                 </Border>
                 <Border Margin="10" CornerRadius="10" Background="{DynamicResource backgroundConsole}">
-                    <ScrollViewer x:Name="ScrollViewer" Margin="10" ScrollChanged="ScrollViewer_ScrollChanged" Style="{DynamicResource ConsoleScrollViewer}">
-                        <TextBlock FontFamily="Courier New" Foreground="{DynamicResource textTerminal}" Text="{Binding Path=ConsoleOutList, Converter={StaticResource ListToStringConverter}}" TextWrapping="Wrap"></TextBlock>
+                    <ScrollViewer Margin="10"  ScrollChanged="ScrollViewer_ScrollChanged">
+                        <TextBox FontFamily="Courier New" Foreground="{DynamicResource textTerminal}" 
+                                 Text="{Binding Path=ConsoleOutList, Converter={StaticResource ListToStringConverter}, Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True"
+                                 Background="{x:Null}" BorderBrush="{x:Null}">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type TextBoxBase}">
+                                                <Grid>
+                                                    <ScrollViewer Name="PART_ContentHost"/>
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
                     </ScrollViewer>
                 </Border>                
             </DockPanel>

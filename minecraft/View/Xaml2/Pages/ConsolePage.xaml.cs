@@ -47,10 +47,11 @@ namespace fork.View.Xaml2.Pages
 
         private void ScrollViewer_ScrollChanged(Object sender, ScrollChangedEventArgs e)
         {
+            ScrollViewer scrollViewer = sender as ScrollViewer;
             // User scroll event : set or unset auto-scroll mode
             if (e.ExtentHeightChange == 0)
             {   // Content unchanged : uSelectPlayerList
-                if (ScrollViewer.VerticalOffset == ScrollViewer.ScrollableHeight)
+                if (scrollViewer.VerticalOffset == scrollViewer.ScrollableHeight)
                 {   // Scroll bar is in bottom
                     // Set auto-scroll mode
                     AutoScroll = true;
@@ -66,7 +67,7 @@ namespace fork.View.Xaml2.Pages
             if (AutoScroll && e.ExtentHeightChange != 0)
             {   // Content changed and auto-scroll mode set
                 // Autoscroll
-                ScrollViewer.ScrollToVerticalOffset(ScrollViewer.ExtentHeight);
+                scrollViewer.ScrollToVerticalOffset(scrollViewer.ExtentHeight);
             }
         }
         #endregion autoscrolling
