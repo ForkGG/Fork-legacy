@@ -21,7 +21,7 @@
         <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <CollectionViewSource x:Key="playerList" Source="{Binding PlayerList}">
             <CollectionViewSource.SortDescriptions>
-                <scm:SortDescription PropertyName="Name" Direction="Ascending"/>
+                <scm:SortDescription PropertyName="Player.Name" Direction="Ascending"/>
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
         <CollectionViewSource x:Key="banList" Source="{Binding BanList}">
@@ -80,22 +80,23 @@
                                                                 <TextBlock.OpacityMask>
                                                                     <VisualBrush Visual="{Binding ElementName=CornersMask}"/>
                                                                 </TextBlock.OpacityMask>
-                                                                <Image Source="{Binding Head}" MinHeight="30px" MinWidth="30px" Stretch="Fill" RenderOptions.BitmapScalingMode="NearestNeighbor" 
+                                                                <Image Source="{Binding Player.Head}" MinHeight="30px" MinWidth="30px" Stretch="Fill" RenderOptions.BitmapScalingMode="NearestNeighbor" 
                                                                        HorizontalAlignment="Center" VerticalAlignment="Center" RenderOptions.EdgeMode="Aliased"/>
                                                             </TextBlock>
                                                             <Border x:Name="overlay" Background="White" Opacity="0.3" CornerRadius="7" Visibility="Hidden"/>
                                                         </Grid>
                                                     </Border>
-                                                    <TextBlock x:Name="text" Text="{Binding Name}" Grid.Column="1" VerticalAlignment="Center" Foreground="{DynamicResource textSelected}" FontSize="14" Margin="5 0 0 0"/>
+                                                    <TextBlock x:Name="text" Text="{Binding Player.Name}" Grid.Column="1" VerticalAlignment="Center" Foreground="{DynamicResource textSelected}" FontSize="14" Margin="5 0 0 0"/>
                                                 </DockPanel>
                                                 <Border.ContextMenu>
                                                     <ContextMenu x:Name="WhitelistContextMenu">
-                                                        <MenuItem Header="Ban Player" Click="Player_Ban" CommandParameter="{Binding Name}" IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}" 
+                                                        <MenuItem Header="Ban Player" Click="Player_Ban" CommandParameter="{Binding Player.Name}" IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}" 
                                                                   Style="{DynamicResource ContextMenuItem}"/>
-                                                        <MenuItem Header="OP Player" Click="Player_OP" CommandParameter="{Binding Name}" IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}" 
-                                                                  Style="{DynamicResource ContextMenuItem}"/>
-                                                        <!-- TODO Deop? -->
-                                                        <MenuItem Header="Kick Player" Click="Player_Kick" CommandParameter="{Binding Name}" IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}" 
+                                                        <MenuItem Header="OP Player" Click="Player_OP" CommandParameter="{Binding Player.Name}" IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}" 
+                                                                  Style="{DynamicResource ContextMenuItem}" Visibility="{Binding IsOP, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                                                        <MenuItem Header="De-OP Player" Click="Player_Deop" CommandParameter="{Binding Player.Name}" IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}" 
+                                                                  Style="{DynamicResource ContextMenuItem}" Visibility="{Binding IsOP, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                                        <MenuItem Header="Kick Player" Click="Player_Kick" CommandParameter="{Binding Player.Name}" IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}" 
                                                                   Style="{DynamicResource ContextMenuItem}"/>
                                                     </ContextMenu>
                                                 </Border.ContextMenu>

@@ -141,6 +141,7 @@
     <Compile Include="Logic\Model\FullStats.cs" />
     <Compile Include="Logic\Model\MinecraftDimension.cs" />
     <Compile Include="Logic\Model\MinecraftVersionModel\Manifest.cs" />
+    <Compile Include="Logic\Model\MinecraftVersionModel\ServerPlayer.cs" />
     <Compile Include="Logic\Model\MinecraftVersionModel\VersionDetails.cs" />
     <Compile Include="Logic\Model\Player.cs" />
     <Compile Include="Logic\Model\ServerRestart.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="View\Xaml2\Controls\IconButton.cs" />
     <Compile Include="View\Xaml2\Controls\IconRadioButton.cs" />
     <Compile Include="View\Xaml2\Controls\ServerTypeRadioButton.cs" />
+    <Compile Include="View\Xaml2\Controls\StretchyWrapPanel.cs" />
     <Compile Include="View\Xaml2\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>

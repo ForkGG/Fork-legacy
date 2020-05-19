@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -18,6 +19,7 @@ using fork.Logic.CustomConsole;
 using fork.Logic.ImportLogic;
 using fork.Logic.Manager;
 using fork.Logic.Model;
+using fork.Logic.Model.MinecraftVersionPojo;
 using fork.Logic.Persistence;
 using fork.Logic.RoleManagement;
 using fork.View.Xaml2.Pages;
@@ -46,7 +48,7 @@ namespace fork.ViewModel
 
         public ConsoleReader ConsoleReader;
         public ObservableCollection<string> ConsoleOutList { get; }
-        public ObservableCollection<Player> PlayerList { get; set; } = new ObservableCollection<Player>();
+        public ObservableCollection<ServerPlayer> PlayerList { get; set; } = new ObservableCollection<ServerPlayer>();
         public ObservableCollection<Player> BanList { get; set; } = new ObservableCollection<Player>();
         public ObservableCollection<Player> OPList { get; set; } = new ObservableCollection<Player>();
         public ObservableCollection<Player> WhiteList { get; set; } = new ObservableCollection<Player>();
@@ -180,6 +182,13 @@ namespace fork.ViewModel
 
         public ServerViewModel(Server server)
         {
+            PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName.ToLower().Contains("isop") || args.PropertyName.ToLower().Contains("playerlist"))
+                {
+                    Console.WriteLine("Property " + args.PropertyName + " changed");
+                }
+            };
             DateTime start = DateTime.Now;
             Console.WriteLine("Starting initialization of ViewModel for Server "+server.Name);
             Server = server;
@@ -432,6 +441,21 @@ namespace fork.ViewModel
         private void OPListChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             raisePropertyChanged(nameof(OPList));
+            EvaluateOPs();
+            
+            //TODO this is bad WPF (use INotifyPropertyChanged in ServerPlayer instead)
+            var c = ConsolePage as ConsolePage;
+            c.Playerlist.Items.Refresh();
+
+        }
+
+        private void EvaluateOPs()
+        {
+            foreach (ServerPlayer serverPlayer in PlayerList)
+            {
+                bool oldOP = serverPlayer.IsOP;
+                serverPlayer.IsOP = OPList.Contains(serverPlayer.Player);
+            }
         }
 
 

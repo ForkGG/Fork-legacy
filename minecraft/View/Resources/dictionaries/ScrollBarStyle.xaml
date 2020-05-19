@@ -162,15 +162,54 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
-    <Style x:Key="ConsoleScrollViewer" TargetType="{x:Type ScrollViewer}">
+
+    <Style x:Key="SettingsScrollViewer" TargetType="{x:Type ScrollViewer}">
         <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
                     <Border CornerRadius="4">
-                        <ScrollContentPresenter/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="7"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="1" Background="Transparent" Width="30"/>
+                            <Border Grid.Column="1" Panel.ZIndex="1" Background="{DynamicResource backgroundDefault}" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+                            <ScrollBar Name="PART_VerticalScrollBar"
+                                   Grid.Column="1"
+                                   Panel.ZIndex="2"
+                                   Value="{TemplateBinding VerticalOffset}"
+                                   Maximum="{TemplateBinding ScrollableHeight}"
+                                   ViewportSize="{TemplateBinding ViewportHeight}"
+                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+
+                            <ScrollContentPresenter Margin="0 0 -10 0"/>
+                        </Grid>
                     </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ConsoleScrollViewer" TargetType="{x:Type ScrollViewer}">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <ScrollContentPresenter/>
+                        <ScrollBar Grid.Column="1" Name="PART_VerticalScrollBar"
+                                   Value="{TemplateBinding VerticalOffset}"
+                                   Maximum="{TemplateBinding ScrollableHeight}"
+                                   ViewportSize="{TemplateBinding ViewportHeight}"
+                                   Visibility="Visible"
+                                   Style="{StaticResource BigScrollBar}"/>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

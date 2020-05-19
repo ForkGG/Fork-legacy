@@ -106,9 +106,10 @@ namespace fork.Logic.Manager
         }
 
 
-        public void StopServer(Server server)
+        public void StopServer(ServerViewModel serverViewModel)
         {
-            ApplicationManager.Instance.ActiveServers[server].StandardInput.WriteLine("stop");
+            ApplicationManager.Instance.ActiveServers[serverViewModel.Server].StandardInput.WriteLine("stop");
+            Application.Current.Dispatcher?.Invoke(() => serverViewModel.PlayerList.Clear());
         }
 
         public async Task<bool> StartServerAsync(ServerViewModel serverViewModel)
@@ -167,7 +168,7 @@ namespace fork.Logic.Manager
 
         public bool RestartServer(ServerViewModel serverViewModel)
         {
-            StopServer(serverViewModel.Server);
+            StopServer(serverViewModel);
             while (serverViewModel.CurrentStatus != ServerStatus.STOPPED)
             {
                 Thread.Sleep(500);
@@ -357,7 +358,7 @@ namespace fork.Logic.Manager
             {
                 if (serverViewModel.CurrentStatus != ServerStatus.STOPPED)
                 {
-                    StopServer(serverViewModel.Server);
+                    StopServer(serverViewModel);
                     while (serverViewModel.CurrentStatus != ServerStatus.STOPPED)
                     {
                         Thread.Sleep(500);
@@ -392,7 +393,7 @@ namespace fork.Logic.Manager
             {
                 if (serverViewModel.CurrentStatus != ServerStatus.STOPPED)
                 {
-                    StopServer(serverViewModel.Server);
+                    StopServer(serverViewModel);
                     while (serverViewModel.CurrentStatus != ServerStatus.STOPPED)
                     {
                         Thread.Sleep(500);

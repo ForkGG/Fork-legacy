@@ -7,7 +7,7 @@ namespace fork.Logic.Logging
 {
     public class ErrorLogger
     {
-        private FileWriter fileWriter = new FileWriter();
+        private static FileWriter fileWriter = new FileWriter();
         
         public ErrorLogger()
         {
@@ -21,6 +21,11 @@ namespace fork.Logic.Logging
                 Exception e = eventArgs.ExceptionObject as Exception;
                 fileWriter.AppendToErrorLog("["+DateTime.Now+"] [UnhandledException] " +e?.StackTrace+"\n");
             };
+        }
+
+        public static void Append(Exception e)
+        {
+            fileWriter.AppendToErrorLog("["+DateTime.Now+"] [HandledException] " +e?.StackTrace+"\n");
         }
     }
 }

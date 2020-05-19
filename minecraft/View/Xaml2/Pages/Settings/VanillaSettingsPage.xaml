@@ -6,6 +6,7 @@
       xmlns:val="clr-namespace:fork.View.Xaml.ValidationRules"
       xmlns:local="clr-namespace:fork.View.Xaml2.Pages.Settings"
       xmlns:converter="clr-namespace:fork.View.Xaml.Converter"
+      xmlns:controls="clr-namespace:fork.View.Xaml2.Controls"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MCSettingsPage">
@@ -13,157 +14,306 @@
     <Page.Resources>
         <converter:SimpleTimeToStringConverter x:Key="SimpleTimeToStringConverter" />
     </Page.Resources>
-    <ScrollViewer Margin="10 20">
-        <StackPanel MaxWidth="800">
+    <ScrollViewer Margin="10 20 5 20" Style="{DynamicResource SettingsScrollViewer}">
+        <controls:StretchyWrapPanel>
 
             <!-- General Settings -->
-            <Border CornerRadius="10" Margin="5 5">
-                <StackPanel Background="Transparent" Margin="0 10">
+            <Border CornerRadius="10" Margin="5 5 10 5">
+                <StackPanel Background="Transparent" Margin="0 20" HorizontalAlignment="Left">
                     <TextBlock Text="General Settings" Foreground="{DynamicResource textHeader}"
-                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="15 0 5 20" />
-                    <Grid Margin="10 10" HorizontalAlignment="Center">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <DockPanel Height="40" Margin="0 0 20 0">
-                            <ComboBox DockPanel.Dock="Right" SelectedIndex="0" Width="150" HorizontalAlignment="Left"
+                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="95 0 5 20" />
+                    <StackPanel Margin="110 10 20 10" HorizontalAlignment="Left">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <DockPanel Height="40" Margin="0 0 20 0">
+                                <ComboBox DockPanel.Dock="Right" SelectedIndex="0" Width="150" HorizontalAlignment="Left"
                                       ItemContainerStyle="{DynamicResource DefaultComboBoxItem}"
                                       FontFamily="{DynamicResource Montserrat-Bold}" FontSize="17"
                                       VerticalAlignment="Center"
                                       ItemsSource="{Binding Server.ServerSettings.Gamemodes}"
                                       SelectedItem="{Binding Server.ServerSettings.CurrGamemode}" />
-                            <TextBlock Text="Gamemode" TextAlignment="Right"
+                                <TextBlock Text="Gamemode" TextAlignment="Right"
                                        Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
-                        </DockPanel>
-                        <DockPanel Height="40" Grid.Row="1" Margin="0 0 20 0">
-                            <ComboBox DockPanel.Dock="Right" SelectedIndex="0" Width="150" HorizontalAlignment="Left"
+                            </DockPanel>
+                            <DockPanel Height="40" Grid.Row="1" Margin="0 0 20 0">
+                                <ComboBox DockPanel.Dock="Right" SelectedIndex="0" Width="150" HorizontalAlignment="Left"
                                       ItemContainerStyle="{DynamicResource DefaultComboBoxItem}"
                                       FontFamily="{DynamicResource Montserrat-Bold}" FontSize="17"
                                       VerticalAlignment="Center"
                                       ItemsSource="{Binding Server.ServerSettings.Difficulties}"
                                       SelectedItem="{Binding Server.ServerSettings.CurrDifficulty}" />
-                            <TextBlock Text="Difficulty" TextAlignment="Right"
+                                <TextBlock Text="Difficulty" TextAlignment="Right"
                                        Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
-                        </DockPanel>
-                        <DockPanel Height="40" Grid.Column="1" Margin="20 0 0 0">
-                            <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
+                            </DockPanel>
+                            <DockPanel Height="40" Grid.Column="1" Margin="20 0 0 0">
+                                <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
                                     Background="{DynamicResource buttonBgrDefault}">
-                                <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.MaxPlayers}"
+                                    <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.MaxPlayers}"
                                          Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="17" Height="20" />
-                            </Border>
-                            <TextBlock Text="Player Slots" TextAlignment="Right"
+                                </Border>
+                                <TextBlock Text="Player Slots" TextAlignment="Right"
                                        Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
-                        </DockPanel>
-                        <DockPanel Height="40" Grid.Column="1" Grid.Row="1" Margin="20 0 0 0">
-                            <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
+                            </DockPanel>
+                            <DockPanel Height="40" Grid.Column="1" Grid.Row="1" Margin="20 0 0 0">
+                                <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
                                     Background="{DynamicResource buttonBgrDefault}">
-                                <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.ServerPort}"
+                                    <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.ServerPort}"
                                          Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="17" Height="20" />
-                            </Border>
-                            <TextBlock Text="Server Port" TextAlignment="Right"
+                                </Border>
+                                <TextBlock Text="Server Port" TextAlignment="Right"
                                        Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
-                        </DockPanel>
-                    </Grid>
-                    <Grid Margin="10 10" HorizontalAlignment="Center">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <CheckBox Content="Enable Nether" IsChecked="{Binding Server.ServerSettings.AllowNether}"
+                            </DockPanel>
+                        </Grid>
+                        <Grid Margin="0 10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <CheckBox Content="Enable Nether" IsChecked="{Binding Server.ServerSettings.AllowNether}"
                                   Style="{DynamicResource DefaultCheckBox}" FontSize="20" Margin="0 0 20 0" />
-                        <CheckBox Content="Enable PvP" IsChecked="{Binding Server.ServerSettings.Pvp}"
+                            <CheckBox Content="Enable PvP" IsChecked="{Binding Server.ServerSettings.Pvp}"
                                   Style="{DynamicResource DefaultCheckBox}" FontSize="20" Grid.Row="1"
                                   Margin="0 0 20 0" />
-                        <CheckBox Content="Use Whitelist" IsChecked="{Binding Server.ServerSettings.Whitelist}"
+                            <CheckBox Content="Use Whitelist" IsChecked="{Binding Server.ServerSettings.Whitelist}"
                                   Style="{DynamicResource DefaultCheckBox}" FontSize="20" Grid.Row="2"
                                   Margin="0 0 20 0" />
-                        <CheckBox Content="Hardcore" IsChecked="{Binding Server.ServerSettings.Hardcore}"
+                            <CheckBox Content="Hardcore" IsChecked="{Binding Server.ServerSettings.Hardcore}"
                                   Style="{DynamicResource DefaultCheckBox}" FontSize="20" Grid.Row="3"
                                   Margin="0 0 20 0" />
-                        <CheckBox Content="Spawn Monsters" IsChecked="{Binding Server.ServerSettings.SpawnMonsters}"
+                            <CheckBox Content="Spawn Monsters" IsChecked="{Binding Server.ServerSettings.SpawnMonsters}"
                                   Style="{DynamicResource DefaultCheckBox}" FontSize="20" Grid.Column="1"
                                   Margin="20 0 0 0" />
-                        <CheckBox Content="Spawn Animals" IsChecked="{Binding Server.ServerSettings.SpawnAnimals}"
+                            <CheckBox Content="Spawn Animals" IsChecked="{Binding Server.ServerSettings.SpawnAnimals}"
                                   Style="{DynamicResource DefaultCheckBox}" FontSize="20" Grid.Row="1" Grid.Column="1"
                                   Margin="20 0 0 0" />
-                        <CheckBox Content="Spawn NPCs" IsChecked="{Binding Server.ServerSettings.SpawnNpcs}"
+                            <CheckBox Content="Spawn NPCs" IsChecked="{Binding Server.ServerSettings.SpawnNpcs}"
                                   Style="{DynamicResource DefaultCheckBox}" FontSize="20" Grid.Row="2" Grid.Column="1"
                                   Margin="20 0 0 0" />
-                        <CheckBox Content="Online mode" IsChecked="{Binding Server.ServerSettings.OnlineMode}"
+                            <CheckBox Content="Online mode" IsChecked="{Binding Server.ServerSettings.OnlineMode}"
                                   Style="{DynamicResource DefaultCheckBox}" FontSize="20" Grid.Row="3" Grid.Column="1"
                                   Margin="20 0 0 0" />
-                    </Grid>
-                    <Grid HorizontalAlignment="Center" Margin="0 10">
-                        <StackPanel>
-                            <Grid HorizontalAlignment="Center">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition />
-                                    <ColumnDefinition />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="40" />
-                                    <RowDefinition Height="40" />
-                                </Grid.RowDefinitions>
-                                <TextBlock Text="Spawn Protection" TextAlignment="Right"
+                        </Grid>
+                        <Grid Margin="0 10">
+                            <StackPanel>
+                                <Grid HorizontalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="40" />
+                                        <RowDefinition Height="40" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="Spawn Protection" TextAlignment="Right"
                                            Style="{DynamicResource CreateServerTextBlock}" />
-                                <Border Grid.Column="1" Margin="10 0 3 0" CornerRadius="4" Width="100" Height="26"
+                                    <Border Grid.Column="1" Margin="10 0 3 0" CornerRadius="4" Width="100" Height="26"
                                         Background="{DynamicResource buttonBgrDefault}">
-                                    <TextBox Text="{Binding Server.ServerSettings.SpawnProtection}"
+                                        <TextBox Text="{Binding Server.ServerSettings.SpawnProtection}"
                                              Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
                                              Foreground="{DynamicResource backgroundDark}"
                                              FontFamily="{DynamicResource Montserrat-SemiBold}"
                                              FontSize="17" Height="20" />
-                                </Border>
-                                <TextBlock Grid.Column="2" Text="Blocks"
+                                    </Border>
+                                    <TextBlock Grid.Column="2" Text="Blocks"
                                            Style="{DynamicResource CreateServerTextBlock}" />
 
-                                <TextBlock Grid.Row="1" Text="View Distance" TextAlignment="Right"
+                                    <TextBlock Grid.Row="1" Text="View Distance" TextAlignment="Right"
                                            Style="{DynamicResource CreateServerTextBlock}" />
-                                <Border Grid.Row="1" Grid.Column="1" Margin="10 0 3 0" CornerRadius="4" Width="100"
+                                    <Border Grid.Row="1" Grid.Column="1" Margin="10 0 3 0" CornerRadius="4" Width="100"
                                         Height="26" Background="{DynamicResource buttonBgrDefault}">
-                                    <TextBox Text="{Binding Server.ServerSettings.ViewDistance}"
+                                        <TextBox Text="{Binding Server.ServerSettings.ViewDistance}"
                                              Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
                                              Foreground="{DynamicResource backgroundDark}"
                                              FontFamily="{DynamicResource Montserrat-SemiBold}"
                                              FontSize="17" Height="20" />
-                                </Border>
-                                <TextBlock Grid.Row="1" Grid.Column="2" Text="Chunks"
+                                    </Border>
+                                    <TextBlock Grid.Row="1" Grid.Column="2" Text="Chunks"
                                            Style="{DynamicResource CreateServerTextBlock}" />
-                            </Grid>
+                                </Grid>
 
-                            <StackPanel Margin="0 30 0 0">
-                                <TextBlock Text="MOTD" Style="{DynamicResource CreateServerTextBlock}"
+                                <StackPanel Margin="0 30 0 0">
+                                    <TextBlock Text="MOTD" Style="{DynamicResource CreateServerTextBlock}"
                                            Margin="0 0 20 10" HorizontalAlignment="Center" />
-                                <Border Margin="5 0" CornerRadius="4" Width="550" DockPanel.Dock="Right" Height="50"
+                                    <Border Margin="5 0" CornerRadius="4" Width="550" DockPanel.Dock="Right" Height="50"
                                         Background="{DynamicResource buttonBgrDefault}">
-                                    <TextBox Text="{Binding Server.ServerSettings.Motd}"
+                                        <TextBox Text="{Binding Server.ServerSettings.Motd}"
                                              Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
                                              Foreground="{DynamicResource backgroundDark}"
                                              FontFamily="{DynamicResource Montserrat-SemiBold}"
                                              FontSize="17" TextWrapping="NoWrap" AcceptsReturn="True" AcceptsTab="True"
                                              Height="40" />
-                                </Border>
+                                    </Border>
+                                </StackPanel>
                             </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </StackPanel>
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+            </Border>
+
+           
+            <!-- Advanced Settings -->
+            <Border CornerRadius="10" Margin="5">
+                <StackPanel Background="Transparent" Margin="0 10" HorizontalAlignment="Left">
+                    <TextBlock Text="Advanced Settings" Foreground="{DynamicResource textHeader}"
+                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="95 0 5 20" />
+                    <StackPanel Margin="110 10 50 10" HorizontalAlignment="Left">
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <CheckBox Content="Enable Snooper" IsChecked="{Binding Server.ServerSettings.SnooperEnabled}"
+                                  Style="{DynamicResource DefaultCheckBox}" FontSize="20" Margin="0 0 20 0" />
+                            <CheckBox Content="Command Blocks"
+                                  IsChecked="{Binding Server.ServerSettings.EnableCommandBlock}"
+                                  Style="{DynamicResource DefaultCheckBox}" FontSize="20" Grid.Row="1"
+                                  Margin="0 0 20 0" />
+                            <CheckBox Content="Force Gamemode" IsChecked="{Binding Server.ServerSettings.ForceGamemode}"
+                                  Style="{DynamicResource DefaultCheckBox}" FontSize="20" Grid.Row="2"
+                                  Margin="0 0 20 0" />
+                            <CheckBox Content="Enable RCon" IsChecked="{Binding Server.ServerSettings.EnableRcon}"
+                                  Style="{DynamicResource DefaultCheckBox}" FontSize="20" Grid.Column="1"
+                                  Margin="20 0 0 0"
+                                  x:Name="enableRcon" />
+                            <CheckBox Content="Broadcast Console"
+                                  IsChecked="{Binding Server.ServerSettings.BcastConsoleToOps}"
+                                  Style="{DynamicResource DefaultCheckBox}" FontSize="20" Grid.Row="1" Grid.Column="1"
+                                  Margin="20 0 0 0" />
+                            <CheckBox Content="Enforce Whitelist"
+                                  IsChecked="{Binding Server.ServerSettings.EnforceWhitelist}"
+                                  Style="{DynamicResource DefaultCheckBox}" FontSize="20" Grid.Row="2" Grid.Column="1"
+                                  Margin="20 0 0 0" />
+                        </Grid>
+                        <StackPanel Margin="0 20 0 0">
+                            <CheckBox IsChecked="{Binding Server.ServerSettings.BcastRconToOps}"
+                                  Content="Broadcast RCon to OPs"
+                                  Style="{DynamicResource DefaultCheckBox}" FontSize="20" HorizontalAlignment="Center"
+                                  Margin="0 0 0 5" />
+                            <DockPanel Height="40" Margin="0 5 0 5">
+                                <Border CornerRadius="4" Width="150" DockPanel.Dock="Right" Height="26"
+                                    Background="{DynamicResource buttonBgrDefault}">
+                                    <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.RconPort}"
+                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Foreground="{DynamicResource backgroundDark}"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="17" Height="20" />
+                                </Border>
+                                <TextBlock Text="RCon Port" TextAlignment="Right"
+                                       Style="{DynamicResource CreateServerTextBlock}"
+                                       Margin="0 0 10 0" />
+                            </DockPanel>
+                            <DockPanel Height="40" Margin="0 5 0 5">
+                                <Border CornerRadius="4" Width="150" DockPanel.Dock="Right" Height="26"
+                                    Background="{DynamicResource buttonBgrDefault}">
+                                    <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.RconPassword}"
+                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Foreground="{DynamicResource backgroundDark}"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="17" Height="20" />
+                                </Border>
+                                <TextBlock Text="RCon Password" TextAlignment="Right"
+                                       Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
+                            </DockPanel>
+                            <StackPanel.Style>
+                                <Style TargetType="StackPanel">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ElementName=enableRcon, Path=IsChecked}"
+                                                 Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ElementName=enableRcon, Path=IsChecked}"
+                                                 Value="False">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
                         </StackPanel>
-                    </Grid>
+                        <StackPanel Margin="0 20 0 0">
+                            <DockPanel Height="40">
+                                <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
+                                    Background="{DynamicResource buttonBgrDefault}">
+                                    <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.OpPermissionLevel}"
+                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Foreground="{DynamicResource backgroundDark}"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="17" Height="20" />
+                                </Border>
+                                <TextBlock Text="OP Permission Level" TextAlignment="Right"
+                                       Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
+                            </DockPanel>
+                            <DockPanel Height="40">
+                                <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
+                                    Background="{DynamicResource buttonBgrDefault}">
+                                    <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.PlayerIdleTimeout}"
+                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Foreground="{DynamicResource backgroundDark}"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="17" Height="20" />
+                                </Border>
+                                <TextBlock Text="Player Idle Timeout" TextAlignment="Right"
+                                       Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
+                            </DockPanel>
+                            <DockPanel Height="40">
+                                <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
+                                    Background="{DynamicResource buttonBgrDefault}">
+                                    <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.MaxBuildHeight}"
+                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Foreground="{DynamicResource backgroundDark}"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="17" Height="20" />
+                                </Border>
+                                <TextBlock Text="Allowed Build Height" TextAlignment="Right"
+                                       Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
+                            </DockPanel>
+                            <DockPanel Height="40">
+                                <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
+                                    Background="{DynamicResource buttonBgrDefault}">
+                                    <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.MaxWorldSize}"
+                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Foreground="{DynamicResource backgroundDark}"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="17" Height="20" />
+                                </Border>
+                                <TextBlock Text="Allowed World Size" TextAlignment="Right"
+                                       Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
+                            </DockPanel>
+                        </StackPanel>
+                    </StackPanel>
                 </StackPanel>
                 <Border.Style>
                     <Style TargetType="Border">
@@ -177,29 +327,31 @@
             </Border>
 
             <!-- Manage Server -->
-            <Border CornerRadius="10" Margin="5">
-                <StackPanel Background="Transparent" Margin="0 10">
+            <Border CornerRadius="10" Margin="5 5 10 5">
+                <StackPanel Background="Transparent" Margin="0 20" Width="720" HorizontalAlignment="Left">
                     <TextBlock Text="Manage Your Server" Foreground="{DynamicResource textHeader}"
-                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="15 0 5 20" />
-                    <Grid HorizontalAlignment="Center">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="180" />
-                            <ColumnDefinition Width="180" />
-                        </Grid.ColumnDefinitions>
-                        <Button Content="Regen Nether" Margin="0 0 5 0" Style="{DynamicResource RoundedTextButton}" />
-                        <Button Grid.Column="1" Content="Regen End" Margin="5 0 0 0"
+                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="95 0 5 20" />
+                    <StackPanel Margin="110 10 50 10" HorizontalAlignment="Left">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="180" />
+                                <ColumnDefinition Width="180" />
+                            </Grid.ColumnDefinitions>
+                            <Button Content="Regen Nether" Margin="0 0 5 0" Style="{DynamicResource RoundedTextButton}" />
+                            <Button Grid.Column="1" Content="Regen End" Margin="5 0 0 0"
                                 Style="{DynamicResource RoundedTextButton}" />
-                    </Grid>
-                    <StackPanel Grid.Column="1" HorizontalAlignment="Center" Margin="20 20" Orientation="Horizontal">
-                        <TextBlock Text="Change Version" Style="{DynamicResource CreateServerTextBlock}"
+                        </Grid>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0 40 0 0">
+                            <TextBlock Text="Change Version" Style="{DynamicResource CreateServerTextBlock}"
                                    Margin="0 0 10 0"
                                    VerticalAlignment="Center" />
-                        <ComboBox SelectionChanged="VersionChange_SelectionChanged" ItemsSource="{Binding Versions}"
+                            <ComboBox SelectionChanged="VersionChange_SelectionChanged" ItemsSource="{Binding Versions}"
                                   x:Name="versionComboBox" SelectedItem="{Binding Server.Version, Mode=OneWay}"
                                   ItemContainerStyle="{DynamicResource DefaultComboBoxItem}"
                                   FontFamily="{DynamicResource Montserrat-Bold}" FontSize="17" />
-                        <Button x:Name="VersionChangeBtn" Visibility="Collapsed" Margin="10 0 0 0" Content="Apply"
+                            <Button x:Name="VersionChangeBtn" Visibility="Collapsed" Margin="10 0 0 0" Content="Apply"
                                 Width="80" Style="{DynamicResource RoundedTextButton}" />
+                        </StackPanel>
                     </StackPanel>
                 </StackPanel>
                 <Border.Style>
@@ -215,103 +367,105 @@
 
             <!-- Automatic Server Restarts -->
             <Border CornerRadius="10" Margin="5">
-                <StackPanel Background="Transparent" Margin="0 10">
+                <StackPanel Background="Transparent" Margin="0 10" Width="720" HorizontalAlignment="Left">
                     <TextBlock Text="Automatic Server Restarts" Foreground="{DynamicResource textHeader}"
-                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="15 0 5 20" />
-                    <Grid HorizontalAlignment="Center">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <CheckBox IsChecked="{Binding Server.Restart1.Enabled}"
+                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="95 0 5 20" />
+                    <StackPanel Margin="110 10 50 10" HorizontalAlignment="Left">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <CheckBox IsChecked="{Binding Server.Restart1.Enabled}"
                                   Style="{DynamicResource DefaultCheckBox}"
                                   Margin="20 5">
-                            <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
+                                <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
                                     Background="{DynamicResource buttonBgrDefault}">
-                                <TextBox Margin="5 0" Background="{DynamicResource buttonBgrDefault}"
+                                    <TextBox Margin="5 0" Background="{DynamicResource buttonBgrDefault}"
                                          BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="17" Height="20">
-                                    <TextBox.Text>
-                                        <Binding Path="Server.Restart1.Time"
+                                        <TextBox.Text>
+                                            <Binding Path="Server.Restart1.Time"
                                                  Converter="{StaticResource SimpleTimeToStringConverter}" Mode="TwoWay">
-                                            <Binding.ValidationRules>
-                                                <val:TimeValidationRule ValidationStep="RawProposedValue" />
-                                            </Binding.ValidationRules>
-                                        </Binding>
-                                    </TextBox.Text>
-                                </TextBox>
-                            </Border>
-                        </CheckBox>
-                        <CheckBox IsChecked="{Binding Server.Restart2.Enabled}"
+                                                <Binding.ValidationRules>
+                                                    <val:TimeValidationRule ValidationStep="RawProposedValue" />
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+                                </Border>
+                            </CheckBox>
+                            <CheckBox IsChecked="{Binding Server.Restart2.Enabled}"
                                   Style="{DynamicResource DefaultCheckBox}"
                                   Grid.Column="1" Margin="20 5">
-                            <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
+                                <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
                                     Background="{DynamicResource buttonBgrDefault}">
-                                <TextBox Margin="5 0" Background="{DynamicResource buttonBgrDefault}"
+                                    <TextBox Margin="5 0" Background="{DynamicResource buttonBgrDefault}"
                                          BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="17" Height="20">
-                                    <TextBox.Text>
-                                        <Binding Path="Server.Restart2.Time"
+                                        <TextBox.Text>
+                                            <Binding Path="Server.Restart2.Time"
                                                  Converter="{StaticResource SimpleTimeToStringConverter}" Mode="TwoWay">
-                                            <Binding.ValidationRules>
-                                                <val:TimeValidationRule ValidationStep="RawProposedValue" />
-                                            </Binding.ValidationRules>
-                                        </Binding>
-                                    </TextBox.Text>
-                                </TextBox>
-                            </Border>
-                        </CheckBox>
-                        <CheckBox IsChecked="{Binding Server.Restart3.Enabled}"
+                                                <Binding.ValidationRules>
+                                                    <val:TimeValidationRule ValidationStep="RawProposedValue" />
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+                                </Border>
+                            </CheckBox>
+                            <CheckBox IsChecked="{Binding Server.Restart3.Enabled}"
                                   Style="{DynamicResource DefaultCheckBox}"
                                   Grid.Row="1" Margin="20 5">
-                            <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
+                                <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
                                     Background="{DynamicResource buttonBgrDefault}">
-                                <TextBox Margin="5 0" Background="{DynamicResource buttonBgrDefault}"
+                                    <TextBox Margin="5 0" Background="{DynamicResource buttonBgrDefault}"
                                          BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="17" Height="20">
-                                    <TextBox.Text>
-                                        <Binding Path="Server.Restart3.Time"
+                                        <TextBox.Text>
+                                            <Binding Path="Server.Restart3.Time"
                                                  Converter="{StaticResource SimpleTimeToStringConverter}" Mode="TwoWay">
-                                            <Binding.ValidationRules>
-                                                <val:TimeValidationRule ValidationStep="RawProposedValue" />
-                                            </Binding.ValidationRules>
-                                        </Binding>
-                                    </TextBox.Text>
-                                </TextBox>
-                            </Border>
-                        </CheckBox>
-                        <CheckBox IsChecked="{Binding Server.Restart4.Enabled}"
+                                                <Binding.ValidationRules>
+                                                    <val:TimeValidationRule ValidationStep="RawProposedValue" />
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+                                </Border>
+                            </CheckBox>
+                            <CheckBox IsChecked="{Binding Server.Restart4.Enabled}"
                                   Style="{DynamicResource DefaultCheckBox}"
                                   Grid.Row="1" Grid.Column="1" Margin="20 5">
-                            <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
+                                <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
                                     Background="{DynamicResource buttonBgrDefault}">
-                                <TextBox Margin="5 0" Background="{DynamicResource buttonBgrDefault}"
+                                    <TextBox Margin="5 0" Background="{DynamicResource buttonBgrDefault}"
                                          BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="17" Height="20">
-                                    <TextBox.Text>
-                                        <Binding Path="Server.Restart4.Time"
+                                        <TextBox.Text>
+                                            <Binding Path="Server.Restart4.Time"
                                                  Converter="{StaticResource SimpleTimeToStringConverter}" Mode="TwoWay">
-                                            <Binding.ValidationRules>
-                                                <val:TimeValidationRule ValidationStep="RawProposedValue" />
-                                            </Binding.ValidationRules>
-                                        </Binding>
-                                    </TextBox.Text>
-                                </TextBox>
-                            </Border>
-                        </CheckBox>
-                    </Grid>
+                                                <Binding.ValidationRules>
+                                                    <val:TimeValidationRule ValidationStep="RawProposedValue" />
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+                                </Border>
+                            </CheckBox>
+                        </Grid>
+                    </StackPanel>
                 </StackPanel>
                 <Border.Style>
                     <Style TargetType="Border">
@@ -324,248 +478,108 @@
                 </Border.Style>
             </Border>
 
-            <!-- Advanced Settings -->
-            <Border CornerRadius="10" Margin="5">
-                <StackPanel Background="Transparent" Margin="0 10">
-                    <TextBlock Text="Advanced Settings" Foreground="{DynamicResource textHeader}"
-                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="15 0 5 20" />
-                    <Grid HorizontalAlignment="Center">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <CheckBox Content="Enable Snooper" IsChecked="{Binding Server.ServerSettings.SnooperEnabled}"
-                                  Style="{DynamicResource DefaultCheckBox}" FontSize="20" Margin="0 0 20 0" />
-                        <CheckBox Content="Command Blocks"
-                                  IsChecked="{Binding Server.ServerSettings.EnableCommandBlock}"
-                                  Style="{DynamicResource DefaultCheckBox}" FontSize="20" Grid.Row="1"
-                                  Margin="0 0 20 0" />
-                        <CheckBox Content="Force Gamemode" IsChecked="{Binding Server.ServerSettings.ForceGamemode}"
-                                  Style="{DynamicResource DefaultCheckBox}" FontSize="20" Grid.Row="2"
-                                  Margin="0 0 20 0" />
-                        <CheckBox Content="Enable RCon" IsChecked="{Binding Server.ServerSettings.EnableRcon}"
-                                  Style="{DynamicResource DefaultCheckBox}" FontSize="20" Grid.Column="1"
-                                  Margin="20 0 0 0"
-                                  x:Name="enableRcon" />
-                        <CheckBox Content="Broadcast Console"
-                                  IsChecked="{Binding Server.ServerSettings.BcastConsoleToOps}"
-                                  Style="{DynamicResource DefaultCheckBox}" FontSize="20" Grid.Row="1" Grid.Column="1"
-                                  Margin="20 0 0 0" />
-                        <CheckBox Content="Enforce Whitelist"
-                                  IsChecked="{Binding Server.ServerSettings.EnforceWhitelist}"
-                                  Style="{DynamicResource DefaultCheckBox}" FontSize="20" Grid.Row="2" Grid.Column="1"
-                                  Margin="20 0 0 0" />
-                    </Grid>
-                    <StackPanel HorizontalAlignment="Center" Margin="0 20 0 0">
-                        <CheckBox IsChecked="{Binding Server.ServerSettings.BcastRconToOps}"
-                                  Content="Broadcast RCon to OPs"
-                                  Style="{DynamicResource DefaultCheckBox}" FontSize="20" HorizontalAlignment="Center"
-                                  Margin="0 0 0 5" />
-                        <DockPanel Height="40" Margin="0 5 0 5">
-                            <Border CornerRadius="4" Width="150" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}">
-                                <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.RconPort}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
-                                         Foreground="{DynamicResource backgroundDark}"
-                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                         FontSize="17" Height="20" />
-                            </Border>
-                            <TextBlock Text="RCon Port" TextAlignment="Right"
-                                       Style="{DynamicResource CreateServerTextBlock}"
-                                       Margin="0 0 10 0" />
-                        </DockPanel>
-                        <DockPanel Height="40" Margin="0 5 0 5">
-                            <Border CornerRadius="4" Width="150" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}">
-                                <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.RconPassword}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
-                                         Foreground="{DynamicResource backgroundDark}"
-                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                         FontSize="17" Height="20" />
-                            </Border>
-                            <TextBlock Text="RCon Password" TextAlignment="Right"
-                                       Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
-                        </DockPanel>
-                        <StackPanel.Style>
-                            <Style TargetType="StackPanel">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ElementName=enableRcon, Path=IsChecked}"
-                                                 Value="True">
-                                        <Setter Property="Visibility" Value="Visible" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding ElementName=enableRcon, Path=IsChecked}"
-                                                 Value="False">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </StackPanel.Style>
-                    </StackPanel>
-                    <StackPanel HorizontalAlignment="Center" Margin="0 20 0 0">
-                        <DockPanel Height="40">
-                            <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}">
-                                <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.OpPermissionLevel}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
-                                         Foreground="{DynamicResource backgroundDark}"
-                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                         FontSize="17" Height="20" />
-                            </Border>
-                            <TextBlock Text="OP Permission Level" TextAlignment="Right"
-                                       Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
-                        </DockPanel>
-                        <DockPanel Height="40">
-                            <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}">
-                                <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.PlayerIdleTimeout}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
-                                         Foreground="{DynamicResource backgroundDark}"
-                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                         FontSize="17" Height="20" />
-                            </Border>
-                            <TextBlock Text="Player Idle Timeout" TextAlignment="Right"
-                                       Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
-                        </DockPanel>
-                        <DockPanel Height="40">
-                            <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}">
-                                <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.MaxBuildHeight}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
-                                         Foreground="{DynamicResource backgroundDark}"
-                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                         FontSize="17" Height="20" />
-                            </Border>
-                            <TextBlock Text="Allowed Build Height" TextAlignment="Right"
-                                       Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
-                        </DockPanel>
-                        <DockPanel Height="40">
-                            <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}">
-                                <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.MaxWorldSize}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
-                                         Foreground="{DynamicResource backgroundDark}"
-                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                         FontSize="17" Height="20" />
-                            </Border>
-                            <TextBlock Text="Allowed World Size" TextAlignment="Right"
-                                       Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
-                        </DockPanel>
-                    </StackPanel>
-                </StackPanel>
-                <Border.Style>
-                    <Style TargetType="Border">
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Border.Style>
-            </Border>
+            
 
             <!-- Java and Networking -->
             <Border CornerRadius="10" Margin="5">
-                <StackPanel Background="Transparent" Margin="0 10">
+                <StackPanel Background="Transparent" Margin="0 10" Width="720" HorizontalAlignment="Left">
                     <TextBlock Text="Java and Networking" Foreground="{DynamicResource textHeader}"
-                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="15 0 5 20" />
-                    <StackPanel HorizontalAlignment="Center">
-                        <CheckBox IsChecked="{Binding Server.ServerSettings.UseNativeTransport}"
+                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="95 0 5 20" />
+                    <StackPanel Margin="110 10 50 10" HorizontalAlignment="Left">
+                        <StackPanel>
+                            <CheckBox IsChecked="{Binding Server.ServerSettings.UseNativeTransport}"
                                   Content="Use Native Transport"
                                   Style="{DynamicResource DefaultCheckBox}" FontSize="20" Margin="0 0 20 0" />
-                        <CheckBox IsChecked="{Binding Server.ServerSettings.PreventProxyConnections}"
+                            <CheckBox IsChecked="{Binding Server.ServerSettings.PreventProxyConnections}"
                                   Content="Prevent Proxy Connections" Style="{DynamicResource DefaultCheckBox}"
                                   FontSize="20"
                                   Margin="0 0 20 0" />
-                    </StackPanel>
-                    <Grid HorizontalAlignment="Center" Margin="0 20 0 0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
+                        </StackPanel>
+                        <Grid Margin="0 20 0 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
 
-                        <TextBlock Text="Max Tick Time" TextAlignment="Right"
+                            <TextBlock Text="Max Tick Time" TextAlignment="Right"
                                    Style="{DynamicResource CreateServerTextBlock}"
                                    Margin="0 0 10 5" />
-                        <Border Grid.Column="1" CornerRadius="4" Width="100" Height="26"
+                            <Border Grid.Column="1" CornerRadius="4" Width="100" Height="26"
                                 Background="{DynamicResource buttonBgrDefault}" Margin="0 5 0 5">
-                            <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.MaxTickTime}"
+                                <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.MaxTickTime}"
                                      Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
                                      Foreground="{DynamicResource backgroundDark}"
                                      FontFamily="{DynamicResource Montserrat-SemiBold}"
                                      FontSize="17" Height="20" />
-                        </Border>
+                            </Border>
 
-                        <TextBlock Grid.Row="1" Text="Network Compression" TextAlignment="Right"
+                            <TextBlock Grid.Row="1" Text="Network Compression" TextAlignment="Right"
                                    Style="{DynamicResource CreateServerTextBlock}" Margin="0 5 10 5" />
-                        <Border Grid.Row="1" Grid.Column="1" CornerRadius="4" Width="100" Height="26"
+                            <Border Grid.Row="1" Grid.Column="1" CornerRadius="4" Width="100" Height="26"
                                 Background="{DynamicResource buttonBgrDefault}" Margin="0 5 0 5">
-                            <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.NetworkCompressionThreshold}"
+                                <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.NetworkCompressionThreshold}"
                                      Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
                                      Foreground="{DynamicResource backgroundDark}"
                                      FontFamily="{DynamicResource Montserrat-SemiBold}"
                                      FontSize="17" Height="20" />
-                        </Border>
+                            </Border>
 
-                        <TextBlock Grid.Row="2" Text="Max Ram" TextAlignment="Right"
+                            <TextBlock Grid.Row="2" Text="Max Ram" TextAlignment="Right"
                                    Style="{DynamicResource CreateServerTextBlock}" Margin="0 5 10 5" />
-                        <Border Grid.Row="2" Grid.Column="1" CornerRadius="4" Width="100" Height="26"
+                            <Border Grid.Row="2" Grid.Column="1" CornerRadius="4" Width="100" Height="26"
                                 Background="{DynamicResource buttonBgrDefault}" Margin="0 5 0 5">
-                            <TextBox Margin="5 0" Text="{Binding Server.JavaSettings.MaxRam}"
+                                <TextBox Margin="5 0" Text="{Binding Server.JavaSettings.MaxRam}"
                                      Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
                                      Foreground="{DynamicResource backgroundDark}"
                                      FontFamily="{DynamicResource Montserrat-SemiBold}"
                                      FontSize="17" Height="20" />
-                        </Border>
-                        <TextBlock Grid.Row="2" Grid.Column="2" Text=" MB"
+                            </Border>
+                            <TextBlock Grid.Row="2" Grid.Column="2" Text=" MB"
                                    Style="{DynamicResource CreateServerTextBlock}" />
 
-                        <TextBlock Grid.Row="3" Text="Min Ram" TextAlignment="Right"
+                            <TextBlock Grid.Row="3" Text="Min Ram" TextAlignment="Right"
                                    Style="{DynamicResource CreateServerTextBlock}" Margin="0 5 10 5" />
-                        <Border Grid.Row="3" Grid.Column="1" CornerRadius="4" Width="100" Height="26"
+                            <Border Grid.Row="3" Grid.Column="1" CornerRadius="4" Width="100" Height="26"
                                 Background="{DynamicResource buttonBgrDefault}" Margin="0 5 0 5">
-                            <TextBox Margin="5 0" Text="{Binding Server.JavaSettings.MinRam}"
+                                <TextBox Margin="5 0" Text="{Binding Server.JavaSettings.MinRam}"
                                      Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
                                      Foreground="{DynamicResource backgroundDark}"
                                      FontFamily="{DynamicResource Montserrat-SemiBold}"
                                      FontSize="17" Height="20" />
-                        </Border>
-                        <TextBlock Grid.Row="3" Grid.Column="2" Text=" MB"
+                            </Border>
+                            <TextBlock Grid.Row="3" Grid.Column="2" Text=" MB"
                                    Style="{DynamicResource CreateServerTextBlock}" />
-                    </Grid>
-                    <StackPanel HorizontalAlignment="Center" Margin="0 20 0 0">
-                        <TextBlock Grid.Row="3" Text="Java Executable Path"
+                        </Grid>
+                        <StackPanel Margin="0 20 0 0">
+                            <TextBlock Grid.Row="3" Text="Java Executable Path"
                                    Style="{DynamicResource CreateServerTextBlock}"
                                    Margin="0 5 10 5" />
-                        <Border Grid.Row="3" Grid.Column="1" CornerRadius="4" Width="400" Height="26"
+                            <Border Grid.Row="3" Grid.Column="1" CornerRadius="4" Width="400" Height="26"
                                 Background="{DynamicResource buttonBgrDefault}" Margin="0 5 0 5">
-                            <TextBox Margin="5 0" Text="{Binding Server.JavaSettings.JavaPath}"
+                                <TextBox Margin="5 0" Text="{Binding Server.JavaSettings.JavaPath}"
                                      Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
                                      Foreground="{DynamicResource backgroundDark}"
                                      FontFamily="{DynamicResource Montserrat-SemiBold}"
                                      FontSize="17" Height="20" />
-                        </Border>
-                        <TextBlock Grid.Row="3" Text="Custom Startup Parameters"
+                            </Border>
+                            <TextBlock Grid.Row="3" Text="Custom Startup Parameters"
                                    Style="{DynamicResource CreateServerTextBlock}" Margin="0 15 10 5" />
-                        <Border Grid.Row="3" Grid.Column="1" CornerRadius="4" Width="400" Height="26"
+                            <Border Grid.Row="3" Grid.Column="1" CornerRadius="4" Width="400" Height="26"
                                 Background="{DynamicResource buttonBgrDefault}" Margin="0 5 0 5">
-                            <TextBox Margin="5 0" Text="{Binding Server.JavaSettings.StartupParameters}"
+                                <TextBox Margin="5 0" Text="{Binding Server.JavaSettings.StartupParameters}"
                                      Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
                                      Foreground="{DynamicResource backgroundDark}"
                                      FontFamily="{DynamicResource Montserrat-SemiBold}"
                                      FontSize="17" Height="20" />
-                        </Border>
+                            </Border>
+                        </StackPanel>
                     </StackPanel>
                 </StackPanel>
                 <Border.Style>
@@ -578,6 +592,6 @@
                     </Style>
                 </Border.Style>
             </Border>
-        </StackPanel>
+        </controls:StretchyWrapPanel>
     </ScrollViewer>
 </Page>

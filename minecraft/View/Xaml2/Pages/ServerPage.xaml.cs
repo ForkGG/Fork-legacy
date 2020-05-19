@@ -54,7 +54,7 @@ namespace fork.View.Xaml2.Pages
 
             else if (viewModel.CurrentStatus == ServerStatus.RUNNING)
             {
-                ServerManager.Instance.StopServer(viewModel.Server);
+                ServerManager.Instance.StopServer(viewModel);
             }
             StartStopButton.IsEnabled = true;
         }

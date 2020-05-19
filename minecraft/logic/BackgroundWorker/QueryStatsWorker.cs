@@ -5,8 +5,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using fork.Logic.CustomConsole;
+using fork.Logic.Logging;
 using fork.Logic.Manager;
 using fork.Logic.Model;
+using fork.Logic.Model.MinecraftVersionPojo;
 using fork.ViewModel;
 
 namespace fork.Logic.BackgroundWorker
@@ -56,10 +58,10 @@ namespace fork.Logic.BackgroundWorker
                 foreach (var name in playerNames)
                 {
                     bool found = false;
-                    List<Player> players = new List<Player>(viewModel.PlayerList);
-                    foreach (Player player in players)
+                    List<ServerPlayer> players = new List<ServerPlayer>(viewModel.PlayerList);
+                    foreach (ServerPlayer serverPlayer in players)
                     {
-                        if (player.Name.Equals(name, StringComparison.InvariantCulture))
+                        if (serverPlayer.Player.Name.Equals(name, StringComparison.InvariantCulture))
                         {
                             found = true;
                             break;
@@ -67,23 +69,25 @@ namespace fork.Logic.BackgroundWorker
                     }
                     if (!found)
                     {
-                        Player player = Task.Run(() => PlayerManager.Instance.GetPlayer(name)).Result;
+                        Player p = Task.Run(() => PlayerManager.Instance.GetPlayer(name)).Result;
+                        ServerPlayer player = new ServerPlayer(p,viewModel,viewModel.OPList.Contains(p));
+                        
                         //Player player = new Player(name);
                         Application.Current.Dispatcher.Invoke(()=>
                         {
                             viewModel.PlayerList.Add(player);
-                            Console.WriteLine("Added Player "+player.Name+" to PlayerList");
+                            Console.WriteLine("Added Player "+player.Player.Name+" to PlayerList");
                         });
                     }
                 }
 
-                List<Player> players2 = new List<Player>(viewModel.PlayerList);
-                foreach (Player player in players2)
+                List<ServerPlayer> players2 = new List<ServerPlayer>(viewModel.PlayerList);
+                foreach (ServerPlayer serverPlayer in players2)
                 {
                     bool found = false;
                     foreach (string name in playerNames)
                     {
-                        if (player.Name.Equals(name))
+                        if (serverPlayer.Player.Name.Equals(name))
                         {
                             found = true;
                             break;
@@ -94,8 +98,8 @@ namespace fork.Logic.BackgroundWorker
                     {
                         Application.Current.Dispatcher.Invoke(()=>
                         {
-                            viewModel.PlayerList.Remove(player);
-                            System.Console.WriteLine("Removed Player "+player.Name+" from PlayerList");
+                            viewModel.PlayerList.Remove(serverPlayer);
+                            Console.WriteLine("Removed Player "+serverPlayer.Player.Name+" from PlayerList");
                         });
                     }
                 }
@@ -123,11 +127,13 @@ namespace fork.Logic.BackgroundWorker
                 try
                 {
                     Player p = await PlayerManager.Instance.GetPlayer(playerName);
-                    Application.Current.Dispatcher?.Invoke(() => viewModel.PlayerList.Add(p));
+                    ServerPlayer player = new ServerPlayer(p, viewModel, viewModel.OPList.Contains(p));
+                    Application.Current.Dispatcher?.Invoke(() => viewModel.PlayerList.Add(player));
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine("Error finding player " + playerName);
+                    ErrorLogger.Append(e);
                 }
                 return;
             }
@@ -139,11 +145,23 @@ namespace fork.Logic.BackgroundWorker
                 try
                 {
                     Player p = await PlayerManager.Instance.GetPlayer(playerName);
-                    Application.Current.Dispatcher?.Invoke(() => viewModel.PlayerList.Remove(p));
+                    ServerPlayer player = null;
+                    foreach (ServerPlayer serverPlayer in viewModel.PlayerList)
+                    {
+                        if (serverPlayer.Player == p)
+                        {
+                            player = serverPlayer;
+                        }
+                    }
+                    if (player != null)
+                    {
+                        Application.Current.Dispatcher?.Invoke(() => viewModel.PlayerList.Remove(player));
+                    }
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine("Error finding player "+playerName);
+                    ErrorLogger.Append(e);
                 }
                 return; 
             }
