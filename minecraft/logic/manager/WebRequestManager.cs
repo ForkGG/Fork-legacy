@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using Newtonsoft.Json;
 using fork.Logic.Model;
-using fork.Logic.Model.MinecraftVersionPojo;
+using fork.Logic.Model.MinecraftVersionModel;
 using fork.Logic.WebRequesters;
 using fork.ViewModel;
 

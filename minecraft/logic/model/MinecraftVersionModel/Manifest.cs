@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace fork.Logic.Model.MinecraftVersionPojo
+namespace fork.Logic.Model.MinecraftVersionModel
 {
     public class Manifest
     {

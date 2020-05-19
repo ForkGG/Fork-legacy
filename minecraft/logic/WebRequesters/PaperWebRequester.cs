@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Resources;
 using Newtonsoft.Json;
-using fork.Logic.Model.MinecraftVersionPojo;
 
 namespace fork.Logic.WebRequesters
 {

@@ -16,7 +16,6 @@ using fork.Logic.CustomConsole;
 using fork.Logic.ImportLogic;
 using fork.Logic.Logging;
 using fork.Logic.Model;
-using fork.Logic.Model.MinecraftVersionPojo;
 using fork.Logic.Persistence;
 using fork.Logic.RoleManagement;
 using fork.ViewModel;
@@ -109,7 +108,11 @@ namespace fork.Logic.Manager
         public void StopServer(ServerViewModel serverViewModel)
         {
             ApplicationManager.Instance.ActiveServers[serverViewModel.Server].StandardInput.WriteLine("stop");
-            Application.Current.Dispatcher?.Invoke(() => serverViewModel.PlayerList.Clear());
+            foreach (ServerPlayer serverPlayer in serverViewModel.PlayerList)
+            {
+                serverPlayer.IsOnline = false;
+            }
+            serverViewModel.RefreshPlayerList();
         }
 
         public async Task<bool> StartServerAsync(ServerViewModel serverViewModel)

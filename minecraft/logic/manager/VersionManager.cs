@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using fork.Logic.Model;
-using fork.Logic.Model.MinecraftVersionPojo;
+using fork.Logic.Model.MinecraftVersionModel;
 using fork.ViewModel;
 
 namespace fork.Logic.Manager

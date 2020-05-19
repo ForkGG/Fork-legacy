@@ -1,3 +1,4 @@
+using System.IO;
 using fork.ViewModel;
 
 namespace fork.Logic.Model
@@ -8,6 +9,7 @@ namespace fork.Logic.Model
         private ServerViewModel viewModel;
         
         public string Name { get; set; }
+        public DirectoryInfo Directory { get; set; }
 
         public bool IsActive
         {
@@ -22,10 +24,11 @@ namespace fork.Logic.Model
             }
         }
 
-        public World(string name, ServerViewModel viewModel)
+        public World(string name, ServerViewModel viewModel, DirectoryInfo directory)
         {
             Name = name;
             this.viewModel = viewModel;
+            Directory = directory;
         }
 
 

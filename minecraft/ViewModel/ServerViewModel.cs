@@ -1,15 +1,18 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -19,7 +22,6 @@ using fork.Logic.CustomConsole;
 using fork.Logic.ImportLogic;
 using fork.Logic.Manager;
 using fork.Logic.Model;
-using fork.Logic.Model.MinecraftVersionPojo;
 using fork.Logic.Persistence;
 using fork.Logic.RoleManagement;
 using fork.View.Xaml2.Pages;
@@ -233,6 +235,9 @@ namespace fork.ViewModel
                 RoleUpdater.InitializeList(RoleType.BAN_LIST, BanList, Server);
                 RoleUpdater.InitializeList(RoleType.OP_LIST, OPList, Server);
                 Console.WriteLine("Finished reading Role-lists for "+server);
+                PlayerList = new ObservableCollection<ServerPlayer>(PlayerManager.Instance.GetInitialPlayerList(this));
+                RefreshPlayerList();
+                Console.WriteLine("Initialized PlayerList for server "+server);
 
                 whitelistUpdater = new RoleUpdater(RoleType.WHITELIST, WhiteList,Server.Version);
                 banlistUpdater = new RoleUpdater(RoleType.BAN_LIST, BanList,Server.Version);
@@ -402,7 +407,7 @@ namespace fork.ViewModel
                 WorldValidationInfo worldVal = DirectoryValidator.ValidateWorldDirectory(directory);
                 if (worldVal.IsValid)
                 {
-                    World world = new World(worldVal.Name, this);
+                    World world = new World(worldVal.Name, this, directory);
                     if (Server.ServerSettings.LevelName.Equals(world.Name))
                     {
                         world.IsActive = true;
@@ -412,6 +417,18 @@ namespace fork.ViewModel
             }
         }
 
+        public void RefreshPlayerList()
+        {
+            List<ServerPlayer> players = new List<ServerPlayer>(PlayerList);
+            players.Sort();
+            PlayerList = new ObservableCollection<ServerPlayer>(players);
+            PlayerList.CollectionChanged += PlayerListChanged;
+            
+            //TODO this is bad WPF (use INotifyPropertyChanged in ServerPlayer instead)
+            var c = ConsolePage as ConsolePage;
+            Application.Current.Dispatcher?.Invoke(()=>c.Playerlist.Items.Refresh());
+        }
+
         private void ConsoleOutChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             raisePropertyChanged(nameof(ConsoleOutList));
@@ -419,7 +436,6 @@ namespace fork.ViewModel
 
         private void PlayerListChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            
             raisePropertyChanged(nameof(PlayerList));
         }
         
@@ -442,11 +458,7 @@ namespace fork.ViewModel
         {
             raisePropertyChanged(nameof(OPList));
             EvaluateOPs();
-            
-            //TODO this is bad WPF (use INotifyPropertyChanged in ServerPlayer instead)
-            var c = ConsolePage as ConsolePage;
-            c.Playerlist.Items.Refresh();
-
+            RefreshPlayerList();
         }
 
         private void EvaluateOPs()

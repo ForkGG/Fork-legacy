@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Management.Instrumentation;
 using System.Threading;
 using System.Threading.Tasks;
@@ -130,9 +131,59 @@ namespace fork.Logic.Manager
             return p;
         }
 
+        public List<ServerPlayer> GetInitialPlayerList(ServerViewModel viewModel)
+        {
+            HashSet<string> playerIDsToAdd = new HashSet<string>();
+            foreach (World world in viewModel.Worlds)
+            {
+                if (world.Directory.Exists)
+                {
+                    DirectoryInfo playerData = new DirectoryInfo(Path.Combine(world.Directory.FullName,"playerdata"));
+                    if (playerData.Exists)
+                    {
+                        foreach (FileInfo fileInfo in playerData.EnumerateFiles())
+                        {
+                            string uuid = fileInfo.Name;
+                            uuid = uuid.Replace("-", "").Replace(".dat", "");
+                            playerIDsToAdd.Add(uuid);
+                        }
+                    }
+                }
+            }
+
+            List<ServerPlayer> result = new List<ServerPlayer>();
+            foreach (string uuid in playerIDsToAdd)
+            {
+                Player p = GetPlayerFromUUID(uuid);
+                ServerPlayer player = new ServerPlayer(p,viewModel,viewModel.OPList.Contains(p), false);
+                result.Add(player);
+            }
+
+            return result;
+        }
+
         private Player CreatePlayer(string name)
         {
             return new Player(name);
+        }
+        
+        private Player GetPlayerFromUUID(string uuid)
+        {
+            foreach (var player in PlayerSet)
+            {
+                if (player.Uid.Equals(uuid))
+                {
+                    return player;
+                }
+            }
+            Player p = CreatePlayerFromUUID(uuid);
+            PlayerSet.Add(p);
+            SafePlayersToFile();
+            return p;
+        }
+        private Player CreatePlayerFromUUID(string uuid)
+        {
+            return new Player(uuid, true);
         }
 
         private void SafePlayersToFile()

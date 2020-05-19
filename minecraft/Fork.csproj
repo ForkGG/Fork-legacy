@@ -141,9 +141,9 @@
     <Compile Include="Logic\Model\FullStats.cs" />
     <Compile Include="Logic\Model\MinecraftDimension.cs" />
     <Compile Include="Logic\Model\MinecraftVersionModel\Manifest.cs" />
-    <Compile Include="Logic\Model\MinecraftVersionModel\ServerPlayer.cs" />
     <Compile Include="Logic\Model\MinecraftVersionModel\VersionDetails.cs" />
     <Compile Include="Logic\Model\Player.cs" />
+    <Compile Include="Logic\Model\ServerPlayer.cs" />
     <Compile Include="Logic\Model\ServerRestart.cs" />
     <Compile Include="Logic\Model\ServerStatus.cs" />
     <Compile Include="Logic\Model\ServerJavaSettings.cs" />

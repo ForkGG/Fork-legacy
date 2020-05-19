@@ -181,7 +181,7 @@
 
            
             <!-- Advanced Settings -->
-            <Border CornerRadius="10" Margin="5">
+            <Border CornerRadius="10" Margin="5 5 10 5">
                 <StackPanel Background="Transparent" Margin="0 10" HorizontalAlignment="Left">
                     <TextBlock Text="Advanced Settings" Foreground="{DynamicResource textHeader}"
                                FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="95 0 5 20" />
@@ -366,8 +366,8 @@
             </Border>
 
             <!-- Automatic Server Restarts -->
-            <Border CornerRadius="10" Margin="5">
-                <StackPanel Background="Transparent" Margin="0 10" Width="720" HorizontalAlignment="Left">
+            <Border CornerRadius="10" Margin="5 5 10 5">
+                <StackPanel Background="Transparent" Margin="0 20" Width="720" HorizontalAlignment="Left">
                     <TextBlock Text="Automatic Server Restarts" Foreground="{DynamicResource textHeader}"
                                FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="95 0 5 20" />
                     <StackPanel Margin="110 10 50 10" HorizontalAlignment="Left">
@@ -481,7 +481,7 @@
             
 
             <!-- Java and Networking -->
-            <Border CornerRadius="10" Margin="5">
+            <Border CornerRadius="10" Margin="5 5 10 5">
                 <StackPanel Background="Transparent" Margin="0 10" Width="720" HorizontalAlignment="Left">
                     <TextBlock Text="Java and Networking" Foreground="{DynamicResource textHeader}"
                                FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="95 0 5 20" />

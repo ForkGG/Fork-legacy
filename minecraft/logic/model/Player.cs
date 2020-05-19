@@ -43,9 +43,57 @@ namespace fork.Logic.Model
             }
         }
 
+        public Player(string uid, bool useUid)
+        {
+            Uid = uid;
+            RetrieveNameAndHead();
+        }
+
         public override string ToString()
         {
             return Name;
+        }
+
+        private void RetrieveNameAndHead()
+        {
+            string cachedName = NameFromCache(Uid);
+            if (cachedName!=null)
+            {
+                Name = cachedName;
+                return;
+            }
+            var client = new HttpClient();
+            var uri = new Uri("https://sessionserver.mojang.com/session/minecraft/profile/"+Uid);
+            var response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
+            while (response.StatusCode == (HttpStatusCode) 429)
+            {
+                Thread.Sleep(5000);
+                response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
+            }
+            
+            //Exception for user not found: Response 204 and 404
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                Console.WriteLine("Error while retrieving Mojang data for UUID: "+Uid);
+                Name = Uid;
+                offlineChar = true;
+                Head = SetOfflineHead();
+                return;
+            }
+            
+            Stream respStream = response.Content.ReadAsStreamAsync().Result;
+            string fullProfileString = new StreamReader(respStream).ReadToEnd();
+            FullProfile fullProfile = JsonConvert.DeserializeObject<FullProfile>(fullProfileString);
+            CacheProfileJson(fullProfile);
+            Name = fullProfile.name;
+            if (fullProfile.properties.Count == 0)
+            {
+                Head = SetOfflineHead();
+            }
+            else
+            {
+                Head = RetrieveImageFromBase64(fullProfile.properties[0].value);
+            }
         }
 
         private void RetrieveUid()
@@ -65,9 +113,6 @@ namespace fork.Logic.Model
                 response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
             }
 
-            response.EnsureSuccessStatusCode();
-            
-            
             //Exception for user not found: Response 204
             if (response.StatusCode == HttpStatusCode.NoContent)
             {
@@ -93,9 +138,32 @@ namespace fork.Logic.Model
                 sw.WriteLine(json);
             }
         }
-        private string UidFromCache(string uid)
+        private string UidFromCache(string name)
         {
-            string path = Path.Combine("players", uid, "profile.json");
+            string path = Path.Combine(App.ApplicationPath,"players", "players.json");
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+            
+            List<Player> cachedPlayers = JsonConvert.DeserializeObject<List<Player>>(File.ReadAllText(path));
+            foreach (Player cachedPlayer in cachedPlayers)
+            {
+                if (cachedPlayer.Name.Equals(name))
+                {
+                    string playerPath = Path.Combine(App.ApplicationPath, "players", cachedPlayer.Uid, "profile.json");
+                    if (File.Exists(playerPath)&&File.GetCreationTime(playerPath).AddDays(2)>DateTime.Now)
+                    {
+                        return cachedPlayer.Uid;
+                    }
+                }
+            }
+            return null;
+        }
+
+        private string NameFromCache(string uid)
+        {
+            string path = Path.Combine(App.ApplicationPath,"players", uid, "profile.json");
             if (!File.Exists(path))
             {
                 return null;
@@ -105,13 +173,14 @@ namespace fork.Logic.Model
             {
                 return null;
             }
+
             FullProfile profile = JsonConvert.DeserializeObject<FullProfile>(File.ReadAllText(path));
-            return profile.id;
+            return profile.name;
         }
 
         private string HeadFromCache(string uid)
         {
-            string path = Path.Combine("players", uid, "head.jpg");
+            string path = Path.Combine(App.ApplicationPath,"players", uid, "head.jpg");
             if (!File.Exists(path))
             {
                 return null;
