@@ -98,12 +98,6 @@ namespace fork.Logic.Model
 
         private void RetrieveUid()
         {
-            string cachedUid = UidFromCache(Name);
-            if (cachedUid!=null)
-            {
-                Uid = cachedUid;
-                return;
-            }
             var client = new HttpClient();
             var uri = new Uri("https://api.mojang.com/users/profiles/minecraft/" + Name);
             var response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
@@ -137,28 +131,6 @@ namespace fork.Logic.Model
             {
                 sw.WriteLine(json);
             }
-        }
-        private string UidFromCache(string name)
-        {
-            string path = Path.Combine(App.ApplicationPath,"players", "players.json");
-            if (!File.Exists(path))
-            {
-                return null;
-            }
-            
-            List<Player> cachedPlayers = JsonConvert.DeserializeObject<List<Player>>(File.ReadAllText(path));
-            foreach (Player cachedPlayer in cachedPlayers)
-            {
-                if (cachedPlayer.Name.Equals(name))
-                {
-                    string playerPath = Path.Combine(App.ApplicationPath, "players", cachedPlayer.Uid, "profile.json");
-                    if (File.Exists(playerPath)&&File.GetCreationTime(playerPath).AddDays(2)>DateTime.Now)
-                    {
-                        return cachedPlayer.Uid;
-                    }
-                }
-            }
-            return null;
         }
 
         private string NameFromCache(string uid)
