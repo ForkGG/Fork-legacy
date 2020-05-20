@@ -21,7 +21,7 @@ namespace fork.View.Xaml.Converter
             }
 
             double percentage = (double)value;
-            if(percentage <= 1)
+            if(percentage <= 0.0)
             {
                 return (Brush)new BrushConverter().ConvertFromString("#565B7A");
             }
@@ -61,7 +61,7 @@ namespace fork.View.Xaml.Converter
             {
                 return (Brush)new BrushConverter().ConvertFromString("#A6543F");
             }
-            if (percentage<=100)
+            if (percentage>=90)
             {
                 return (Brush)new BrushConverter().ConvertFromString("#A63F3F");
             }

@@ -42,6 +42,8 @@ namespace fork.View.Xaml2.Pages
         private async void ButtonStartStop_Click(object sender, RoutedEventArgs e)
         {
             StartStopButton.IsEnabled = false;
+            TerminalTab.IsChecked = true;
+            SelectTerminal(this,e);
             if (viewModel.CurrentStatus == ServerStatus.STOPPED)
             {
                 await ServerManager.Instance.StartServerAsync(viewModel);
@@ -117,6 +119,8 @@ namespace fork.View.Xaml2.Pages
 
         private void RestartButton_Click(object sender, RoutedEventArgs e)
         {
+            TerminalTab.IsChecked = true;
+            SelectTerminal(this, e);
             ServerManager.Instance.RestartServerAsync(viewModel);
         }
     }

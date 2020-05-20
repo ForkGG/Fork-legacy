@@ -80,7 +80,7 @@
             </Grid>
             
             <StackPanel Panel.ZIndex="100" Margin="5 50 0 0" DockPanel.Dock="Left" VerticalAlignment="Center">
-                <controls:IconRadioButton Margin="10" IsChecked="True" GroupName="MenuTabs" Click="SelectTerminal"
+                <controls:IconRadioButton Margin="10" IsChecked="True" GroupName="MenuTabs" Click="SelectTerminal" x:Name="TerminalTab"
                                           IconSource="pack://application:,,,/View/Resources/images/Icons/Terminal.png"
                                           HoverIconSource="pack://application:,,,/View/Resources/images/Icons/TerminalW.png"/>
                 <controls:IconRadioButton Margin="10" GroupName="MenuTabs" Click="SelectSettings"

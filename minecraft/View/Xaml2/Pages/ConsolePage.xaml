@@ -341,7 +341,7 @@
                     <!-- Background -->
                     <Border Background="{DynamicResource backgroundDark}" CornerRadius="7">
                         <DockPanel LastChildFill="False">
-                            <shapes:UsageIndicatorBackground DockPanel.Dock="Right" Fill="{DynamicResource buttonBgrDefault}" Grid.ColumnSpan="2"/>
+                            <shapes:UsageIndicatorBackground DockPanel.Dock="Right" Fill="{Binding Path=DiskValueRaw, Converter={StaticResource PercentageToStringConverter}}" Grid.ColumnSpan="2"/>
                         </DockPanel>
                     </Border>
                     <!-- Foreground -->
@@ -353,7 +353,7 @@
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                             <TextBlock Text="DISK" FontSize="20"/>
                         </StackPanel>
-                        <TextBlock Grid.Column="1" Text="0%" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 0 5 0" FontSize="20" Foreground="{DynamicResource backgroundDark}"/>
+                        <TextBlock Grid.Column="1" Text="{Binding DiskValue}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 0 5 0" FontSize="20" Foreground="{DynamicResource backgroundDark}"/>
                     </Grid>
                 </Grid>
             </Grid>

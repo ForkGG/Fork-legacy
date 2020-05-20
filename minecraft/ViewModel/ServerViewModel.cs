@@ -40,6 +40,8 @@ namespace fork.ViewModel
         private double cpuValue;
         private MEMTracker memTracker;
         private double memValue;
+        private DiskTracker diskTracker;
+        private double diskValue;
 
         private Timer restartTimer = null;
 
@@ -155,6 +157,10 @@ namespace fork.ViewModel
 
         public string MemValue => Math.Round(memValue/Server.JavaSettings.MaxRam *100,0) + "%";
         public double MemValueRaw => memValue/Server.JavaSettings.MaxRam *100;
+
+        public string DiskValue => Math.Round(diskValue, 0) + "%";
+        public double DiskValueRaw => diskValue;
+        
         public Page ServerPage { get; set; }
         public Page ConsolePage { get; set; }
         public Page WorldsPage { get; set; }
@@ -329,6 +335,13 @@ namespace fork.ViewModel
 
             memTracker = new MEMTracker();
             memTracker.TrackP(p, this);
+            
+            
+            // Track disk usage
+            diskTracker?.StopThreads();
+            
+            diskTracker = new DiskTracker();
+            diskTracker.TrackTotal(p,this);
         }
 
         public void UpdateActiveWorld(World world)
@@ -349,6 +362,13 @@ namespace fork.ViewModel
             memValue = value;
             raisePropertyChanged(nameof(MemValue));
             raisePropertyChanged(nameof(MemValueRaw));
+        }
+
+        public void DiskValueUpdate(double value)
+        {
+            diskValue = value;
+            raisePropertyChanged(nameof(DiskValue));
+            raisePropertyChanged(nameof(DiskValueRaw));
         }
 
         public void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)

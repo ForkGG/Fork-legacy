@@ -127,6 +127,7 @@
     <Compile Include="ExtendedRadioButton.cs" />
     <Compile Include="Logic\ApplicationConsole\ConsoleWriter.cs" />
     <Compile Include="Logic\BackgroundWorker\Performance\CPUTracker.cs" />
+    <Compile Include="Logic\BackgroundWorker\Performance\DiskTracker.cs" />
     <Compile Include="Logic\BackgroundWorker\Performance\MEMTracker.cs" />
     <Compile Include="Logic\BackgroundWorker\QueryStatsWorker.cs" />
     <Compile Include="Logic\CustomConsole\ConsoleReader.cs" />
