@@ -37,7 +37,7 @@
     <SolidColorBrush x:Key="textUnselected" Color="#565B7A" />
     <SolidColorBrush x:Key="textSelected" Color="#F9EFD7" />
     <SolidColorBrush x:Key="textLink" Color="#5E93ED" />
-    <SolidColorBrush x:Key="textTerminal" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="textTerminal" Color="#D1C2EF" />
 
     <SolidColorBrush x:Key="caretColor" Color="#272A41"/>
 

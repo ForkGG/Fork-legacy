@@ -383,7 +383,7 @@
                 </Border>
                 <Border Margin="10" CornerRadius="10" Background="{DynamicResource backgroundConsole}">
                     <ScrollViewer Margin="10"  ScrollChanged="ScrollViewer_ScrollChanged">
-                        <TextBox FontFamily="Courier New" Foreground="{DynamicResource textTerminal}" 
+                        <TextBox FontFamily="Consolas" Foreground="{DynamicResource textTerminal}" 
                                  Text="{Binding Path=ConsoleOutList, Converter={StaticResource ListToStringConverter}, Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True"
                                  Background="{x:Null}" BorderBrush="{x:Null}">
                             <TextBox.Style>
