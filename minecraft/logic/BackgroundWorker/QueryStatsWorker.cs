@@ -42,6 +42,8 @@ namespace fork.Logic.BackgroundWorker
             new Regex(@"\[([0-9]+:*)+\] \[Server thread/INFO\]: ([0-9a-zA-Z_]+) joined the game$");
         private Regex playerJoinPaper =
             new Regex(@"\[([0-9]+:*)+ INFO\]: ([0-9a-zA-Z_]+) joined the game$");
+        private Regex playerJoinPaper2 =
+            new Regex(@"\[([0-9]+:*)+ INFO\]: ([A-Za-z0-9_]+)\[.*\] logged in with entity id [0-9]+ at \(.*\)$");
 
         private Regex playerLeave =
             new Regex(@"\[([0-9]+:*)+\] \[Server thread/INFO\]: ([0-9a-zA-Z_]+) left the game$");
@@ -57,6 +59,7 @@ namespace fork.Logic.BackgroundWorker
                     break;
                 case ServerVersion.VersionType.Paper:
                     HandlePlayerJoinLeave(line, viewModel, playerJoinPaper, playerLeavePaper);
+                    HandlePlayerJoinLeave(line,viewModel, playerJoinPaper2, playerLeavePaper);
                     break;
                 default:
                     throw new Exception("Handle Player join/leave function does not implement "+viewModel.Server.Version.Type);
