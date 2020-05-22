@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using fork;
 using fork.Logic.ImportLogic;
+using fork.Logic.Manager;
 using fork.Logic.Model;
 using fork.ViewModel;
 using Application = System.Windows.Application;
@@ -55,9 +56,11 @@ namespace Fork.View.Xaml2.Pages
             
         }
         
-        private void ImportWorld_Click(object sender, RoutedEventArgs e)
+        private async void ImportWorld_Click(object sender, RoutedEventArgs e)
         {
-            
+            worldFolderPathText.Text = "Click To Select Your World";
+            worldFolderPathText.Background = Brushes.Transparent;
+            await ServerManager.Instance.ImportWorldAsync(viewModel, lastPath);
         }
 
         private void WorldDirPath_MouseDown(object sender, MouseButtonEventArgs e)
@@ -77,11 +80,17 @@ namespace Fork.View.Xaml2.Pages
                 if (!valInfo.IsValid)
                 {
                     serverPathBgr.Background = (Brush) Application.Current.FindResource("buttonBgrRed");
+                    ImportWorld.IsEnabled = false;
                 }
                 else
                 {
                     serverPathBgr.Background = (Brush) Application.Current.FindResource("tabSelected");
+                    ImportWorld.IsEnabled = true;
                 }
+            }
+            else
+            {
+                ImportWorld.IsEnabled = false;
             }
         }
     }

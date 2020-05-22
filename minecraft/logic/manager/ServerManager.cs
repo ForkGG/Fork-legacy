@@ -95,11 +95,10 @@ namespace fork.Logic.Manager
             return await t;
         }
 
-        public async Task<bool> ImportWorldAsync(ServerVersion serverVersion, ServerSettings serverSettings,
-            ServerJavaSettings javaSettings, ImportViewModel viewModel, string worldSource)
+        public async Task<bool> ImportWorldAsync(ServerViewModel viewModel, string worldSource)
         {
             Task<bool> t = new Task<bool>(()=>
-                ImportWorld(serverVersion, serverSettings, javaSettings, viewModel, worldSource));
+                ImportWorld(viewModel, worldSource));
             t.Start();
             return await t;
         }
@@ -254,47 +253,29 @@ namespace fork.Logic.Manager
             return new DirectoryInfo(serverPath).Exists;
         }
 
-        private bool ImportWorld(ServerVersion serverVersion, ServerSettings serverSettings,
-            ServerJavaSettings javaSettings, ImportViewModel viewModel, string worldSource)
+        private bool ImportWorld(ServerViewModel viewModel, string worldSource)
         {
             try
             {
-                string name = serverSettings.LevelName;
-                serverNames.Add(name);
-
-                Server server = new Server(name, serverVersion, serverSettings, javaSettings);
-                server.Name = name;
-                server.Version = serverVersion;
-
-                DirectoryInfo directoryInfo = Directory.CreateDirectory(Path.Combine(App.ApplicationPath, name));
-                Thread thread = new Thread(() =>
+                DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ApplicationPath,viewModel.Server.Name));
+                DirectoryInfo importWorldDir = new DirectoryInfo(worldSource);
+                string worldName = importWorldDir.Name;
+                List<string> worlds = new List<string>();
+                foreach (World world in viewModel.Worlds)
                 {
-                    WebClient webClient = new WebClient();
-                    webClient.DownloadProgressChanged += viewModel.DownloadProgressChanged;
-                    webClient.DownloadFileCompleted += viewModel.DownloadCompletedHandler;
-                    webClient.DownloadFileAsync(new Uri(serverVersion.JarLink),
-                        Path.Combine(directoryInfo.FullName, "server.jar"));
-                });
-                thread.Start();
-                new FileImporter().DirectoryCopy(worldSource, Path.Combine(directoryInfo.FullName,name), true);
-                while (true)
-                {
-                    if (viewModel.DownloadCompleted)
-                    {
-                        Console.WriteLine("Finished downloading server.jar for server " + server.Name);
-                        break;
-                    }
-
-                    Thread.Sleep(500);
+                    worlds.Add(world.Name);
                 }
-
-                new FileWriter().WriteEula(Path.Combine(App.ApplicationPath, directoryInfo.Name));
-                new FileWriter().WriteServerSettings(Path.Combine(App.ApplicationPath, directoryInfo.Name),
-                    serverSettings.SettingsDictionary);
-
-                ServerViewModel serverViewModel = new ServerViewModel(server);
-                Application.Current.Dispatcher.Invoke(() => Servers.Add(serverViewModel));
-                ApplicationManager.Instance.MainViewModel.SelectedServer = serverViewModel;
+                while (worlds.Contains(worldName))
+                {
+                    worldName += "1";
+                }
+                if (!serverDir.Exists||!importWorldDir.Exists)
+                {
+                    Console.WriteLine("Error during world import! Server or World directory don't exist");
+                }
+                new FileImporter().DirectoryCopy(importWorldDir.FullName,
+                    Path.Combine(serverDir.FullName, worldName), true);
+                viewModel.InitializeWorldsList();
                 return true;
             }
             catch (Exception e)
