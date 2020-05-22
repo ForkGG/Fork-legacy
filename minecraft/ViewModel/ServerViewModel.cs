@@ -223,7 +223,7 @@ namespace fork.ViewModel
             Application.Current.Dispatcher.Invoke(new Action(() => ServerPage = new ServerPage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => ConsolePage = new ConsolePage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => WorldsPage = new WorldsPage(this)));
-            Application.Current.Dispatcher.Invoke(new Action(() => SettingsViewModel = new SettingsViewModel(Server)));
+            Application.Current.Dispatcher.Invoke(new Action(() => SettingsViewModel = new SettingsViewModel(this)));
 
             PlayerList.CollectionChanged += PlayerListChanged;
             WhiteList.CollectionChanged += WhiteListChanged;
@@ -369,6 +369,16 @@ namespace fork.ViewModel
             diskValue = value;
             raisePropertyChanged(nameof(DiskValue));
             raisePropertyChanged(nameof(DiskValueRaw));
+        }
+
+        public void StartDownload()
+        {
+            DownloadCompleted = false;
+            Server.Initialized = false;
+            Serializer.Instance.StoreServers(ServerManager.Instance.Servers);
+            Console.WriteLine("Starting server.jar download for server "+Server.Name);
+            raisePropertyChanged(nameof(Server));
+            raisePropertyChanged(nameof(ReadyToUse));
         }
 
         public void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)

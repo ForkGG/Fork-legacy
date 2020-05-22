@@ -20,6 +20,7 @@ namespace fork.ViewModel
         //Others
         public Server Server { get; set; }
         public ObservableCollection<ServerVersion> Versions { get; set; }
+        public ServerViewModel ServerViewModel { get; set; }
 
         //Pages
         public SettingsPage SettingsPage { get; }
@@ -27,9 +28,10 @@ namespace fork.ViewModel
 
         #endregion
 
-        public SettingsViewModel(Server server)
+        public SettingsViewModel(ServerViewModel serverViewModel)
         {
-            Server = server;
+            ServerViewModel = serverViewModel;
+            Server = serverViewModel.Server;
             //Server = new Server("test", new ServerVersion(), new ServerSettings("test"), new ServerJavaSettings());
             SettingsPage = new SettingsPage(this);
             VanillaSettingsPage = new VanillaSettingsPage(this);

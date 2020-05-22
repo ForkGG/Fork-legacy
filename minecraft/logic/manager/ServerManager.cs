@@ -327,6 +327,7 @@ namespace fork.Logic.Manager
         {
             Thread thread = new Thread(() =>
             {
+                viewModel.StartDownload();
                 WebClient webClient = new WebClient();
                 webClient.DownloadProgressChanged += viewModel.DownloadProgressChanged;
                 webClient.DownloadFileCompleted += viewModel.DownloadCompletedHandler;
@@ -392,25 +393,7 @@ namespace fork.Logic.Manager
                 //Download new server.jar
                 DirectoryInfo directoryInfo =
                     new DirectoryInfo(Path.Combine(App.ApplicationPath, serverViewModel.Server.Name));
-                Thread thread = new Thread(() =>
-                {
-                    WebClient webClient = new WebClient();
-                    webClient.DownloadProgressChanged += serverViewModel.DownloadProgressChanged;
-                    webClient.DownloadFileCompleted += serverViewModel.DownloadCompletedHandler;
-                    webClient.DownloadFileAsync(new Uri(newVersion.JarLink),
-                        Path.Combine(directoryInfo.FullName, "server.jar"));
-                });
-                thread.Start();
-                while (true)
-                {
-                    if (serverViewModel.DownloadCompleted)
-                    {
-                        Console.WriteLine("Finished downloading server.jar");
-                        break;
-                    }
-
-                    Thread.Sleep(500);
-                }
+                DownloadJarAsync(serverViewModel, directoryInfo);
 
                 serverViewModel.Server.Version = newVersion;
                 //Update Name in UI
