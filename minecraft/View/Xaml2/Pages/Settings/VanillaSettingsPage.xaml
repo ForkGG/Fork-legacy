@@ -19,7 +19,7 @@
             <RowDefinition />
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
-        <ScrollViewer Margin="10 20 5 0" Style="{DynamicResource SettingsScrollViewer}">
+        <ScrollViewer Margin="10 20 5 10" Style="{DynamicResource SettingsScrollViewer}">
             <controls:StretchyWrapPanel>
                 <!-- General Settings -->
                 <Border CornerRadius="10" Margin="5 5 10 5">
