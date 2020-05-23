@@ -10,6 +10,7 @@ using fork;
 using fork.Logic.ImportLogic;
 using fork.Logic.Manager;
 using fork.Logic.Model;
+using fork.View.Xaml2.Pages;
 using fork.ViewModel;
 using Application = System.Windows.Application;
 
@@ -51,9 +52,10 @@ namespace Fork.View.Xaml2.Pages
             }
         }
         
-        private void CreateWorld_Click(object sender, RoutedEventArgs e)
+        private async void CreateWorld_Click(object sender, RoutedEventArgs e)
         {
-            
+            bool result = await ServerManager.Instance.CreateWorldAsync(createWorldName.Text, viewModel);
+            //TODO indicate result
         }
         
         private async void ImportWorld_Click(object sender, RoutedEventArgs e)

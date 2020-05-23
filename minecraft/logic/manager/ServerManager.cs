@@ -102,6 +102,14 @@ namespace fork.Logic.Manager
             t.Start();
             return await t;
         }
+        
+        public async Task<bool> CreateWorldAsync(string name, ServerViewModel viewModel)
+        {
+            Task<bool> t = new Task<bool>(()=>
+                CreateWorld(name, viewModel));
+            t.Start();
+            return await t;
+        }
 
 
         public void StopServer(ServerViewModel serverViewModel)
@@ -272,9 +280,42 @@ namespace fork.Logic.Manager
                 if (!serverDir.Exists||!importWorldDir.Exists)
                 {
                     Console.WriteLine("Error during world import! Server or World directory don't exist");
+                    return false;
                 }
                 new FileImporter().DirectoryCopy(importWorldDir.FullName,
                     Path.Combine(serverDir.FullName, worldName), true);
+                viewModel.InitializeWorldsList();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                return false;
+            }
+        }
+
+        private bool CreateWorld(string worldName, ServerViewModel viewModel)
+        {
+            try
+            {
+                DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ApplicationPath,viewModel.Server.Name));
+                List<string> worlds = new List<string>();
+                foreach (World world in viewModel.Worlds)
+                {
+                    worlds.Add(world.Name);
+                }
+                while (worlds.Contains(worldName))
+                {
+                    worldName += "1";
+                }
+                if (!serverDir.Exists)
+                {
+                    Console.WriteLine("Error during world import! Server or World directory don't exist");
+                    return false;
+                }
+                DirectoryInfo worldDir = Directory.CreateDirectory(Path.Combine(serverDir.FullName, worldName));
+                Directory.CreateDirectory(Path.Combine(worldDir.FullName, "region"));
+                Directory.CreateDirectory(Path.Combine(worldDir.FullName, "data"));
                 viewModel.InitializeWorldsList();
                 return true;
             }

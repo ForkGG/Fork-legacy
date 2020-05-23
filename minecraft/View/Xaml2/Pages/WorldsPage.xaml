@@ -81,7 +81,7 @@
                                 <DockPanel Height="40" Grid.Column="1" Margin="50 0 0 0" HorizontalAlignment="Center">
                                     <Border CornerRadius="4" Width="150" DockPanel.Dock="Right" Height="26"
                                     Background="{DynamicResource buttonBgrDefault}">
-                                        <TextBox Margin="5 0" Text="world"
+                                        <TextBox Margin="5 0" Text="world" x:Name="createWorldName"
                                          Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
@@ -91,7 +91,7 @@
                                        Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
                                 </DockPanel>
                                 <Button x:Name="CreateWorld" Margin="0 20 0 5" Content="Create" Click="CreateWorld_Click"
-                                            Width="120" Style="{DynamicResource RoundedTextButton}" IsEnabled="False"/>
+                                            Width="120" Style="{DynamicResource RoundedTextButton}"/>
                             </StackPanel>
                         </StackPanel>
                         <Border.Style>
