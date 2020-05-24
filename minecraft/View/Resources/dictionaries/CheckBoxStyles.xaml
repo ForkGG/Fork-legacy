@@ -19,4 +19,27 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style x:Key="TextCheckBox" TargetType="CheckBox">
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle x:Name="indicator" Width="17" Height="17" Fill="{DynamicResource backgroundDarker}" Margin="0 0 10 0"/>
+                        <TextBlock x:Name="text" Text="{TemplateBinding Content}"/>
+                    </StackPanel>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="indicator" Property="Fill" Value="{DynamicResource tabSelected}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="text" Property="Foreground" Value="White"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

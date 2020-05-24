@@ -123,7 +123,7 @@
                                     </Border>
                                 </StackPanel>
                                 <Button x:Name="ImportWorld" Margin="0 20 0 5" Content="Import" Click="ImportWorld_Click"
-                                            Width="120" Style="{DynamicResource RoundedTextButton}"  IsEnabled="False"/>
+                                            Width="120" Style="{DynamicResource RoundedTextButton}"  IsEnabled="False" Visibility="Collapsed"/>
                             </StackPanel>
                         </StackPanel>
                         <Border.Style>

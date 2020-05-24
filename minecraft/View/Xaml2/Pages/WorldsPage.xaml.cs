@@ -61,7 +61,9 @@ namespace Fork.View.Xaml2.Pages
         private async void ImportWorld_Click(object sender, RoutedEventArgs e)
         {
             worldFolderPathText.Text = "Click To Select Your World";
-            worldFolderPathText.Background = Brushes.Transparent;
+            serverPathBgr.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
+            ImportWorld.IsEnabled = false;
+            ImportWorld.Visibility = Visibility.Collapsed;
             await ServerManager.Instance.ImportWorldAsync(viewModel, lastPath);
         }
 
@@ -83,16 +85,19 @@ namespace Fork.View.Xaml2.Pages
                 {
                     serverPathBgr.Background = (Brush) Application.Current.FindResource("buttonBgrRed");
                     ImportWorld.IsEnabled = false;
+                    ImportWorld.Visibility = Visibility.Collapsed;
                 }
                 else
                 {
                     serverPathBgr.Background = (Brush) Application.Current.FindResource("tabSelected");
                     ImportWorld.IsEnabled = true;
+                    ImportWorld.Visibility = Visibility.Visible;
                 }
             }
             else
             {
                 ImportWorld.IsEnabled = false;
+                ImportWorld.Visibility = Visibility.Collapsed;
             }
         }
     }

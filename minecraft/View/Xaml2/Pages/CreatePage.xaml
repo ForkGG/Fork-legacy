@@ -163,14 +163,14 @@
                                     </DockPanel>
                                 </StackPanel>
                                 <StackPanel Grid.Row="2" HorizontalAlignment="Center" Margin="30 30 30 10">
-                                    <CheckBox Margin="5" IsChecked="{Binding ServerSettings.Pvp}" Content="Enable PvP" Style="{DynamicResource DefaultCheckBox}" FontSize="20"/>
-                                    <CheckBox Margin="5" IsChecked="{Binding ServerSettings.SpawnNpcs}" Content="Spawn NPCs" Style="{DynamicResource DefaultCheckBox}" FontSize="20"/>
-                                    <CheckBox Margin="5" IsChecked="{Binding ServerSettings.SpawnAnimals}" Content="Spawn Animals" Style="{DynamicResource DefaultCheckBox}" FontSize="20"/>
+                                    <CheckBox Margin="5" IsChecked="{Binding ServerSettings.Pvp}" Content="Enable PvP" Style="{DynamicResource TextCheckBox}" FontSize="20"/>
+                                    <CheckBox Margin="5" IsChecked="{Binding ServerSettings.SpawnNpcs}" Content="Spawn NPCs" Style="{DynamicResource TextCheckBox}" FontSize="20"/>
+                                    <CheckBox Margin="5" IsChecked="{Binding ServerSettings.SpawnAnimals}" Content="Spawn Animals" Style="{DynamicResource TextCheckBox}" FontSize="20"/>
                                 </StackPanel>
                                 <StackPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Margin="30 30 30 10">
-                                    <CheckBox Margin="5" IsChecked="{Binding ServerSettings.Whitelist}" Content="Use Whitelist" Style="{DynamicResource DefaultCheckBox}" FontSize="20"/>
-                                    <CheckBox Margin="5" IsChecked="{Binding ServerSettings.GenerateStructures}" Content="Generate Structures" Style="{DynamicResource DefaultCheckBox}" FontSize="20"/>
-                                    <CheckBox Margin="5" IsChecked="{Binding ServerSettings.OnlineMode}" Content="Online Mode" Style="{DynamicResource DefaultCheckBox}" FontSize="20"/>
+                                    <CheckBox Margin="5" IsChecked="{Binding ServerSettings.Whitelist}" Content="Use Whitelist" Style="{DynamicResource TextCheckBox}" FontSize="20"/>
+                                    <CheckBox Margin="5" IsChecked="{Binding ServerSettings.GenerateStructures}" Content="Generate Structures" Style="{DynamicResource TextCheckBox}" FontSize="20"/>
+                                    <CheckBox Margin="5" IsChecked="{Binding ServerSettings.OnlineMode}" Content="Online Mode" Style="{DynamicResource TextCheckBox}" FontSize="20"/>
                                 </StackPanel>                                
                             </Grid>
                         </StackPanel>
