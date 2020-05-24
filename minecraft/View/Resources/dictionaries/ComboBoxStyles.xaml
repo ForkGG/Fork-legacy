@@ -22,7 +22,7 @@
                   BorderThickness="0,0,0,3" />
             <Polygon x:Name="Arrow" Grid.Column="1"
                      Margin="0 0 0 3"
-                     Fill="{DynamicResource textSelected}"
+                     Fill="{DynamicResource buttonBgrDefault}"
                      HorizontalAlignment="Center" VerticalAlignment="Center"
                      Points="0,0 16,0 8,8">
             </Polygon>
@@ -37,7 +37,7 @@
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="Arrow" Property="Fill" Value="{DynamicResource buttonBgrDefault}"/>
+                <Setter TargetName="Arrow" Property="Fill" Value="{DynamicResource textSelected}"/>
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
                 <Setter TargetName="Arrow" Property="Points" Value="0,8 16,8 8,0"/>

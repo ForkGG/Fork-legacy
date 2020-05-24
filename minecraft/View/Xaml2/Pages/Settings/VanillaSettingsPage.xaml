@@ -612,6 +612,6 @@
                 </Border>
             </controls:StretchyWrapPanel>
         </ScrollViewer>
-        <TextBlock Grid.Row="1" Text="All Changes will be automatically applied on the next Server Start" HorizontalAlignment="Center" Foreground="{DynamicResource buttonBgrYellow}"/>
+        <TextBlock Grid.Row="1" Text="All Changes will be automatically applied on the next Server Start" HorizontalAlignment="Center" />
     </Grid>
 </Page>
