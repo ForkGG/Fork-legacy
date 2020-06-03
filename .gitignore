@@ -7,5 +7,6 @@ arma/.vs
 arma/.idea
 arma/bin 
 arma/obj
+*.html
 NihilusInstaller
 NihilusAdvInstaller
