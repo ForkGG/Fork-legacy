@@ -74,7 +74,7 @@ namespace fork.Logic.Persistence
                         entityViewModels.Add(new ServerViewModel(server));
                     }
                 }
-                serversFile.Delete();
+                //serversFile.Delete();
             }
             
             FileInfo entitiesFile = new FileInfo(Path.Combine(App.ApplicationPath, "persistence", "entities.json"));

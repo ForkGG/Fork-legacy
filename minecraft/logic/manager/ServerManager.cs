@@ -415,6 +415,7 @@ namespace fork.Logic.Manager
             {
                 serverSettings.LevelName = "world";
             }
+            DirectoryInfo directoryInfo = Directory.CreateDirectory(serverPath);
             Server server = new Server(serverName, serverVersion, serverSettings, javaSettings);
             ServerViewModel viewModel = new ServerViewModel(server);
             Application.Current.Dispatcher.Invoke(() => Entities.Add(viewModel));
@@ -422,7 +423,6 @@ namespace fork.Logic.Manager
             ApplicationManager.Instance.MainViewModel.SelectedEntity = viewModel;
             
             //Download server.jar
-            DirectoryInfo directoryInfo = Directory.CreateDirectory(serverPath);
             Downloader.DownloadJarAsync(viewModel,directoryInfo);
             
             //Move World Files

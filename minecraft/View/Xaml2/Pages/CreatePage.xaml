@@ -46,11 +46,12 @@
                                                  Header="Bukkit" GroupName="createServerTypes" Margin="10 10" Visibility="Collapsed"/>
                                 <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/BungeeCordD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/BungeeCordW.png"
-                                                 Header="BungeeCord" GroupName="createServerTypes" Margin="10 10"
+                                                 Header="BungeeCord" GroupName="createServerTypes" Margin="10 10"  Visibility="Collapsed"
                                                 Click="ServerTypeBungeeCord_Click"/>
                                 <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/WaterfallD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/WaterfallW.png"
-                                                 Header="Waterfall" GroupName="createServerTypes" Margin="10 10" Visibility="Collapsed"/>
+                                                 Header="Waterfall" GroupName="createServerTypes" Margin="10 10"
+                                                Click="ServerTypeWaterfall_Click"/>
                             </WrapPanel>
                         </StackPanel>
                         <Border.Style>
