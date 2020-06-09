@@ -11,7 +11,7 @@ namespace fork.Logic.BackgroundWorker.Performance
         private bool interrupted = false;
         private List<Thread> threads = new List<Thread>();
 
-        public void TrackTotal(Process p, ServerViewModel viewModel)
+        public void TrackTotal(Process p, EntityViewModel viewModel)
         {
             PerformanceCounter cpuCounter = new PerformanceCounter
             {

@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using fork.Logic.Persistence;
+using Newtonsoft.Json;
 
 namespace fork.Logic.Model
 {
     [Serializable]
-    public class Server
+    public class Server : Entity
     {
         private ServerSettings serverSettings;
         
-        public String Name { get; set; }
+        public string UID { get; set; }
+        public string Name { get; set; }
         public ServerVersion Version { get; set; }
-        public ServerJavaSettings JavaSettings { get; set; }
+        public JavaSettings JavaSettings { get; set; }
 
         public bool Initialized { get; set; } = false;
         
@@ -21,7 +24,7 @@ namespace fork.Logic.Model
         public ServerRestart Restart2 { get; set; }
         public ServerRestart Restart3 { get; set; }
         public ServerRestart Restart4 { get; set; }
-        [XmlIgnore]
+        [JsonIgnore]
         public ServerSettings ServerSettings {
             get
             {
@@ -32,10 +35,13 @@ namespace fork.Logic.Model
             set => serverSettings = value;
         }
 
-        [XmlIgnore]
+        [JsonIgnore]
         public string FullName => Name + " (" + Version.Version + ")";
 
-        public Server(String name, ServerVersion version, ServerSettings serverSettings, ServerJavaSettings javaSettings) {
+        [JsonIgnore]
+        public string JarLink => Version.JarLink;
+
+        public Server(String name, ServerVersion version, ServerSettings serverSettings, JavaSettings javaSettings) {
             Name = name;
             Version = version;
             JavaSettings = javaSettings;
@@ -44,13 +50,22 @@ namespace fork.Logic.Model
             Restart2 = new ServerRestart(false,new SimpleTime(6,0));
             Restart3 = new ServerRestart(false,new SimpleTime(12,0));
             Restart4 = new ServerRestart(false,new SimpleTime(18,0));
-
+            UID = Guid.NewGuid().ToString("D");
         }
 
         /// <summary>
-        /// Constructor for xml deserializer
+        /// Constructor for deserializer
         /// </summary>
         public Server() {}
+
+        [OnDeserialized]
+        internal void EnsureUid(StreamingContext context)
+        {
+            if (UID == null ||UID.Equals(""))
+            {
+                UID = Guid.NewGuid().ToString("D");
+            }
+        }
 
         public override string ToString()
         {

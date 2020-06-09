@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:fork.View.Xaml2.Pages"
       xmlns:controls="clr-namespace:fork.View.Xaml2.Controls"
       mc:Ignorable="d" 
-      d:DesignHeight="700" d:DesignWidth="1000"
+      d:DesignHeight="1200" d:DesignWidth="1000"
       Title="CreatePage">
 
     <Page.Resources>
@@ -39,17 +39,18 @@
                                                 Click="ServerTypePaper_Click"/>
                                 <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/SpigotD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/SpigotW.png"
-                                                 Header="Spigot" GroupName="createServerTypes" Margin="10 10" IsEnabled="False"
+                                                 Header="Spigot" GroupName="createServerTypes" Margin="10 10" Visibility="Collapsed"
                                                 Click="ServerTypeSpigot_Click"/>
                                 <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/BukkitD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/BukkitW.png"
-                                                 Header="Bukkit" GroupName="createServerTypes" Margin="10 10" IsEnabled="False"/>
+                                                 Header="Bukkit" GroupName="createServerTypes" Margin="10 10" Visibility="Collapsed"/>
                                 <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/BungeeCordD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/BungeeCordW.png"
-                                                 Header="BungeeCord" GroupName="createServerTypes" Margin="10 10" IsEnabled="False"/>
+                                                 Header="BungeeCord" GroupName="createServerTypes" Margin="10 10"
+                                                Click="ServerTypeBungeeCord_Click"/>
                                 <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/WaterfallD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/WaterfallW.png"
-                                                 Header="Waterfall" GroupName="createServerTypes" Margin="10 10" IsEnabled="False"/>
+                                                 Header="Waterfall" GroupName="createServerTypes" Margin="10 10" Visibility="Collapsed"/>
                             </WrapPanel>
                         </StackPanel>
                         <Border.Style>
@@ -62,11 +63,11 @@
                             </Style>
                         </Border.Style>
                     </Border>
-
-
-                    <Border CornerRadius="10" Margin="5">
+                    
+                    
+                    <Border CornerRadius="10" Margin="5" x:Name="VersionSelection">
                         <StackPanel Background="Transparent" Margin="0 10">
-                            <TextBlock  Text="Choose A Server Version" Foreground="{DynamicResource textHeader}" FontFamily="{StaticResource Montserrat-SemiBold}" FontSize="23" Margin="15 0 5 20"/>
+                            <TextBlock Text="Choose A Server Version" Foreground="{DynamicResource textHeader}" FontFamily="{StaticResource Montserrat-SemiBold}" FontSize="23" Margin="15 0 5 20"/>
                             <ComboBox Margin="25 5" SelectedIndex="0" Width="120" HorizontalAlignment="Left" ItemContainerStyle="{DynamicResource DefaultComboBoxItem}"
                       FontFamily="{DynamicResource Montserrat-Bold}" FontSize="17" VerticalAlignment="Center" x:Name="versionComboBox"
                       ItemsSource="{Binding VanillaServerVersions}" IsSynchronizedWithCurrentItem="True">
@@ -84,7 +85,7 @@
                     </Border>
 
 
-                    <Border CornerRadius="10" Margin="5">
+                    <Border CornerRadius="10" Margin="5" x:Name="ConfigureSection">
                         <StackPanel Background="Transparent" Margin="0 10">
                             <TextBlock  Text="Configure Your Server" Foreground="{DynamicResource textHeader}" FontFamily="{StaticResource Montserrat-SemiBold}" FontSize="23" Margin="15 0 5 20"/>
                             <Grid Margin="25 5">
@@ -185,7 +186,7 @@
                         </Border.Style>
                     </Border>
 
-                    <Border CornerRadius="10" Margin="5">
+                    <Border CornerRadius="10" Margin="5" x:Name="MiscSection">
                         <StackPanel Background="Transparent" Margin="0 10">
                             <TextBlock  Text="Misc" Foreground="{DynamicResource textHeader}" FontFamily="{StaticResource Montserrat-SemiBold}" FontSize="23" Margin="15 0 5 20"/>
                             <StackPanel Margin="25 0 0 0" Height="40" Orientation="Horizontal">
@@ -196,6 +197,29 @@
                                      FontSize="17" Height="20" PreviewMouseDown="ServerDirPath_MouseDown" Name="worldFolderPathText"/>
                                 </Border>
                             </StackPanel>
+                        </StackPanel>
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+
+                    <Border CornerRadius="10" Margin="5" x:Name="ConfigureProxySection" Visibility="Collapsed">
+                        <StackPanel Background="Transparent" Margin="0 10">
+                            <TextBlock Text="Configure Your Network" Foreground="{DynamicResource textHeader}" FontFamily="{StaticResource Montserrat-SemiBold}" FontSize="23" Margin="15 0 5 20"/>
+                            <DockPanel Height="40" Grid.Row="0" HorizontalAlignment="Center" Margin="0 0 0 30">
+                                <Border CornerRadius="4" MaxWidth="200" MinWidth="150" DockPanel.Dock="Right" Height="26" Background="{DynamicResource buttonBgrDefault}">
+                                    <TextBox Margin="5 0" Text="" Background="{DynamicResource buttonBgrDefault}" BorderThickness="0" 
+                                     Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                     FontSize="17" Height="20" x:Name="NetworkName"/>
+                                </Border>
+                                <TextBlock Text="Network Name" TextAlignment="Right" Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0"/>
+                            </DockPanel>
                         </StackPanel>
                         <Border.Style>
                             <Style TargetType="Border">

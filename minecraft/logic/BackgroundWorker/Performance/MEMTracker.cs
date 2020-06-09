@@ -1,14 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Windows;
-using LiveCharts;
-using System.Management;
-using fork.Logic.Model;
 using fork.ViewModel;
 
 namespace fork.Logic.BackgroundWorker.Performance
@@ -18,7 +13,7 @@ namespace fork.Logic.BackgroundWorker.Performance
         private bool interrupted = false;
         private List<Thread> threads = new List<Thread>();
 
-        public void TrackP(Process p, ServerViewModel viewModel)
+        public void TrackP(Process p, EntityViewModel viewModel)
         {
             string instanceName = GetProcessInstanceName(p.Id);
             PerformanceCounter memCounter = new PerformanceCounter

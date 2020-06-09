@@ -11,7 +11,9 @@ namespace fork.Logic.Model
         {
             Vanilla,
             Paper,
-            Spigot
+            Spigot,
+            Waterfall,
+            BungeeCord
         }
 
         private Regex nonNumeric = new Regex(@"[^\d.]");
@@ -19,6 +21,7 @@ namespace fork.Logic.Model
         public VersionType Type { get; set; }
         public string Version { get; set; }
         public string JarLink { get; set; }
+        public bool IsProxy => Type == VersionType.Waterfall;
 
         public ServerVersion()
         {

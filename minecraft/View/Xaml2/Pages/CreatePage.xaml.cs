@@ -30,6 +30,8 @@ namespace fork.View.Xaml2.Pages
     {
         private AddServerViewModel viewModel;
         private string lastPath;
+        private bool isProxy = false;
+        private ServerVersion.VersionType proxyType = ServerVersion.VersionType.Waterfall;
         
         public CreatePage()
         {
@@ -40,24 +42,61 @@ namespace fork.View.Xaml2.Pages
         
         private void ServerTypeVanilla_Click(object sender, RoutedEventArgs e)
         {
+            UnSelectProxyType();
             versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.VanillaServerVersions });
             versionComboBox.SelectedIndex = 0;
         }
 
         private void ServerTypePaper_Click(object sender, RoutedEventArgs e)
         {
+            UnSelectProxyType();
             versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.PaperVersions });
             versionComboBox.SelectedIndex = 0;
         }
 
         private void ServerTypeSpigot_Click(object sender, RoutedEventArgs e)
         {
+            UnSelectProxyType();
             versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.SpigotServerVersions });
             versionComboBox.SelectedIndex = 0;
+        }
+        
+        private void ServerTypeBungeeCord_Click(object sender, RoutedEventArgs e)
+        {
+            SelectProxyType();
+            proxyType = ServerVersion.VersionType.Waterfall;
+        }
+
+        private void SelectProxyType()
+        {
+            isProxy = true;
+            VersionSelection.Visibility = Visibility.Collapsed;
+            ConfigureSection.Visibility = Visibility.Collapsed;
+            MiscSection.Visibility = Visibility.Collapsed;
+            ConfigureProxySection.Visibility = Visibility.Visible;
+        }
+
+        private void UnSelectProxyType()
+        {
+            isProxy = false;
+            VersionSelection.Visibility = Visibility.Visible;
+            ConfigureSection.Visibility = Visibility.Visible;
+            MiscSection.Visibility = Visibility.Visible;
+            ConfigureProxySection.Visibility = Visibility.Collapsed;
         }
 
         private async void BtnApply_Click(object sender, RoutedEventArgs e)
         {
+            if (isProxy)
+            {
+                string networkName = NetworkName.Text;
+                if (networkName == null || networkName.Equals(""))
+                {
+                    networkName = "Network";
+                }
+                bool createNetworkSuccess = await ServerManager.Instance.CreateNetworkAsync(networkName,proxyType);
+                return;
+            }
             ServerVersion selectedVersion = (ServerVersion)versionComboBox.SelectedValue;
             //TODO check if inputs are valid / server not existing
 
@@ -77,7 +116,7 @@ namespace fork.View.Xaml2.Pages
                 }
             }
 
-            bool createServerSuccess = await ServerManager.Instance.CreateServerAsync(serverName,selectedVersion, viewModel.ServerSettings, new ServerJavaSettings(),worldPath);
+            bool createServerSuccess = await ServerManager.Instance.CreateServerAsync(serverName,selectedVersion, viewModel.ServerSettings, new JavaSettings(),worldPath);
 
             //TODO Do something if creating fails
         }

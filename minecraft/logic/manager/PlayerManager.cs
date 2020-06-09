@@ -53,7 +53,7 @@ namespace fork.Logic.Manager
                 Console.WriteLine("Can only change roles while server is running!");
                 return;
             }
-            ApplicationManager.Instance.ActiveServers[viewModel.Server].StandardInput.WriteLine("whitelist add "+name);
+            ApplicationManager.Instance.ActiveEntities[viewModel.Server].StandardInput.WriteLine("whitelist add "+name);
         }
 
         public void UnWhitelistPlayer(ServerViewModel viewModel, string name)
@@ -63,7 +63,7 @@ namespace fork.Logic.Manager
                 Console.WriteLine("Can only change roles while server is running!");
                 return;
             }
-            ApplicationManager.Instance.ActiveServers[viewModel.Server].StandardInput.WriteLine("whitelist remove "+name);
+            ApplicationManager.Instance.ActiveEntities[viewModel.Server].StandardInput.WriteLine("whitelist remove "+name);
         }
 
         public void KickPlayer(ServerViewModel viewModel, string name)
@@ -73,7 +73,7 @@ namespace fork.Logic.Manager
                 Console.WriteLine("Can only change roles while server is running!");
                 return;
             }
-            ApplicationManager.Instance.ActiveServers[viewModel.Server].StandardInput.WriteLine("kick "+name);
+            ApplicationManager.Instance.ActiveEntities[viewModel.Server].StandardInput.WriteLine("kick "+name);
         }
 
         public void BanPlayer(ServerViewModel viewModel, string name)
@@ -83,7 +83,7 @@ namespace fork.Logic.Manager
                 Console.WriteLine("Can only change roles while server is running!");
                 return;
             }
-            ApplicationManager.Instance.ActiveServers[viewModel.Server].StandardInput.WriteLine("ban "+name);
+            ApplicationManager.Instance.ActiveEntities[viewModel.Server].StandardInput.WriteLine("ban "+name);
         }
 
         public void UnBanPlayer(ServerViewModel viewModel, string name)
@@ -93,7 +93,7 @@ namespace fork.Logic.Manager
                 Console.WriteLine("Can only change roles while server is running!");
                 return;
             }
-            ApplicationManager.Instance.ActiveServers[viewModel.Server].StandardInput.WriteLine("pardon "+name);
+            ApplicationManager.Instance.ActiveEntities[viewModel.Server].StandardInput.WriteLine("pardon "+name);
         }
 
         public void OpPlayer(ServerViewModel viewModel, string name)
@@ -103,7 +103,7 @@ namespace fork.Logic.Manager
                 Console.WriteLine("Can only change roles while server is running!");
                 return;
             }
-            ApplicationManager.Instance.ActiveServers[viewModel.Server].StandardInput.WriteLine("op "+name);
+            ApplicationManager.Instance.ActiveEntities[viewModel.Server].StandardInput.WriteLine("op "+name);
         }
 
         public void DeopPlayer(ServerViewModel viewModel, string name)
@@ -113,7 +113,7 @@ namespace fork.Logic.Manager
                 Console.WriteLine("Can only change roles while server is running!");
                 return;
             }
-            ApplicationManager.Instance.ActiveServers[viewModel.Server].StandardInput.WriteLine("deop "+name);
+            ApplicationManager.Instance.ActiveEntities[viewModel.Server].StandardInput.WriteLine("deop "+name);
         }
 
         public async Task<Player> GetPlayer(string name)

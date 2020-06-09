@@ -87,11 +87,11 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
-      <HintPath>packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
+    <Reference Include="GongSolutions.WPF.DragDrop, Version=2.0.0.0, Culture=neutral, PublicKeyToken=91f1945125b7a587, processorArchitecture=MSIL">
+      <HintPath>packages\gong-wpf-dragdrop.2.2.0\lib\net47\GongSolutions.WPF.DragDrop.dll</HintPath>
     </Reference>
-    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
-      <HintPath>packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=6.0.1.278, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+      <HintPath>packages\AvalonEdit.6.0.1\lib\net45\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -118,6 +118,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="YamlDotNet, Version=8.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
+      <HintPath>packages\YamlDotNet.8.1.2\lib\net45\YamlDotNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -130,6 +133,7 @@
     <Compile Include="Logic\BackgroundWorker\Performance\DiskTracker.cs" />
     <Compile Include="Logic\BackgroundWorker\Performance\MEMTracker.cs" />
     <Compile Include="Logic\BackgroundWorker\QueryStatsWorker.cs" />
+    <Compile Include="Logic\Controller\NetworkController.cs" />
     <Compile Include="Logic\CustomConsole\ConsoleReader.cs" />
     <Compile Include="Logic\CustomConsole\ConsoleWriter.cs" />
     <Compile Include="Logic\ExtensionMethods.cs" />
@@ -139,15 +143,24 @@
     <Compile Include="Logic\Manager\ApplicationManager.cs" />
     <Compile Include="Logic\Manager\AutoRestartManager.cs" />
     <Compile Include="Logic\Manager\PlayerManager.cs" />
+    <Compile Include="Logic\Model\Entity.cs" />
     <Compile Include="Logic\Model\FullStats.cs" />
     <Compile Include="Logic\Model\MinecraftDimension.cs" />
     <Compile Include="Logic\Model\MinecraftVersionModel\Manifest.cs" />
     <Compile Include="Logic\Model\MinecraftVersionModel\VersionDetails.cs" />
     <Compile Include="Logic\Model\Player.cs" />
+    <Compile Include="Logic\Model\ProxyModels\Group.cs" />
+    <Compile Include="Logic\Model\ProxyModels\Network.cs" />
+    <Compile Include="Logic\Model\ProxyModels\NetworkExternalServer.cs" />
+    <Compile Include="Logic\Model\ProxyModels\NetworkForkServer.cs" />
+    <Compile Include="Logic\Model\ProxyModels\NetworkServer.cs" />
+    <Compile Include="Logic\Model\ProxyModels\Permission.cs" />
     <Compile Include="Logic\Model\ServerPlayer.cs" />
     <Compile Include="Logic\Model\ServerRestart.cs" />
     <Compile Include="Logic\Model\ServerStatus.cs" />
-    <Compile Include="Logic\Model\ServerJavaSettings.cs" />
+    <Compile Include="Logic\Model\JavaSettings.cs" />
+    <Compile Include="Logic\Model\Settings\BungeeSettings.cs" />
+    <Compile Include="Logic\Model\Settings\SettingsFile.cs" />
     <Compile Include="Logic\Model\SimpleTime.cs" />
     <Compile Include="Logic\Model\World.cs" />
     <Compile Include="Logic\Persistence\FileReader.cs" />
@@ -155,19 +168,28 @@
     <Compile Include="Logic\Persistence\PersistencePO\BannedPlayer.cs" />
     <Compile Include="Logic\Persistence\PersistencePO\OPPlayer.cs" />
     <Compile Include="Logic\Persistence\PersistencePO\WhitelistedPlayer.cs" />
+    <Compile Include="Logic\Persistence\SettingsReader.cs" />
+    <Compile Include="Logic\Persistence\YMLReaders\BungeeSettingsSerializer.cs" />
     <Compile Include="Logic\Query\Query.cs" />
     <Compile Include="Logic\RoleManagement\RoleUpdater.cs" />
     <Compile Include="Logic\RoleManagement\RoleType.cs" />
     <Compile Include="Logic\Utils\ByteUtils.cs" />
+    <Compile Include="Logic\WebRequesters\Downloader.cs" />
     <Compile Include="Logic\WebRequesters\ResponseCache.cs" />
     <Compile Include="Logic\WebRequesters\PaperWebRequester.cs" />
+    <Compile Include="Logic\WebRequesters\WaterfallWebRequester.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\ConsoleViewModel.cs" />
+    <Compile Include="ViewModel\EntityViewModel.cs" />
     <Compile Include="ViewModel\ImportViewModel.cs" />
+    <Compile Include="ViewModel\NetworkViewModel.cs" />
     <Compile Include="ViewModel\ServerViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
+    <Compile Include="View\Resources\dictionaries\ListViewStyles.xaml.cs">
+      <DependentUpon>ListViewStyles.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Resources\dictionaries\WindowStyles.xaml.cs">
       <DependentUpon>WindowStyles.xaml</DependentUpon>
     </Compile>
@@ -180,7 +202,10 @@
     <Compile Include="View\Xaml2\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Xaml2\Pages\ConsolePage.xaml.cs">
+    <Compile Include="View\Xaml2\Pages\Network\ConsolePage.xaml.cs">
+      <DependentUpon>ConsolePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Xaml2\Pages\Server\ConsolePage.xaml.cs">
       <DependentUpon>ConsolePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Xaml2\Pages\CreatePage.xaml.cs">
@@ -189,8 +214,17 @@
     <Compile Include="View\Xaml2\Pages\ImportPage.xaml.cs">
       <DependentUpon>ImportPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Xaml2\Pages\ServerPage.xaml.cs">
+    <Compile Include="View\Xaml2\Pages\Network\NetworkPage.xaml.cs">
+      <DependentUpon>NetworkPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Xaml2\Pages\Server\ServerPage.xaml.cs">
       <DependentUpon>ServerPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Xaml2\Pages\Settings\DefaultSettingsPage.xaml.cs">
+      <DependentUpon>DefaultSettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Xaml2\Pages\Settings\ProxySettingsPage.xaml.cs">
+      <DependentUpon>ProxySettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Xaml2\Pages\Settings\VanillaSettingsPage.xaml.cs">
       <DependentUpon>VanillaSettingsPage.xaml</DependentUpon>
@@ -198,7 +232,7 @@
     <Compile Include="View\Xaml2\Pages\Settings\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Xaml2\Pages\WorldsPage.xaml.cs">
+    <Compile Include="View\Xaml2\Pages\Server\WorldsPage.xaml.cs">
       <DependentUpon>WorldsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Xaml2\Shapes\InnerSpeechBubble.cs" />
@@ -267,7 +301,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Xaml2\Pages\ConsolePage.xaml">
+    <Page Include="View\Xaml2\Pages\Network\ConsolePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Xaml2\Pages\Server\ConsolePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -275,7 +313,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Xaml2\Pages\ServerPage.xaml">
+    <Page Include="View\Xaml2\Pages\Network\NetworkPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Xaml2\Pages\Server\ServerPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Xaml2\Pages\Settings\DefaultSettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Xaml2\Pages\Settings\ProxySettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -293,7 +343,7 @@
     <Compile Include="Logic\Model\Server.cs" />
     <Compile Include="Logic\Model\ServerSettings.cs" />
     <Compile Include="Logic\Model\ServerVersion.cs" />
-    <Compile Include="Logic\Persistence\Serializer.cs" />
+    <Compile Include="Logic\Persistence\EntitySerializer.cs" />
     <Compile Include="ViewModel\AddServerViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="App.xaml.cs">
@@ -301,7 +351,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="View\Xaml\Converter\ListToStringConverter.cs" />
-    <Page Include="View\Xaml2\Pages\WorldsPage.xaml" />
+    <Page Include="View\Xaml2\Pages\Server\WorldsPage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -326,6 +376,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="View\Resources\SyntaxHighlighting\YAML.xshd" />
     <Resource Include="View\Resources\Fonts\Montserrat-Bold.ttf" />
     <Resource Include="View\Resources\Fonts\Montserrat-Medium.ttf" />
     <Resource Include="View\Resources\Fonts\Montserrat-SemiBold.ttf" />
@@ -358,6 +409,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="View\Resources\images\Icons\Add.png" />
+    <Resource Include="View\Resources\images\Icons\AddW.png" />
     <Resource Include="View\Resources\images\Icons\Banned.png" />
     <Resource Include="View\Resources\images\Icons\PlayerList.png" />
     <Resource Include="View\Resources\images\Icons\WhiteList.png" />

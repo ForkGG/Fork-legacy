@@ -1,14 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Windows;
-using LiveCharts;
-using System.Management;
-using fork.Logic.Model;
 using fork.ViewModel;
 
 namespace fork.Logic.BackgroundWorker.Performance
@@ -18,7 +13,7 @@ namespace fork.Logic.BackgroundWorker.Performance
         private bool interrupted = false;
         private List<Thread> threads = new List<Thread>();
 
-        public void TrackTotal(Process p, ServerViewModel viewModel)
+        public void TrackTotal(Process p, EntityViewModel viewModel)
         {
             PerformanceCounter cpuCounter = new PerformanceCounter
             {
@@ -37,40 +32,6 @@ namespace fork.Logic.BackgroundWorker.Performance
                     Thread.Sleep(500);
                 }
                 viewModel.CPUValueUpdate(0.0);
-            });
-            t.Start();
-            threads.Add(t);
-        }
-
-        public void TrackP(Process p, ChartValues<double> chartValues, int maxLength)
-        {
-            string instanceName = GetProcessInstanceName(p.Id);
-            PerformanceCounter cpuCounter = new PerformanceCounter
-            {
-                CategoryName = "Process",
-                CounterName = "% Processor Time",
-                InstanceName = instanceName
-            };
-            Thread t = new Thread(() =>
-            {
-                float processorCount = Environment.ProcessorCount;
-                while (!interrupted && !p.HasExited)
-                {
-                    try
-                    {
-                        double value = cpuCounter.NextValue() / processorCount;
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            chartValues.Add(value);
-                            if (chartValues.Count > maxLength)
-                            {
-                                chartValues.RemoveAt(0);
-                            }
-                        });
-                    }
-                    catch(Exception e){ break; }
-                    Thread.Sleep(1000);
-                }
             });
             t.Start();
             threads.Add(t);

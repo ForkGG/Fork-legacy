@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading;
 using fork.Logic.Model;
 using fork.ViewModel;
@@ -9,14 +10,15 @@ namespace fork.Logic.CustomConsole
 {
     public class ConsoleWriter
     {
-        public delegate void ConsoleWriteEventHandler(string line, ServerViewModel source);
+        private static Regex waterfallStarted = new Regex(@"\[([0-9]+:?)* INFO\]: Listening on /.*$");
+        
+        public delegate void ConsoleWriteEventHandler(string line, EntityViewModel source);
         public static event ConsoleWriteEventHandler ConsoleWriteLine;
 
-
-        private delegate void CustomWriteEventHandler(string line, ServerViewModel target);
+        private delegate void CustomWriteEventHandler(string line, EntityViewModel target);
         private static event CustomWriteEventHandler CustomWriteLine;
         
-        public static void RegisterApplication(ServerViewModel viewModel, StreamReader stdOut, StreamReader errOut)
+        public static void RegisterApplication(EntityViewModel viewModel, StreamReader stdOut, StreamReader errOut)
         {
             new Thread(() =>
             {
@@ -25,12 +27,23 @@ namespace fork.Logic.CustomConsole
                     string line = stdOut.ReadLine();
                     if (line != null)
                     {
-                        if (line.Contains("For help, type \"help\""))
-                        {
-                            viewModel.CurrentStatus = ServerStatus.RUNNING;
-                        }
                         ConsoleWriteLine?.Invoke(line,viewModel);
-                        viewModel.RoleInputHandler(line);
+                        if (viewModel is ServerViewModel serverViewModel)
+                        {
+                            if (line.Contains("For help, type \"help\""))
+                            {
+                                serverViewModel.CurrentStatus = ServerStatus.RUNNING;
+                            }
+                            serverViewModel.RoleInputHandler(line);
+                        }
+
+                        if (viewModel is NetworkViewModel networkViewModel)
+                        {
+                            if (waterfallStarted.Match(line).Success)
+                            {
+                                networkViewModel.CurrentStatus = ServerStatus.RUNNING;
+                            }
+                        }
                         viewModel.ConsoleOutList.Add(line);
                     }
                 }
@@ -48,7 +61,11 @@ namespace fork.Logic.CustomConsole
                         {
                             viewModel.CurrentStatus = ServerStatus.RUNNING;
                         }
-                        viewModel.RoleInputHandler(line);
+
+                        if (viewModel is ServerViewModel serverViewModel)
+                        {
+                            serverViewModel.RoleInputHandler(line);
+                        }
                         ConsoleWriteLine?.Invoke(line,viewModel);
                         viewModel.ConsoleOutList.Add(line);
                     }
@@ -56,7 +73,7 @@ namespace fork.Logic.CustomConsole
             }).Start();
         }
 
-        public static void Write(string line, ServerViewModel target)
+        public static void Write(string line, EntityViewModel target)
         {
             target.ConsoleOutList.Add(line);
         }

@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Threading;
 using fork.Logic.Model;
 using fork.Logic.Model.MinecraftVersionModel;
+using fork.Logic.WebRequesters;
 using fork.ViewModel;
 
 namespace fork.Logic.Manager
@@ -17,6 +18,18 @@ namespace fork.Logic.Manager
 
         private VersionManager()
         {
+            new Task(() =>
+            {
+                WaterfallVersion = new WaterfallWebRequester().RequestLatestWaterfallVersion();
+            }).Start();
+            new Task(() =>
+            {
+                BungeeCordVersion = new ServerVersion();
+                BungeeCordVersion.Type = ServerVersion.VersionType.BungeeCord;
+                BungeeCordVersion.Version = "";
+                BungeeCordVersion.JarLink =
+                    "https://ci.md-5.net/job/BungeeCord/lastSuccessfulBuild/artifact/bootstrap/target/BungeeCord.jar";
+            }).Start();
             new Task(() =>
             {
                 List<ServerVersion> versions =
@@ -68,5 +81,9 @@ namespace fork.Logic.Manager
         /// The property that holds all Minecraft Spigot Server versions
         /// </summary>
         public ObservableCollection<ServerVersion> SpigotVersions => spigotVersions;
+
+        public ServerVersion WaterfallVersion;
+
+        public ServerVersion BungeeCordVersion;
     }
 }

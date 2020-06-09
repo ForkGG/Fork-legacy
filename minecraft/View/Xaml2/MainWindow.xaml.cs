@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using fork.Logic.Manager;
+using fork.Logic.Model;
 using fork.ViewModel;
 using Brush = System.Windows.Media.Brush;
 
@@ -50,7 +51,14 @@ namespace fork.View.Xaml2
         }
         private void DeleteServer_Click(object sender, RoutedEventArgs e)
         {
-            DeleteOverlay.Visibility = Visibility.Visible;
+            if (viewModel.SelectedEntity is ServerViewModel)
+            {
+                DeleteServerOverlay.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                DeleteNetworkOverlay.Visibility = Visibility.Visible;
+            }
         }
         private void ImportServer_Click(object sender, RoutedEventArgs e)
         {
@@ -199,26 +207,57 @@ namespace fork.View.Xaml2
 
         private void Abort_Click(object sender, RoutedEventArgs e)
         {
-            DeleteOverlay.Visibility = Visibility.Collapsed;
+            DeleteServerOverlay.Visibility = Visibility.Collapsed;
+            DeleteNetworkOverlay.Visibility = Visibility.Collapsed;
         }
         
         private async void Delete_Click(object sender, RoutedEventArgs e)
         {
-            DeleteOverlay.Visibility = Visibility.Collapsed;
+            DeleteServerOverlay.Visibility = Visibility.Collapsed;
+            DeleteNetworkOverlay.Visibility = Visibility.Collapsed;
 
-            ServerViewModel serverToDelete = viewModel.SelectedServer;
-            Application.Current.Dispatcher?.Invoke(()=>viewModel.Servers.Remove(serverToDelete), DispatcherPriority.Background); //This shouldn't be here
-            bool success = await ServerManager.Instance.DeleteServerAsync(serverToDelete);
-            if (!success)
+            EntityViewModel entityToDelete = viewModel.SelectedEntity;
+            if (entityToDelete is ServerViewModel serverToDelete)
             {
-                Console.WriteLine("Problem while deleting "+viewModel.SelectedServer?.Server?.Name);
-                Application.Current.Dispatcher?.Invoke(()=>viewModel.Servers.Add(serverToDelete), DispatcherPriority.Background); //This shouldn't be here
+                Application.Current.Dispatcher?.Invoke(()=>viewModel.Entities.Remove(serverToDelete), DispatcherPriority.Background); //This shouldn't be here
+                bool success = await ServerManager.Instance.DeleteServerAsync(serverToDelete);
+                if (!success)
+                {
+                    Console.WriteLine("Problem while deleting "+serverToDelete);
+                    Application.Current.Dispatcher?.Invoke(()=>viewModel.Entities.Add(serverToDelete), DispatcherPriority.Background); //This shouldn't be here
+                }
+                else
+                {
+                    Console.WriteLine("Successfully deleted server "+serverToDelete);
+                    ServerList.SelectedIndex = 0;
+                }
             }
-            else
+            else if (entityToDelete is NetworkViewModel networkToDelete)
             {
-                Console.WriteLine("Successfully deleted server "+serverToDelete);
-                ServerList.SelectedIndex = 0;
+                Application.Current.Dispatcher?.Invoke(()=>viewModel.Entities.Remove(networkToDelete), DispatcherPriority.Background); //This shouldn't be here
+                bool success = await ServerManager.Instance.DeleteNetworkAsync(networkToDelete);
+                if (!success)
+                {
+                    Console.WriteLine("Problem while deleting "+networkToDelete.Network);
+                    Application.Current.Dispatcher?.Invoke(()=>viewModel.Entities.Add(networkToDelete), DispatcherPriority.Background); //This shouldn't be here
+                }
+                else
+                {
+                    Console.WriteLine("Successfully deleted network "+networkToDelete.Network);
+                    ServerList.SelectedIndex = 0;
+                }
             }
+        }
+
+        private void EntityMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            var s = sender as FrameworkElement;
+            viewModel.SelectedEntity = s.DataContext as EntityViewModel;
+        }
+
+        private void EntityMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true;
         }
     }
 }

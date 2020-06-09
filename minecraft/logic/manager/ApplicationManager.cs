@@ -39,11 +39,11 @@ namespace fork.Logic.Manager
         
         public MainViewModel MainViewModel { get; } = new MainViewModel();
         public ConsoleViewModel ConsoleViewModel { get; } = new ConsoleViewModel();
-        public Dictionary<Server, Process> ActiveServers { get; set; } = new Dictionary<Server, Process>();
+        public Dictionary<Entity, Process> ActiveEntities { get; set; } = new Dictionary<Entity, Process>();
 
         public void ExitApplication()
         {
-            List<Process> serversToEnd = new List<Process>(ActiveServers.Values);
+            List<Process> serversToEnd = new List<Process>(ActiveEntities.Values);
             foreach (Process process in serversToEnd)
             {
                 if (process != null)

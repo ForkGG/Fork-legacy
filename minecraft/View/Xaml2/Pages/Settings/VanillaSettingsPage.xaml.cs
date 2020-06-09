@@ -12,31 +12,32 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using fork.Logic.Manager;
 using fork.Logic.Model;
+using fork.View.Xaml2.Pages.Server;
 using fork.ViewModel;
 
 namespace fork.View.Xaml2.Pages.Settings
 {
-    /// <summary>
-    /// Interaktionslogik für MCSettingsPage.xaml
-    /// </summary>
     public partial class VanillaSettingsPage : Page
     {
         private SettingsViewModel viewModel;
+        private ServerViewModel serverViewModel;
         
         public VanillaSettingsPage(SettingsViewModel viewModel)
         {
             InitializeComponent();
             this.viewModel = viewModel;
-            DataContext = this.viewModel;
+            serverViewModel = viewModel.EntityViewModel as ServerViewModel;
+            DataContext = serverViewModel;
         }
 
         private void VersionChange_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if ((bool) !versionComboBox.SelectedItem?.Equals(viewModel.Server.Version))
+            if ((bool) !versionComboBox.SelectedItem?.Equals(serverViewModel.Server.Version))
             {
                 VersionChangeBtn.Visibility = Visibility.Visible;
             }
@@ -48,7 +49,7 @@ namespace fork.View.Xaml2.Pages.Settings
 
         private async void RegenNether_Click(object sender, RoutedEventArgs e)
         {
-            bool success = await ServerManager.Instance.DeleteDimensionAsync(MinecraftDimension.Nether, viewModel.Server);
+            bool success = await ServerManager.Instance.DeleteDimensionAsync(MinecraftDimension.Nether, serverViewModel.Server);
             DoubleAnimation doubleAnimation = new DoubleAnimation();
             doubleAnimation.From = 0.0;
             doubleAnimation.To = 0.4;
@@ -72,7 +73,7 @@ namespace fork.View.Xaml2.Pages.Settings
 
         private async void RegenEnd_Click(object sender, RoutedEventArgs e)
         {
-            bool success = await ServerManager.Instance.DeleteDimensionAsync(MinecraftDimension.End, viewModel.Server);
+            bool success = await ServerManager.Instance.DeleteDimensionAsync(MinecraftDimension.End, serverViewModel.Server);
             DoubleAnimation doubleAnimation = new DoubleAnimation();
             doubleAnimation.From = 0.0;
             doubleAnimation.To = 0.4;
@@ -96,13 +97,16 @@ namespace fork.View.Xaml2.Pages.Settings
 
         private async void VersionChange_Click(object sender, RoutedEventArgs e)
         {
-            ServerPage serverPage = viewModel.ServerViewModel.ServerPage as ServerPage;
-            serverPage?.OpenTerminal();
-            bool success = await ServerManager.Instance.ChangeServerVersionAsync((ServerVersion) versionComboBox.SelectedValue, viewModel.ServerViewModel);
-            if (!success)
+            if (viewModel.EntityViewModel is ServerViewModel serverViewModel)
             {
-                //TODO: Display error
-                return;
+                ServerPage serverPage = viewModel.EntityViewModel.EntityPage as ServerPage;
+                serverPage?.OpenTerminal();
+                bool success = await ServerManager.Instance.ChangeServerVersionAsync((ServerVersion) versionComboBox.SelectedValue, serverViewModel);
+                if (!success)
+                {
+                    //TODO: Display error
+                    return;
+                }
             }
         }
     }

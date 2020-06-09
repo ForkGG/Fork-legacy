@@ -6,6 +6,7 @@
         xmlns:controls="clr-namespace:fork.View.Xaml2.Controls"
         xmlns:shapes="clr-namespace:fork.View.Xaml2.Shapes"
         xmlns:converter="clr-namespace:fork.View.Xaml.Converter"
+        xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:local="clr-namespace:fork.View.Xaml2"
         mc:Ignorable="d" MinWidth="1080" MinHeight="400"
         Title="Fork" Height="720" Width="1200" Style="{StaticResource DefaultWindowV2}">
@@ -51,8 +52,8 @@
                                FontFamily="{StaticResource Montserrat-SemiBold}" Visibility="{Binding HasServers, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                             <ListView Margin="0" Grid.Row="1" Background="{DynamicResource backgroundDark}" Style="{StaticResource ServerListViewV2}"
-                              ItemsSource="{Binding Servers}" x:Name="ServerList"
-                              SelectedItem="{Binding SelectedServer}" SelectionChanged="ServerList_SelectionChanged">
+                              ItemsSource="{Binding Entities}" x:Name="ServerList" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
+                              SelectedItem="{Binding SelectedEntity}" SelectionChanged="ServerList_SelectionChanged">
                                 <!-- This shouldn't be here, but Event handling is shit -->
                                 <ListView.ItemContainerStyle>
                                     <Style  TargetType="{x:Type ListViewItem}">
@@ -67,7 +68,7 @@
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="{x:Type ListViewItem}">
                                                     <Border BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}">
-                                                        <StackPanel>
+                                                        <StackPanel MouseDown="EntityMouseDown" MouseUp="EntityMouseUp">
                                                             <Grid Width="250" Height="60">
                                                                 <Border x:Name="background" Background="Transparent" Width="251" CornerRadius="0 8 8 0" Margin="-1 0 0 0"/>
                                                                 <DockPanel Panel.ZIndex="1" LastChildFill="True">
@@ -75,7 +76,7 @@
                                                                     <Border Height="40" Width="40" Background="Transparent" Margin="5 0 10 0">
                                                                         <Image x:Name="image" Source="{Binding Icon}" Width="25" Height="25" RenderOptions.BitmapScalingMode="Linear"/>
                                                                     </Border>
-                                                                    <TextBlock x:Name="title" Text="{Binding Server.Name}" VerticalAlignment="Center" FontSize="20" FontFamily="{StaticResource Montserrat-SemiBold}" 
+                                                                    <TextBlock x:Name="title" Text="{Binding Entity.Name}" VerticalAlignment="Center" FontSize="20" FontFamily="{StaticResource Montserrat-SemiBold}" 
                                                                                 Foreground="{DynamicResource textUnselected}" Margin="0 0 15 0"/>
                                                                 </DockPanel>
                                                                 <Grid.ContextMenu>
@@ -193,8 +194,8 @@
 
                 <!-- Subscreens -->
                 <Border Visibility="{Binding HasServers, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <Frame x:Name="ServerPage" Grid.Column="1" DataContext="{Binding SelectedServer, Mode=TwoWay}"
-                       Content="{Binding ServerPage}" NavigationUIVisibility="Hidden" Background="{DynamicResource backgroundDefault}"/>
+                    <Frame x:Name="ServerPage" Grid.Column="1" DataContext="{Binding SelectedEntity, Mode=TwoWay}"
+                       Content="{Binding EntityPage}" NavigationUIVisibility="Hidden" Background="{DynamicResource backgroundDefault}"/>
                 </Border>
                 <Frame x:Name="CreatePage" Grid.Column="1" Content="{Binding CreatePage}" NavigationUIVisibility="Hidden" Visibility="Hidden" 
                        Background="{DynamicResource backgroundDefault}"/>
@@ -202,14 +203,30 @@
                        Background="{DynamicResource backgroundDefault}"/>
             </Grid>
         </DockPanel>
-        <Grid Panel.ZIndex="1" x:Name="DeleteOverlay" Visibility="Collapsed">
+        <Grid Panel.ZIndex="1" x:Name="DeleteServerOverlay" Visibility="Collapsed">
             <Rectangle Fill="#1F2234" Opacity="0.9" Margin="-5 0 0 0"/>
             <StackPanel Panel.ZIndex="1" VerticalAlignment="Center">
                 <TextBlock Text="Delete Server" FontSize="28" FontFamily="{DynamicResource Montserrat-Bold}" TextAlignment="Center" Foreground="{DynamicResource buttonBgrRed}" Margin="0 0 0 20"/>
                 <TextBlock Text="WARNING: This action will permanently remove your beloved server" Margin="0 0 0 5" FontSize="17" HorizontalAlignment="Center" Foreground="#f28c8c" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 40">
                     <TextBlock Text="- " Foreground="{DynamicResource textSelected}" FontSize="17" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
-                    <TextBlock Text="{Binding SelectedServer.Server.Name}" Foreground="{DynamicResource textSelected}" FontSize="17" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                    <TextBlock Text="{Binding SelectedEntity.Entity.Name}" Foreground="{DynamicResource textSelected}" FontSize="17" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                    <TextBlock Text=" -" Foreground="{DynamicResource textSelected}" FontSize="17" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5 0 30">
+                    <Button Content="Cancel" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="20" Click="Abort_Click"/>
+                    <Button Content="Delete" Style="{DynamicResource RoundedTextButtonRed}" Width="100" Margin="20" Click="Delete_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        <Grid Panel.ZIndex="1" x:Name="DeleteNetworkOverlay" Visibility="Collapsed">
+            <Rectangle Fill="#1F2234" Opacity="0.9" Margin="-5 0 0 0"/>
+            <StackPanel Panel.ZIndex="1" VerticalAlignment="Center">
+                <TextBlock Text="Delete Network" FontSize="28" FontFamily="{DynamicResource Montserrat-Bold}" TextAlignment="Center" Foreground="{DynamicResource buttonBgrRed}" Margin="0 0 0 20"/>
+                <TextBlock Text="WARNING: This action will permanently remove your beloved network" Margin="0 0 0 5" FontSize="17" HorizontalAlignment="Center" Foreground="#f28c8c" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 40">
+                    <TextBlock Text="- " Foreground="{DynamicResource textSelected}" FontSize="17" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                    <TextBlock Text="{Binding SelectedEntity.Entity.Name}" Foreground="{DynamicResource textSelected}" FontSize="17" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
                     <TextBlock Text=" -" Foreground="{DynamicResource textSelected}" FontSize="17" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5 0 30">

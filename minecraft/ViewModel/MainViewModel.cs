@@ -18,8 +18,8 @@ namespace fork.ViewModel
 
         //public MainWindow MainWindow { get; set; }
         
-        public ObservableCollection<ServerViewModel> Servers { get; set; }
-        public ServerViewModel SelectedServer { get; set; }
+        public ObservableCollection<EntityViewModel> Entities { get; set; }
+        public EntityViewModel SelectedEntity { get; set; }
         public ImportViewModel ImportViewModel { get; set; }
         public bool HasServers { get; set; }
         
@@ -33,26 +33,26 @@ namespace fork.ViewModel
             //Console.SetOut(ApplicationManager.ConsoleWriter);
             
             ImportViewModel = new ImportViewModel();
-            Servers = ServerManager.Instance.Servers;
+            Entities = ServerManager.Instance.Entities;
             //Servers.Insert(0, ServerViewModel.HomeViewModel());
-            Servers.CollectionChanged += ServerListChanged;
-            if (Servers.Count != 0)
+            Entities.CollectionChanged += ServerListChanged;
+            if (Entities.Count != 0)
             {
-                SelectedServer = Servers[0];
+                SelectedEntity = Entities[0];
                 HasServers = true;
             }
         }
 
-        public void SetServerList(ref ObservableCollection<ServerViewModel> servers)
+        public void SetServerList(ref ObservableCollection<EntityViewModel> entities)
         {
-            Servers = servers;
-            HasServers = Servers.Count!=0;
-            Servers.CollectionChanged += ServerListChanged;
+            Entities = entities;
+            HasServers = Entities.Count!=0;
+            Entities.CollectionChanged += ServerListChanged;
         }
 
         private void ServerListChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            raisePropertyChanged(nameof(Servers));
+            raisePropertyChanged(nameof(Entities));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

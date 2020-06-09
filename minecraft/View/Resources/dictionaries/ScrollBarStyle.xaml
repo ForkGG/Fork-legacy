@@ -56,7 +56,7 @@
                 IsDirectionReversed="False">
             <Track.Thumb>
                 <Thumb Style="{StaticResource ScrollBarThumb}"
-                        Margin="0,1,0,1"/>
+                        Margin="0"/>
             </Track.Thumb>
         </Track>
     </ControlTemplate>
@@ -214,8 +214,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
 
     <Style x:Key="ServerListScrollViewer" TargetType="ScrollViewer">
         <Setter Property="OverridesDefaultStyle" Value="True"/>

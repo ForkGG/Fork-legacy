@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace fork.logic.Utils
+namespace fork.Logic.Utils
 {
     public class ByteUtils
     {

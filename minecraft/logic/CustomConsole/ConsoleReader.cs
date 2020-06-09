@@ -12,7 +12,7 @@ namespace fork.Logic.CustomConsole
             this.stdIn = stdIn;
         }
 
-        public void Read(string line, ServerViewModel source)
+        public void Read(string line, EntityViewModel source)
         {
             stdIn.WriteLine(line);
             ConsoleWriter.Write(line, source);
