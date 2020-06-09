@@ -12,8 +12,9 @@
     <Grid>
         <!--TextBlock Text="Coming soon" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="{DynamicResource Montserrat-SemiBold}"
                        Foreground="{DynamicResource textSelected}"/-->
-        <avalon:TextEditor x:Name="text" Margin="120 10 10 10" Padding="3" ShowLineNumbers="True" Background="{DynamicResource backgroundConsole}" 
-                           Foreground="{DynamicResource textTerminal}" FontFamily="Consolas" HorizontalScrollBarVisibility="Disabled">
+        <avalon:TextEditor x:Name="text" Margin="120 10 10 10" Padding="4 10" ShowLineNumbers="True" Background="{DynamicResource backgroundConsole}" 
+                           Foreground="White" FontFamily="Consolas" HorizontalScrollBarVisibility="Disabled">
+            
         </avalon:TextEditor>
     </Grid>
 </Page>

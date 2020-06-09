@@ -91,7 +91,8 @@
       <HintPath>packages\gong-wpf-dragdrop.2.2.0\lib\net47\GongSolutions.WPF.DragDrop.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.AvalonEdit, Version=6.0.1.278, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
-      <HintPath>packages\AvalonEdit.6.0.1\lib\net45\ICSharpCode.AvalonEdit.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\AvalonEdit\ICSharpCode.AvalonEdit\bin\Release\net45\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -223,6 +224,7 @@
     <Compile Include="View\Xaml2\Pages\Settings\DefaultSettingsPage.xaml.cs">
       <DependentUpon>DefaultSettingsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Xaml2\Pages\Settings\ISettingsPage.cs" />
     <Compile Include="View\Xaml2\Pages\Settings\ProxySettingsPage.xaml.cs">
       <DependentUpon>ProxySettingsPage.xaml</DependentUpon>
     </Compile>
@@ -409,6 +411,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Python.xshd.bmp" />
+    <Content Include="View\Resources\SyntaxHighlighting\Python.xshd" />
     <Resource Include="View\Resources\images\Icons\Add.png" />
     <Resource Include="View\Resources\images\Icons\AddW.png" />
     <Resource Include="View\Resources\images\Icons\Banned.png" />

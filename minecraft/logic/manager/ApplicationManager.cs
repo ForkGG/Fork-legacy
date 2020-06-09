@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using fork.Logic.ApplicationConsole;
 using fork.Logic.Model;
+using fork.Logic.Persistence;
 using fork.ViewModel;
 
 namespace fork.Logic.Manager
@@ -39,7 +41,9 @@ namespace fork.Logic.Manager
         
         public MainViewModel MainViewModel { get; } = new MainViewModel();
         public ConsoleViewModel ConsoleViewModel { get; } = new ConsoleViewModel();
-        public Dictionary<Entity, Process> ActiveEntities { get; set; } = new Dictionary<Entity, Process>();
+        public Dictionary<Entity, Process> ActiveEntities { get; } = new Dictionary<Entity, Process>();
+        public List<SettingsReader> SettingsReaders { get; } = new List<SettingsReader>();
+        public bool HasExited { get; set; } = false;
 
         public void ExitApplication()
         {
@@ -61,7 +65,13 @@ namespace fork.Logic.Manager
                     }
                 }
             }
-            
+
+            foreach (SettingsReader settingsReader in SettingsReaders)
+            {
+                settingsReader.Dispose();
+            }
+
+            HasExited = true;
         }
     }
 }

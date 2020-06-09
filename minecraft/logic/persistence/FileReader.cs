@@ -168,5 +168,20 @@ namespace fork.Logic.Persistence
             }
             return names;
         }
+
+        public static bool IsFileReadable(FileInfo file)
+        {
+            // If the file can be opened for exclusive access it means that the file
+            // is no longer locked by another process.
+            try
+            {
+                using (FileStream inputStream = file.OpenRead())
+                    return inputStream.Length >= 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

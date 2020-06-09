@@ -261,7 +261,7 @@ namespace fork.Logic.Model
 
         private string SetOfflineHead()
         {
-            Image defaultHead = Resources.DeafultHead;
+             Image defaultHead = Resources.DeafultHead;
              Bitmap b = new Bitmap(defaultHead);
              Directory.CreateDirectory(Path.Combine(App.ApplicationPath,"players",Name));
              string path = Path.Combine(App.ApplicationPath,"players",Name,"head.jpg");

@@ -47,7 +47,8 @@ namespace fork.ViewModel
             UpdateAddressInfo();
             Application.Current.Dispatcher.Invoke(new Action(() => EntityPage = new NetworkPage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => ConsolePage = new ConsolePage(this)));
-            Application.Current.Dispatcher.Invoke(new Action(() => SettingsViewModel = new SettingsViewModel(this, SettingsReader.GetSettingsFiles(this))));
+            Application.Current.Dispatcher.Invoke(new Action(() => SettingsViewModel = new SettingsViewModel(this)));
+
             DropHandler = new ServerDropHandler(this);
             Console.WriteLine("Server ViewModel for " + network.Name + " initialized in "+t.Seconds+"."+t.Milliseconds+"s");
         }
@@ -158,7 +159,16 @@ namespace fork.ViewModel
         }
 
         public void SaveSettings()
-        {   
+        {
+            new Thread(() =>
+            {
+                SettingsViewModel.SaveChanges();
+                EntitySerializer.Instance.StoreEntities(ServerManager.Instance.Entities);
+            }).Start();
+        }
+
+        public void SaveConfig()
+        {
             new Thread(() =>
             {
                 StoreServersToConfig(Network.Config);

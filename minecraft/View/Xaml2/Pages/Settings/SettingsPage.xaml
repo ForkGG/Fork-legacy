@@ -22,8 +22,8 @@
                         <ListViewItem Content="spigot.yml" Selected="SelectSpigotSettings"/>
                     </-->
                     <ListView Margin="0" Background="{DynamicResource backgroundDark}" Style="{DynamicResource SettingsListView}"
-                              ItemContainerStyle="{DynamicResource SettingsListItem}" ItemsSource="{Binding Settings}" SelectedIndex="0"
-                              SelectionChanged="FileSelectionChanged">
+                              ItemContainerStyle="{DynamicResource SettingsListItem}" ItemsSource="{Binding SettingsPages}" SelectedIndex="0"
+                              SelectionChanged="FileSelectionChanged" x:Name="SelectionListView">
                         
                     </ListView>
                 </StackPanel>

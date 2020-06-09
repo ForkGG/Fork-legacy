@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Fork.Logic.Model.ProxyModels;
 using fork.Logic.Model.Settings;
@@ -22,15 +12,25 @@ namespace Fork.View.Xaml2.Pages.Settings
     /// <summary>
     /// Interaktionslogik für ProxySettingsPage.xaml
     /// </summary>
-    public partial class ProxySettingsPage : Page
+    public partial class ProxySettingsPage : Page, ISettingsPage
     {
+        public SettingsFile SettingsFile { get; set; }
+        public string FileName => System.IO.Path.GetFileNameWithoutExtension(SettingsFile.FileInfo.FullName);
+        public string FileExtension => System.IO.Path.GetExtension(SettingsFile.FileInfo.FullName);
+
         private NetworkViewModel networkViewModel;
         
-        public ProxySettingsPage(SettingsViewModel viewModel)
+        public ProxySettingsPage(SettingsViewModel viewModel, SettingsFile settingsFile)
         {
             InitializeComponent();
+            SettingsFile = settingsFile;
             networkViewModel = viewModel.EntityViewModel as NetworkViewModel;
             DataContext = networkViewModel;
+        }
+
+        public void SaveSettings()
+        {
+            networkViewModel.SaveConfig();
         }
 
         private void AddExternalServer_Click(object sender, MouseButtonEventArgs e)

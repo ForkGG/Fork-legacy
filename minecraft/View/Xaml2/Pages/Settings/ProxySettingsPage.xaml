@@ -170,7 +170,7 @@
                                FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="95 0 5 0" />
                             <Grid Margin="0 5 0 0">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1.7*"/>
+                                    <ColumnDefinition Width="1.3*"/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel>
@@ -243,8 +243,13 @@
                                               Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 5 0 0"/>
                                     <CheckBox Content="Log Commands" IsChecked="{Binding Network.Config.log_commands}" 
                                               Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 5 0 0"/>
-                                    <CheckBox Content="Prevent Proxy Connections" IsChecked="{Binding Network.Config.prevent_proxy_connections}" 
-                                              Style="{DynamicResource TextCheckBox}" FontSize="15" Margin="20 5 0 0"/>
+                                    <CheckBox IsChecked="{Binding Network.Config.prevent_proxy_connections}" 
+                                              Style="{DynamicResource DefaultCheckBox}" FontSize="19" Margin="20 5 0 0" HorizontalAlignment="Left">
+                                        <StackPanel>
+                                            <TextBlock Text="Prevent Proxy"/>
+                                            <TextBlock Text="Connections"/>
+                                        </StackPanel>
+                                    </CheckBox>
                                 </StackPanel>
                             </Grid>
                         </StackPanel>
@@ -258,6 +263,8 @@
                             </Style>
                         </Border.Style>
                     </Border>
+                    
+                    
                     <!-- Permissions and Groups -->
                     <Border CornerRadius="10" Margin="5 5 10 5">
                         <StackPanel Background="Transparent" Margin="0 10 0 20" Width="720" HorizontalAlignment="Left">
@@ -278,7 +285,7 @@
                                 </StackPanel>
                                 <controls:IconButton Grid.Row="1" Margin="110 0 10 0" IconSource="pack://application:,,,/view/resources/images/icons/Add.png" IconHeight="18" IconWidth="20" Background="{DynamicResource buttonBgrDefault}"
                                                      Height="30" Width="30" HoverBackground="{DynamicResource buttonBgrGreen}" HoverIconSource="pack://application:,,,/view/resources/images/icons/AddW.png"
-                                                     Click="AddUser_Click"/>
+                                                     Click="AddGroup_Click"/>
                                 
                                 <StackPanel Grid.Column="1" HorizontalAlignment="Left">
                                     <TextBlock Text="Users" Foreground="{DynamicResource textHeader}"
@@ -357,8 +364,8 @@
             <Border CornerRadius="10" Background="#1F2234" Opacity="0.96"/>
             <StackPanel Margin="100 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Add new Permission-Group to " FontFamily="{DynamicResource Montserrat-Bold}" FontSize="23" Foreground="{DynamicResource textSelected}"/>
-                    <TextBlock Text="{Binding Network.Name}" FontFamily="{DynamicResource Montserrat-Bold}" FontSize="23" Foreground="{DynamicResource textLink}"/>
+                    <TextBlock Text="Add new Permission-Group to " FontFamily="{DynamicResource Montserrat-Bold}" FontSize="23"/>
+                    <TextBlock Text="{Binding Network.Name}" FontFamily="{DynamicResource Montserrat-Bold}" FontSize="23" Foreground="{DynamicResource tabSelected}"/>
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Center">
                     <StackPanel Orientation="Horizontal" Margin="0 30 0 0" HorizontalAlignment="Right">
@@ -383,8 +390,8 @@
             <Border CornerRadius="10" Background="#1F2234" Opacity="0.96"/>
             <StackPanel Margin="100 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Add new User to " FontFamily="{DynamicResource Montserrat-Bold}" FontSize="23" Foreground="{DynamicResource textSelected}"/>
-                    <TextBlock Text="{Binding Network.Name}" FontFamily="{DynamicResource Montserrat-Bold}" FontSize="23" Foreground="{DynamicResource textLink}"/>
+                    <TextBlock Text="Add new User to " FontFamily="{DynamicResource Montserrat-Bold}" FontSize="23"/>
+                    <TextBlock Text="{Binding Network.Name}" FontFamily="{DynamicResource Montserrat-Bold}" FontSize="23" Foreground="{DynamicResource tabSelected}"/>
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Center">
                     <StackPanel Orientation="Horizontal" Margin="0 30 0 0" HorizontalAlignment="Right">

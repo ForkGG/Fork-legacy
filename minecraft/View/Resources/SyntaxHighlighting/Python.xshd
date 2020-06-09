@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<SyntaxDefinition name ="Python" extensions = ".py" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+
+    <Color name="Comment" foreground="#808080" />        
+    <Color name="String" foreground="#6A8759" />    
+    <Color name="Keywords" foreground="#c75454" fontWeight="bold" />        
+    <Color name="NumAndTypes" foreground="#21b0b0" />
+    <Color name="FunctionCall" foreground="#38a1d4" />
+    <Color name="Words" foreground="#8fb1ba" />
+
+    <RuleSet>
+
+        <Span color="Comment">
+            <Begin>\#</Begin>
+        </Span>
+
+        <Span color="String" multiline="true">
+            <Begin>'</Begin>
+            <End>'</End>
+        </Span>
+
+        <Span color="String" multiline="true">
+            <Begin>"</Begin>
+            <End>"</End>
+        </Span>
+
+        <!-- Digits -->
+        <Rule color="NumAndTypes">
+            \b0[xX][0-9a-fA-F]+  # hex number
+            |
+            \b0[0-9]+ # octal number
+            |
+            (   \b\d+(\.[0-9]+)?   #number with optional floating point
+            |   \.[0-9]+           #or just starting with floating point
+            )
+            ([eE][+-]?[0-9]+)? # optional exponent
+        </Rule>
+
+        <Keywords color="NumAndTypes">
+            <Word>False</Word>
+            <Word>True</Word>
+            <Word>None</Word>
+        </Keywords>
+
+
+        <Keywords color="Keywords">
+            <Word>class</Word>
+            <Word>finally</Word>
+            <Word>is</Word>
+            <Word>return</Word>
+            <Word>continue</Word>
+            <Word>for</Word>
+            <Word>lambda</Word>
+            <Word>try</Word>
+            <Word>def</Word>
+            <Word>from</Word>
+            <Word>nonlocal</Word>
+            <Word>while</Word>
+            <Word>and</Word>
+            <Word>del</Word>
+            <Word>global</Word>
+            <Word>not</Word>
+            <Word>with</Word>
+            <Word>as</Word>
+            <Word>elif</Word>
+            <Word>if</Word>
+            <Word>or</Word>
+            <Word>yield</Word>
+            <Word>assert</Word>
+            <Word>else</Word>
+            <Word>import</Word>
+            <Word>pass</Word>
+            <Word>break</Word>
+            <Word>except</Word>
+            <Word>in</Word>
+            <Word>raise</Word>
+        </Keywords>
+
+        <Rule color="FunctionCall">
+            \b
+            [\d\w_]+  # an identifier
+            (?=\s*\() # followed by (
+        </Rule>
+
+        <Rule color="Words">\w+</Rule>
+
+    </RuleSet>
+
+</SyntaxDefinition>

@@ -69,5 +69,25 @@ namespace Fork.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        internal static byte[] Python {
+            get {
+                object obj = ResourceManager.GetObject("Python", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        internal static byte[] YAML {
+            get {
+                object obj = ResourceManager.GetObject("YAML", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

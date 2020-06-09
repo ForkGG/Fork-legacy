@@ -287,9 +287,11 @@
                         <StackPanel>
                             <Grid Width="250" Height="60">
                                 <Border x:Name="background" Background="Transparent" Width="250" CornerRadius="8 0 0 8" Margin="0 0 0 0"/>
-                                <DockPanel Panel.ZIndex="1" LastChildFill="True">
-                                    <TextBlock Margin="20 0 0 0" x:Name="title" Text="{Binding Name}" VerticalAlignment="Center" FontSize="16" FontFamily="{StaticResource Montserrat-SemiBold}" Foreground="{DynamicResource textUnselected}"/>
-                                </DockPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Margin="20 0 0 0" x:Name="title" Text="{Binding FileName}" VerticalAlignment="Center" FontSize="16" FontFamily="{StaticResource Montserrat-SemiBold}" Foreground="{DynamicResource textUnselected}"/>
+                                    <TextBlock Margin="0 0 0 0" x:Name="extension" Text="{Binding FileExtension}" VerticalAlignment="Center" FontSize="16" FontFamily="{StaticResource Montserrat-SemiBold}" 
+                                               Foreground="{DynamicResource textUnselected}" Opacity="0.35"/>
+                                </StackPanel>
                             </Grid>
                         </StackPanel>
                     </Border>
@@ -297,9 +299,11 @@
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="background" Property="Background" Value="{DynamicResource tabSelected}"/>
                             <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
+                            <Setter TargetName="extension" Property="Foreground" Value="{DynamicResource textSelected}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
+                            <Setter TargetName="extension" Property="Foreground" Value="{DynamicResource textSelected}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

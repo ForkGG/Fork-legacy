@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Net;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -15,7 +18,9 @@ using fork.Logic.CustomConsole;
 using fork.Logic.ImportLogic;
 using fork.Logic.Manager;
 using fork.Logic.Model;
+using fork.Logic.Model.Settings;
 using fork.Logic.Persistence;
+using Server = fork.Logic.Model.Server;
 
 namespace fork.ViewModel
 {
@@ -164,6 +169,24 @@ namespace fork.ViewModel
             CurrentStatus = ServerStatus.STOPPED;
             ConsoleOutList = new ObservableCollection<string>();
             ConsoleOutList.CollectionChanged += ConsoleOutChanged;
+            
+            new Thread(() =>
+            {
+                Thread.Sleep(1000);
+                Application.Current.Dispatcher?.Invoke(StartSettingsReader);
+            }).Start();
+        }
+
+        public void UpdateSettingsFiles(List<SettingsFile> files, bool initial = false)
+        {
+            if (initial)
+            {
+                SettingsViewModel.InitializeSettings(files);
+            }
+            else
+            {
+                SettingsViewModel.UpdateSettings(files);
+            }
         }
         
         public void TrackPerformance(Process p)
@@ -265,9 +288,14 @@ namespace fork.ViewModel
             raisePropertyChanged(nameof(ConsoleOutList));
         }
         
+        private void StartSettingsReader()
+        {
+            SettingsReader settingsReader = new SettingsReader(this);
+            ApplicationManager.Instance.SettingsReaders.Add(settingsReader);
+        }
         
-        
-        
+
+
 
         [NotifyPropertyChangedInvocator]
         protected void raisePropertyChanged([CallerMemberName] string propertyName = null)

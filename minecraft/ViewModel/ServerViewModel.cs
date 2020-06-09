@@ -92,7 +92,7 @@ namespace fork.ViewModel
             Application.Current.Dispatcher.Invoke(new Action(() => EntityPage = new ServerPage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => ConsolePage = new ConsolePage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => WorldsPage = new WorldsPage(this)));
-            Application.Current.Dispatcher.Invoke(new Action(() => SettingsViewModel = new SettingsViewModel(this, SettingsReader.GetSettingsFiles(this))));
+            Application.Current.Dispatcher.Invoke(new Action(() => SettingsViewModel = new SettingsViewModel(this)));
 
             PlayerList.CollectionChanged += PlayerListChanged;
             WhiteList.CollectionChanged += WhiteListChanged;
@@ -183,11 +183,19 @@ namespace fork.ViewModel
 
         public void UpdateSettings()
         {
-            UpdateAddressInfo();
+            new Thread(() =>
+            {
+                UpdateAddressInfo();
+                SettingsViewModel.SaveChanges();
+                EntitySerializer.Instance.StoreEntities(ServerManager.Instance.Entities);
+            }).Start();
+        }
+
+        public void SaveProperties()
+        {
             new Thread(() =>
             {
                 new FileWriter().WriteServerSettings(Path.Combine(App.ApplicationPath,Server.Name), Server.ServerSettings.SettingsDictionary);
-                EntitySerializer.Instance.StoreEntities(ServerManager.Instance.Entities);
             }).Start();
         }
 
