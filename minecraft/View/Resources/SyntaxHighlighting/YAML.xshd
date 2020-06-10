@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0"?>
 <SyntaxDefinition name ="Python" extensions = ".py" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
 
-    <Color name="Comment" foreground="#808080" />                
+    <Color name="Comment" foreground="#565B7A" />                
     <Color name="Boolean" foreground="#5EED80" />
-    <Color name="Words" foreground="Red" /> <!--#8fb1ba-->
+    <Color name="Words" foreground="#cc7000" /> <!--#8fb1ba-->
 	<Color name="Key" foreground="#8080ff"/>
 	<Color name="Colon" foreground="#ffffff"/>
 	<Color name="Number" foreground="Yellow"/>
@@ -34,7 +34,7 @@
         </Keywords>
 
         <Rule color="Words">
-			[\w'&amp;.\-,!$0-9\/@=?\\{}"]+
+			[\w'&amp;.\-,!$0-9\/@=?\\{}";]+
 		</Rule>
 
     </RuleSet>

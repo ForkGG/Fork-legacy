@@ -48,7 +48,9 @@ namespace Fork.View.Xaml2.Pages.Settings
             //text.Options.ShowSpaces = true;
             //text.Options.ShowColumnRuler = true;
             //text.Options.ColumnRulerPosition = 1;
-            text.TextArea.TextView.LinkTextForegroundBrush = new SolidColorBrush(Colors.Green);
+            text.TextArea.TextView.LinkTextForegroundBrush =
+                (SolidColorBrush) new BrushConverter().ConvertFrom("#3779C3");
+            
         }
 
         public void ReadText()

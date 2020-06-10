@@ -90,9 +90,9 @@
     <Reference Include="GongSolutions.WPF.DragDrop, Version=2.0.0.0, Culture=neutral, PublicKeyToken=91f1945125b7a587, processorArchitecture=MSIL">
       <HintPath>packages\gong-wpf-dragdrop.2.2.0\lib\net47\GongSolutions.WPF.DragDrop.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.AvalonEdit, Version=6.0.1.278, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+    <Reference Include="ICSharpCode.AvalonEdit, Version=6.1.0.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\AvalonEdit\ICSharpCode.AvalonEdit\bin\Release\net45\ICSharpCode.AvalonEdit.dll</HintPath>
+      <HintPath>packages\AvalonEdit\net45\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -411,7 +411,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Python.xshd.bmp" />
     <Content Include="View\Resources\SyntaxHighlighting\Python.xshd" />
     <Resource Include="View\Resources\images\Icons\Add.png" />
     <Resource Include="View\Resources\images\Icons\AddW.png" />
@@ -473,6 +472,12 @@
     <Resource Include="icon.ico" />
     <Content Include="View\Resources\images\DeafultHead.png" />
     <Resource Include="View\Resources\images\ImportServer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Fody.5.0.6\build\Fody.targets" Condition="Exists('packages\Fody.5.0.6\build\Fody.targets')" />
