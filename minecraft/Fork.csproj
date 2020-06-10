@@ -194,6 +194,7 @@
     <Compile Include="View\Resources\dictionaries\WindowStyles.xaml.cs">
       <DependentUpon>WindowStyles.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Resources\Folding\TabFoldingStrategy.cs" />
     <Compile Include="View\Resources\Helper\BindingProxy.cs" />
     <Compile Include="View\Resources\ViewBase\ServerListView.cs" />
     <Compile Include="View\Xaml2\Controls\IconButton.cs" />

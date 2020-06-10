@@ -17,8 +17,10 @@ using System.Windows.Shapes;
 using System.Xml;
 using fork;
 using fork.Logic.Model.Settings;
+using Fork.View.Resources.Folding;
 using fork.ViewModel;
 using ICSharpCode.AvalonEdit.Document;
+using ICSharpCode.AvalonEdit.Folding;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using Path = System.IO.Path;
@@ -49,7 +51,10 @@ namespace Fork.View.Xaml2.Pages.Settings
             //text.Options.ShowColumnRuler = true;
             //text.Options.ColumnRulerPosition = 1;
             text.TextArea.TextView.LinkTextForegroundBrush =
-                (SolidColorBrush) new BrushConverter().ConvertFrom("#3779C3");
+                (SolidColorBrush) new BrushConverter().ConvertFrom("#79CF93 ");
+            
+            FoldingManager foldingManager = new FoldingManager(text.TextArea.Document);
+            XmlFoldingStrategy tabFoldingStrategy = new XmlFoldingStrategy();
             
         }
 

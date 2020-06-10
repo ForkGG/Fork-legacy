@@ -2,11 +2,11 @@
 <SyntaxDefinition name ="Python" extensions = ".py" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
 
     <Color name="Comment" foreground="#565B7A" />                
-    <Color name="Boolean" foreground="#5EED80" />
-    <Color name="Words" foreground="#cc7000" /> <!--#8fb1ba-->
-	<Color name="Key" foreground="#8080ff"/>
-	<Color name="Colon" foreground="#ffffff"/>
-	<Color name="Number" foreground="Yellow"/>
+    <Color name="Boolean" foreground="#A576D3" />
+    <Color name="Words" foreground="#E19C79" /> <!--#8fb1ba-->
+	<Color name="Key" foreground="#6A6BD3"/>
+	<Color name="Colon" foreground="#B1B2E8"/>
+	<Color name="Number" foreground="#79CF93"/>
 
     <RuleSet>
 

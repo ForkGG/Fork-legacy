@@ -15,7 +15,12 @@ namespace fork.View.Xaml.Converter
             {
                 throw new InvalidOperationException("Target of conversion must be string");
             }
-            List<string> strings = new List<string>((ObservableCollection<string>)value);
+
+            List<string> strings;
+            lock (value)
+            {
+                strings = new List<string>((ObservableCollection<string>)value);
+            }
             string returnString = String.Join("\n",strings);
 
             return returnString;
