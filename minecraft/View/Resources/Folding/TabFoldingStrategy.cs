@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using ICSharpCode.AvalonEdit.Document;
@@ -8,12 +9,22 @@ namespace Fork.View.Resources.Folding
     public class TabFoldingStrategy
     {
         // How many spaces == one tab
-        private const int SpacesInTab = 4;
+        private const int SpacesInTab = 2;
 
         /// <summary>
         /// Creates a new TabFoldingStrategy.
         /// </summary>
         public TabFoldingStrategy() {
+        }
+        
+        /// <summary>
+        /// Create <see cref="NewFolding"/>s for the specified document and updates the folding manager with them.
+        /// </summary>
+        public void UpdateFoldings(FoldingManager manager, TextDocument document)
+        {
+            int firstErrorOffset;
+            IEnumerable<NewFolding> foldings = CreateNewFoldings(document, out firstErrorOffset);
+            manager.UpdateFoldings(foldings, firstErrorOffset);
         }
 
         /// <summary>
@@ -28,117 +39,70 @@ namespace Fork.View.Resources.Folding
         /// <summary>
         /// Create <see cref="NewFolding"/>s for the specified document.
         /// </summary>
-        public IEnumerable<NewFolding> CreateNewFoldingsByLine(ITextSource document)
+        public IEnumerable<NewFolding> CreateNewFoldingsByLine(TextDocument document)
         {
             List<NewFolding> newFoldings = new List<NewFolding>();
-
-            if (document == null || (document as TextDocument).LineCount <= 1)
+            if (document == null || document.LineCount <= 1)
             {
                 return newFoldings;
             }
-
-            //Can keep track of offset ourself and from testing it seems to be accurate
-            int offsetTracker = 0;
-
-            // Keep track of start points since things nest
-            Stack<int> startOffsets = new Stack<int>();
-
-            StringBuilder lineBuffer = new StringBuilder();
-
-
-            foreach (DocumentLine line in (document as TextDocument).Lines)
-            {
-                if (offsetTracker >= document.TextLength)
-                {
-                    break;
-                }
-
-                lineBuffer.Clear();
-
-
-                // First task is to get the line and figure out the spacing in front of it
-                int spaceCounter = 0;
-                bool foundText = false;
-                bool foundColon = false;
-                //for (int i = 0; i < line.Length; i++)
-                int i = 0;
-                //TODO buffer the characters so you can have the line contents on the stack too for the folding name (display text)
-                while (i < line.Length && !(foundText && foundColon))
-                {
-                    char c = document.GetCharAt(offsetTracker + i);
-
-                    switch (c)
-                    {
-                        case ' ': // spaces count as one
-                            if (!foundText) {
-                                spaceCounter++;
-                            }
-                            break;
-                        case '\t': // Tabs count as N
-                            if (!foundText) {
-                                spaceCounter += SpacesInTab;
-                            }
-                            break;
-                        case ':': // Tabs count as N
-                            foundColon = true;
-                            break;
-                        default: // anything else means we encountered not spaces or tabs, so keep making the line but stop counting
-                            foundText = true;
-                            break;
-                    }
-                    i++;
-                }
-
-                // before we continue, we need to make sure its a correct multiple
-                int remainder = spaceCounter % SpacesInTab;
-                if (remainder > 0)
-                {
-                    // Some tabbing isn't correct. ignore this line for folding purposes.
-                    // This may break all foldings below that, but it's a complex problem to address.
-                    continue;
-                }
-
-                // Now we need to figure out if this line is a new folding by checking its tabing
-                // relative to the current stack count. Convert into virtual tabs and compare to stack level
-                int numTabs = spaceCounter / SpacesInTab; // we know this will be an int because of the above check
-                if (numTabs >= startOffsets.Count && foundText && foundColon)
-                {
-                    // we are starting a new folding
-                    startOffsets.Push(offsetTracker);
-
-                }
-                else // numtabs < offsets
-                {
-                    // we know that this is the end of a folding. It could be the end of multiple foldings. So pop until it matches.
-                    while (numTabs < startOffsets.Count)
-                    {
-                        int foldingStart = startOffsets.Pop();
-                        NewFolding tempFolding = new NewFolding();
-                        //tempFolding.Name = < could add logic here, possibly by tracking key words when starting the folding, to control what is shown when it's folded >
-                        tempFolding.StartOffset = foldingStart;
-                        tempFolding.EndOffset = offsetTracker - 2; 
-                        newFoldings.Add(tempFolding);
-                    }
-                }
-
-
-                // Increment tracker. Much faster than getting it from the line
-                offsetTracker += line.TotalLength;
-            }
-
-            // Complete last foldings
-            while (startOffsets.Count > 0)
-            {
-                int foldingStart = startOffsets.Pop();
-                NewFolding tempFolding = new NewFolding();
-                //tempFolding.Name = < could add logic here, possibly by tracking key words when starting the folding, to control what is shown when it's folded >
-                tempFolding.StartOffset = foldingStart;
-                tempFolding.EndOffset = offsetTracker;
-                newFoldings.Add(tempFolding);
-            }
-
+            
+            ActualDocument actualDocument = ActualDocument.BuildActualDocument(document);
+            newFoldings.AddRange(CreateFoldings(actualDocument.Lines.First, new Stack<NewFolding>()));
+            
             newFoldings.Sort((a, b) => (a.StartOffset.CompareTo(b.StartOffset)));
             return newFoldings;
+        }
+
+        private List<NewFolding> CreateFoldings(LinkedListNode<ActualDocument.ActualLine> linkedLine, Stack<NewFolding> offsetStack)
+        {
+            List<NewFolding> foldings = new List<NewFolding>();
+
+            if (linkedLine.Next == null)
+            {
+                while (offsetStack.Count > 0)
+                {
+                    NewFolding folding = offsetStack.Pop();
+                    folding.EndOffset = linkedLine.Value.DocumentLine.EndOffset;
+                    foldings.Add(folding);
+                }
+
+                return foldings;
+            }
+            
+            int thisLineOffset = linkedLine.Value.FrontOffset;
+            int nextLineOffset = linkedLine.Next.Value.FrontOffset;
+            
+            //This is the first line of a folding
+            if (nextLineOffset > thisLineOffset)
+            {
+                int documentOffset = linkedLine.Value.DocumentLine.Offset;
+                NewFolding folding = new NewFolding();
+                folding.Name = linkedLine.Value.Line;
+                folding.StartOffset = documentOffset;
+                offsetStack.Push(folding);
+            }
+            
+            //This is the last line of a folding
+            while (thisLineOffset > nextLineOffset)
+            {
+                if (offsetStack.Count > 0)
+                {
+                    NewFolding folding = offsetStack.Pop();
+                    folding.EndOffset = linkedLine.Value.DocumentLine.EndOffset;
+                    foldings.Add(folding);
+                }
+
+                thisLineOffset -= 2;
+            }
+
+            if (linkedLine.Next != null)
+            {
+                foldings.AddRange(CreateFoldings(linkedLine.Next, offsetStack));
+            }
+
+
+            return foldings;
         }
     }
 }

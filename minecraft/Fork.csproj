@@ -194,6 +194,7 @@
     <Compile Include="View\Resources\dictionaries\WindowStyles.xaml.cs">
       <DependentUpon>WindowStyles.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Resources\Folding\ActualDocument.cs" />
     <Compile Include="View\Resources\Folding\TabFoldingStrategy.cs" />
     <Compile Include="View\Resources\Helper\BindingProxy.cs" />
     <Compile Include="View\Resources\ViewBase\ServerListView.cs" />
@@ -247,6 +248,10 @@
     <Compile Include="View\Xaml\ValidationRules\PortValidationRule.cs" />
     <Compile Include="View\Xaml\ValidationRules\PositiveLongValidationRule.cs" />
     <Compile Include="View\Xaml\ValidationRules\TimeValidationRule.cs" />
+    <Page Include="View\Resources\dictionaries\AvalonStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\Resources\dictionaries\CheckBoxStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

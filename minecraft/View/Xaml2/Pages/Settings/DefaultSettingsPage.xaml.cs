@@ -16,7 +16,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml;
 using fork;
+using fork.Logic;
 using fork.Logic.Model.Settings;
+using fork.Logic.RoleManagement;
 using Fork.View.Resources.Folding;
 using fork.ViewModel;
 using ICSharpCode.AvalonEdit.Document;
@@ -29,6 +31,9 @@ namespace Fork.View.Xaml2.Pages.Settings
 {
     public partial class DefaultSettingsPage : Page, ISettingsPage
     {
+        private FoldingManager foldingManager;
+        private TabFoldingStrategy tabFoldingStrategy;
+        
         public SettingsFile SettingsFile { get; set; }
         public string FileName => Path.GetFileNameWithoutExtension(SettingsFile.FileInfo.FullName);
         public string FileExtension => Path.GetExtension(SettingsFile.FileInfo.FullName);
@@ -51,11 +56,13 @@ namespace Fork.View.Xaml2.Pages.Settings
             //text.Options.ShowColumnRuler = true;
             //text.Options.ColumnRulerPosition = 1;
             text.TextArea.TextView.LinkTextForegroundBrush =
-                (SolidColorBrush) new BrushConverter().ConvertFrom("#79CF93 ");
+                (SolidColorBrush) new BrushConverter().ConvertFrom("#79CF93");
             
-            FoldingManager foldingManager = new FoldingManager(text.TextArea.Document);
-            XmlFoldingStrategy tabFoldingStrategy = new XmlFoldingStrategy();
+            foldingManager = FoldingManager.Install(text.TextArea);
+            tabFoldingStrategy = new TabFoldingStrategy();
+            UpdateFoldings(foldingManager, tabFoldingStrategy);
             
+            text.TextChanged += TextChanged;
         }
 
         public void ReadText()
@@ -73,6 +80,16 @@ namespace Fork.View.Xaml2.Pages.Settings
                 SettingsFile.Text = newText;
                 SettingsFile.SaveText();
             }
+        }
+
+        private void UpdateFoldings(FoldingManager foldingManager, TabFoldingStrategy tabFoldingStrategy)
+        {
+            tabFoldingStrategy.UpdateFoldings(foldingManager, text.TextArea.Document);
+        }
+
+        private void TextChanged(object sender, EventArgs e)
+        {
+            UpdateFoldings(foldingManager, tabFoldingStrategy);
         }
     }
 }
