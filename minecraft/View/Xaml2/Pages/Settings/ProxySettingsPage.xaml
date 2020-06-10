@@ -92,8 +92,8 @@
                                               Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 20 0 0"/>
                                     <CheckBox Content="Force Default Server" IsChecked="{Binding Network.Config.listeners[0].force_default_server}" 
                                               Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 10 0 0"/>
-                                    <CheckBox Content="Proxy Protocoll" IsChecked="{Binding Network.Config.listeners[0].proxy_protocol}" 
-                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 10 0 0"/>
+                                    <CheckBox Content="Proxy Protocol" IsChecked="{Binding Network.Config.listeners[0].proxy_protocol}" 
+                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 10 0 0" Checked="CheckBox_Checked"/>
                                     <CheckBox Content="Bind Local Address" IsChecked="{Binding Network.Config.listeners[0].bind_local_address}" 
                                               Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 10 0 0"/>
                                     <CheckBox Content="Enable Query" IsChecked="{Binding Network.Config.listeners[0].query_enabled}" 

@@ -145,7 +145,8 @@ namespace fork.ViewModel
                 if (!SettingsPages[ptr].Equals(sorted[ptr]))
                 {
                     ISettingsPage t = SettingsPages[ptr];
-                    SettingsPages.Move(ptr,sorted.IndexOf(t));
+                    int ptr1 = ptr;
+                    Application.Current.Dispatcher?.Invoke(()=>SettingsPages.Move(ptr1,sorted.IndexOf(t)));
                 }
                 else
                 {

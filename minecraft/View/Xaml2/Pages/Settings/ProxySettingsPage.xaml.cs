@@ -97,5 +97,10 @@ namespace Fork.View.Xaml2.Pages.Settings
             networkViewModel.AddGroup(group);
             AddUserCancel_Click(sender, e);
         }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
