@@ -100,7 +100,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="200"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock  Text="{Binding ServerTitle}" HorizontalAlignment="Center" FontSize="30" FontFamily="{DynamicResource Montserrat-Bold}" Foreground="{DynamicResource textSelected}"/>
+                <TextBlock  Text="{Binding ServerTitle}" HorizontalAlignment="Center" FontSize="30" FontFamily="{DynamicResource Montserrat-Bold}" Foreground="{DynamicResource textTitle}"/>
             </Grid>
 
             <Grid>

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.AccessControl;
+using System.Threading;
 using fork.Annotations;
 using fork.Logic.Model;
 using fork.Logic.Model.Settings;
@@ -35,6 +36,17 @@ namespace fork.Logic.Persistence.YMLReaders
 
         public void WriteSettings(BungeeSettings settings)
         {
+            int i = 0;
+            while (!FileWriter.IsFileWritable(ConfigYML))
+            {
+                if (i>60*5)
+                {
+                    Console.WriteLine("File "+ConfigYML.FullName+" was not writable for 5 minutes, aborting...");
+                    return;
+                }
+                Thread.Sleep(1000);
+                i++;
+            }
             using (StreamWriter streamWriter = new StreamWriter(ConfigYML.Create()))
             {
                 Serializer serializer = new Serializer();

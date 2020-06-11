@@ -76,5 +76,20 @@ namespace fork.Logic.Persistence
                 }
             }
         }
+
+        public static bool IsFileWritable(FileInfo file)
+        {
+            // If the file can be opened for exclusive access it means that the file
+            // is no longer locked by another process.
+            try
+            {
+                using (FileStream outputStream = file.OpenWrite())
+                    return outputStream.CanWrite;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

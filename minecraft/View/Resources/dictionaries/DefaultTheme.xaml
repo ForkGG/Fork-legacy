@@ -34,6 +34,7 @@
     <!-- Text Colors -->
     <SolidColorBrush x:Key="textDefault" Color="#9DA7E2" />
     <SolidColorBrush x:Key="textHeader" Color="#8FB2BC" />
+    <SolidColorBrush x:Key="textTitle" Color="#565B7A" />
     <SolidColorBrush x:Key="textUnselected" Color="#565B7A" />
     <SolidColorBrush x:Key="textSelected" Color="#F9EFD7" />
     <SolidColorBrush x:Key="textLink" Color="#5E93ED" />
