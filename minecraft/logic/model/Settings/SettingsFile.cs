@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using fork.Logic.Manager;
+using fork.Logic.Persistence;
 using ICSharpCode.AvalonEdit.Utils;
 using FileReader = fork.Logic.Persistence.FileReader;
 
@@ -14,6 +15,8 @@ namespace fork.Logic.Model.Settings
         {
             Vanilla, Bungee, Undefined
         }
+        
+        private static object fileLock = new object();
         
         public FileInfo FileInfo { get; set; }
         public int NameID { get; }
@@ -54,13 +57,31 @@ namespace fork.Logic.Model.Settings
                         return;
                     }
                 }
-                Text = File.ReadAllText(FileInfo.FullName);
+                lock (fileLock)
+                {
+                    Text = File.ReadAllText(FileInfo.FullName);
+                }
             }).Start();
         }
 
         public void SaveText()
         {
-            File.WriteAllText(FileInfo.FullName,Text);
+            new Thread(() =>
+            {
+                while (!FileWriter.IsFileWritable(FileInfo))
+                {
+                    Thread.Sleep(500);
+                    if (ApplicationManager.Instance.HasExited)
+                    {
+                        return;
+                    }
+                }
+
+                lock (fileLock)
+                {
+                    File.WriteAllText(FileInfo.FullName,Text);
+                }
+            }).Start();
         }
 
         private int GetNameID(string filename)
