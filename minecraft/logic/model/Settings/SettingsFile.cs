@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading;
 using fork.Logic.Manager;
 using fork.Logic.Persistence;
+using fork.ViewModel;
 using ICSharpCode.AvalonEdit.Utils;
 using FileReader = fork.Logic.Persistence.FileReader;
 
@@ -23,7 +24,13 @@ namespace fork.Logic.Model.Settings
         public string Text { get; set; }
         public SettingsType Type { get; }
 
-        
+        //Constructor for Settings without file
+        public SettingsFile(string name)
+        {
+            Type = SettingsType.Undefined;
+            NameID = GetNameID(name);
+            FileInfo = new FileInfo(Path.Combine(App.ApplicationPath,"persistence","entities.json"));
+        }
         public SettingsFile(FileInfo fileInfo)
         {
             FileInfo = fileInfo;
@@ -88,6 +95,8 @@ namespace fork.Logic.Model.Settings
         {
             switch (filename)
             {
+                case "Settings":
+                    return -1;
                 case "server.properties":
                     return 0;
                 case "config.yml":

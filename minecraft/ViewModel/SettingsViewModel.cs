@@ -37,8 +37,8 @@ namespace fork.ViewModel
 
         //Pages
         public SettingsPage SettingsPage { get; }
-        //public VanillaSettingsPage VanillaSettingsPage { get; }
-        //public ProxySettingsPage ProxySettingsPage { get; }
+        public ISettingsPage ForkEntitySettingsPage { get; }
+        
         public ObservableCollection<ISettingsPage> SettingsPages { get; set; } = new ObservableCollection<ISettingsPage>();
 
         #endregion
@@ -48,7 +48,7 @@ namespace fork.ViewModel
             EntityViewModel = serverViewModel;
             Entity = serverViewModel.Entity;
             SettingsPage = new SettingsPage(this);
-            //VanillaSettingsPage = new VanillaSettingsPage(this);
+            ForkEntitySettingsPage = new ForkServerSettingsPage(this);
         }
 
         public SettingsViewModel(NetworkViewModel networkViewModel)
@@ -56,12 +56,13 @@ namespace fork.ViewModel
             EntityViewModel = networkViewModel;
             Entity = networkViewModel.Network;
             SettingsPage = new SettingsPage(this);
-            //ProxySettingsPage = new ProxySettingsPage(this);
+            ForkEntitySettingsPage = new ForkNetworkSettingsPage(this);
         }
 
         public void InitializeSettings(List<SettingsFile> settingsFiles)
         {
             SettingsPages = new ObservableCollection<ISettingsPage>();
+            SettingsPages.Add(ForkEntitySettingsPage);
             List<SettingsFile> orderedList = settingsFiles.OrderBy(x => x.NameID).ThenByDescending(x => x.FileInfo.Name).ToList();
             foreach (SettingsFile settingsFile in orderedList)
             {
@@ -90,11 +91,14 @@ namespace fork.ViewModel
                 bool add = true;
                 foreach (ISettingsPage setting in SettingsPages)
                 {
+                    //Edge case for Settings without file
+                    if (settingsFile == null || setting.SettingsFile == null) continue;
                     if (settingsFile.FileInfo.FullName.Equals(setting.SettingsFile.FileInfo.FullName))
                     {
                         add = false;
                         break;
                     }
+
                 }
 
                 if (add)
@@ -120,6 +124,8 @@ namespace fork.ViewModel
                 int removeIndex = 0;
                 foreach (ISettingsPage setting in SettingsPages)
                 {
+                    //Edge case for Settings without file
+                    if (setting.SettingsFile == null) continue;
                     if (settingsFile.FileInfo.FullName.Equals(setting.SettingsFile.FileInfo.FullName))
                     {
                         remove = false;

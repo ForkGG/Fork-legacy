@@ -1,0 +1,125 @@
+﻿<Page x:Class="Fork.View.Xaml2.Pages.Settings.ForkNetworkSettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Fork.View.Xaml2.Pages.Settings"
+      xmlns:controls="clr-namespace:fork.View.Xaml2.Controls"
+      mc:Ignorable="d" 
+      d:DesignHeight="1000" d:DesignWidth="800"
+      Title="ForkNetworkSettingsPage">
+
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+
+            <ScrollViewer Margin="10 0 5 10" Style="{DynamicResource SettingsScrollViewer}">
+                <controls:StretchyWrapPanel>
+                    <!-- Java and Networking -->
+                    <Border CornerRadius="10" Margin="5 5 10 5">
+                        <StackPanel Background="Transparent" Margin="0 10" Width="720" HorizontalAlignment="Left">
+                            <TextBlock Text="Java and Networking" Foreground="{DynamicResource textHeader}"
+                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="95 0 5 0" />
+                            <StackPanel Margin="110 10 50 10" HorizontalAlignment="Left">                                
+                                <Grid Margin="0 20 0 0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Text="Max Ram" TextAlignment="Right"
+                                   Style="{DynamicResource CreateServerTextBlock}" Margin="0 5 10 5" />
+                                    <Border Grid.Column="1" CornerRadius="4" Width="100" Height="26"
+                                Background="{DynamicResource buttonBgrDefault}" Margin="0 5 0 5">
+                                        <TextBox Margin="5 0" Text="{Binding Network.JavaSettings.MaxRam}"
+                                     Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                     Foreground="{DynamicResource backgroundDark}"
+                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                     FontSize="17" Height="20" />
+                                    </Border>
+                                    <TextBlock Grid.Column="2" Text=" MB"
+                                   Style="{DynamicResource CreateServerTextBlock}" />
+
+                                    <TextBlock Grid.Row="1" Text="Min Ram" TextAlignment="Right"
+                                   Style="{DynamicResource CreateServerTextBlock}" Margin="0 5 10 5" />
+                                    <Border Grid.Row="1" Grid.Column="1" CornerRadius="4" Width="100" Height="26"
+                                Background="{DynamicResource buttonBgrDefault}" Margin="0 5 0 5">
+                                        <TextBox Margin="5 0" Text="{Binding Network.JavaSettings.MinRam}"
+                                     Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                     Foreground="{DynamicResource backgroundDark}"
+                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                     FontSize="17" Height="20" />
+                                    </Border>
+                                    <TextBlock Grid.Row="1" Grid.Column="2" Text=" MB"
+                                   Style="{DynamicResource CreateServerTextBlock}" />
+                                </Grid>
+                                <StackPanel Margin="0 20 0 0">
+                                    <TextBlock Grid.Row="3" Text="Java Executable Path"
+                                   Style="{DynamicResource CreateServerTextBlock}"
+                                   Margin="0 5 10 5" />
+                                    <Border Grid.Row="3" Grid.Column="1" CornerRadius="4" Width="400" Height="26"
+                                Background="{DynamicResource buttonBgrDefault}" Margin="0 5 0 5">
+                                        <TextBox Margin="5 0" Text="{Binding Network.JavaSettings.JavaPath}"
+                                     Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                     Foreground="{DynamicResource backgroundDark}"
+                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                     FontSize="17" Height="20" />
+                                    </Border>
+                                    <TextBlock Grid.Row="3" Text="Custom Startup Parameters"
+                                   Style="{DynamicResource CreateServerTextBlock}" Margin="0 15 10 5" />
+                                    <Border Grid.Row="3" Grid.Column="1" CornerRadius="4" Width="400" Height="26"
+                                Background="{DynamicResource buttonBgrDefault}" Margin="0 5 0 5">
+                                        <TextBox Margin="5 0" Text="{Binding Network.JavaSettings.StartupParameters}"
+                                     Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                     Foreground="{DynamicResource backgroundDark}"
+                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                     FontSize="17" Height="20" />
+                                    </Border>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+
+                    <!-- Advanced -->
+                    <Border CornerRadius="10" Margin="5 5 10 5">
+                        <StackPanel Background="Transparent" Margin="0 10" Width="720" HorizontalAlignment="Left">
+                            <TextBlock Text="Advanced" Foreground="{DynamicResource textHeader}"
+                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="95 0 5 0" />
+                            <StackPanel Margin="110 10 50 10" HorizontalAlignment="Left">
+                                <CheckBox Content="Start/Stop Servers with the Network" Style="{DynamicResource TextCheckBox}" FontSize="18" IsChecked="{Binding Network.SyncServers}"/>
+                            </StackPanel> 
+                        </StackPanel>
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+                </controls:StretchyWrapPanel>
+            </ScrollViewer>
+
+            <TextBlock Grid.Row="1" Text="All Changes will be saved automatically" HorizontalAlignment="Center" />
+        </Grid>
+    </Grid>
+</Page>

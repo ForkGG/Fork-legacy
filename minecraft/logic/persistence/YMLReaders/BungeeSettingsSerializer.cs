@@ -14,6 +14,8 @@ namespace fork.Logic.Persistence.YMLReaders
 {
     public class BungeeSettingsSerializer
     {
+        private object fileLock = new object();
+        
         public FileInfo ConfigYML { get; }
 
         public BungeeSettingsSerializer(FileInfo configYml)
@@ -27,10 +29,14 @@ namespace fork.Logic.Persistence.YMLReaders
             {
                 InitializeBungeeConfig();
             }
-            using (StreamReader streamReader = new StreamReader(ConfigYML.OpenRead()))
+
+            lock (fileLock)
             {
-                var deserializer = new DeserializerBuilder().IgnoreUnmatchedProperties().Build();
-                return deserializer.Deserialize<BungeeSettings>(streamReader);
+                using (StreamReader streamReader = new StreamReader(ConfigYML.OpenRead()))
+                {
+                    var deserializer = new DeserializerBuilder().IgnoreUnmatchedProperties().Build();
+                    return deserializer.Deserialize<BungeeSettings>(streamReader);
+                }
             }
         }
 
@@ -47,10 +53,14 @@ namespace fork.Logic.Persistence.YMLReaders
                 Thread.Sleep(1000);
                 i++;
             }
-            using (StreamWriter streamWriter = new StreamWriter(ConfigYML.Create()))
+
+            lock (fileLock)
             {
-                Serializer serializer = new Serializer();
-                serializer.Serialize(streamWriter, settings);
+                using (StreamWriter streamWriter = new StreamWriter(ConfigYML.Create()))
+                {
+                    Serializer serializer = new Serializer();
+                    serializer.Serialize(streamWriter, settings);
+                }
             }
         }
 

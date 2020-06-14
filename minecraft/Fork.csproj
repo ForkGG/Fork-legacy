@@ -35,7 +35,7 @@
     <PublisherName>Christian Kern</PublisherName>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>0.5.1.0</ApplicationVersion>
+    <ApplicationVersion>0.7.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -226,6 +226,12 @@
     <Compile Include="View\Xaml2\Pages\Settings\DefaultSettingsPage.xaml.cs">
       <DependentUpon>DefaultSettingsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Xaml2\Pages\Settings\ForkNetworkSettingsPage.xaml.cs">
+      <DependentUpon>ForkNetworkSettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Xaml2\Pages\Settings\ForkServerSettingsPage.xaml.cs">
+      <DependentUpon>ForkServerSettingsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Xaml2\Pages\Settings\ISettingsPage.cs" />
     <Compile Include="View\Xaml2\Pages\Settings\ProxySettingsPage.xaml.cs">
       <DependentUpon>ProxySettingsPage.xaml</DependentUpon>
@@ -330,6 +336,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Xaml2\Pages\Settings\DefaultSettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Xaml2\Pages\Settings\ForkNetworkSettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Xaml2\Pages\Settings\ForkServerSettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

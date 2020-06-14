@@ -18,6 +18,7 @@ namespace fork.Logic.Model.ProxyModels
         public string Name { get; set; }
         public ServerVersion.VersionType ProxyType { get; set; }
         public JavaSettings JavaSettings { get; set; }
+        public bool SyncServers { get; set; } = false;
 
         public bool Initialized { get; set; } = false;
         public ServerVersion Version { get; set; }

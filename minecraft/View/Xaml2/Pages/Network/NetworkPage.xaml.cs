@@ -48,7 +48,7 @@ namespace Fork.View.Xaml2.Pages.Network
             SelectTerminal(this,e);
             if (viewModel.CurrentStatus == ServerStatus.STOPPED)
             {
-                await ServerManager.Instance.StartNetworkAsync(viewModel);
+                await ServerManager.Instance.StartNetworkAsync(viewModel, viewModel.Network.SyncServers);
             }
 
             else if (viewModel.CurrentStatus == ServerStatus.STARTING)
@@ -58,7 +58,7 @@ namespace Fork.View.Xaml2.Pages.Network
 
             else if (viewModel.CurrentStatus == ServerStatus.RUNNING)
             {
-                await ServerManager.Instance.StopNetworkAsync(viewModel);
+                await ServerManager.Instance.StopNetworkAsync(viewModel, viewModel.Network.SyncServers);
             }
             StartStopButton.IsEnabled = true;
         }
@@ -118,7 +118,7 @@ namespace Fork.View.Xaml2.Pages.Network
         {
             TerminalTab.IsChecked = true;
             SelectTerminal(this, e);
-            ServerManager.Instance.RestartNetworkAsync(viewModel);
+            ServerManager.Instance.RestartNetworkAsync(viewModel, viewModel.Network.SyncServers);
         }
     }
 }

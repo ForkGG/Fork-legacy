@@ -13,7 +13,7 @@
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="60"/>
+                <RowDefinition Height="0"/><!-- 60 -->
                 <RowDefinition/>
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
@@ -150,7 +150,8 @@
                                         </Style>
                                     </ListViewItem.Style>
                                 </ListViewItem>
-                            </ListView>                            
+                            </ListView>
+                            <TextBlock Margin="120 10 0 0" Text="The order of the servers represents their join priority (lobby server should be first)"/>
                         </StackPanel>
                         <Border.Style>
                             <Style TargetType="Border">
