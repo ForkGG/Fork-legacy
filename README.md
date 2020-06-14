@@ -37,7 +37,7 @@ This project wouldn't be possible without:
 - [SCPhantom / Jakob](https://github.com/SCPhantom/) for inspiration and coding advice
 
 Mentionable projects:
-- [PaperMC](https://papermc.io/) an amazing minecraft fork for better performance and a neat downlaod API
+- [PaperMC](https://papermc.io/) an amazing minecraft fork for better performance and a neat download API
 - [MCVersions.net](https://mcversions.net/) for helping me out to find a way to get the latest minecraft server versions
 - [BukkitGUI](https://github.com/Bertware/bukkitgui2) for being the inspiration for this project
 
