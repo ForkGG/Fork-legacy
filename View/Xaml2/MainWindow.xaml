@@ -57,9 +57,6 @@
                                 <!-- This shouldn't be here, but Event handling is shit -->
                                 <ListView.ItemContainerStyle>
                                     <Style  TargetType="{x:Type ListViewItem}">
-                                        <Style.Resources>
-                                            <FontFamily x:Key="Montserrat-SemiBold">pack://application:,,,/View/Resources/Fonts/Montserrat-SemiBold.ttf#Montserrat SemiBold</FontFamily>
-                                        </Style.Resources>
                                         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                                         <Setter Property="Background" Value="Transparent"/>
                                         <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>
@@ -76,7 +73,7 @@
                                                                     <Border Height="40" Width="40" Background="Transparent" Margin="5 0 10 0">
                                                                         <Image x:Name="image" Source="{Binding Icon}" Width="25" Height="25" RenderOptions.BitmapScalingMode="Linear"/>
                                                                     </Border>
-                                                                    <TextBlock x:Name="title" Text="{Binding Entity.Name}" VerticalAlignment="Center" FontSize="20" FontFamily="{StaticResource Montserrat-SemiBold}" 
+                                                                    <TextBlock x:Name="title" Text="{Binding Entity.Name}" VerticalAlignment="Center" FontSize="20" FontFamily="{DynamicResource Montserrat-SemiBold}" 
                                                                                 Foreground="{DynamicResource textUnselected}" Margin="0 0 15 0"/>
                                                                 </DockPanel>
                                                                 <Grid.ContextMenu>

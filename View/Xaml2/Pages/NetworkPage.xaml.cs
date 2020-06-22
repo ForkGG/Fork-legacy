@@ -105,7 +105,7 @@ namespace Fork.View.Xaml2.Pages
             //Save settings, if settings is closed
             if (settingsPage.Visibility == Visibility.Visible)
             {
-                viewModel.UpdateSettings();
+                viewModel.SaveSettings();
             }
             
             foreach (Frame frame in subPages)

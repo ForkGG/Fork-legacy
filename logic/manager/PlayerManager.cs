@@ -1,14 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Management.Instrumentation;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using Newtonsoft.Json;
-using fork.Annotations;
 using fork.Logic.Model;
 using fork.ViewModel;
 

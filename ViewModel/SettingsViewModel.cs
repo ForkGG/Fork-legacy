@@ -163,7 +163,8 @@ namespace fork.ViewModel
 
         public void SaveChanges()
         {
-            foreach (ISettingsPage settingsPage in SettingsPages)
+            List<ISettingsPage> pages = new List<ISettingsPage>(SettingsPages);
+            foreach (ISettingsPage settingsPage in pages)
             {
                 settingsPage.SaveSettings();
             }

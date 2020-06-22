@@ -9,8 +9,6 @@ using System.Windows.Media;
 using fork;
 using fork.Logic.ImportLogic;
 using fork.Logic.Manager;
-using fork.Logic.Model;
-using fork.View.Xaml2.Pages;
 using fork.ViewModel;
 using Application = System.Windows.Application;
 
