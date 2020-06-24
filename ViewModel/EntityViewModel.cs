@@ -166,6 +166,13 @@ namespace fork.ViewModel
 
         public EntityViewModel(Entity entity)
         {
+            Entity = entity;
+            
+            //Error weird crash (should not happen unless entities.json is corrupted)
+            if (Entity.Version == null)
+            {
+                Console.WriteLine("Persistence file storing servers probably is corrupted (entities.json). Can not start Fork!");
+            }
             CurrentStatus = ServerStatus.STOPPED;
             ConsoleOutList = new ObservableCollection<string>();
             ConsoleOutList.CollectionChanged += ConsoleOutChanged;

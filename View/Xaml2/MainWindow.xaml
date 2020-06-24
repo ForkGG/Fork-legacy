@@ -211,8 +211,8 @@
                     <TextBlock Text=" -" Foreground="{DynamicResource textSelected}" FontSize="17" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5 0 30">
-                    <Button Content="Cancel" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="20" Click="Abort_Click"/>
-                    <Button Content="Delete" Style="{DynamicResource RoundedTextButtonRed}" Width="100" Margin="20" Click="Delete_Click"/>
+                    <Button x:Name="ServerDeleteCancelBtn" Content="Cancel" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="20" Click="Abort_Click"/>
+                    <Button x:Name="ServerDeleteBtn" Content="Delete" Style="{DynamicResource RoundedTextButtonRed}" Width="100" Margin="20" Click="Delete_Click"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
@@ -227,8 +227,8 @@
                     <TextBlock Text=" -" Foreground="{DynamicResource textSelected}" FontSize="17" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5 0 30">
-                    <Button Content="Cancel" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="20" Click="Abort_Click"/>
-                    <Button Content="Delete" Style="{DynamicResource RoundedTextButtonRed}" Width="100" Margin="20" Click="Delete_Click"/>
+                    <Button x:Name="NetworkDeleteCancelBtn" Content="Cancel" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="20" Click="Abort_Click"/>
+                    <Button x:Name="NetworkDeleteBtn" Content="Delete" Style="{DynamicResource RoundedTextButtonRed}" MinWidth="100" Margin="20" Click="Delete_Click"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

@@ -37,7 +37,8 @@ namespace fork
         protected override void OnStartup(StartupEventArgs e)
         {
             Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-us");
-            ApplicationManager.ConsoleWriter.AppStarted();
+            ApplicationManager.ConsoleWriter = new ConsoleWriter();
+            Console.SetOut(ApplicationManager.ConsoleWriter);
             ErrorLogger logger = new ErrorLogger();
             base.OnStartup(e);
         }

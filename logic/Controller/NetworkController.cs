@@ -21,7 +21,7 @@ namespace fork.Logic.Controller
     /// </summary>
     public class NetworkController
     {
-        public bool CreateNetwork(string networkName, ServerVersion.VersionType networkType, List<string> usedServerNames)
+        public bool CreateNetwork(string networkName, ServerVersion.VersionType networkType, JavaSettings javaSettings, List<string> usedServerNames)
         {
             if (networkType != ServerVersion.VersionType.Waterfall)
             {
@@ -30,7 +30,7 @@ namespace fork.Logic.Controller
             networkName = RefineName(networkName, usedServerNames);
             string serverPath = Path.Combine(App.ApplicationPath, networkName);
             DirectoryInfo directoryInfo = Directory.CreateDirectory(serverPath);
-            Network network = new Network(networkName, networkType, new JavaSettings(), VersionManager.Instance.WaterfallVersion);
+            Network network = new Network(networkName, networkType, javaSettings, VersionManager.Instance.WaterfallVersion);
             NetworkViewModel viewModel = new NetworkViewModel(network);
             ServerManager.Instance.AddEntity(viewModel);
             //Select Server

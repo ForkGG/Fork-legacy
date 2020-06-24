@@ -24,7 +24,7 @@
                 <TextBlock DockPanel.Dock="Top" Text="Create a server" HorizontalAlignment="Center" FontSize="30" FontFamily="{StaticResource Montserrat-Bold}" Foreground="{DynamicResource textSelected}" Margin="15"/>
 
             <ScrollViewer Margin="0 10 0 10">
-                <StackPanel>
+                <StackPanel MaxWidth="900">
                     <Border CornerRadius="10" Margin="5">
                         <StackPanel Background="Transparent" Margin="0 10">
                             <TextBlock  Text="Choose A Server Type" Foreground="{DynamicResource textHeader}" FontFamily="{StaticResource Montserrat-SemiBold}" FontSize="23"  Margin="15 0 5 20"/>
@@ -101,7 +101,7 @@
                                 </Grid.RowDefinitions>
                                 <DockPanel Height="40" Grid.Row="0" HorizontalAlignment="Center" Margin="0 0 0 30">
                                     <Border CornerRadius="4" MaxWidth="200" MinWidth="150" DockPanel.Dock="Right" Height="26" Background="{DynamicResource buttonBgrDefault}">
-                                        <TextBox Margin="5 0" Text="" Background="{DynamicResource buttonBgrDefault}" BorderThickness="0" 
+                                        <TextBox Margin="5 0" Text="Server" Background="{DynamicResource buttonBgrDefault}" BorderThickness="0" 
                                      Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}"
                                      FontSize="17" Height="20" x:Name="ServerName"/>
                                     </Border>
@@ -213,14 +213,51 @@
                     <Border CornerRadius="10" Margin="5" x:Name="ConfigureProxySection" Visibility="Collapsed">
                         <StackPanel Background="Transparent" Margin="0 10">
                             <TextBlock Text="Configure Your Network" Foreground="{DynamicResource textHeader}" FontFamily="{StaticResource Montserrat-SemiBold}" FontSize="23" Margin="15 0 5 20"/>
-                            <DockPanel Height="40" Grid.Row="0" HorizontalAlignment="Center" Margin="0 0 0 30">
+                            <DockPanel Height="40" Grid.Row="0" HorizontalAlignment="Center" Margin="0 0 0 10">
                                 <Border CornerRadius="4" MaxWidth="200" MinWidth="150" DockPanel.Dock="Right" Height="26" Background="{DynamicResource buttonBgrDefault}">
-                                    <TextBox Margin="5 0" Text="" Background="{DynamicResource buttonBgrDefault}" BorderThickness="0" 
+                                    <TextBox Margin="5 0" Text="Network" Background="{DynamicResource buttonBgrDefault}" BorderThickness="0" 
                                      Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}"
                                      FontSize="17" Height="20" x:Name="NetworkName"/>
                                 </Border>
                                 <TextBlock Text="Network Name" TextAlignment="Right" Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0"/>
                             </DockPanel>
+                            <Grid Margin="0 0 0 0" HorizontalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="Max Ram" TextAlignment="Right"
+                                   Style="{DynamicResource CreateServerTextBlock}" Margin="0 5 10 10" />
+                                <Border Grid.Column="1" CornerRadius="4" Width="100" Height="26"
+                                Background="{DynamicResource buttonBgrDefault}" Margin="0 5 0 10">
+                                    <TextBox Margin="5 0" Text="1024" x:Name="NetworkMaxRam"
+                                     Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                     Foreground="{DynamicResource backgroundDark}"
+                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                     FontSize="17" Height="20" />
+                                </Border>
+                                <TextBlock Grid.Column="2" Text=" MB" Margin="0 0 0 5"
+                                   Style="{DynamicResource CreateServerTextBlock}" />
+
+                                <TextBlock Grid.Row="1" Text="Min Ram" TextAlignment="Right"
+                                   Style="{DynamicResource CreateServerTextBlock}" Margin="0 5 10 5" />
+                                <Border Grid.Row="1" Grid.Column="1" CornerRadius="4" Width="100" Height="26"
+                                Background="{DynamicResource buttonBgrDefault}" Margin="0 5 0 5">
+                                    <TextBox Margin="5 0" Text="512" x:Name="NetworkMinRam"
+                                     Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                     Foreground="{DynamicResource backgroundDark}"
+                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                     FontSize="17" Height="20" />
+                                </Border>
+                                <TextBlock Grid.Row="1" Grid.Column="2" Text=" MB"
+                                   Style="{DynamicResource CreateServerTextBlock}" />
+                            </Grid>
                         </StackPanel>
                         <Border.Style>
                             <Style TargetType="Border">

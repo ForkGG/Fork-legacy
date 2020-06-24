@@ -213,40 +213,54 @@ namespace fork.View.Xaml2
         
         private async void Delete_Click(object sender, RoutedEventArgs e)
         {
-            DeleteServerOverlay.Visibility = Visibility.Collapsed;
-            DeleteNetworkOverlay.Visibility = Visibility.Collapsed;
-
             EntityViewModel entityToDelete = viewModel.SelectedEntity;
             if (entityToDelete is ServerViewModel serverToDelete)
             {
-                Application.Current.Dispatcher?.Invoke(()=>viewModel.Entities.Remove(serverToDelete), DispatcherPriority.Background); //This shouldn't be here
+                ServerDeleteCancelBtn.IsEnabled = false;
+                ServerDeleteBtn.IsEnabled = false;
+                ServerDeleteBtn.Content = "Deleting...";
+                
                 bool success = await ServerManager.Instance.DeleteServerAsync(serverToDelete);
                 if (!success)
                 {
                     Console.WriteLine("Problem while deleting "+serverToDelete);
-                    Application.Current.Dispatcher?.Invoke(()=>viewModel.Entities.Add(serverToDelete), DispatcherPriority.Background); //This shouldn't be here
                 }
                 else
                 {
                     Console.WriteLine("Successfully deleted server "+serverToDelete);
+                    Application.Current.Dispatcher?.Invoke(()=>viewModel.Entities.Remove(serverToDelete), DispatcherPriority.Background); //This shouldn't be here
                     ServerList.SelectedIndex = 0;
                 }
+                
+                ServerDeleteCancelBtn.IsEnabled = true;
+                ServerDeleteBtn.IsEnabled = true;
+                ServerDeleteBtn.Content = "Delete";
             }
             else if (entityToDelete is NetworkViewModel networkToDelete)
             {
-                Application.Current.Dispatcher?.Invoke(()=>viewModel.Entities.Remove(networkToDelete), DispatcherPriority.Background); //This shouldn't be here
+                NetworkDeleteCancelBtn.IsEnabled = false;
+                NetworkDeleteBtn.IsEnabled = false;
+                NetworkDeleteBtn.Content = "Deleting...";
+                
                 bool success = await ServerManager.Instance.DeleteNetworkAsync(networkToDelete);
                 if (!success)
                 {
                     Console.WriteLine("Problem while deleting "+networkToDelete.Network);
-                    Application.Current.Dispatcher?.Invoke(()=>viewModel.Entities.Add(networkToDelete), DispatcherPriority.Background); //This shouldn't be here
                 }
                 else
                 {
                     Console.WriteLine("Successfully deleted network "+networkToDelete.Network);
+                    Application.Current.Dispatcher?.Invoke(()=>viewModel.Entities.Remove(networkToDelete), DispatcherPriority.Background); //This shouldn't be here
                     ServerList.SelectedIndex = 0;
                 }
+                
+                NetworkDeleteCancelBtn.IsEnabled = true;
+                NetworkDeleteBtn.IsEnabled = true;
+                NetworkDeleteBtn.Content = "Delete";
             }
+            
+            DeleteServerOverlay.Visibility = Visibility.Collapsed;
+            DeleteNetworkOverlay.Visibility = Visibility.Collapsed;
         }
 
         private void EntityMouseUp(object sender, MouseButtonEventArgs e)

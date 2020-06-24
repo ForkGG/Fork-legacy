@@ -92,7 +92,21 @@ namespace fork.View.Xaml2.Pages
                 {
                     networkName = "Network";
                 }
-                bool createNetworkSuccess = await ServerManager.Instance.CreateNetworkAsync(networkName,proxyType);
+
+                //TODO replace this with int value verifier
+                int minRam, maxRam;
+                if (!int.TryParse(NetworkMaxRam.Text, out maxRam))
+                {
+                    maxRam = 1024;
+                }
+
+                if (!int.TryParse(NetworkMinRam.Text, out minRam))
+                {
+                    minRam = 512;
+                }
+                
+                JavaSettings javaSettings = new JavaSettings{MinRam = minRam, MaxRam = maxRam};
+                bool createNetworkSuccess = await ServerManager.Instance.CreateNetworkAsync(networkName,proxyType, javaSettings);
                 return;
             }
             ServerVersion selectedVersion = (ServerVersion)versionComboBox.SelectedValue;

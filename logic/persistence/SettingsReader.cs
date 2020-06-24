@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Windows;
+using fork.Logic.Logging;
 using fork.Logic.Manager;
 using fork.Logic.Model;
 using fork.Logic.Model.Settings;
@@ -33,20 +34,42 @@ namespace fork.Logic.Persistence
             this.viewModel = viewModel;
             string path = Path.Combine(App.ApplicationPath, viewModel.Entity.Name);
             DirectoryInfo entitiyDir = new DirectoryInfo(path);
-
             List<SettingsFile> settingsFiles = new List<SettingsFile>();
-            
-            foreach (string fileName in Directory.GetFiles(entitiyDir.FullName, "*.properties", SearchOption.TopDirectoryOnly))
+            if (!entitiyDir.Exists)
             {
-                FileInfo fileInfo = new FileInfo(Path.Combine(entitiyDir.FullName,fileName));
-                SettingsFile settingsFile = new SettingsFile(fileInfo);
-                settingsFiles.Add(settingsFile);
+                Console.WriteLine("Directory for entity "+ viewModel.Entity.Name+" does not exist.\nPath: \""+entitiyDir.FullName+"\"");
+                return settingsFiles;
             }
-            foreach (string fileName in Directory.GetFiles(entitiyDir.FullName, "*.yml", SearchOption.TopDirectoryOnly))
+
+            try
             {
-                FileInfo fileInfo = new FileInfo(Path.Combine(entitiyDir.FullName,fileName));
-                SettingsFile settingsFile = new SettingsFile(fileInfo);
-                settingsFiles.Add(settingsFile);
+                foreach (string fileName in Directory.GetFiles(entitiyDir.FullName, "*.properties",
+                    SearchOption.TopDirectoryOnly))
+                {
+                    FileInfo fileInfo = new FileInfo(Path.Combine(entitiyDir.FullName, fileName));
+                    SettingsFile settingsFile = new SettingsFile(fileInfo);
+                    settingsFiles.Add(settingsFile);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error looking for properties files in directory: "+path);
+                ErrorLogger.Append(e);
+            }
+
+            try
+            {
+                foreach (string fileName in Directory.GetFiles(entitiyDir.FullName, "*.yml", SearchOption.TopDirectoryOnly))
+                {
+                    FileInfo fileInfo = new FileInfo(Path.Combine(entitiyDir.FullName,fileName));
+                    SettingsFile settingsFile = new SettingsFile(fileInfo);
+                    settingsFiles.Add(settingsFile);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error looking for yml files in directory: "+path);
+                ErrorLogger.Append(e);
             }
 
             return settingsFiles;

@@ -71,7 +71,6 @@ namespace fork.ViewModel
         {
             DateTime start = DateTime.Now;
             Console.WriteLine("Starting initialization of ViewModel for Server "+server.Name);
-            Server = server;
             new Thread(() =>
             {
                 if (Server.Version.Type == ServerVersion.VersionType.Vanilla)
