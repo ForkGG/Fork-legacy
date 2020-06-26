@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -27,10 +28,15 @@ namespace fork.ViewModel
     public abstract class EntityViewModel : BaseViewModel
     {
         private CPUTracker cpuTracker;
+        private List<double> cpuList;
         private double cpuValue;
+        
         private MEMTracker memTracker;
+        private List<double> memList;
         private double memValue;
+        
         private DiskTracker diskTracker;
+        private List<double> diskList;
         private double diskValue;
         
         public Entity Entity { get; set; }
@@ -201,6 +207,7 @@ namespace fork.ViewModel
             // Track CPU usage
             cpuTracker?.StopThreads();
 
+            cpuList = new List<double>();
             cpuTracker = new CPUTracker();
             cpuTracker.TrackTotal(p, this);
 
@@ -208,6 +215,7 @@ namespace fork.ViewModel
             // Track memory usage
             memTracker?.StopThreads();
 
+            memList = new List<double>();
             memTracker = new MEMTracker();
             memTracker.TrackP(p, this);
             
@@ -215,6 +223,7 @@ namespace fork.ViewModel
             // Track disk usage
             diskTracker?.StopThreads();
             
+            diskList = new List<double>();
             diskTracker = new DiskTracker();
             diskTracker.TrackTotal(p,this);
         }
@@ -223,21 +232,36 @@ namespace fork.ViewModel
 
         public void CPUValueUpdate(double value)
         {
-            cpuValue = value;
+            cpuList.Add(value);
+            if (cpuList.Count > 3)
+            {
+                cpuList.RemoveAt(0);
+            }
+            cpuValue = cpuList.Average();
             raisePropertyChanged(nameof(CPUValue));
             raisePropertyChanged(nameof(CPUValueRaw));
         }
 
         public void MemValueUpdate(double value)
         {
-            memValue = value;
+            memList.Add(value);
+            if (memList.Count > 3)
+            {
+                memList.RemoveAt(0);
+            }
+            memValue = memList.Average();
             raisePropertyChanged(nameof(MemValue));
             raisePropertyChanged(nameof(MemValueRaw));
         }
 
         public void DiskValueUpdate(double value)
         {
-            diskValue = value;
+            diskList.Add(value);
+            if (diskList.Count > 3)
+            {
+                diskList.RemoveAt(0);
+            }
+            diskValue = diskList.Average();
             raisePropertyChanged(nameof(DiskValue));
             raisePropertyChanged(nameof(DiskValueRaw));
         }

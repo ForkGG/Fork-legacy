@@ -47,6 +47,11 @@ namespace fork.Logic.Persistence
             }
 
             string json = JsonConvert.SerializeObject(entities, Formatting.Indented);
+            DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ApplicationPath, "persistence"));
+            if (!directoryInfo.Exists)
+            {
+                directoryInfo.Create();
+            }
             FileInfo entitiesFile = new FileInfo(Path.Combine(App.ApplicationPath, "persistence", "entities.json"));
             lock (writeLock)
             {
