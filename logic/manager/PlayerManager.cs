@@ -135,11 +135,10 @@ namespace fork.Logic.Manager
                     DirectoryInfo playerData = new DirectoryInfo(Path.Combine(world.Directory.FullName,"playerdata"));
                     if (playerData.Exists)
                     {
-                        foreach (FileInfo fileInfo in playerData.EnumerateFiles())
+                        foreach (string fileName in Directory.GetFiles(playerData.FullName, "*.dat", SearchOption.TopDirectoryOnly))
                         {
-                            string uuid = fileInfo.Name;
-                            uuid = uuid.Replace("-", "").Replace(".dat", "");
-                            playerIDsToAdd.Add(uuid);
+                            string uuid = new FileInfo(fileName).Name;
+                            playerIDsToAdd.Add(uuid.Replace("-", "").Replace(".dat", ""));
                         }
                     }
                 }

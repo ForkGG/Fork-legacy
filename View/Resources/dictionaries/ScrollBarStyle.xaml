@@ -66,7 +66,7 @@
                 IsDirectionReversed="False">
             <Track.Thumb>
                 <Thumb Style="{StaticResource ScrollBarThumbLight}"
-                        Margin="0,1,0,1"/>
+                        Margin="0"/>
             </Track.Thumb>
         </Track>
     </ControlTemplate>
@@ -123,7 +123,6 @@
             </Trigger>
             <Trigger Property="Orientation" Value="Vertical">
                 <Setter Property="Width" Value="7" />
-                <Setter Property="Margin" Value="0 0 0 0"/>
                 <Setter Property="Height" Value="Auto" />
                 <Setter Property="Template"
                         Value="{StaticResource VerticalScrollBarLight}" />
@@ -253,5 +252,61 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style x:Key="DefaultScrollViewer" TargetType="{x:Type ScrollViewer}">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <ScrollContentPresenter x:Name="Presenter"/>
+
+                        <ScrollBar Grid.Column="1" Name="PART_VerticalScrollBar"
+                                   Value="{TemplateBinding VerticalOffset}"
+                                   Maximum="{TemplateBinding ScrollableHeight}"
+                                   ViewportSize="{TemplateBinding ViewportHeight}"
+                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                                   Style="{StaticResource DefaultScrollBarLight}"/>
+
+                        <ScrollBar Grid.Row="1" x:Name="PART_HorizontalScrollBar"
+                                    Orientation="Horizontal"
+                                    Value="{TemplateBinding HorizontalOffset}"
+                                    Maximum="{TemplateBinding ScrollableWidth}"
+                                    ViewportSize="{TemplateBinding ViewportWidth}"
+                                    Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
+                                    Style="{StaticResource DefaultScrollBarLight}"/>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger SourceName="PART_VerticalScrollBar" Property="Visibility" Value="Visible">
+                            <Setter TargetName="Presenter" Property="Margin" Value="0 0 5 0"/>
+                        </Trigger>
+                        <Trigger SourceName="PART_HorizontalScrollBar" Property="Visibility" Value="Visible">
+                            <Setter TargetName="Presenter" Property="Margin" Value="0 0 0 5"/>
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition SourceName="PART_VerticalScrollBar" Property="Visibility" Value="Visible"/>
+                                <Condition SourceName="PART_HorizontalScrollBar" Property="Visibility" Value="Visible"/>                                
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Presenter" Property="Margin" Value="0 0 5 5"/>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style TargetType="{x:Type ScrollViewer}" BasedOn="{StaticResource DefaultScrollViewer}">
     </Style>
 </ResourceDictionary>

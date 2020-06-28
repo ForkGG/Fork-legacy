@@ -101,10 +101,9 @@ namespace fork.ViewModel
             Worlds = new ObservableCollection<World>();
             Worlds.CollectionChanged += WorldsChanged;
             
-            new Thread(InitializeWorldsList).Start();
-            
             new Thread(() =>
             {
+                InitializeWorldsList();
                 RoleUpdater.InitializeList(RoleType.WHITELIST, WhiteList, Server);
                 RoleUpdater.InitializeList(RoleType.BAN_LIST, BanList, Server);
                 RoleUpdater.InitializeList(RoleType.OP_LIST, OPList, Server);
