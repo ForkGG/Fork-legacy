@@ -19,8 +19,7 @@
 
 
 ## Installation
-- Download the [latest installer](https://www.fork.gg/downloads/Fork_setup.msi) 
-- Run the installer
+- Download the [latest version](https://www.fork.gg/downloads/Fork.exe) 
 - Run Fork.exe
 
 ## Useful Links:
