@@ -9,6 +9,10 @@
     <Version>0.7.0</Version>
     <StartupObject>fork.App</StartupObject>
     <ApplicationIcon>icon.ico</ApplicationIcon>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://fork.gg</PackageProjectUrl>
+    <PackageIcon>icon.ico</PackageIcon>
+    <RepositoryUrl>https://github.com/ChristianKern97/fork</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -83,6 +87,14 @@
     <None Remove="View\Resources\images\vanillaSymbol.png" />
     <None Remove="View\Resources\SyntaxHighlighting\Python.xshd" />
     <None Remove="View\Resources\SyntaxHighlighting\YAML.xshd" />
+    <None Include="icon.ico">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
