@@ -1,3 +1,5 @@
+
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -6,10 +8,8 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
-using Newtonsoft.Json;
-using fork.Properties;
-using Color = System.Drawing.Color;
 using Fork.Properties;
+using Newtonsoft.Json;
 
 namespace fork.Logic.Model
 {

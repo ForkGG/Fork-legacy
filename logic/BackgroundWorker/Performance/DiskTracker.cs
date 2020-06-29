@@ -30,6 +30,8 @@ namespace fork.Logic.BackgroundWorker.Performance
                     Thread.Sleep(500);
                 }
                 viewModel.DiskValueUpdate(0.0);
+                viewModel.DiskValueUpdate(0.0);
+                viewModel.DiskValueUpdate(0.0);
             });
             t.Start();
             threads.Add(t);

@@ -57,9 +57,6 @@
                                 <!-- This shouldn't be here, but Event handling is shit -->
                                 <ListView.ItemContainerStyle>
                                     <Style  TargetType="{x:Type ListViewItem}">
-                                        <Style.Resources>
-                                            <FontFamily x:Key="Montserrat-SemiBold">pack://application:,,,/View/Resources/Fonts/Montserrat-SemiBold.ttf#Montserrat SemiBold</FontFamily>
-                                        </Style.Resources>
                                         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                                         <Setter Property="Background" Value="Transparent"/>
                                         <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>
@@ -76,7 +73,7 @@
                                                                     <Border Height="40" Width="40" Background="Transparent" Margin="5 0 10 0">
                                                                         <Image x:Name="image" Source="{Binding Icon}" Width="25" Height="25" RenderOptions.BitmapScalingMode="Linear"/>
                                                                     </Border>
-                                                                    <TextBlock x:Name="title" Text="{Binding Entity.Name}" VerticalAlignment="Center" FontSize="20" FontFamily="{StaticResource Montserrat-SemiBold}" 
+                                                                    <TextBlock x:Name="title" Text="{Binding Entity.Name}" VerticalAlignment="Center" FontSize="20" FontFamily="{DynamicResource Montserrat-SemiBold}" 
                                                                                 Foreground="{DynamicResource textUnselected}" Margin="0 0 15 0"/>
                                                                 </DockPanel>
                                                                 <Grid.ContextMenu>
@@ -114,8 +111,8 @@
                     </Grid>
                     <DockPanel Grid.Row="2" LastChildFill="False" Margin="0 0 5 0" Background="{DynamicResource backgroundDark}">
                         <Grid  DockPanel.Dock="Bottom"  Background="{DynamicResource backgroundDarker}">
-                            <Label HorizontalAlignment="Center" FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="16">
-                                <TextBlock Text="v0.7" Foreground="{DynamicResource textUnselected}"/>
+                            <Label HorizontalAlignment="Center" FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="16" Height="30" VerticalAlignment="Top">
+                                <TextBlock Text="v0.7.1" Foreground="{DynamicResource textUnselected}"/>
                             </Label>
                         </Grid>
                         <Grid DockPanel.Dock="Bottom" Margin="10">
@@ -187,7 +184,7 @@
                                              IconSource="pack://application:,,,/View/Resources/images/Icons/Import.png"
                                              HoverIconSource="pack://application:,,,/View/Resources/images/Icons/ImportW.png"/>
                                 </StackPanel>
-                            </Border>                            
+                            </Border>
                         </DockPanel>
                     </StackPanel>
                 </Grid>
@@ -214,8 +211,8 @@
                     <TextBlock Text=" -" Foreground="{DynamicResource textSelected}" FontSize="17" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5 0 30">
-                    <Button Content="Cancel" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="20" Click="Abort_Click"/>
-                    <Button Content="Delete" Style="{DynamicResource RoundedTextButtonRed}" Width="100" Margin="20" Click="Delete_Click"/>
+                    <Button x:Name="ServerDeleteCancelBtn" Content="Cancel" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="20" Click="Abort_Click"/>
+                    <Button x:Name="ServerDeleteBtn" Content="Delete" Style="{DynamicResource RoundedTextButtonRed}" Width="100" Margin="20" Click="Delete_Click"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
@@ -230,8 +227,8 @@
                     <TextBlock Text=" -" Foreground="{DynamicResource textSelected}" FontSize="17" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5 0 30">
-                    <Button Content="Cancel" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="20" Click="Abort_Click"/>
-                    <Button Content="Delete" Style="{DynamicResource RoundedTextButtonRed}" Width="100" Margin="20" Click="Delete_Click"/>
+                    <Button x:Name="NetworkDeleteCancelBtn" Content="Cancel" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="20" Click="Abort_Click"/>
+                    <Button x:Name="NetworkDeleteBtn" Content="Delete" Style="{DynamicResource RoundedTextButtonRed}" MinWidth="100" Margin="20" Click="Delete_Click"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

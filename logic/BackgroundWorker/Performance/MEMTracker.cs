@@ -34,6 +34,8 @@ namespace fork.Logic.BackgroundWorker.Performance
                     Thread.Sleep(500);
                 }
                 viewModel.MemValueUpdate(0.0);
+                viewModel.MemValueUpdate(0.0);
+                viewModel.MemValueUpdate(0.0);
             });
             t.Start();
             threads.Add(t);

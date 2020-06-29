@@ -12,7 +12,7 @@ namespace fork.Logic.Manager
 {
     public sealed class ApplicationManager
     {
-        public static ConsoleWriter ConsoleWriter = new ConsoleWriter();
+        public static ConsoleWriter ConsoleWriter;
         private static ApplicationManager instance = null;
         //Lock to ensure Singleton pattern
         private static object myLock = new object();
@@ -28,6 +28,7 @@ namespace fork.Logic.Manager
                         if (instance == null)
                         {
                             instance = new ApplicationManager();
+                            ConsoleWriter.AppStarted();
                         }
                     }
                 }
@@ -35,8 +36,7 @@ namespace fork.Logic.Manager
             }
         }
         private ApplicationManager()
-        {
-        }
+        { }
         
         
         public MainViewModel MainViewModel { get; } = new MainViewModel();

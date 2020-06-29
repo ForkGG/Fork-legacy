@@ -13,10 +13,18 @@ namespace fork.Logic.Persistence
     {
         public Dictionary<string, string> ReadServerSettings(string folderPath)
         {
+            string propertiesPath = Path.Combine(folderPath, "server.properties");
+            FileInfo propertiesFile = new FileInfo(propertiesPath);
+            if (!propertiesFile.Exists)
+            {
+                Console.WriteLine("Could not find properties file: "+propertiesPath+"\nCreating default server.properties file");
+                new FileWriter().WriteServerSettings(folderPath, new ServerSettings("world").SettingsDictionary);
+            }
+            
             Dictionary<string, string> serverSettings = new Dictionary<string, string>();
             try
             {   // Open the text file using a stream reader.
-                using (StreamReader sr = new StreamReader(Path.Combine(folderPath, "server.properties")))
+                using (StreamReader sr = new StreamReader(propertiesFile.FullName))
                 {
                     string line;
                     while ((line = sr.ReadLine())!=null)

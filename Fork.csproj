@@ -1,461 +1,130 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="packages\PropertyChanged.Fody.3.0.1\build\PropertyChanged.Fody.props" Condition="Exists('packages\PropertyChanged.Fody.3.0.1\build\PropertyChanged.Fody.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3CC25DA4-D84C-4B40-99FF-004EB14D8FE0}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Fork</RootNamespace>
-    <AssemblyName>Fork</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <PublishUrl>C:\Users\Christian\source\repos\nihilus\NihilusInstaller\Release\ClickOnce\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>false</MapFileExtensions>
-    <SupportUrl>https://www.nihilus.gg</SupportUrl>
-    <ErrorReportUrl>https://www.nihilus.gg</ErrorReportUrl>
-    <TargetCulture>en</TargetCulture>
-    <ProductName>Nihilus Server Manager</ProductName>
-    <PublisherName>Christian Kern</PublisherName>
-    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>0.7.0.0</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <CreateDesktopShortcut>true</CreateDesktopShortcut>
-    <PublishWizardCompleted>true</PublishWizardCompleted>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestCertificateThumbprint>7C1E25DC2467BAF5F8F1248AD4D35B2DFDA1B415</ManifestCertificateThumbprint>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestKeyFile>nihilus_TemporaryKey.pfx</ManifestKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>false</SignManifests>
-  </PropertyGroup>
-  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Version>0.7.0</Version>
     <StartupObject>fork.App</StartupObject>
-  </PropertyGroup>
-  <PropertyGroup>
     <ApplicationIcon>icon.ico</ApplicationIcon>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://fork.gg</PackageProjectUrl>
+    <PackageIcon>icon.ico</PackageIcon>
+    <RepositoryUrl>https://github.com/ChristianKern97/fork</RepositoryUrl>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="GongSolutions.WPF.DragDrop, Version=2.0.0.0, Culture=neutral, PublicKeyToken=91f1945125b7a587, processorArchitecture=MSIL">
-      <HintPath>packages\gong-wpf-dragdrop.2.2.0\lib\net47\GongSolutions.WPF.DragDrop.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.AvalonEdit, Version=6.1.0.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\AvalonEdit\net45\ICSharpCode.AvalonEdit.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="PropertyChanged, Version=3.0.1.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd">
-      <HintPath>packages\PropertyChanged.Fody.3.0.1\lib\net452\PropertyChanged.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="YamlDotNet, Version=8.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
-      <HintPath>packages\YamlDotNet.8.1.2\lib\net45\YamlDotNet.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="ExtendedRadioButton.cs" />
-    <Compile Include="Logic\ApplicationConsole\ConsoleWriter.cs" />
-    <Compile Include="Logic\BackgroundWorker\Performance\CPUTracker.cs" />
-    <Compile Include="Logic\BackgroundWorker\Performance\DiskTracker.cs" />
-    <Compile Include="Logic\BackgroundWorker\Performance\MEMTracker.cs" />
-    <Compile Include="Logic\BackgroundWorker\QueryStatsWorker.cs" />
-    <Compile Include="Logic\Controller\NetworkController.cs" />
-    <Compile Include="Logic\CustomConsole\ConsoleReader.cs" />
-    <Compile Include="Logic\CustomConsole\ConsoleWriter.cs" />
-    <Compile Include="Logic\ExtensionMethods.cs" />
-    <Compile Include="Logic\ImportLogic\DirectoryValidator.cs" />
-    <Compile Include="Logic\ImportLogic\FileImporter.cs" />
-    <Compile Include="Logic\Logging\ErrorLogger.cs" />
-    <Compile Include="Logic\Manager\ApplicationManager.cs" />
-    <Compile Include="Logic\Manager\AutoRestartManager.cs" />
-    <Compile Include="Logic\Manager\PlayerManager.cs" />
-    <Compile Include="Logic\Model\Entity.cs" />
-    <Compile Include="Logic\Model\FullStats.cs" />
-    <Compile Include="Logic\Model\MinecraftDimension.cs" />
-    <Compile Include="Logic\Model\MinecraftVersionModel\Manifest.cs" />
-    <Compile Include="Logic\Model\MinecraftVersionModel\VersionDetails.cs" />
-    <Compile Include="Logic\Model\Player.cs" />
-    <Compile Include="Logic\Model\ProxyModels\Group.cs" />
-    <Compile Include="Logic\Model\ProxyModels\Network.cs" />
-    <Compile Include="Logic\Model\ProxyModels\NetworkExternalServer.cs" />
-    <Compile Include="Logic\Model\ProxyModels\NetworkForkServer.cs" />
-    <Compile Include="Logic\Model\ProxyModels\NetworkServer.cs" />
-    <Compile Include="Logic\Model\ProxyModels\Permission.cs" />
-    <Compile Include="Logic\Model\ServerPlayer.cs" />
-    <Compile Include="Logic\Model\ServerRestart.cs" />
-    <Compile Include="Logic\Model\ServerStatus.cs" />
-    <Compile Include="Logic\Model\JavaSettings.cs" />
-    <Compile Include="Logic\Model\Settings\BungeeSettings.cs" />
-    <Compile Include="Logic\Model\Settings\SettingsFile.cs" />
-    <Compile Include="Logic\Model\SimpleTime.cs" />
-    <Compile Include="Logic\Model\World.cs" />
-    <Compile Include="Logic\Persistence\FileReader.cs" />
-    <Compile Include="Logic\Persistence\FileWriter.cs" />
-    <Compile Include="Logic\Persistence\PersistencePO\BannedPlayer.cs" />
-    <Compile Include="Logic\Persistence\PersistencePO\OPPlayer.cs" />
-    <Compile Include="Logic\Persistence\PersistencePO\WhitelistedPlayer.cs" />
-    <Compile Include="Logic\Persistence\SettingsReader.cs" />
-    <Compile Include="Logic\Persistence\YMLReaders\BungeeSettingsSerializer.cs" />
-    <Compile Include="Logic\Query\Query.cs" />
-    <Compile Include="Logic\RoleManagement\RoleUpdater.cs" />
-    <Compile Include="Logic\RoleManagement\RoleType.cs" />
-    <Compile Include="Logic\Utils\ByteUtils.cs" />
-    <Compile Include="Logic\WebRequesters\Downloader.cs" />
-    <Compile Include="Logic\WebRequesters\ResponseCache.cs" />
-    <Compile Include="Logic\WebRequesters\PaperWebRequester.cs" />
-    <Compile Include="Logic\WebRequesters\WaterfallWebRequester.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="ViewModel\BaseViewModel.cs" />
-    <Compile Include="ViewModel\ConsoleViewModel.cs" />
-    <Compile Include="ViewModel\EntityViewModel.cs" />
-    <Compile Include="ViewModel\ImportViewModel.cs" />
-    <Compile Include="ViewModel\NetworkViewModel.cs" />
-    <Compile Include="ViewModel\ServerViewModel.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\SettingsViewModel.cs" />
-    <Compile Include="View\Resources\dictionaries\ListViewStyles.xaml.cs">
-      <DependentUpon>ListViewStyles.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Resources\dictionaries\WindowStyles.xaml.cs">
-      <DependentUpon>WindowStyles.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Resources\Folding\ActualDocument.cs" />
-    <Compile Include="View\Resources\Folding\TabFoldingStrategy.cs" />
-    <Compile Include="View\Resources\Helper\BindingProxy.cs" />
-    <Compile Include="View\Resources\ViewBase\ServerListView.cs" />
-    <Compile Include="View\Xaml2\Controls\IconButton.cs" />
-    <Compile Include="View\Xaml2\Controls\IconRadioButton.cs" />
-    <Compile Include="View\Xaml2\Controls\ServerTypeRadioButton.cs" />
-    <Compile Include="View\Xaml2\Controls\StretchyWrapPanel.cs" />
-    <Compile Include="View\Xaml2\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Xaml2\Pages\Network\ConsolePage.xaml.cs">
-      <DependentUpon>ConsolePage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Xaml2\Pages\Server\ConsolePage.xaml.cs">
-      <DependentUpon>ConsolePage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Xaml2\Pages\CreatePage.xaml.cs">
-      <DependentUpon>CreatePage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Xaml2\Pages\ImportPage.xaml.cs">
-      <DependentUpon>ImportPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Xaml2\Pages\Network\NetworkPage.xaml.cs">
-      <DependentUpon>NetworkPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Xaml2\Pages\Server\ServerPage.xaml.cs">
-      <DependentUpon>ServerPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Xaml2\Pages\Settings\DefaultSettingsPage.xaml.cs">
-      <DependentUpon>DefaultSettingsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Xaml2\Pages\Settings\ForkNetworkSettingsPage.xaml.cs">
-      <DependentUpon>ForkNetworkSettingsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Xaml2\Pages\Settings\ForkServerSettingsPage.xaml.cs">
-      <DependentUpon>ForkServerSettingsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Xaml2\Pages\Settings\ISettingsPage.cs" />
-    <Compile Include="View\Xaml2\Pages\Settings\ProxySettingsPage.xaml.cs">
-      <DependentUpon>ProxySettingsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Xaml2\Pages\Settings\VanillaSettingsPage.xaml.cs">
-      <DependentUpon>VanillaSettingsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Xaml2\Pages\Settings\SettingsPage.xaml.cs">
-      <DependentUpon>SettingsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Xaml2\Pages\Server\WorldsPage.xaml.cs">
-      <DependentUpon>WorldsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Xaml2\Shapes\InnerSpeechBubble.cs" />
-    <Compile Include="View\Xaml2\Shapes\SpeechBubble.cs" />
-    <Compile Include="View\Xaml2\Shapes\UsageIndicatorBackground.cs" />
-    <Compile Include="View\Xaml\Converter\BoolToVisibilityConverter.cs" />
-    <Compile Include="View\Xaml\Converter\PercentageToColorConverter.cs" />
-    <Compile Include="View\Xaml\Converter\SimpleTimeToStringConverter.cs" />
-    <Compile Include="View\Xaml\ValidationRules\PortValidationRule.cs" />
-    <Compile Include="View\Xaml\ValidationRules\PositiveLongValidationRule.cs" />
-    <Compile Include="View\Xaml\ValidationRules\TimeValidationRule.cs" />
-    <Page Include="View\Resources\dictionaries\AvalonStyles.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\Resources\dictionaries\CheckBoxStyles.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Resources\dictionaries\ComboBoxStyles.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Resources\dictionaries\ContextMenuStyle.xaml" />
-    <Page Include="View\Resources\dictionaries\DefaultTheme.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Resources\dictionaries\ListViewStyles.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Resources\dictionaries\MenuItemStyles.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Resources\dictionaries\RadioButtonStyles.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\Resources\dictionaries\ButtonStyles.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Resources\dictionaries\ScrollBarStyle.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Resources\dictionaries\Styles.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Resources\dictionaries\TabControlStyles.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Resources\dictionaries\TextBlockStyles.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Resources\dictionaries\WindowStyles.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\Themes\Generic.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Xaml2\MainWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Xaml2\Pages\Network\ConsolePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Xaml2\Pages\Server\ConsolePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Xaml2\Pages\CreatePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Xaml2\Pages\Network\NetworkPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Xaml2\Pages\Server\ServerPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Xaml2\Pages\Settings\DefaultSettingsPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Xaml2\Pages\Settings\ForkNetworkSettingsPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Xaml2\Pages\Settings\ForkServerSettingsPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Xaml2\Pages\Settings\ProxySettingsPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Xaml2\Pages\Settings\VanillaSettingsPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Xaml2\Pages\Settings\SettingsPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Compile Include="Logic\Manager\ServerManager.cs" />
-    <Compile Include="Logic\Manager\VersionManager.cs" />
-    <Compile Include="Logic\Manager\WebRequestManager.cs" />
-    <Compile Include="Logic\Model\Server.cs" />
-    <Compile Include="Logic\Model\ServerSettings.cs" />
-    <Compile Include="Logic\Model\ServerVersion.cs" />
-    <Compile Include="Logic\Persistence\EntitySerializer.cs" />
-    <Compile Include="ViewModel\AddServerViewModel.cs" />
-    <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\Xaml\Converter\ListToStringConverter.cs" />
-    <Page Include="View\Xaml2\Pages\Server\WorldsPage.xaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    <None Remove="View\Resources\Fonts\MaterialIcons-Regular.ttf" />
+    <None Remove="View\Resources\Fonts\Montserrat-Bold.ttf" />
+    <None Remove="View\Resources\Fonts\Montserrat-Medium.ttf" />
+    <None Remove="View\Resources\Fonts\Montserrat-SemiBold.ttf" />
+    <None Remove="View\Resources\images\close.png" />
+    <None Remove="View\Resources\images\DeafultHead.png" />
+    <None Remove="View\Resources\images\Icons\Add.png" />
+    <None Remove="View\Resources\images\Icons\AddW.png" />
+    <None Remove="View\Resources\images\Icons\Banned.png" />
+    <None Remove="View\Resources\images\Icons\BannedW.png" />
+    <None Remove="View\Resources\images\Icons\Bukkit.png" />
+    <None Remove="View\Resources\images\Icons\BukkitD.png" />
+    <None Remove="View\Resources\images\Icons\BukkitW.png" />
+    <None Remove="View\Resources\images\Icons\BungeeCord.png" />
+    <None Remove="View\Resources\images\Icons\BungeeCordD.png" />
+    <None Remove="View\Resources\images\Icons\BungeeCordW.png" />
+    <None Remove="View\Resources\images\Icons\Cancel.png" />
+    <None Remove="View\Resources\images\Icons\CancelW.png" />
+    <None Remove="View\Resources\images\Icons\Create.png" />
+    <None Remove="View\Resources\images\Icons\CreateW.png" />
+    <None Remove="View\Resources\images\Icons\Delete.png" />
+    <None Remove="View\Resources\images\Icons\DeleteW.png" />
+    <None Remove="View\Resources\images\Icons\dude.png" />
+    <None Remove="View\Resources\images\Icons\DudeHover.png" />
+    <None Remove="View\Resources\images\Icons\DudeSelected.png" />
+    <None Remove="View\Resources\images\Icons\DudeSelectedHover.png" />
+    <None Remove="View\Resources\images\Icons\dudeSmall.png" />
+    <None Remove="View\Resources\images\Icons\DudeTransparent.png" />
+    <None Remove="View\Resources\images\Icons\DudeTransparentHover.png" />
+    <None Remove="View\Resources\images\Icons\Import.png" />
+    <None Remove="View\Resources\images\Icons\ImportW.png" />
+    <None Remove="View\Resources\images\Icons\Paper.png" />
+    <None Remove="View\Resources\images\Icons\PaperD.png" />
+    <None Remove="View\Resources\images\Icons\PaperW.png" />
+    <None Remove="View\Resources\images\Icons\PlayerList.png" />
+    <None Remove="View\Resources\images\Icons\PlayerListW.png" />
+    <None Remove="View\Resources\images\Icons\Plugins.png" />
+    <None Remove="View\Resources\images\Icons\PluginsW.png" />
+    <None Remove="View\Resources\images\Icons\Restart.png" />
+    <None Remove="View\Resources\images\Icons\RestartW.png" />
+    <None Remove="View\Resources\images\Icons\Settings.png" />
+    <None Remove="View\Resources\images\Icons\SettingsW.png" />
+    <None Remove="View\Resources\images\Icons\Spigot.png" />
+    <None Remove="View\Resources\images\Icons\SpigotD.png" />
+    <None Remove="View\Resources\images\Icons\SpigotW.png" />
+    <None Remove="View\Resources\images\Icons\Start.png" />
+    <None Remove="View\Resources\images\Icons\StartW.png" />
+    <None Remove="View\Resources\images\Icons\Stop.png" />
+    <None Remove="View\Resources\images\Icons\StopW.png" />
+    <None Remove="View\Resources\images\Icons\Terminal.png" />
+    <None Remove="View\Resources\images\Icons\TerminalW.png" />
+    <None Remove="View\Resources\images\Icons\Vanilla.png" />
+    <None Remove="View\Resources\images\Icons\VanillaD.png" />
+    <None Remove="View\Resources\images\Icons\VanillaW.png" />
+    <None Remove="View\Resources\images\Icons\Waterfall.png" />
+    <None Remove="View\Resources\images\Icons\WaterfallD.png" />
+    <None Remove="View\Resources\images\Icons\WaterfallW.png" />
+    <None Remove="View\Resources\images\Icons\WhiteList.png" />
+    <None Remove="View\Resources\images\Icons\WhiteListW.png" />
+    <None Remove="View\Resources\images\Icons\World.png" />
+    <None Remove="View\Resources\images\Icons\WorldW.png" />
+    <None Remove="View\Resources\images\ImportServer.png" />
+    <None Remove="View\Resources\images\maximize1.png" />
+    <None Remove="View\Resources\images\maximize2.png" />
+    <None Remove="View\Resources\images\minimize.png" />
+    <None Remove="View\Resources\images\paperSymbol.png" />
+    <None Remove="View\Resources\images\spigotSymbol.png" />
+    <None Remove="View\Resources\images\title.png" />
+    <None Remove="View\Resources\images\vanillaSymbol.png" />
+    <None Remove="View\Resources\SyntaxHighlighting\Python.xshd" />
+    <None Remove="View\Resources\SyntaxHighlighting\YAML.xshd" />
+    <None Include="icon.ico">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
     </None>
-    <None Include="View\Resources\SyntaxHighlighting\YAML.xshd" />
+    <None Include="LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Fody" Version="6.2.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="gong-wpf-dragdrop" Version="2.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="PropertyChanged.Fody" Version="3.2.8" />
+    <PackageReference Include="YamlDotNet" Version="8.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ICSharpCode.AvalonEdit">
+      <HintPath>minecraft\packages\AvalonEdit\net45\ICSharpCode.AvalonEdit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="View\Resources\Fonts\MaterialIcons-Regular.ttf" />
     <Resource Include="View\Resources\Fonts\Montserrat-Bold.ttf" />
     <Resource Include="View\Resources\Fonts\Montserrat-Medium.ttf" />
     <Resource Include="View\Resources\Fonts\Montserrat-SemiBold.ttf" />
-    <Resource Include="View\Resources\Fonts\MaterialIcons-Regular.ttf" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="View\Resources\images\close.png" />
-    <Resource Include="View\Resources\images\Icons\dudeSmall.png" />
-    <Resource Include="View\Resources\images\Icons\StartW.png" />
-    <Resource Include="View\Resources\images\maximize1.png" />
-    <Resource Include="View\Resources\images\maximize2.png" />
-    <Resource Include="View\Resources\images\minimize.png" />
-    <Resource Include="View\Resources\images\title.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 und x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="View\Resources\SyntaxHighlighting\Python.xshd" />
+    <Resource Include="View\Resources\images\DeafultHead.png" />
     <Resource Include="View\Resources\images\Icons\Add.png" />
     <Resource Include="View\Resources\images\Icons\AddW.png" />
     <Resource Include="View\Resources\images\Icons\Banned.png" />
-    <Resource Include="View\Resources\images\Icons\PlayerList.png" />
-    <Resource Include="View\Resources\images\Icons\WhiteList.png" />
     <Resource Include="View\Resources\images\Icons\BannedW.png" />
-    <Resource Include="View\Resources\images\Icons\PlayerListW.png" />
-    <Resource Include="View\Resources\images\Icons\WhiteListW.png" />
-    <Resource Include="View\Resources\images\Icons\DudeSelected.png" />
-    <Resource Include="View\Resources\images\Icons\DudeSelectedHover.png" />
-    <Resource Include="View\Resources\images\Icons\DudeTransparent.png" />
-    <Resource Include="View\Resources\images\Icons\DudeTransparentHover.png" />
-    <Resource Include="View\Resources\images\Icons\Plugins.png" />
-    <Resource Include="View\Resources\images\Icons\PluginsW.png" />
-    <Resource Include="View\Resources\images\Icons\World.png" />
-    <Resource Include="View\Resources\images\Icons\WorldW.png" />
-    <Page Include="View\Xaml2\Pages\ImportPage.xaml" />
-    <Resource Include="View\Resources\images\Icons\DudeHover.png" />
-    <Resource Include="View\Resources\images\Icons\dude.png" />
-    <Resource Include="View\Resources\images\Icons\Paper.png" />
-    <Resource Include="View\Resources\images\Icons\Spigot.png" />
-    <Resource Include="View\Resources\images\paperSymbol.png" />
-    <Resource Include="View\Resources\images\spigotSymbol.png" />
-    <Resource Include="View\Resources\images\vanillaSymbol.png" />
     <Resource Include="View\Resources\images\Icons\Bukkit.png" />
     <Resource Include="View\Resources\images\Icons\BukkitD.png" />
     <Resource Include="View\Resources\images\Icons\BukkitW.png" />
@@ -468,17 +137,31 @@
     <Resource Include="View\Resources\images\Icons\CreateW.png" />
     <Resource Include="View\Resources\images\Icons\Delete.png" />
     <Resource Include="View\Resources\images\Icons\DeleteW.png" />
+    <Resource Include="View\Resources\images\Icons\dude.png" />
+    <Resource Include="View\Resources\images\Icons\DudeHover.png" />
+    <Resource Include="View\Resources\images\Icons\DudeSelected.png" />
+    <Resource Include="View\Resources\images\Icons\DudeSelectedHover.png" />
+    <Resource Include="View\Resources\images\Icons\dudeSmall.png" />
+    <Resource Include="View\Resources\images\Icons\DudeTransparent.png" />
+    <Resource Include="View\Resources\images\Icons\DudeTransparentHover.png" />
     <Resource Include="View\Resources\images\Icons\Import.png" />
     <Resource Include="View\Resources\images\Icons\ImportW.png" />
+    <Resource Include="View\Resources\images\Icons\Paper.png" />
     <Resource Include="View\Resources\images\Icons\PaperD.png" />
     <Resource Include="View\Resources\images\Icons\PaperW.png" />
+    <Resource Include="View\Resources\images\Icons\PlayerList.png" />
+    <Resource Include="View\Resources\images\Icons\PlayerListW.png" />
+    <Resource Include="View\Resources\images\Icons\Plugins.png" />
+    <Resource Include="View\Resources\images\Icons\PluginsW.png" />
     <Resource Include="View\Resources\images\Icons\Restart.png" />
     <Resource Include="View\Resources\images\Icons\RestartW.png" />
     <Resource Include="View\Resources\images\Icons\Settings.png" />
     <Resource Include="View\Resources\images\Icons\SettingsW.png" />
+    <Resource Include="View\Resources\images\Icons\Spigot.png" />
     <Resource Include="View\Resources\images\Icons\SpigotD.png" />
     <Resource Include="View\Resources\images\Icons\SpigotW.png" />
     <Resource Include="View\Resources\images\Icons\Start.png" />
+    <Resource Include="View\Resources\images\Icons\StartW.png" />
     <Resource Include="View\Resources\images\Icons\Stop.png" />
     <Resource Include="View\Resources\images\Icons\StopW.png" />
     <Resource Include="View\Resources\images\Icons\Terminal.png" />
@@ -489,20 +172,20 @@
     <Resource Include="View\Resources\images\Icons\Waterfall.png" />
     <Resource Include="View\Resources\images\Icons\WaterfallD.png" />
     <Resource Include="View\Resources\images\Icons\WaterfallW.png" />
-    <Resource Include="icon.ico" />
-    <Content Include="View\Resources\images\DeafultHead.png" />
+    <Resource Include="View\Resources\images\Icons\WhiteList.png" />
+    <Resource Include="View\Resources\images\Icons\WhiteListW.png" />
+    <Resource Include="View\Resources\images\Icons\World.png" />
+    <Resource Include="View\Resources\images\Icons\WorldW.png" />
     <Resource Include="View\Resources\images\ImportServer.png" />
+    <Resource Include="View\Resources\images\maximize1.png" />
+    <Resource Include="View\Resources\images\maximize2.png" />
+    <Resource Include="View\Resources\images\minimize.png" />
+    <Resource Include="View\Resources\images\paperSymbol.png" />
+    <Resource Include="View\Resources\images\spigotSymbol.png" />
+    <Resource Include="View\Resources\images\title.png" />
+    <Resource Include="View\Resources\images\vanillaSymbol.png" />
+    <Resource Include="View\Resources\SyntaxHighlighting\Python.xshd" />
+    <Resource Include="View\Resources\SyntaxHighlighting\YAML.xshd" />
   </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="packages\Fody.5.0.6\build\Fody.targets" Condition="Exists('packages\Fody.5.0.6\build\Fody.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('packages\Fody.5.0.6\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Fody.5.0.6\build\Fody.targets'))" />
-    <Error Condition="!Exists('packages\PropertyChanged.Fody.3.0.1\build\PropertyChanged.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\PropertyChanged.Fody.3.0.1\build\PropertyChanged.Fody.props'))" />
-  </Target>
+
 </Project>

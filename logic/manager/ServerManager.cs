@@ -10,6 +10,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Media;
 using fork.Logic.BackgroundWorker;
 using fork.Logic.Controller;
@@ -107,6 +108,11 @@ namespace fork.Logic.Manager
         
         public void StopServer(ServerViewModel serverViewModel)
         {
+            if (!ApplicationManager.Instance.ActiveEntities.ContainsKey(serverViewModel.Server))
+            {
+                Console.WriteLine("Can't stop server that has no active process");
+                return;
+            }
             ApplicationManager.Instance.ActiveEntities[serverViewModel.Server].StandardInput.WriteLine("stop");
             foreach (ServerPlayer serverPlayer in serverViewModel.PlayerList)
             {
@@ -133,6 +139,14 @@ namespace fork.Logic.Manager
 
         public async Task<bool> DeleteServerAsync(ServerViewModel serverViewModel)
         {
+            if (serverViewModel.CurrentStatus != ServerStatus.STOPPED)
+            {
+                StopServer(serverViewModel);
+                while (serverViewModel.CurrentStatus != ServerStatus.STOPPED)
+                {
+                    Thread.Sleep(500);
+                }
+            }
             Task<bool> t = new Task<bool>(() => DeleteServer(serverViewModel));
             t.Start();
             bool result = await t;
@@ -192,10 +206,10 @@ namespace fork.Logic.Manager
 
         #region Network Managment Methods
 
-        public async Task<bool> CreateNetworkAsync(string networkName, ServerVersion.VersionType networkType)
+        public async Task<bool> CreateNetworkAsync(string networkName, ServerVersion.VersionType networkType, JavaSettings javaSettings)
         {
             Task<bool> t = new Task<bool>(() =>
-                networkController.CreateNetwork(networkName,networkType, serverNames));
+                networkController.CreateNetwork(networkName,networkType, javaSettings, serverNames));
             t.Start();
             bool r = await t;
             return r;

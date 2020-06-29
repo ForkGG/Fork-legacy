@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Data;
 
 namespace fork.View.Xaml.Converter
@@ -16,14 +17,21 @@ namespace fork.View.Xaml.Converter
                 throw new InvalidOperationException("Target of conversion must be string");
             }
 
-            List<string> strings;
-            lock (value)
+            ObservableCollection<string> valueCol = value as ObservableCollection<string>;
+            try
             {
-                strings = new List<string>((ObservableCollection<string>)value);
-            }
-            string returnString = String.Join("\n",strings);
+                var strings = valueCol?.ToList();
 
-            return returnString;
+                if (strings == null)
+                {
+                    return "";
+                }
+                return String.Join("\n", strings);
+            } catch(ArgumentException e)
+            {
+                Console.WriteLine("Argument Exception while Converting List to String (List probably changed while converting)");
+                return "";
+            }            
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
