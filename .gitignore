@@ -5,3 +5,5 @@ obj
 UpgradeLog.htm
 *.html
 NihilusInstaller
+Fork.csprj.user
+Properties/PublishProfiles
