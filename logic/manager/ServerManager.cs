@@ -478,7 +478,7 @@ namespace fork.Logic.Manager
                 ZipFile.CreateFromDirectory(serverDirectory.FullName,
                     Path.Combine(deletedDirectory.FullName, serverViewModel.Server.Name + ".zip"));
                 serverDirectory.Delete(true);
-                Entities.Remove(serverViewModel);
+                Application.Current.Dispatcher?.Invoke(()=>Entities.Remove(serverViewModel));
                 return true;
             }
             catch (Exception e)

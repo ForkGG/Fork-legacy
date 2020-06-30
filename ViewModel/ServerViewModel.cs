@@ -100,25 +100,30 @@ namespace fork.ViewModel
             
             Worlds = new ObservableCollection<World>();
             Worlds.CollectionChanged += WorldsChanged;
-            
+
+            InitializeLists(server);
+
+            TimeSpan t = DateTime.Now - start;
+            Console.WriteLine("Server ViewModel for " + server.Name + " initialized in "+t.Seconds+"."+t.Milliseconds+"s");
+        }
+
+        public void InitializeLists(Server server)
+        {
             new Thread(() =>
             {
                 InitializeWorldsList();
                 RoleUpdater.InitializeList(RoleType.WHITELIST, WhiteList, Server);
                 RoleUpdater.InitializeList(RoleType.BAN_LIST, BanList, Server);
                 RoleUpdater.InitializeList(RoleType.OP_LIST, OPList, Server);
-                Console.WriteLine("Finished reading Role-lists for "+server);
+                Console.WriteLine("Finished reading Role-lists for " + server);
                 PlayerList = new ObservableCollection<ServerPlayer>(PlayerManager.Instance.GetInitialPlayerList(this));
                 RefreshPlayerList();
-                Console.WriteLine("Initialized PlayerList for server "+server);
+                Console.WriteLine("Initialized PlayerList for server " + server);
 
-                whitelistUpdater = new RoleUpdater(RoleType.WHITELIST, WhiteList,Server.Version);
-                banlistUpdater = new RoleUpdater(RoleType.BAN_LIST, BanList,Server.Version);
-                oplistUpdater = new RoleUpdater(RoleType.OP_LIST, OPList,Server.Version);
+                whitelistUpdater = new RoleUpdater(RoleType.WHITELIST, WhiteList, Server.Version);
+                banlistUpdater = new RoleUpdater(RoleType.BAN_LIST, BanList, Server.Version);
+                oplistUpdater = new RoleUpdater(RoleType.OP_LIST, OPList, Server.Version);
             }).Start();
-
-            TimeSpan t = DateTime.Now - start;
-            Console.WriteLine("Server ViewModel for " + server.Name + " initialized in "+t.Seconds+"."+t.Milliseconds+"s");
         }
 
         public void RoleInputHandler(string line)

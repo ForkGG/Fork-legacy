@@ -304,6 +304,10 @@ namespace fork.ViewModel
         public void FinishedCopying()
         {
             ImportCompleted = true;
+            if (this is ServerViewModel serverViewModel)
+            {
+                serverViewModel.InitializeLists(serverViewModel.Server);
+            }
             raisePropertyChanged(nameof(ImportCompleted));
             raisePropertyChanged(nameof(ReadyToUse));
         }
