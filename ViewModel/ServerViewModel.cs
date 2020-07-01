@@ -63,7 +63,7 @@ namespace fork.ViewModel
         public string NextRestartMinutes { get; set; }
         public string NextRestartSeconds { get; set; }
 
-        public string ServerTitle => Server.Name + " - " + Server.Version.Type + " " + Server.Version.Version;
+        public string ServerTitle => Name + " - " + Server.Version.Type + " " + Server.Version.Version;
         
         public Page WorldsPage { get; set; }
 

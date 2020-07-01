@@ -40,6 +40,27 @@ namespace fork.ViewModel
         private double diskValue;
         
         public Entity Entity { get; set; }
+
+        public string Name
+        {
+            get => Entity.Name;
+            set
+            {
+                Entity.Name = value; 
+                new Thread(()=>
+                {
+                    if (this is ServerViewModel s)
+                    {
+                        raisePropertyChanged(nameof(s.ServerTitle));
+                    } else if (this is NetworkViewModel n)
+                    {
+                        raisePropertyChanged(nameof(n.NetworkTitle));
+                    }
+                    EntitySerializer.Instance.StoreEntities(ServerManager.Instance.Entities);
+                }).Start();
+            }
+        }
+        
         public ConsoleReader ConsoleReader;
         public ObservableCollection<string> ConsoleOutList { get; set; }
         

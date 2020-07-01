@@ -73,14 +73,14 @@
                                                                     <Border Height="40" Width="40" Background="Transparent" Margin="5 0 10 0">
                                                                         <Image x:Name="image" Source="{Binding Icon}" Width="25" Height="25" RenderOptions.BitmapScalingMode="Linear"/>
                                                                     </Border>
-                                                                    <TextBlock x:Name="title" Text="{Binding Entity.Name}" VerticalAlignment="Center" FontSize="20" FontFamily="{DynamicResource Montserrat-SemiBold}" 
+                                                                    <TextBlock x:Name="title" Text="{Binding Name}" VerticalAlignment="Center" FontSize="20" FontFamily="{DynamicResource Montserrat-SemiBold}" 
                                                                                 Foreground="{DynamicResource textUnselected}" Margin="0 0 15 0"/>
                                                                 </DockPanel>
                                                                 <Grid.ContextMenu>
                                                                     <ContextMenu>
-                                                                        <MenuItem Header="Rename" Style="{DynamicResource ContextMenuItem}" IsEnabled="False"/>
+                                                                        <MenuItem Header="Rename" Style="{DynamicResource ContextMenuItem}" Click="RenameOpen_Click"/>
                                                                         <MenuItem Header="Clone" Style="{DynamicResource ContextMenuItem}" IsEnabled="False"/>
-                                                                        <MenuItem Header="Delete" Style="{DynamicResource RedContextMenuItem}" IsEnabled="True" Click="DeleteServer_Click"/>
+                                                                        <MenuItem Header="Delete" Style="{DynamicResource RedContextMenuItem}" Click="DeleteOpen_Click"/>
                                                                     </ContextMenu>
                                                                 </Grid.ContextMenu>
                                                             </Grid>
@@ -118,7 +118,7 @@
                         <Grid DockPanel.Dock="Bottom" Margin="10">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 10">
                                 <controls:IconButton Margin="0 0 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrDefault}"
-                                             Width="40" Height="40" IconWidth="21" IconHeight="24" x:Name="DeleteButton" Click="DeleteServer_Click"
+                                             Width="40" Height="40" IconWidth="21" IconHeight="24" x:Name="DeleteButton" Click="DeleteOpen_Click"
                                              IconSource="pack://application:,,,/View/Resources/images/Icons/Delete.png"
                                              HoverIconSource="pack://application:,,,/View/Resources/images/Icons/DeleteW.png"
                                              HoverBackground="{DynamicResource buttonBgrRed}"/>
@@ -229,6 +229,52 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5 0 30">
                     <Button x:Name="NetworkDeleteCancelBtn" Content="Cancel" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="20" Click="Abort_Click"/>
                     <Button x:Name="NetworkDeleteBtn" Content="Delete" Style="{DynamicResource RoundedTextButtonRed}" MinWidth="100" Margin="20" Click="Delete_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        <Grid Panel.ZIndex="1" x:Name="RenameServerOverlay" Visibility="Collapsed">
+            <Rectangle Fill="#1F2234" Opacity="0.9" Margin="-5 0 0 0"/>
+            <StackPanel Panel.ZIndex="1" VerticalAlignment="Center">
+                <TextBlock Text="Rename Server" FontSize="28" FontFamily="{DynamicResource Montserrat-Bold}" TextAlignment="Center" Margin="0 0 0 20"/>
+                <TextBlock Text="Choose a new name for your Server" Margin="0 0 0 5" FontSize="17" HorizontalAlignment="Center" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 40">
+                    <Border CornerRadius="4" Width="200" DockPanel.Dock="Right" Height="26"
+                                    Background="{DynamicResource buttonBgrDefault}">
+                        <TextBox Margin="5 0" Background="{DynamicResource buttonBgrDefault}"
+                                 x:Name="NewServerName"
+                                         BorderThickness="0" Text="{Binding Name, Mode=OneTime}"
+                                         Foreground="{DynamicResource backgroundDark}"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="17" Height="20">
+                        </TextBox>
+                    </Border>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5 0 30">
+                    <Button x:Name="ServerRenameCancelBtn" Content="Cancel" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="20" Click="Abort_Click"/>
+                    <Button x:Name="ServerRenameBtn" Content="Rename" Style="{DynamicResource RoundedTextButton}" MinWidth="100" Margin="20" Click="Rename_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        <Grid Panel.ZIndex="1" x:Name="RenameNetworkOverlay" Visibility="Collapsed">
+            <Rectangle Fill="#1F2234" Opacity="0.9" Margin="-5 0 0 0"/>
+            <StackPanel Panel.ZIndex="1" VerticalAlignment="Center">
+                <TextBlock Text="Rename Network" FontSize="28" FontFamily="{DynamicResource Montserrat-Bold}" TextAlignment="Center" Margin="0 0 0 20"/>
+                <TextBlock Text="Choose a new name for your Network" Margin="0 0 0 5" FontSize="17" HorizontalAlignment="Center" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 40">
+                    <Border CornerRadius="4" Width="200" DockPanel.Dock="Right" Height="26"
+                                    Background="{DynamicResource buttonBgrDefault}">
+                        <TextBox Margin="5 0" Background="{DynamicResource buttonBgrDefault}"
+                                 x:Name="NewNetworkName"
+                                         BorderThickness="0" Text="{Binding Name, Mode=OneTime}"
+                                         Foreground="{DynamicResource backgroundDark}"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="17" Height="20">
+                        </TextBox>
+                    </Border>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5 0 30">
+                    <Button x:Name="NetworkRenameCancelBtn" Content="Cancel" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="20" Click="Abort_Click"/>
+                    <Button x:Name="NetworkRenameBtn" Content="Rename" Style="{DynamicResource RoundedTextButton}" MinWidth="100" Margin="20" Click="Rename_Click"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

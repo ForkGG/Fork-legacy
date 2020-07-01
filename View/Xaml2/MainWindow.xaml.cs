@@ -49,7 +49,7 @@ namespace fork.View.Xaml2
                 CloseCreateServer();
             }
         }
-        private void DeleteServer_Click(object sender, RoutedEventArgs e)
+        private void DeleteOpen_Click(object sender, RoutedEventArgs e)
         {
             if (viewModel.SelectedEntity is ServerViewModel)
             {
@@ -60,6 +60,19 @@ namespace fork.View.Xaml2
                 DeleteNetworkOverlay.Visibility = Visibility.Visible;
             }
         }
+
+        private void RenameOpen_Click(object sender, RoutedEventArgs e)
+        {
+            if (viewModel.SelectedEntity is ServerViewModel)
+            {
+                RenameServerOverlay.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                RenameNetworkOverlay.Visibility = Visibility.Visible;
+            }
+        }
+        
         private void ImportServer_Click(object sender, RoutedEventArgs e)
         {
             if (ImportPage.Visibility == Visibility.Hidden)
@@ -209,6 +222,45 @@ namespace fork.View.Xaml2
         {
             DeleteServerOverlay.Visibility = Visibility.Collapsed;
             DeleteNetworkOverlay.Visibility = Visibility.Collapsed;
+            RenameServerOverlay.Visibility = Visibility.Collapsed;
+            RenameNetworkOverlay.Visibility = Visibility.Collapsed;
+        }
+
+        private void Rename_Click(object sender, RoutedEventArgs e)
+        {
+            ServerRenameBtn.IsEnabled = false;
+            ServerRenameCancelBtn.IsEnabled = false;
+            NetworkRenameBtn.IsEnabled = false;
+            NetworkRenameCancelBtn.IsEnabled = false;
+            
+            string newName;
+            if (viewModel.SelectedEntity is ServerViewModel serverViewModel)
+            {
+                newName = NewServerName.Text;
+            }
+            else if (viewModel.SelectedEntity is NetworkViewModel networkViewModel)
+            {
+                newName = NewNetworkName.Text;
+            }
+            else
+            {
+                throw new NotImplementedException("Rename does not support this type of entity: "+viewModel.GetType());
+            }
+            
+            //TODO name verifier instead of this
+            if (newName.Equals(""))
+            {
+                newName = "forkEntity";
+            }
+            
+            viewModel.SelectedEntity.Name = newName;
+            Console.WriteLine("Successfully renamed Entity to: "+newName);
+            
+            Abort_Click(this, e);
+            ServerRenameBtn.IsEnabled = true;
+            ServerRenameCancelBtn.IsEnabled = true;
+            NetworkRenameBtn.IsEnabled = true;
+            NetworkRenameCancelBtn.IsEnabled = true;
         }
         
         private async void Delete_Click(object sender, RoutedEventArgs e)

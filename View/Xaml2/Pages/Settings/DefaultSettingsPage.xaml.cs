@@ -85,10 +85,6 @@ namespace Fork.View.Xaml2.Pages.Settings
 
         private void HandleTextReadUpdate(object sender, SettingsFile.TextReadUpdatedEventArgs eventArgs)
         {
-            if (SettingsFile.FileInfo.Name.Contains("locations"))
-            {
-                string test = eventArgs.NewText;
-            }
             Application.Current.Dispatcher?.Invoke(() => text.Text = eventArgs.NewText);
         }
 

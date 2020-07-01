@@ -33,7 +33,7 @@ namespace fork.ViewModel
         public ObservableCollection<Permission> Permissions { get; set; } = new ObservableCollection<Permission>();
         public ObservableCollection<Group> Groups { get; set; } = new ObservableCollection<Group>();
 
-        public string NetworkTitle => Network.Name + " - " + Network.Version.Type;
+        public string NetworkTitle => Name + " - " + Network.Version.Type;
         
         public ServerDropHandler DropHandler { get; }
 
