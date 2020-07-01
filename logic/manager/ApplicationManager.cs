@@ -14,6 +14,8 @@ namespace fork.Logic.Manager
     {
         public static ConsoleWriter ConsoleWriter;
         private static ApplicationManager instance = null;
+        public static bool Initialized { get; private set; } = false;
+
         //Lock to ensure Singleton pattern
         private static object myLock = new object();
         
@@ -29,6 +31,7 @@ namespace fork.Logic.Manager
                         {
                             instance = new ApplicationManager();
                             ConsoleWriter.AppStarted();
+                            Initialized = true;
                         }
                     }
                 }

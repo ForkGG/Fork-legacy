@@ -182,12 +182,6 @@ namespace fork.ViewModel
             CurrentStatus = ServerStatus.STOPPED;
             ConsoleOutList = new ObservableCollection<string>();
             ConsoleOutList.CollectionChanged += ConsoleOutChanged;
-            
-            new Thread(() =>
-            {
-                Thread.Sleep(1000);
-                Application.Current.Dispatcher?.Invoke(StartSettingsReader);
-            }).Start();
         }
 
         public void UpdateSettingsFiles(List<SettingsFile> files, bool initial = false)
@@ -323,7 +317,7 @@ namespace fork.ViewModel
             raisePropertyChanged(nameof(ConsoleOutList));
         }
         
-        private void StartSettingsReader()
+        public void StartSettingsReader()
         {
             SettingsReader settingsReader = new SettingsReader(this);
             ApplicationManager.Instance.SettingsReaders.Add(settingsReader);

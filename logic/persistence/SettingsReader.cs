@@ -80,14 +80,16 @@ namespace fork.Logic.Persistence
             fileWatcher = new FileSystemWatcher();
             fileWatcher.Path = directoryInfo.FullName;
             fileWatcher.NotifyFilter = NotifyFilters.LastWrite;
-            fileWatcher.Filter = "*.*";
+            fileWatcher.Filters.Add("*.yml");
+            fileWatcher.Filters.Add("*.properties");
             fileWatcher.Changed += OnFilesChanged;
             fileWatcher.EnableRaisingEvents = true;
         }
 
         private void OnFilesChanged(object source, FileSystemEventArgs e)
         {
-            viewModel.UpdateSettingsFiles(GetSettingsFiles(viewModel));
+            List<SettingsFile> settings = new List<SettingsFile>{new SettingsFile(new FileInfo(e.FullPath))};
+            viewModel.UpdateSettingsFiles(settings);
         }
     }
 }

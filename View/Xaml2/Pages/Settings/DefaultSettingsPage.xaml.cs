@@ -63,13 +63,14 @@ namespace Fork.View.Xaml2.Pages.Settings
             UpdateFoldings(foldingManager, tabFoldingStrategy);
             
             text.TextChanged += TextChanged;
+            settingsFile.TextReadUpdateEvent += HandleTextReadUpdate;
         }
 
-        public void ReadText()
-        {
-            SettingsFile.ReadText();
-            text.Text = SettingsFile.Text;
-        }
+        //public void ReadText()
+        //{
+        //    SettingsFile.ReadText();
+        //    text.Text = SettingsFile.Text;
+        //}
 
         public void SaveSettings()
         {
@@ -80,6 +81,15 @@ namespace Fork.View.Xaml2.Pages.Settings
                 SettingsFile.Text = newText;
                 SettingsFile.SaveText();
             }
+        }
+
+        private void HandleTextReadUpdate(object sender, SettingsFile.TextReadUpdatedEventArgs eventArgs)
+        {
+            if (SettingsFile.FileInfo.Name.Contains("locations"))
+            {
+                string test = eventArgs.NewText;
+            }
+            Application.Current.Dispatcher?.Invoke(() => text.Text = eventArgs.NewText);
         }
 
         private void UpdateFoldings(FoldingManager foldingManager, TabFoldingStrategy tabFoldingStrategy)

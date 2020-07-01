@@ -50,6 +50,16 @@ namespace fork.ViewModel
             Application.Current.Dispatcher.Invoke(new Action(() => SettingsViewModel = new SettingsViewModel(this)));
 
             DropHandler = new ServerDropHandler(this);
+            
+            new Thread(() =>
+            {
+                while (ApplicationManager.Initialized == false)
+                {
+                    Thread.Sleep(100);
+                }
+                Application.Current.Dispatcher?.Invoke(StartSettingsReader);
+            }).Start();
+            
             Console.WriteLine("Server ViewModel for " + network.Name + " initialized in "+t.Seconds+"."+t.Milliseconds+"s");
         }
 

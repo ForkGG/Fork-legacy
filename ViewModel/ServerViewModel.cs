@@ -102,6 +102,15 @@ namespace fork.ViewModel
             Worlds.CollectionChanged += WorldsChanged;
 
             InitializeLists(server);
+            
+            new Thread(() =>
+            {
+                while (ApplicationManager.Initialized == false)
+                {
+                    Thread.Sleep(100);
+                }
+                Application.Current.Dispatcher?.Invoke(StartSettingsReader);
+            }).Start();
 
             TimeSpan t = DateTime.Now - start;
             Console.WriteLine("Server ViewModel for " + server.Name + " initialized in "+t.Seconds+"."+t.Milliseconds+"s");

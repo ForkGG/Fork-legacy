@@ -89,6 +89,7 @@ namespace fork.ViewModel
             foreach (SettingsFile settingsFile in settingsFiles)
             {
                 bool add = true;
+                ISettingsPage existingPage = null;
                 foreach (ISettingsPage setting in SettingsPages)
                 {
                     //Edge case for Settings without file
@@ -96,6 +97,7 @@ namespace fork.ViewModel
                     if (settingsFile.FileInfo.FullName.Equals(setting.SettingsFile.FileInfo.FullName))
                     {
                         add = false;
+                        existingPage = setting;
                         break;
                     }
 
@@ -136,6 +138,11 @@ namespace fork.ViewModel
                 if (remove)
                 {
                     Application.Current.Dispatcher?.Invoke(() => SettingsPages.RemoveAt(removeIndex));
+                }
+
+                if (!add && !remove)
+                {
+                    existingPage.SettingsFile.ReadText();
                 }
             }
             SortSettingsPages();

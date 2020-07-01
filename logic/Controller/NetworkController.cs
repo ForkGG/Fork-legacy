@@ -203,7 +203,7 @@ namespace fork.Logic.Controller
                 ZipFile.CreateFromDirectory(serverDirectory.FullName,
                     Path.Combine(deletedDirectory.FullName, networkViewModel.Network.Name + ".zip"));
                 serverDirectory.Delete(true);
-                ServerManager.Instance.RemoveEntity(networkViewModel);
+                Application.Current.Dispatcher?.Invoke(()=>ServerManager.Instance.RemoveEntity(networkViewModel));
                 return true;
             }
             catch (Exception e)

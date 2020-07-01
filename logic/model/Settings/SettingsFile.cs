@@ -16,6 +16,17 @@ namespace fork.Logic.Model.Settings
         {
             Vanilla, Bungee, Undefined
         }
+        public class TextReadUpdatedEventArgs
+        {
+            public string NewText { get; }
+
+            public TextReadUpdatedEventArgs(string newText)
+            {
+                NewText = newText;
+            }
+        }
+        public delegate void HandleTextReadUpdate(object sender, TextReadUpdatedEventArgs eventArgs);
+        public event HandleTextReadUpdate TextReadUpdateEvent;
         
         private static object fileLock = new object();
         
@@ -23,6 +34,7 @@ namespace fork.Logic.Model.Settings
         public int NameID { get; }
         public string Text { get; set; }
         public SettingsType Type { get; }
+        
 
         //Constructor for Settings without file
         public SettingsFile(string name)
@@ -59,7 +71,7 @@ namespace fork.Logic.Model.Settings
                 while (!FileReader.IsFileReadable(FileInfo))
                 {
                     Thread.Sleep(500);
-                    if (ApplicationManager.Instance.HasExited)
+                    if (ApplicationManager.Instance.HasExited || !FileInfo.Exists)
                     {
                         return;
                     }
@@ -67,6 +79,7 @@ namespace fork.Logic.Model.Settings
                 lock (fileLock)
                 {
                     Text = File.ReadAllText(FileInfo.FullName);
+                    TextReadUpdateEvent?.Invoke(this, new TextReadUpdatedEventArgs(Text));
                 }
             }).Start();
         }
