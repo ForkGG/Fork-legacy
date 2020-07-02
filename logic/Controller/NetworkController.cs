@@ -6,6 +6,7 @@ using System.IO.Compression;
 using System.Threading;
 using System.Windows;
 using fork.Logic.CustomConsole;
+using fork.Logic.Logging;
 using fork.Logic.Manager;
 using fork.Logic.Model;
 using fork.Logic.Model.ProxyModels;
@@ -193,15 +194,15 @@ namespace fork.Logic.Controller
 
                 DirectoryInfo deletedDirectory =
                     Directory.CreateDirectory(Path.Combine(App.ApplicationPath, "backup", "deleted"));
-                if (File.Exists(Path.Combine(deletedDirectory.FullName, networkViewModel.Network.Name + ".zip")))
+                if (File.Exists(Path.Combine(deletedDirectory.FullName, networkViewModel.Name + ".zip")))
                 {
-                    File.Delete(Path.Combine(deletedDirectory.FullName, networkViewModel.Network.Name + ".zip"));
+                    File.Delete(Path.Combine(deletedDirectory.FullName, networkViewModel.Name + ".zip"));
                 }
 
                 DirectoryInfo serverDirectory =
-                    new DirectoryInfo(Path.Combine(App.ApplicationPath, networkViewModel.Network.Name));
+                    new DirectoryInfo(Path.Combine(App.ApplicationPath, networkViewModel.Name));
                 ZipFile.CreateFromDirectory(serverDirectory.FullName,
-                    Path.Combine(deletedDirectory.FullName, networkViewModel.Network.Name + ".zip"));
+                    Path.Combine(deletedDirectory.FullName, networkViewModel.Name + ".zip"));
                 serverDirectory.Delete(true);
                 Application.Current.Dispatcher?.Invoke(()=>ServerManager.Instance.RemoveEntity(networkViewModel));
                 return true;
@@ -209,6 +210,38 @@ namespace fork.Logic.Controller
             catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);
+                return false;
+            }
+        }
+
+        public bool RenameNetwork(NetworkViewModel viewModel, string newName)
+        {
+            if (viewModel.CurrentStatus != ServerStatus.STOPPED)
+            {
+                StopNetwork(viewModel, true);
+                while (viewModel.CurrentStatus != ServerStatus.STOPPED)
+                {
+                    Thread.Sleep(500);
+                }
+            }
+            try
+            {
+                DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ApplicationPath, viewModel.Name));
+                if (!directoryInfo.Exists)
+                {
+                    ErrorLogger.Append(
+                        new DirectoryNotFoundException("Could not find Directory " + directoryInfo.FullName));
+                    return false;
+                }
+
+                directoryInfo.MoveTo(Path.Combine(App.ApplicationPath, newName));
+
+                viewModel.Name = newName;
+                return true;
+            }
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
                 return false;
             }
         }

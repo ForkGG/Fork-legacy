@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
@@ -39,6 +40,18 @@ namespace fork.ViewModel
         private List<double> diskList;
         private double diskValue;
         
+        public class EntityPathChangedEventArgs
+        {
+            public string NewPath { get; }
+
+            public EntityPathChangedEventArgs(string newPath)
+            {
+                NewPath = newPath;
+            }
+        }
+        public delegate void HandleEntityPathChangedEvent(object sender, EntityPathChangedEventArgs e);
+        public event HandleEntityPathChangedEvent EntityPathChangedEvent;
+        
         public Entity Entity { get; set; }
 
         public string Name
@@ -47,6 +60,7 @@ namespace fork.ViewModel
             set
             {
                 Entity.Name = value; 
+                EntityPathChangedEvent?.Invoke(this, new EntityPathChangedEventArgs(Path.Combine(App.ApplicationPath,value)));
                 new Thread(()=>
                 {
                     if (this is ServerViewModel s)

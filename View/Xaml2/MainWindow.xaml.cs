@@ -226,41 +226,65 @@ namespace fork.View.Xaml2
             RenameNetworkOverlay.Visibility = Visibility.Collapsed;
         }
 
-        private void Rename_Click(object sender, RoutedEventArgs e)
+        private async void Rename_Click(object sender, RoutedEventArgs e)
         {
-            ServerRenameBtn.IsEnabled = false;
-            ServerRenameCancelBtn.IsEnabled = false;
-            NetworkRenameBtn.IsEnabled = false;
-            NetworkRenameCancelBtn.IsEnabled = false;
-            
             string newName;
             if (viewModel.SelectedEntity is ServerViewModel serverViewModel)
             {
+                ServerRenameBtn.IsEnabled = false;
+                ServerRenameCancelBtn.IsEnabled = false;
                 newName = NewServerName.Text;
+                //TODO name verifier instead of this
+                if (newName.Equals(""))
+                {
+                    newName = "forkEntity";
+                }
+
+                bool success = await ServerManager.Instance.RenameServerAsync(serverViewModel, newName);
+                if (success)
+                {
+                    Console.WriteLine("Successfully renamed Server to: "+newName);
+                }
+                else
+                {
+                    //TODO Show error
+                    Console.WriteLine("Error renaming Server: "+serverViewModel.Name);
+                }
+                    
+                ServerRenameBtn.IsEnabled = true;
+                ServerRenameCancelBtn.IsEnabled = true;
             }
             else if (viewModel.SelectedEntity is NetworkViewModel networkViewModel)
             {
+                NetworkRenameBtn.IsEnabled = false;
+                NetworkRenameCancelBtn.IsEnabled = false;
                 newName = NewNetworkName.Text;
+                //TODO name verifier instead of this
+                if (newName.Equals(""))
+                {
+                    newName = "forkEntity";
+                }
+
+                bool success = await ServerManager.Instance.RenameNetworkAsync(networkViewModel, newName);
+                if (success)
+                {
+                    Console.WriteLine("Successfully renamed Network to: "+newName);
+                }
+                else
+                {
+                    //TODO Show error
+                    Console.WriteLine("Error renaming Network: "+networkViewModel.Name);
+                }
+                
+                NetworkRenameBtn.IsEnabled = true;
+                NetworkRenameCancelBtn.IsEnabled = true;
             }
             else
             {
                 throw new NotImplementedException("Rename does not support this type of entity: "+viewModel.GetType());
             }
             
-            //TODO name verifier instead of this
-            if (newName.Equals(""))
-            {
-                newName = "forkEntity";
-            }
-            
-            viewModel.SelectedEntity.Name = newName;
-            Console.WriteLine("Successfully renamed Entity to: "+newName);
-            
             Abort_Click(this, e);
-            ServerRenameBtn.IsEnabled = true;
-            ServerRenameCancelBtn.IsEnabled = true;
-            NetworkRenameBtn.IsEnabled = true;
-            NetworkRenameCancelBtn.IsEnabled = true;
         }
         
         private async void Delete_Click(object sender, RoutedEventArgs e)

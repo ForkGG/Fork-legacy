@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using fork.Logic.Logging;
 using fork.ViewModel;
 
 namespace fork.Logic.BackgroundWorker.Performance
@@ -43,27 +44,36 @@ namespace fork.Logic.BackgroundWorker.Performance
 
         private string GetProcessInstanceName(int processId)
         {
-            var process = Process.GetProcessById(processId);
-            string processName = Path.GetFileNameWithoutExtension(process.ProcessName);
-
-            PerformanceCounterCategory cat = new PerformanceCounterCategory("Process");
-            string[] instances = cat.GetInstanceNames()
-                .Where(inst => inst.StartsWith(processName))
-                .ToArray();
-
-            foreach (string instance in instances)
+            try
             {
-                using (PerformanceCounter cnt = new PerformanceCounter("Process",
-                    "ID Process", instance, true))
+                var process = Process.GetProcessById(processId);
+                string processName = Path.GetFileNameWithoutExtension(process.ProcessName);
+
+                PerformanceCounterCategory cat = new PerformanceCounterCategory("Process");
+                string[] instances = cat.GetInstanceNames()
+                    .Where(inst => inst.StartsWith(processName))
+                    .ToArray();
+
+                foreach (string instance in instances)
                 {
-                    int val = (int)cnt.RawValue;
-                    if (val == processId)
+                    using (PerformanceCounter cnt = new PerformanceCounter("Process",
+                        "ID Process", instance, true))
                     {
-                        return instance;
+                        int val = (int) cnt.RawValue;
+                        if (val == processId)
+                        {
+                            return instance;
+                        }
                     }
                 }
+
+                return null;
             }
-            return null;
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
+                return null;
+            }
         }
 
         public void StopThreads()

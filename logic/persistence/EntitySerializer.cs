@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using fork.Logic.Logging;
 using fork.Logic.Model;
 using fork.Logic.Model.ProxyModels;
 using fork.ViewModel;
@@ -79,7 +80,16 @@ namespace fork.Logic.Persistence
                         entityViewModels.Add(new ServerViewModel(server));
                     }
                 }
-                //serversFile.Delete();
+
+                try
+                {
+                    serversFile.Delete();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error while deleting servers.xml");
+                    ErrorLogger.Append(e);
+                }
             }
             
             FileInfo entitiesFile = new FileInfo(Path.Combine(App.ApplicationPath, "persistence", "entities.json"));

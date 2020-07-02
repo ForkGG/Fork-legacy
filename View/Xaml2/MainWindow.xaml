@@ -7,6 +7,7 @@
         xmlns:shapes="clr-namespace:fork.View.Xaml2.Shapes"
         xmlns:converter="clr-namespace:fork.View.Xaml.Converter"
         xmlns:dd="urn:gong-wpf-dragdrop"
+        xmlns:model="clr-namespace:fork.Logic.Model"
         xmlns:local="clr-namespace:fork.View.Xaml2"
         mc:Ignorable="d" MinWidth="1080" MinHeight="400"
         Title="Fork" Height="720" Width="1200" Style="{StaticResource DefaultWindowV2}">
@@ -247,8 +248,19 @@
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="17" Height="20">
                         </TextBox>
-                    </Border>
+                    </Border>                    
                 </StackPanel>
+                <TextBlock Text="WARNING: Renaming will stop your Server" Margin="0 0 0 5" FontSize="17" HorizontalAlignment="Center" FontFamily="{DynamicResource Montserrat-SemiBold}" Foreground="{DynamicResource buttonBgrRed}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedEntity.CurrentStatus}" Value="{x:Static model:ServerStatus.STOPPED}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5 0 30">
                     <Button x:Name="ServerRenameCancelBtn" Content="Cancel" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="20" Click="Abort_Click"/>
                     <Button x:Name="ServerRenameBtn" Content="Rename" Style="{DynamicResource RoundedTextButton}" MinWidth="100" Margin="20" Click="Rename_Click"/>

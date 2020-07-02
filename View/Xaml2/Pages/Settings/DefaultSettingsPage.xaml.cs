@@ -66,15 +66,14 @@ namespace Fork.View.Xaml2.Pages.Settings
             settingsFile.TextReadUpdateEvent += HandleTextReadUpdate;
         }
 
-        //public void ReadText()
-        //{
-        //    SettingsFile.ReadText();
-        //    text.Text = SettingsFile.Text;
-        //}
-
         public void SaveSettings()
         {
             string newText = "";
+            if (SettingsFile.Text == null)
+            {
+                Console.WriteLine("Failed to save file "+SettingsFile.FileInfo.FullName+" because the text has not yet been read from the file.");
+                return;
+            }
             Application.Current.Dispatcher?.Invoke(() => newText = text.Text);
             if (!SettingsFile.Text.Equals(newText))
             {

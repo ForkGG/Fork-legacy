@@ -45,7 +45,7 @@ namespace fork.Logic.Manager
             {
                 if (!viewModel.Entity.Initialized)
                 {
-                    Downloader.DownloadJarAsync(viewModel, new DirectoryInfo(Path.Combine(App.ApplicationPath, viewModel.Entity.Name)));
+                    Downloader.DownloadJarAsync(viewModel, new DirectoryInfo(Path.Combine(App.ApplicationPath, viewModel.Name)));
                 }
             }
 
@@ -135,6 +135,14 @@ namespace fork.Logic.Manager
             t.Start();
             bool result = await t;
             return result;
+        }
+        
+        public async Task<bool> RenameServerAsync(ServerViewModel viewModel, string newName)
+        {
+            Task<bool> t = new Task<bool>(() => RenameServer(viewModel, newName));
+            t.Start();
+            bool r = await t;
+            return r;
         }
 
         public async Task<bool> DeleteServerAsync(ServerViewModel serverViewModel)
@@ -242,6 +250,15 @@ namespace fork.Logic.Manager
             }
             bool startSuccess = await StartNetworkAsync(viewModel, restartServers);
             return startSuccess;
+        }
+
+        public async Task<bool> RenameNetworkAsync(NetworkViewModel viewModel, string newName)
+        {
+            Task<bool> t = new Task<bool>(() =>
+                networkController.RenameNetwork(viewModel, newName));
+            t.Start();
+            bool r = await t;
+            return r;
         }
         
         public async Task<bool> DeleteNetworkAsync(NetworkViewModel viewModel)
@@ -452,6 +469,38 @@ namespace fork.Logic.Manager
 
             return true;
         }
+        
+        private bool RenameServer(ServerViewModel viewModel, string newName)
+        {
+            if (viewModel.CurrentStatus != ServerStatus.STOPPED)
+            {
+                StopServer(viewModel);
+                while (viewModel.CurrentStatus != ServerStatus.STOPPED)
+                {
+                    Thread.Sleep(500);
+                }
+            }
+            try
+            {
+                DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ApplicationPath, viewModel.Name));
+                if (!directoryInfo.Exists)
+                {
+                    ErrorLogger.Append(
+                        new DirectoryNotFoundException("Could not find Directory " + directoryInfo.FullName));
+                    return false;
+                }
+
+                directoryInfo.MoveTo(Path.Combine(App.ApplicationPath, newName));
+
+                viewModel.Name = newName;
+                return true;
+            }
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
+                return false;
+            }
+        }
 
         private bool DeleteServer(ServerViewModel serverViewModel)
         {
@@ -468,15 +517,15 @@ namespace fork.Logic.Manager
 
                 DirectoryInfo deletedDirectory =
                     Directory.CreateDirectory(Path.Combine(App.ApplicationPath, "backup", "deleted"));
-                if (File.Exists(Path.Combine(deletedDirectory.FullName, serverViewModel.Server.Name + ".zip")))
+                if (File.Exists(Path.Combine(deletedDirectory.FullName, serverViewModel.Name + ".zip")))
                 {
-                    File.Delete(Path.Combine(deletedDirectory.FullName, serverViewModel.Server.Name + ".zip"));
+                    File.Delete(Path.Combine(deletedDirectory.FullName, serverViewModel.Name + ".zip"));
                 }
 
                 DirectoryInfo serverDirectory =
-                    new DirectoryInfo(Path.Combine(App.ApplicationPath, serverViewModel.Server.Name));
+                    new DirectoryInfo(Path.Combine(App.ApplicationPath, serverViewModel.Name));
                 ZipFile.CreateFromDirectory(serverDirectory.FullName,
-                    Path.Combine(deletedDirectory.FullName, serverViewModel.Server.Name + ".zip"));
+                    Path.Combine(deletedDirectory.FullName, serverViewModel.Name + ".zip"));
                 serverDirectory.Delete(true);
                 Application.Current.Dispatcher?.Invoke(()=>Entities.Remove(serverViewModel));
                 serverNames.Remove(serverViewModel.Server.Name);
@@ -509,7 +558,7 @@ namespace fork.Logic.Manager
 
                 //Download new server.jar
                 DirectoryInfo directoryInfo =
-                    new DirectoryInfo(Path.Combine(App.ApplicationPath, serverViewModel.Server.Name));
+                    new DirectoryInfo(Path.Combine(App.ApplicationPath, serverViewModel.Name));
                 Downloader.DownloadJarAsync(serverViewModel, directoryInfo);
 
                 serverViewModel.Server.Version = newVersion;
