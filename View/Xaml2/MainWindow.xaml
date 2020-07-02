@@ -282,8 +282,19 @@
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="17" Height="20">
                         </TextBox>
-                    </Border>
+                    </Border>                    
                 </StackPanel>
+                <TextBlock Text="WARNING: Renaming will stop your Network" Margin="0 0 0 5" FontSize="17" HorizontalAlignment="Center" FontFamily="{DynamicResource Montserrat-SemiBold}" Foreground="{DynamicResource buttonBgrRed}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedEntity.CurrentStatus}" Value="{x:Static model:ServerStatus.STOPPED}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5 0 30">
                     <Button x:Name="NetworkRenameCancelBtn" Content="Cancel" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="20" Click="Abort_Click"/>
                     <Button x:Name="NetworkRenameBtn" Content="Rename" Style="{DynamicResource RoundedTextButton}" MinWidth="100" Margin="20" Click="Rename_Click"/>
