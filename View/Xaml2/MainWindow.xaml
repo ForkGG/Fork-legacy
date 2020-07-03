@@ -240,8 +240,8 @@
                 <TextBlock Text="Choose a new name for your Server" Margin="0 0 0 5" FontSize="17" HorizontalAlignment="Center" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 40">
                     <Border CornerRadius="4" Width="200" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}">
-                        <TextBox Margin="5 0" Background="{DynamicResource buttonBgrDefault}"
+                                    Background="{DynamicResource textBackground}">
+                        <TextBox Margin="5 0" Background="{DynamicResource textBackground}"
                                  x:Name="NewServerName"
                                          BorderThickness="0" Text="{Binding Name, Mode=OneTime}"
                                          Foreground="{DynamicResource backgroundDark}"
@@ -274,8 +274,8 @@
                 <TextBlock Text="Choose a new name for your Network" Margin="0 0 0 5" FontSize="17" HorizontalAlignment="Center" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 40">
                     <Border CornerRadius="4" Width="200" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}">
-                        <TextBox Margin="5 0" Background="{DynamicResource buttonBgrDefault}"
+                                    Background="{DynamicResource textBackground}">
+                        <TextBox Margin="5 0" Background="{DynamicResource textBackground}"
                                  x:Name="NewNetworkName"
                                          BorderThickness="0" Text="{Binding Name, Mode=OneTime}"
                                          Foreground="{DynamicResource backgroundDark}"

@@ -59,7 +59,7 @@ namespace Fork.View.Xaml2.Pages.Server
         private async void ImportWorld_Click(object sender, RoutedEventArgs e)
         {
             worldFolderPathText.Text = "Click To Select Your World";
-            serverPathBgr.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
+            serverPathBgr.Background = (Brush) Application.Current.FindResource("textBackground");
             ImportWorld.IsEnabled = false;
             ImportWorld.Visibility = Visibility.Collapsed;
             await ServerManager.Instance.ImportWorldAsync(viewModel, lastPath);

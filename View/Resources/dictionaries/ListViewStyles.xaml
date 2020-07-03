@@ -351,9 +351,9 @@
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Name" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
                                 <Border CornerRadius="3" MinWidth="120" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}" Margin="0 0 10 0">
+                                    Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                     <TextBox Margin="5 0" Text="{Binding Name}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="16" Height="18" MaxWidth="300"/>
@@ -373,9 +373,9 @@
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="Address" VerticalAlignment="Center" Margin="0 5 15 5" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
                                     <Border CornerRadius="3" MinWidth="200" Grid.Column="1" Height="26"
-                                        Background="{DynamicResource buttonBgrDefault}" Margin="0 0 10 0">
+                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                         <TextBox x:Name="address" Margin="5 0" Text="{Binding Address}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="16" Height="18"/>
@@ -385,9 +385,9 @@
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="MOTD" Grid.Row="1" VerticalAlignment="Center" Margin="0 5 30 5" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
                                     <Border CornerRadius="3" MinWidth="120" Grid.Row="1" Grid.Column="1" Height="26"
-                                        Background="{DynamicResource buttonBgrDefault}" Margin="0 0 10 0">
+                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                         <TextBox Margin="5 0" Text="{Binding Motd}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="16" Height="18" MaxWidth="400"/>
@@ -441,9 +441,9 @@
                             </DockPanel>
                             <StackPanel Orientation="Horizontal" Margin="10 5 0 0" >
                                 <Border CornerRadius="3" MinWidth="66"  MinHeight="26"
-                                        Background="{DynamicResource buttonBgrDefault}" Margin="0 0 10 0">
+                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                     <TextBox Margin="5 5" Text="{Binding PermissionList, Converter={StaticResource ListToStringConverter}}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}" AcceptsReturn="True"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="16" MinHeight="18" Width="290"/>
@@ -490,9 +490,9 @@
                             </DockPanel>
                             <StackPanel Orientation="Horizontal" Margin="10 5 0 0" >
                                 <Border CornerRadius="3" MinWidth="130"  MinHeight="26"
-                                        Background="{DynamicResource buttonBgrDefault}" Margin="0 0 10 0">
+                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                     <TextBox Margin="5 5" Text="{Binding Groups, Converter={StaticResource ListToStringConverter}}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}" AcceptsReturn="True"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="16" MinHeight="18" Width="150"/>

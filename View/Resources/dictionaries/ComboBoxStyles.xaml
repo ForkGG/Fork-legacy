@@ -17,12 +17,12 @@
                   Grid.Column="0"
                   CornerRadius="4 0 0 4" 
                   Margin="0" 
-                  Background="{DynamicResource buttonBgrDefault}" 
+                  Background="{DynamicResource textBackground}" 
                   BorderBrush="Transparent"
                   BorderThickness="0,0,0,3" />
             <Polygon x:Name="Arrow" Grid.Column="1"
                      Margin="0 0 0 3"
-                     Fill="{DynamicResource buttonBgrDefault}"
+                     Fill="{DynamicResource textBackground}"
                      HorizontalAlignment="Center" VerticalAlignment="Center"
                      Points="0,0 16,0 8,8">
             </Polygon>

@@ -117,13 +117,13 @@
                     <TextBlock Text="Fun Fact: You are awesome" Margin="0 0 0 20" FontSize="15" HorizontalAlignment="Center" Foreground="{DynamicResource textSelected}"/>
 
                     <ProgressBar Style="{DynamicResource CustomProgressBar}" Margin="100 20 100 10" Height="14" 
-                             Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                             Background="{DynamicResource textBackground}" BorderThickness="0"
                              Value="{Binding CopyProgress}" Visibility="{Binding ImportCompleted, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
                     <TextBlock Text="Copying Files..." Margin="0 0 0 0" FontSize="15" HorizontalAlignment="Center" Foreground="{DynamicResource textSelected}"
                            Visibility="{Binding ImportCompleted, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
 
                     <ProgressBar Style="{DynamicResource CustomProgressBar}" Margin="100 20 100 10" Height="14" 
-                             Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                             Background="{DynamicResource textBackground}" BorderThickness="0"
                              Value="{Binding DownloadProgress}"/>
                     <TextBlock Text="Downloading..." Margin="0 0 0 0" FontSize="15" HorizontalAlignment="Center" Foreground="{DynamicResource textSelected}"/>
                 </StackPanel>

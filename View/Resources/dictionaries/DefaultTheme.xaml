@@ -15,7 +15,7 @@
     <!-- Button Colors -->
     <SolidColorBrush x:Key="buttonDefault" Color="#1F2234"/>
     <SolidColorBrush x:Key="buttonHover" Color="#FF444444"/>
-    <SolidColorBrush x:Key="buttonBgrDefault" Color="#565B7A"/>
+    <SolidColorBrush x:Key="buttonBgrDefault" Color="#747AAC"/>
     <SolidColorBrush x:Key="buttonBgrRed" Color="#ED5E5E"/>
     <SolidColorBrush x:Key="buttonBgrYellow" Color="#EBED78"/>
     <SolidColorBrush x:Key="buttonBgrGreen" Color="#5EED80"/>
@@ -32,6 +32,7 @@
     <SolidColorBrush x:Key="foregroundDisabled" Color="#8c8c8c"/>
     
     <!-- Text Colors -->
+    <SolidColorBrush x:Key="textBackground" Color="#565B7A"/>
     <SolidColorBrush x:Key="textDefault" Color="#9DA7E2" />
     <SolidColorBrush x:Key="textHeader" Color="#8FB2BC" />
     <SolidColorBrush x:Key="textTitle" Color="#4F9AEE " />

@@ -96,8 +96,8 @@
                                   Style="{DynamicResource DefaultCheckBox}"
                                   Margin="20 5">
                                         <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}">
-                                            <TextBox Margin="5 0" Background="{DynamicResource buttonBgrDefault}"
+                                    Background="{DynamicResource textBackground}">
+                                            <TextBox Margin="5 0" Background="{DynamicResource textBackground}"
                                          BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
@@ -117,8 +117,8 @@
                                   Style="{DynamicResource DefaultCheckBox}"
                                   Grid.Column="1" Margin="20 5">
                                         <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}">
-                                            <TextBox Margin="5 0" Background="{DynamicResource buttonBgrDefault}"
+                                    Background="{DynamicResource textBackground}">
+                                            <TextBox Margin="5 0" Background="{DynamicResource textBackground}"
                                          BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
@@ -138,8 +138,8 @@
                                   Style="{DynamicResource DefaultCheckBox}"
                                   Grid.Row="1" Margin="20 5">
                                         <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}">
-                                            <TextBox Margin="5 0" Background="{DynamicResource buttonBgrDefault}"
+                                    Background="{DynamicResource textBackground}">
+                                            <TextBox Margin="5 0" Background="{DynamicResource textBackground}"
                                          BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
@@ -159,8 +159,8 @@
                                   Style="{DynamicResource DefaultCheckBox}"
                                   Grid.Row="1" Grid.Column="1" Margin="20 5">
                                         <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}">
-                                            <TextBox Margin="5 0" Background="{DynamicResource buttonBgrDefault}"
+                                    Background="{DynamicResource textBackground}">
+                                            <TextBox Margin="5 0" Background="{DynamicResource textBackground}"
                                          BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"

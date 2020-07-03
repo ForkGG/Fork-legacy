@@ -26,7 +26,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
                     <Border CornerRadius="2"
-                        Background="{DynamicResource buttonBgrDefault}"
+                        Background="{DynamicResource textBackground}"
                         BorderThickness="0" />
                 </ControlTemplate>
             </Setter.Value>
@@ -152,7 +152,7 @@
                                    Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" 
                                    Style="{StaticResource BigScrollBar}"/>
 
-                            <Border Background="{DynamicResource buttonBgrDefault}" CornerRadius="3" BorderThickness="2" BorderBrush="{DynamicResource buttonBgrDefault}">
+                            <Border Background="{DynamicResource textBackground}" CornerRadius="3" BorderThickness="2" BorderBrush="{DynamicResource buttonBgrDefault}">
                                 <ScrollContentPresenter/>
                             </Border>
                         </Grid>

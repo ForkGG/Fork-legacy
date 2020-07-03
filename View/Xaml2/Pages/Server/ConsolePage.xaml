@@ -218,9 +218,9 @@
                         <StackPanel Background="{DynamicResource backgroundDark}" Visibility="Collapsed" x:Name="AddWhitelistPanel">
                             <TextBlock Text="Enter Player Name" Foreground="{DynamicResource textSelected}" FontSize="15" HorizontalAlignment="Center"/>
                             <Border Grid.Column="1" Margin="10 5 3 0" CornerRadius="4" Width="150" Height="26"
-                                        Background="{DynamicResource buttonBgrDefault}" HorizontalAlignment="Center">
+                                        Background="{DynamicResource textBackground}" HorizontalAlignment="Center">
                                 <TextBox x:Name="PlayerToWhitelist" IsEnabled="True"
-                                             Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                             Background="{DynamicResource textBackground}" BorderThickness="0"
                                              Foreground="{DynamicResource backgroundDark}"
                                              FontFamily="{DynamicResource Montserrat-SemiBold}"
                                              FontSize="17" Height="20" TextAlignment="Center">

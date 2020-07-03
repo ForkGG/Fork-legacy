@@ -58,9 +58,9 @@
                                 </DockPanel>
                                 <DockPanel Height="40" Grid.Column="1" Margin="20 0 0 0">
                                     <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}">
+                                    Background="{DynamicResource textBackground}">
                                         <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.MaxPlayers}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="17" Height="20" />
@@ -70,9 +70,9 @@
                                 </DockPanel>
                                 <DockPanel Height="40" Grid.Column="1" Grid.Row="1" Margin="20 0 0 0">
                                     <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}">
+                                    Background="{DynamicResource textBackground}">
                                         <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.ServerPort}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="17" Height="20" />
@@ -131,9 +131,9 @@
                                         <TextBlock Text="Spawn Protection" TextAlignment="Right"
                                            Style="{DynamicResource CreateServerTextBlock}" />
                                         <Border Grid.Column="1" Margin="10 0 3 0" CornerRadius="4" Width="100" Height="26"
-                                        Background="{DynamicResource buttonBgrDefault}">
+                                        Background="{DynamicResource textBackground}">
                                             <TextBox Text="{Binding Server.ServerSettings.SpawnProtection}"
-                                             Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                             Background="{DynamicResource textBackground}" BorderThickness="0"
                                              Foreground="{DynamicResource backgroundDark}"
                                              FontFamily="{DynamicResource Montserrat-SemiBold}"
                                              FontSize="17" Height="20" />
@@ -144,9 +144,9 @@
                                         <TextBlock Grid.Row="1" Text="View Distance" TextAlignment="Right"
                                            Style="{DynamicResource CreateServerTextBlock}" />
                                         <Border Grid.Row="1" Grid.Column="1" Margin="10 0 3 0" CornerRadius="4" Width="100"
-                                        Height="26" Background="{DynamicResource buttonBgrDefault}">
+                                        Height="26" Background="{DynamicResource textBackground}">
                                             <TextBox Text="{Binding Server.ServerSettings.ViewDistance}"
-                                             Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                             Background="{DynamicResource textBackground}" BorderThickness="0"
                                              Foreground="{DynamicResource backgroundDark}"
                                              FontFamily="{DynamicResource Montserrat-SemiBold}"
                                              FontSize="17" Height="20" />
@@ -159,9 +159,9 @@
                                         <TextBlock Text="MOTD" Style="{DynamicResource CreateServerTextBlock}"
                                            Margin="0 0 20 10" HorizontalAlignment="Center" />
                                         <Border Margin="5 0" CornerRadius="4" Width="550" DockPanel.Dock="Right" Height="50"
-                                        Background="{DynamicResource buttonBgrDefault}">
+                                        Background="{DynamicResource textBackground}">
                                             <TextBox Text="{Binding Server.ServerSettings.Motd}"
-                                             Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                             Background="{DynamicResource textBackground}" BorderThickness="0"
                                              Foreground="{DynamicResource backgroundDark}"
                                              FontFamily="{DynamicResource Montserrat-SemiBold}"
                                              FontSize="17" TextWrapping="NoWrap" AcceptsReturn="True" AcceptsTab="True"
@@ -229,9 +229,9 @@
                                   Margin="0 0 0 5" />
                                 <DockPanel Height="40" Margin="0 5 0 5">
                                     <Border CornerRadius="4" Width="150" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}">
+                                    Background="{DynamicResource textBackground}">
                                         <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.RconPort}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="17" Height="20" />
@@ -242,9 +242,9 @@
                                 </DockPanel>
                                 <DockPanel Height="40" Margin="0 5 0 5">
                                     <Border CornerRadius="4" Width="150" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}">
+                                    Background="{DynamicResource textBackground}">
                                         <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.RconPassword}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="17" Height="20" />
@@ -270,9 +270,9 @@
                             <StackPanel Margin="0 20 0 0">
                                 <DockPanel Height="40">
                                     <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}">
+                                    Background="{DynamicResource textBackground}">
                                         <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.OpPermissionLevel}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="17" Height="20" />
@@ -282,9 +282,9 @@
                                 </DockPanel>
                                 <DockPanel Height="40">
                                     <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}">
+                                    Background="{DynamicResource textBackground}">
                                         <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.PlayerIdleTimeout}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="17" Height="20" />
@@ -294,9 +294,9 @@
                                 </DockPanel>
                                 <DockPanel Height="40">
                                     <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}">
+                                    Background="{DynamicResource textBackground}">
                                         <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.MaxBuildHeight}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="17" Height="20" />
@@ -306,9 +306,9 @@
                                 </DockPanel>
                                 <DockPanel Height="40">
                                     <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}">
+                                    Background="{DynamicResource textBackground}">
                                         <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.MaxWorldSize}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="17" Height="20" />
@@ -530,9 +530,9 @@
                                    Style="{DynamicResource CreateServerTextBlock}"
                                    Margin="0 0 10 5" />
                                 <Border Grid.Column="1" CornerRadius="4" Width="100" Height="26"
-                                Background="{DynamicResource buttonBgrDefault}" Margin="0 5 0 5">
+                                Background="{DynamicResource textBackground}" Margin="0 5 0 5">
                                     <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.MaxTickTime}"
-                                     Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                     Background="{DynamicResource textBackground}" BorderThickness="0"
                                      Foreground="{DynamicResource backgroundDark}"
                                      FontFamily="{DynamicResource Montserrat-SemiBold}"
                                      FontSize="17" Height="20" />
@@ -541,9 +541,9 @@
                                 <TextBlock Grid.Row="1" Text="Network Compression" TextAlignment="Right"
                                    Style="{DynamicResource CreateServerTextBlock}" Margin="0 5 10 5" />
                                 <Border Grid.Row="1" Grid.Column="1" CornerRadius="4" Width="100" Height="26"
-                                Background="{DynamicResource buttonBgrDefault}" Margin="0 5 0 5">
+                                Background="{DynamicResource textBackground}" Margin="0 5 0 5">
                                     <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.NetworkCompressionThreshold}"
-                                     Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                     Background="{DynamicResource textBackground}" BorderThickness="0"
                                      Foreground="{DynamicResource backgroundDark}"
                                      FontFamily="{DynamicResource Montserrat-SemiBold}"
                                      FontSize="17" Height="20" />
@@ -552,9 +552,9 @@
                                 <TextBlock Grid.Row="2" Text="Max Ram" TextAlignment="Right"
                                    Style="{DynamicResource CreateServerTextBlock}" Margin="0 5 10 5" />
                                 <Border Grid.Row="2" Grid.Column="1" CornerRadius="4" Width="100" Height="26"
-                                Background="{DynamicResource buttonBgrDefault}" Margin="0 5 0 5">
+                                Background="{DynamicResource textBackground}" Margin="0 5 0 5">
                                     <TextBox Margin="5 0" Text="{Binding Server.JavaSettings.MaxRam}"
-                                     Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                     Background="{DynamicResource textBackground}" BorderThickness="0"
                                      Foreground="{DynamicResource backgroundDark}"
                                      FontFamily="{DynamicResource Montserrat-SemiBold}"
                                      FontSize="17" Height="20" />
@@ -565,9 +565,9 @@
                                 <TextBlock Grid.Row="3" Text="Min Ram" TextAlignment="Right"
                                    Style="{DynamicResource CreateServerTextBlock}" Margin="0 5 10 5" />
                                 <Border Grid.Row="3" Grid.Column="1" CornerRadius="4" Width="100" Height="26"
-                                Background="{DynamicResource buttonBgrDefault}" Margin="0 5 0 5">
+                                Background="{DynamicResource textBackground}" Margin="0 5 0 5">
                                     <TextBox Margin="5 0" Text="{Binding Server.JavaSettings.MinRam}"
-                                     Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                     Background="{DynamicResource textBackground}" BorderThickness="0"
                                      Foreground="{DynamicResource backgroundDark}"
                                      FontFamily="{DynamicResource Montserrat-SemiBold}"
                                      FontSize="17" Height="20" />
@@ -580,9 +580,9 @@
                                    Style="{DynamicResource CreateServerTextBlock}"
                                    Margin="0 5 10 5" />
                                 <Border Grid.Row="3" Grid.Column="1" CornerRadius="4" Width="400" Height="26"
-                                Background="{DynamicResource buttonBgrDefault}" Margin="0 5 0 5">
+                                Background="{DynamicResource textBackground}" Margin="0 5 0 5">
                                     <TextBox Margin="5 0" Text="{Binding Server.JavaSettings.JavaPath}"
-                                     Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                     Background="{DynamicResource textBackground}" BorderThickness="0"
                                      Foreground="{DynamicResource backgroundDark}"
                                      FontFamily="{DynamicResource Montserrat-SemiBold}"
                                      FontSize="17" Height="20" />
@@ -590,9 +590,9 @@
                                 <TextBlock Grid.Row="3" Text="Custom Startup Parameters"
                                    Style="{DynamicResource CreateServerTextBlock}" Margin="0 15 10 5" />
                                 <Border Grid.Row="3" Grid.Column="1" CornerRadius="4" Width="400" Height="26"
-                                Background="{DynamicResource buttonBgrDefault}" Margin="0 5 0 5">
+                                Background="{DynamicResource textBackground}" Margin="0 5 0 5">
                                     <TextBox Margin="5 0" Text="{Binding Server.JavaSettings.StartupParameters}"
-                                     Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                     Background="{DynamicResource textBackground}" BorderThickness="0"
                                      Foreground="{DynamicResource backgroundDark}"
                                      FontFamily="{DynamicResource Montserrat-SemiBold}"
                                      FontSize="17" Height="20" />

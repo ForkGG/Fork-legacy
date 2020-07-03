@@ -35,9 +35,9 @@
                                     <StackPanel Orientation="Horizontal" Margin="110 20 0 0" HorizontalAlignment="Right">
                                         <TextBlock Text="Player Slots" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
                                         <Border CornerRadius="3" MinWidth="66" DockPanel.Dock="Right" Height="26"
-                                        Background="{DynamicResource buttonBgrDefault}" Margin="0 0 10 0">
+                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                             <TextBox Margin="5 0" Text="{Binding Network.Config.listeners[0].max_players}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="16" Height="18" MaxWidth="300"/>
@@ -46,9 +46,9 @@
                                     <StackPanel Orientation="Horizontal" Margin="110 10 0 0" HorizontalAlignment="Right">
                                         <TextBlock Text="Tab-List Size" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
                                         <Border CornerRadius="3" MinWidth="66" DockPanel.Dock="Right" Height="26"
-                                        Background="{DynamicResource buttonBgrDefault}" Margin="0 0 10 0">
+                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                             <TextBox Margin="5 0" Text="{Binding Network.Config.listeners[0].tab_size}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="16" Height="18" MaxWidth="300"/>
@@ -57,9 +57,9 @@
                                     <StackPanel Orientation="Horizontal" Margin="110 10 0 0" HorizontalAlignment="Right">
                                         <TextBlock Text="Server Port" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
                                         <Border CornerRadius="3" MinWidth="66" DockPanel.Dock="Right" Height="26"
-                                        Background="{DynamicResource buttonBgrDefault}" Margin="0 0 10 0">
+                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                             <TextBox Margin="5 0" Text="{Binding Network.Port}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="16" Height="18" MaxWidth="300"/>
@@ -68,9 +68,9 @@
                                     <StackPanel Orientation="Horizontal" Margin="110 10 0 0" HorizontalAlignment="Right">
                                         <TextBlock Text="Query Port" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
                                         <Border CornerRadius="3" MinWidth="66" DockPanel.Dock="Right" Height="26"
-                                        Background="{DynamicResource buttonBgrDefault}" Margin="0 0 10 0">
+                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                             <TextBox Margin="5 0" Text="{Binding Network.Config.listeners[0].query_port}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="16" Height="18" MaxWidth="300"/>
@@ -104,9 +104,9 @@
                                 <TextBlock Text="MOTD" Style="{DynamicResource CreateServerTextBlock}"
                                            Margin="0 0 20 10" HorizontalAlignment="Center" />
                                 <Border Margin="5 0" CornerRadius="4" Width="550" DockPanel.Dock="Right" Height="50"
-                                        Background="{DynamicResource buttonBgrDefault}">
+                                        Background="{DynamicResource textBackground}">
                                     <TextBox Text="{Binding Network.Config.listeners[0].motdUnescaped}"
-                                             Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                             Background="{DynamicResource textBackground}" BorderThickness="0"
                                              Foreground="{DynamicResource backgroundDark}" MaxLines="2"
                                              FontFamily="{DynamicResource Montserrat-SemiBold}" Margin="5 0"
                                              FontSize="17" TextWrapping="NoWrap" AcceptsReturn="True" AcceptsTab="True"
@@ -178,9 +178,9 @@
                                     <StackPanel Orientation="Horizontal" Margin="110 20 0 0" HorizontalAlignment="Right">
                                         <TextBlock Text="Connection Throttle" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
                                         <Border CornerRadius="3" MinWidth="66" DockPanel.Dock="Right" Height="26"
-                                        Background="{DynamicResource buttonBgrDefault}" Margin="0 0 10 0">
+                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                             <TextBox Margin="5 0" Text="{Binding Network.Config.connection_throttle}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="16" Height="18" MaxWidth="300"/>
@@ -189,9 +189,9 @@
                                     <StackPanel Orientation="Horizontal" Margin="110 10 0 0" HorizontalAlignment="Right">
                                         <TextBlock Text="Connection Throttle Limit" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="16"/>
                                         <Border CornerRadius="3" MinWidth="66" DockPanel.Dock="Right" Height="26"
-                                        Background="{DynamicResource buttonBgrDefault}" Margin="0 0 10 0">
+                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                             <TextBox Margin="5 0" Text="{Binding Network.Config.connection_throttle_limit}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="16" Height="18" MaxWidth="300"/>
@@ -200,9 +200,9 @@
                                     <StackPanel Orientation="Horizontal" Margin="110 10 0 0" HorizontalAlignment="Right">
                                         <TextBlock Text="Timeout" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
                                         <Border CornerRadius="3" MinWidth="66" DockPanel.Dock="Right" Height="26"
-                                        Background="{DynamicResource buttonBgrDefault}" Margin="0 0 10 0">
+                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                             <TextBox Margin="5 0" Text="{Binding Network.Config.timeout}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="16" Height="18" MaxWidth="300"/>
@@ -211,9 +211,9 @@
                                     <StackPanel Orientation="Horizontal" Margin="110 10 0 0" HorizontalAlignment="Right">
                                         <TextBlock Text="Remote Ping Cache" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
                                         <Border CornerRadius="3" MinWidth="66" DockPanel.Dock="Right" Height="26"
-                                        Background="{DynamicResource buttonBgrDefault}" Margin="0 0 10 0">
+                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                             <TextBox Margin="5 0" Text="{Binding Network.Config.remote_ping_cache}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="16" Height="18" MaxWidth="300"/>
@@ -222,9 +222,9 @@
                                     <StackPanel Orientation="Horizontal" Margin="110 10 0 0" HorizontalAlignment="Right">
                                         <TextBlock Text="Remote Ping Timeout" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
                                         <Border CornerRadius="3" MinWidth="66" DockPanel.Dock="Right" Height="26"
-                                        Background="{DynamicResource buttonBgrDefault}" Margin="0 0 10 0">
+                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                             <TextBox Margin="5 0" Text="{Binding Network.Config.remote_ping_timeout}"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="16" Height="18" MaxWidth="300"/>
@@ -324,9 +324,9 @@
                     <StackPanel Orientation="Horizontal" Margin="0 30 0 0" HorizontalAlignment="Right">
                         <TextBlock Text="Name" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
                         <Border CornerRadius="3" MinWidth="200" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}" Margin="0 0 10 0">
+                                    Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                             <TextBox Margin="5 0" Name="newServerName"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="16" Height="18" MaxWidth="300"/>
@@ -335,9 +335,9 @@
                     <StackPanel Orientation="Horizontal" Margin="0 20 0 0"  HorizontalAlignment="Right">
                         <TextBlock Text="Address" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
                         <Border CornerRadius="3" MinWidth="200" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}" Margin="0 0 10 0">
+                                    Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                             <TextBox Margin="5 0" Name="newServerAddress"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="16" Height="18" MaxWidth="300"/>
@@ -346,9 +346,9 @@
                     <StackPanel Orientation="Horizontal" Margin="0 20 0 0"  HorizontalAlignment="Right">
                         <TextBlock Text="MOTD" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
                         <Border CornerRadius="3" MinWidth="200" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}" Margin="0 0 10 0">
+                                    Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                             <TextBox Margin="5 0" Name="newServerMotd"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="16" Height="18" MaxWidth="300"/>
@@ -372,9 +372,9 @@
                     <StackPanel Orientation="Horizontal" Margin="0 30 0 0" HorizontalAlignment="Right">
                         <TextBlock Text="Name" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
                         <Border CornerRadius="3" MinWidth="200" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}" Margin="0 0 10 0">
+                                    Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                             <TextBox Margin="5 0" Name="newGroupName"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="16" Height="18" MaxWidth="300"/>
@@ -398,9 +398,9 @@
                     <StackPanel Orientation="Horizontal" Margin="0 30 0 0" HorizontalAlignment="Right">
                         <TextBlock Text="Name" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
                         <Border CornerRadius="3" MinWidth="200" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}" Margin="0 0 10 0">
+                                    Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                             <TextBox Margin="5 0" Name="newUserName"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="16" Height="18" MaxWidth="300"/>

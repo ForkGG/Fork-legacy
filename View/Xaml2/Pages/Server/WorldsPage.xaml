@@ -80,9 +80,9 @@
                             <StackPanel>
                                 <DockPanel Height="40" Grid.Column="1" Margin="50 0 0 0" HorizontalAlignment="Center">
                                     <Border CornerRadius="4" Width="150" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource buttonBgrDefault}">
+                                    Background="{DynamicResource textBackground}">
                                         <TextBox Margin="5 0" Text="world" x:Name="createWorldName"
-                                         Background="{DynamicResource buttonBgrDefault}" BorderThickness="0"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
                                          Foreground="{DynamicResource backgroundDark}"
                                          FontFamily="{DynamicResource Montserrat-SemiBold}"
                                          FontSize="17" Height="20" />
@@ -116,7 +116,7 @@
                             <StackPanel>
                                 <StackPanel Margin="25 0 0 0" Height="40" Orientation="Horizontal" HorizontalAlignment="Center">
                                     <TextBlock Text="Path"  Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0"/>
-                                    <Border x:Name="serverPathBgr" CornerRadius="4" Height="26" Background="{DynamicResource buttonBgrDefault}">
+                                    <Border x:Name="serverPathBgr" CornerRadius="4" Height="26" Background="{DynamicResource textBackground}">
                                         <TextBlock Margin="10 0" Text="Click To Select Your World" Background="Transparent"
                                      Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}"
                                      FontSize="17" Height="20" PreviewMouseDown="WorldDirPath_MouseDown" Name="worldFolderPathText"/>
