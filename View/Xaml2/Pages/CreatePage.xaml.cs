@@ -107,28 +107,30 @@ namespace fork.View.Xaml2.Pages
                 
                 JavaSettings javaSettings = new JavaSettings{MinRam = minRam, MaxRam = maxRam};
                 bool createNetworkSuccess = await ServerManager.Instance.CreateNetworkAsync(networkName,proxyType, javaSettings);
-                return;
             }
-            ServerVersion selectedVersion = (ServerVersion)versionComboBox.SelectedValue;
-            //TODO check if inputs are valid / server not existing
+            else
+            {   
+                ServerVersion selectedVersion = (ServerVersion)versionComboBox.SelectedValue;
+                //TODO check if inputs are valid / server not existing
 
-            string serverName = ServerName.Text;
-            if (serverName == null || serverName.Equals(""))
-            {
-                serverName = "Server";
-            }
-
-            string worldPath = null;
-            if (lastPath!=null)
-            {
-                WorldValidationInfo valInfo = DirectoryValidator.ValidateWorldDirectory(new DirectoryInfo(lastPath));
-                if (valInfo.IsValid)
+                string serverName = ServerName.Text;
+                if (serverName == null || serverName.Equals(""))
                 {
-                    worldPath = lastPath;
+                    serverName = "Server";
                 }
-            }
 
-            bool createServerSuccess = await ServerManager.Instance.CreateServerAsync(serverName,selectedVersion, viewModel.ServerSettings, new JavaSettings(),worldPath);
+                string worldPath = null;
+                if (lastPath!=null)
+                {
+                    WorldValidationInfo valInfo = DirectoryValidator.ValidateWorldDirectory(new DirectoryInfo(lastPath));
+                    if (valInfo.IsValid)
+                    {
+                        worldPath = lastPath;
+                    }
+                }
+                bool createServerSuccess = await ServerManager.Instance.CreateServerAsync(serverName,selectedVersion, viewModel.ServerSettings, new JavaSettings(),worldPath);
+            }
+            viewModel.GenerateNewSettings();
 
             //TODO Do something if creating fails
         }

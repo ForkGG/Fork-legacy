@@ -26,6 +26,11 @@ namespace fork.ViewModel
             VanillaServerVersions = VersionManager.Instance.VanillaVersions;
             PaperVersions = VersionManager.Instance.PaperVersions;
             SpigotServerVersions = VersionManager.Instance.SpigotVersions;
+            GenerateNewSettings();
+        }
+
+        public void GenerateNewSettings()
+        {
             ServerSettings = new ServerSettings("world");
         }
     }
