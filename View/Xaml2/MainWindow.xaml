@@ -113,7 +113,7 @@
                     <DockPanel Grid.Row="2" LastChildFill="False" Margin="0 0 5 0" Background="{DynamicResource backgroundDark}">
                         <Grid  DockPanel.Dock="Bottom"  Background="{DynamicResource backgroundDarker}">
                             <Label HorizontalAlignment="Center" FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="16" Height="30" VerticalAlignment="Top">
-                                <TextBlock Text="v0.7.1" Foreground="{DynamicResource textUnselected}"/>
+                                <TextBlock Text="v0.7.2" Foreground="{DynamicResource textUnselected}"/>
                             </Label>
                         </Grid>
                         <Grid DockPanel.Dock="Bottom" Margin="10">
