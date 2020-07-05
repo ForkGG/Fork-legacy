@@ -2,11 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Text;
+using System.Threading;
+using fork.Logic.Logging;
 using Newtonsoft.Json;
 using fork.Logic.Model;
 using fork.Logic.Model.MinecraftVersionModel;
 using fork.Logic.WebRequesters;
 using fork.ViewModel;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace fork.Logic.Manager
 {
@@ -29,7 +33,9 @@ namespace fork.Logic.Manager
 
         public List<ServerVersion> GetVanillaVersions(Manifest.VersionType type)
         {
-            List<ServerVersion> cachedVersions = GetVanillaVersionsFromCache(type);
+            return GetVanillaVersionsFromCache(type);
+            
+            /*List<ServerVersion> cachedVersions = GetVanillaVersionsFromCache(type);
             if (cachedVersions!=null)
             {
                 return cachedVersions;
@@ -63,7 +69,7 @@ namespace fork.Logic.Manager
             }
             vanillaDict[type] = result;
             vanillaCacheAge[type] = DateTime.Now;
-            return result;
+            return result;*/
         }
 
         public List<ServerVersion> GetPaperVersions()
@@ -122,16 +128,101 @@ namespace fork.Logic.Manager
             }
             return versionDetails.downloads.server.url;
         }
+        
+        private void CacheVanillaVersions(Manifest.VersionType versionType, List<ServerVersion> versions){
+            DateTime cacheAge = DateTime.Now;
+            
+            //RAM cache
+            vanillaDict[versionType] = versions;
+            vanillaCacheAge[versionType] = cacheAge;
+            VanillaVersionCache versionCache = new VanillaVersionCache(cacheAge, versionType, versions);
+
+            //File cache
+            string json = System.Text.Json.JsonSerializer.Serialize(versionCache);
+            try
+            {
+                string path = Path.Combine(App.ApplicationPath,"persistence");
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                path = Path.Combine(path, "vanilla-"+versionType+".json");
+                File.WriteAllText(path,json, Encoding.UTF8);
+            }
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
+                Console.WriteLine("Error while saving Vanilla version cache. Skipping...");
+            }
+        }
 
         private List<ServerVersion> GetVanillaVersionsFromCache(Manifest.VersionType versionType)
         {
-            //TODO File cache
             if (vanillaDict.ContainsKey(versionType)&&VanillaCacheUpToDate(versionType))
             {
                 return vanillaDict[versionType];
             }
+            string path = Path.Combine(App.ApplicationPath, "persistence", "vanilla-" + versionType + ".json");
+            if (File.Exists(path))
+            {
+                try
+                {
+                    string json = File.ReadAllText(path,Encoding.UTF8);
+                    VanillaVersionCache versionCache = JsonSerializer.Deserialize<VanillaVersionCache>(json);
+                    if (DateTime.Now.Subtract(versionCache.CacheCreation).Hours < 12)
+                    {
+                        return versionCache.Versions;
+                    }
+                    UpdateVanillaVersionsAsync(versionType);
+                    return versionCache.Versions;
+                }
+                catch (Exception e)
+                {
+                    ErrorLogger.Append(e);
+                    Console.WriteLine("Error while reading Vanilla version cache. Skipping...");
+                }
+            }
+            UpdateVanillaVersions(versionType);
+            return GetVanillaVersionsFromCache(versionType);
+        }
 
-            return null;
+        private void UpdateVanillaVersions(Manifest.VersionType versionType)
+        {
+            Uri uri = new Uri("https://launchermeta.mojang.com/mc/game/version_manifest.json");
+            HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uri);
+            string json;
+            using (var response =  request.GetResponse())
+            using (Stream stream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                json = reader.ReadToEnd();
+            }
+            
+            Manifest manifest = JsonConvert.DeserializeObject<Manifest>(json);
+            List<ServerVersion> result = new List<ServerVersion>();
+            foreach (Manifest.Version version in manifest.versions)
+            {
+                if (version.type == versionType)
+                {
+                    ServerVersion internalVersion = new ServerVersion();
+                    internalVersion.Type = ServerVersion.VersionType.Vanilla;
+                    internalVersion.Version = version.id;
+                    internalVersion.JarLink = GetJarURL(version.url);
+                    if (internalVersion.JarLink!=null)
+                    {
+                        result.Add(internalVersion);
+                    }
+                }
+            }
+            CacheVanillaVersions(versionType, result);
+        }
+
+        private void UpdateVanillaVersionsAsync(Manifest.VersionType versionType)
+        {
+            new Thread(() =>
+            {
+                UpdateVanillaVersions(versionType);
+            }).Start();
         }
 
         private bool VanillaCacheUpToDate(Manifest.VersionType versionType)
@@ -148,6 +239,25 @@ namespace fork.Logic.Manager
             }
 
             return false;
+        }
+        
+        private class VanillaVersionCache
+        {
+            public DateTime CacheCreation { get; set; }
+            public Manifest.VersionType VersionType { get; set; }
+            public List<ServerVersion> Versions { get; set; }
+
+            public VanillaVersionCache(DateTime cacheCreation, Manifest.VersionType versionType,
+                List<ServerVersion> versions)
+            {
+                CacheCreation = cacheCreation;
+                VersionType = versionType;
+                Versions = versions;
+            }
+
+            //Empty constructor for serializers
+            public VanillaVersionCache()
+            { }
         }
     }
 }
