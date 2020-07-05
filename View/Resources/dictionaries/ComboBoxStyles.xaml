@@ -123,7 +123,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBoxItem">
-                    <Border x:Name="background" Background="{DynamicResource buttonBgrDefault}" CornerRadius="4">
+                    <Border x:Name="background" Background="{DynamicResource textBackground}" CornerRadius="4">
                         <Grid>
                             <Border HorizontalAlignment="Left" Margin="5 0">
                                 <TextBlock x:Name="textBlock" Text="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"

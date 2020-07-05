@@ -152,7 +152,7 @@
                                    Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" 
                                    Style="{StaticResource BigScrollBar}"/>
 
-                            <Border Background="{DynamicResource textBackground}" CornerRadius="3" BorderThickness="2" BorderBrush="{DynamicResource buttonBgrDefault}">
+                            <Border Background="{DynamicResource textBackground}" CornerRadius="3" BorderThickness="2" BorderBrush="{DynamicResource textBackground}">
                                 <ScrollContentPresenter/>
                             </Border>
                         </Grid>

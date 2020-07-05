@@ -213,7 +213,7 @@
                     <Border CornerRadius="10" Margin="5" x:Name="ConfigureProxySection" Visibility="Collapsed">
                         <StackPanel Background="Transparent" Margin="0 10">
                             <TextBlock Text="Configure Your Network" Foreground="{DynamicResource textHeader}" FontFamily="{StaticResource Montserrat-SemiBold}" FontSize="23" Margin="15 0 5 20"/>
-                            <DockPanel Height="40" Grid.Row="0" HorizontalAlignment="Center" Margin="0 0 0 10"
+                            <DockPanel Height="40" Grid.Row="0" HorizontalAlignment="Center" Margin="0 0 0 10">
                                 <Border CornerRadius="4" MaxWidth="200" MinWidth="150" DockPanel.Dock="Right" Height="26" Background="{DynamicResource textBackground}">
                                     <TextBox Margin="5 0" Text="Network" Background="{DynamicResource textBackground}" BorderThickness="0" 
                                      Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}"
