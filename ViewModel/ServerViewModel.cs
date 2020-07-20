@@ -19,6 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using fork.Annotations;
 using fork.Logic.BackgroundWorker.Performance;
+using fork.Logic.Controller;
 using fork.Logic.CustomConsole;
 using fork.Logic.ImportLogic;
 using fork.Logic.Manager;
@@ -189,8 +190,7 @@ namespace fork.ViewModel
         
         private void UpdateAddressInfo()
         {
-            string externalIP = new WebClient().DownloadString("http://icanhazip.com").Trim();
-            AddressInfo = externalIP + ":" + Server.ServerSettings.ServerPort;
+            AddressInfo = new APIController().GetExternalIPAddress() + ":" + Server.ServerSettings.ServerPort;
         }
 
         public void UpdateSettings()

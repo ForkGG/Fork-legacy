@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
+using fork.Logic.Controller;
 using fork.Logic.Logging;
 using fork.Logic.Manager;
 using fork.Logic.Model;
@@ -191,8 +192,7 @@ namespace fork.ViewModel
 
         private void UpdateAddressInfo()
         {
-            string externalIP = new WebClient().DownloadString("http://icanhazip.com").Trim();
-            AddressInfo = externalIP + ":" + Network.Port;
+            AddressInfo = new APIController().GetExternalIPAddress() + ":" + Network.Port;
         }
 
         private void LoadServersFromConfig(BungeeSettings settings)
