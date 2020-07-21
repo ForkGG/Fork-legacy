@@ -3,4 +3,14 @@
   <PropertyGroup>
     <_LastSelectedProfileId>C:\Users\Christian\source\repos\fork\Properties\PublishProfiles\FolderProfile.pubxml</_LastSelectedProfileId>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="View\Xaml2\TextGenerator.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\Xaml2\TextGenerator.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
 </Project>
