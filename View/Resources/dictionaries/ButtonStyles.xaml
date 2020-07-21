@@ -53,7 +53,7 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-
+    
     <!-- RoundedTextButton -->
     <Style x:Key="RoundedTextButton" TargetType="Button">
         <Setter Property="Template">
@@ -152,36 +152,6 @@
             <DataTrigger Binding="{Binding CurrentStatus}" Value="{x:Static model:ServerStatus.STOPPED}">
                 <Setter Property="Visibility" Value="Collapsed"/>
             </DataTrigger>
-        </Style.Triggers>
-    </Style>
-
-    <!-- Newt's wonderful Buttons -->
-    <Style x:Key="ColorButtons" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
-        <Setter Property="BorderThickness" Value="5"/>
-        <Setter Property="Background" Value="{DynamicResource buttonDefault}"/>
-        <Setter Property="Height" Value="35"/>
-        <Setter Property="Width" Value="35"/>
-        <Setter Property="BorderBrush" Value="#272A41"/>
-        <Setter Property="Margin" Value="3"/>
-
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource buttonBgrDefault}"/>
-                <Setter Property="Background" Value="Transparent"/>
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-    
-    <Style x:Key="TextButtonNewt" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="Transparent"/>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush" Value="Transparent"/>
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="Foreground" Value="White"/>
-            </Trigger>
         </Style.Triggers>
     </Style>
 
