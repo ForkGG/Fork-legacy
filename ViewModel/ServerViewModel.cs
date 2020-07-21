@@ -45,7 +45,7 @@ namespace fork.ViewModel
         private RoleUpdater oplistUpdater;
         private World activeWorld;
 
-        
+
         public ObservableCollection<ServerPlayer> PlayerList { get; set; } = new ObservableCollection<ServerPlayer>();
         public ObservableCollection<Player> BanList { get; set; } = new ObservableCollection<Player>();
         public ObservableCollection<Player> OPList { get; set; } = new ObservableCollection<Player>();
@@ -65,13 +65,13 @@ namespace fork.ViewModel
         public string NextRestartSeconds { get; set; }
 
         public string ServerTitle => Name + " - " + Server.Version.Type + " " + Server.Version.Version;
-        
+
         public Page WorldsPage { get; set; }
 
         public ServerViewModel(Server server) : base(server)
         {
             DateTime start = DateTime.Now;
-            Console.WriteLine("Starting initialization of ViewModel for Server "+server.Name);
+            Console.WriteLine("Starting initialization of ViewModel for Server " + server.Name);
             new Thread(() =>
             {
                 if (Server.Version.Type == ServerVersion.VersionType.Vanilla)
@@ -85,9 +85,9 @@ namespace fork.ViewModel
                 else if (Server.Version.Type == ServerVersion.VersionType.Spigot)
                 {
                     Versions = VersionManager.Instance.SpigotVersions;
-                } 
+                }
             }).Start();
-            
+
             UpdateAddressInfo();
             Application.Current.Dispatcher.Invoke(new Action(() => EntityPage = new ServerPage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => ConsolePage = new ConsolePage(this)));
@@ -98,23 +98,25 @@ namespace fork.ViewModel
             WhiteList.CollectionChanged += WhiteListChanged;
             BanList.CollectionChanged += BanListChanged;
             OPList.CollectionChanged += OPListChanged;
-            
+
             Worlds = new ObservableCollection<World>();
             Worlds.CollectionChanged += WorldsChanged;
 
             InitializeLists(server);
-            
-            new Thread(() =>
+
+            if (!ApplicationManager.Initialized)
             {
-                while (ApplicationManager.Initialized == false)
-                {
-                    Thread.Sleep(100);
-                }
+                ApplicationManager.ApplicationInitialized +=
+                    () => Application.Current.Dispatcher?.Invoke(StartSettingsReader);
+            }
+            else
+            {
                 Application.Current.Dispatcher?.Invoke(StartSettingsReader);
-            }).Start();
+            }
 
             TimeSpan t = DateTime.Now - start;
-            Console.WriteLine("Server ViewModel for " + server.Name + " initialized in "+t.Seconds+"."+t.Milliseconds+"s");
+            Console.WriteLine("Server ViewModel for " + server.Name + " initialized in " + t.Seconds + "." +
+                              t.Milliseconds + "s");
         }
 
         public void InitializeLists(Server server)
@@ -187,7 +189,7 @@ namespace fork.ViewModel
                 restartTimer.Enabled = true;
             }).Start();
         }
-        
+
         private void UpdateAddressInfo()
         {
             AddressInfo = new APIController().GetExternalIPAddress() + ":" + Server.ServerSettings.ServerPort;
@@ -207,7 +209,8 @@ namespace fork.ViewModel
         {
             new Thread(() =>
             {
-                new FileWriter().WriteServerSettings(Path.Combine(App.ApplicationPath,Server.Name), Server.ServerSettings.SettingsDictionary);
+                new FileWriter().WriteServerSettings(Path.Combine(App.ApplicationPath, Server.Name),
+                    Server.ServerSettings.SettingsDictionary);
             }).Start();
         }
 
@@ -221,15 +224,16 @@ namespace fork.ViewModel
         {
             raisePropertyChanged(nameof(ServerTitle));
         }
-        
+
         public void InitializeWorldsList()
         {
-            DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ApplicationPath,Server.Name));
+            DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ApplicationPath, Server.Name));
             if (!serverDir.Exists)
             {
                 return;
             }
-            Application.Current.Dispatcher?.Invoke(()=>Worlds.Clear());
+
+            Application.Current.Dispatcher?.Invoke(() => Worlds.Clear());
             foreach (DirectoryInfo directory in serverDir.EnumerateDirectories())
             {
                 WorldValidationInfo worldVal = DirectoryValidator.ValidateWorldDirectory(directory);
@@ -240,7 +244,8 @@ namespace fork.ViewModel
                     {
                         world.IsActive = true;
                     }
-                    Application.Current.Dispatcher?.Invoke(()=>Worlds.Add(world));
+
+                    Application.Current.Dispatcher?.Invoke(() => Worlds.Add(world));
                 }
             }
         }
@@ -251,24 +256,23 @@ namespace fork.ViewModel
             players.Sort();
             PlayerList = new ObservableCollection<ServerPlayer>(players);
             PlayerList.CollectionChanged += PlayerListChanged;
-            
+
             //TODO this is bad WPF (use INotifyPropertyChanged in ServerPlayer instead)
             var c = ConsolePage as ConsolePage;
-            Application.Current.Dispatcher?.Invoke(()=>c.Playerlist.Items.Refresh());
+            Application.Current.Dispatcher?.Invoke(() => c.Playerlist.Items.Refresh());
         }
 
-        
 
         private void PlayerListChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             raisePropertyChanged(nameof(PlayerList));
         }
-        
+
         private void WhiteListChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             raisePropertyChanged(nameof(WhiteList));
         }
-        
+
         private void WorldsChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             raisePropertyChanged(nameof(Worlds));

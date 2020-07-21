@@ -1,10 +1,10 @@
 using System;
 using System.IO;
 using System.Net;
-using System.Text.Json;
-using System.Threading.Tasks;
 using fork.Logic.Logging;
+using fork.Logic.Manager;
 using fork.Logic.Model.APIModel;
+using Newtonsoft.Json;
 
 namespace fork.Logic.Controller
 {
@@ -32,19 +32,26 @@ namespace fork.Logic.Controller
             if (!IsAPIAvailable())
             {
                 ErrorLogger.Append(new WebException("api.fork.gg is not online or operational"));
-                return null;
+                return ApplicationManager.Instance.CurrentForkVersion;
             }
 
             var response = RequestRawResponse(apiBaseURL + "versions/fork/latest");
             string versionJson = RetrieveResponseBody(response);
-            return JsonSerializer.Deserialize<ForkVersion>(versionJson);
+            return JsonConvert.DeserializeObject<ForkVersion>(versionJson);
         }
         
         private bool IsAPIAvailable()
         {
-            HttpWebResponse response = RequestRawResponse(apiBaseURL + "status");
-            //Check if API is online
-            return response.StatusCode == HttpStatusCode.OK && RetrieveResponseBody(response).Equals("ONLINE");
+            try
+            {
+                HttpWebResponse response = RequestRawResponse(apiBaseURL + "status");
+                //Check if API is online
+                return response.StatusCode == HttpStatusCode.OK && RetrieveResponseBody(response).Equals("ONLINE");
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
         }
 
         private HttpWebResponse RequestRawResponse(string requestUrl)

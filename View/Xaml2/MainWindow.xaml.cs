@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -348,6 +349,13 @@ namespace fork.View.Xaml2
         private void EntityMouseDown(object sender, MouseButtonEventArgs e)
         {
             e.Handled = true;
+        }
+
+        private void NewVersion_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            string url = viewModel.LatestForkVersion.URL;
+            //hack for windows only https://github.com/dotnet/corefx/issues/10361
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
         }
     }
 }
