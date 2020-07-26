@@ -20,7 +20,7 @@ namespace fork.Logic.Persistence
         public SettingsReader(EntityViewModel viewModel)
         {
             viewModel.UpdateSettingsFiles(GetSettingsFiles(viewModel), true);
-            WatchFileChanges(new DirectoryInfo(Path.Combine(App.ApplicationPath, viewModel.Name)));
+            WatchFileChanges(new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Name)));
             viewModel.EntityPathChangedEvent += HandleEntityPathChangedEvent;
         }
 
@@ -28,7 +28,7 @@ namespace fork.Logic.Persistence
         {
             viewModel.UpdateSettingsFiles(GetSettingsFiles(viewModel), true);
             fileWatcher.Dispose();
-            WatchFileChanges(new DirectoryInfo(Path.Combine(App.ApplicationPath, viewModel.Name)));
+            WatchFileChanges(new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Name)));
         }
 
         public void Dispose()
@@ -40,7 +40,7 @@ namespace fork.Logic.Persistence
         private List<SettingsFile> GetSettingsFiles(EntityViewModel viewModel)
         {
             this.viewModel = viewModel;
-            string path = Path.Combine(App.ApplicationPath, viewModel.Name);
+            string path = Path.Combine(App.ServerPath, viewModel.Name);
             DirectoryInfo entitiyDir = new DirectoryInfo(path);
             List<SettingsFile> settingsFiles = new List<SettingsFile>();
             if (!entitiyDir.Exists)

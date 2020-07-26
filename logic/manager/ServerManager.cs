@@ -44,7 +44,7 @@ namespace fork.Logic.Manager
             {
                 if (!viewModel.Entity.Initialized)
                 {
-                    Downloader.DownloadJarAsync(viewModel, new DirectoryInfo(Path.Combine(App.ApplicationPath, viewModel.Name)));
+                    Downloader.DownloadJarAsync(viewModel, new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Name)));
                 }
             }
 
@@ -324,7 +324,7 @@ namespace fork.Logic.Manager
         private bool ImportServer(ServerVersion version, ServerValidationInfo validationInfo,
             string originalServerDirectory, string serverName)
         {
-            string serverPath = Path.Combine(App.ApplicationPath, serverName);
+            string serverPath = Path.Combine(App.ServerPath, serverName);
             while (Directory.Exists(serverPath))
             {
                 serverPath += "-Copy";
@@ -391,7 +391,7 @@ namespace fork.Logic.Manager
         {
             try
             {
-                DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ApplicationPath,viewModel.Server.Name));
+                DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ServerPath,viewModel.Server.Name));
                 DirectoryInfo importWorldDir = new DirectoryInfo(worldSource);
                 string worldName = importWorldDir.Name;
                 List<string> worlds = new List<string>();
@@ -424,7 +424,7 @@ namespace fork.Logic.Manager
         {
             try
             {
-                DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ApplicationPath,viewModel.Server.Name));
+                DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ServerPath,viewModel.Server.Name));
                 List<string> worlds = new List<string>();
                 foreach (World world in viewModel.Worlds)
                 {
@@ -456,7 +456,7 @@ namespace fork.Logic.Manager
             JavaSettings javaSettings, string worldPath = null)
         {
             serverName = RefineName(serverName);
-            string serverPath = Path.Combine(App.ApplicationPath, serverName);
+            string serverPath = Path.Combine(App.ServerPath, serverName);
             serverNames.Add(serverName);
             if (string.IsNullOrEmpty(serverSettings.LevelName))
             {
@@ -479,8 +479,8 @@ namespace fork.Logic.Manager
             }
             
             //Writing necessary files
-            new FileWriter().WriteEula(Path.Combine(App.ApplicationPath, directoryInfo.Name));
-            new FileWriter().WriteServerSettings(Path.Combine(App.ApplicationPath, directoryInfo.Name),
+            new FileWriter().WriteEula(Path.Combine(App.ServerPath, directoryInfo.Name));
+            new FileWriter().WriteServerSettings(Path.Combine(App.ServerPath, directoryInfo.Name),
                 serverSettings.SettingsDictionary);
 
             return true;
@@ -498,7 +498,7 @@ namespace fork.Logic.Manager
             }
             try
             {
-                DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ApplicationPath, viewModel.Name));
+                DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Name));
                 if (!directoryInfo.Exists)
                 {
                     ErrorLogger.Append(
@@ -506,7 +506,7 @@ namespace fork.Logic.Manager
                     return false;
                 }
 
-                directoryInfo.MoveTo(Path.Combine(App.ApplicationPath, newName));
+                directoryInfo.MoveTo(Path.Combine(App.ServerPath, newName));
 
                 viewModel.Name = newName;
                 return true;
@@ -530,7 +530,7 @@ namespace fork.Logic.Manager
             }
             try
             {
-                DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ApplicationPath, viewModel.Name));
+                DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Name));
                 if (!directoryInfo.Exists)
                 {
                     ErrorLogger.Append(
@@ -547,7 +547,7 @@ namespace fork.Logic.Manager
                 newServer.UID = Guid.NewGuid().ToString();
                 ServerViewModel newServerViewModel = new ServerViewModel(newServer);
 
-                string newServerPath = Path.Combine(App.ApplicationPath, newName);
+                string newServerPath = Path.Combine(App.ServerPath, newName);
                 newServerViewModel.StartImport();
                 Application.Current.Dispatcher?.Invoke(() => Entities.Add(newServerViewModel));
                 ApplicationManager.Instance.MainViewModel.SelectedEntity = newServerViewModel;
@@ -589,14 +589,14 @@ namespace fork.Logic.Manager
                 }
 
                 DirectoryInfo deletedDirectory =
-                    Directory.CreateDirectory(Path.Combine(App.ApplicationPath, "backup", "deleted"));
+                    Directory.CreateDirectory(Path.Combine(App.ServerPath, "backup", "deleted"));
                 if (File.Exists(Path.Combine(deletedDirectory.FullName, serverViewModel.Name + ".zip")))
                 {
                     File.Delete(Path.Combine(deletedDirectory.FullName, serverViewModel.Name + ".zip"));
                 }
 
                 DirectoryInfo serverDirectory =
-                    new DirectoryInfo(Path.Combine(App.ApplicationPath, serverViewModel.Name));
+                    new DirectoryInfo(Path.Combine(App.ServerPath, serverViewModel.Name));
                 ZipFile.CreateFromDirectory(serverDirectory.FullName,
                     Path.Combine(deletedDirectory.FullName, serverViewModel.Name + ".zip"));
                 serverDirectory.Delete(true);
@@ -627,11 +627,11 @@ namespace fork.Logic.Manager
                 serverViewModel.DownloadCompleted = false;
 
                 //Delete old server.jar
-                File.Delete(Path.Combine(App.ApplicationPath, serverViewModel.Server.Name, "server.jar"));
+                File.Delete(Path.Combine(App.ServerPath, serverViewModel.Server.Name, "server.jar"));
 
                 //Download new server.jar
                 DirectoryInfo directoryInfo =
-                    new DirectoryInfo(Path.Combine(App.ApplicationPath, serverViewModel.Name));
+                    new DirectoryInfo(Path.Combine(App.ServerPath, serverViewModel.Name));
                 Downloader.DownloadJarAsync(serverViewModel, directoryInfo);
 
                 serverViewModel.Server.Version = newVersion;
@@ -658,7 +658,7 @@ namespace fork.Logic.Manager
             }
 
             DirectoryInfo dimBackups =
-                Directory.CreateDirectory(Path.Combine(App.ApplicationPath, server.Name, "DimensionBackups"));
+                Directory.CreateDirectory(Path.Combine(App.ServerPath, server.Name, "DimensionBackups"));
             string timeStamp = DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year + "_" +
                                DateTime.Now.Hour + "-" + DateTime.Now.Minute;
             ZipFile.CreateFromDirectory(dimensionDir.FullName,
@@ -676,11 +676,11 @@ namespace fork.Logic.Manager
                     switch (dimension)
                     {
                         case MinecraftDimension.Nether:
-                            return new DirectoryInfo(Path.Combine(App.ApplicationPath, server.Name, server.Name,
+                            return new DirectoryInfo(Path.Combine(App.ServerPath, server.Name, server.Name,
                                 "DIM-1"));
                         case MinecraftDimension.End:
                             return new DirectoryInfo(
-                                Path.Combine(App.ApplicationPath, server.Name, server.Name, "DIM1"));
+                                Path.Combine(App.ServerPath, server.Name, server.Name, "DIM1"));
                         default:
                             throw new ArgumentException("No implementation for deletion of dimension " + dimension +
                                                         " on Vanilla servers");
@@ -689,10 +689,10 @@ namespace fork.Logic.Manager
                     switch (dimension)
                     {
                         case MinecraftDimension.Nether:
-                            return new DirectoryInfo(Path.Combine(App.ApplicationPath, server.Name,
+                            return new DirectoryInfo(Path.Combine(App.ServerPath, server.Name,
                                 server.Name + "_nether"));
                         case MinecraftDimension.End:
-                            return new DirectoryInfo(Path.Combine(App.ApplicationPath, server.Name,
+                            return new DirectoryInfo(Path.Combine(App.ServerPath, server.Name,
                                 server.Name + "_the_end"));
                         default:
                             throw new ArgumentException("No implementation for deletion of dimension " + dimension +
@@ -708,7 +708,7 @@ namespace fork.Logic.Manager
         {
             viewModel.ConsoleOutList.Add("\nStarting server "+viewModel.Server+" on world: "+ viewModel.Server.ServerSettings.LevelName);
             Console.WriteLine("Starting server "+viewModel.Server.Name+" on world: "+ viewModel.Server.ServerSettings.LevelName);
-            DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ApplicationPath, viewModel.Server.Name));
+            DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Server.Name));
             if (!directoryInfo.Exists)
             {
                 return false;

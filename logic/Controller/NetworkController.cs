@@ -31,7 +31,7 @@ namespace fork.Logic.Controller
                 return false;
             }
             networkName = RefineName(networkName, usedServerNames);
-            string serverPath = Path.Combine(App.ApplicationPath, networkName);
+            string serverPath = Path.Combine(App.ServerPath, networkName);
             DirectoryInfo directoryInfo = Directory.CreateDirectory(serverPath);
             Network network = new Network(networkName, networkType, javaSettings, VersionManager.Instance.WaterfallVersion);
             NetworkViewModel viewModel = new NetworkViewModel(network);
@@ -44,7 +44,7 @@ namespace fork.Logic.Controller
 
             //Writing necessary files
             //TODO write settings
-            //new FileWriter().WriteServerSettings(Path.Combine(App.ApplicationPath, directoryInfo.Name), serverSettings.SettingsDictionary);
+            //new FileWriter().WriteServerSettings(Path.Combine(App.ServerPath, directoryInfo.Name), serverSettings.SettingsDictionary);
 
             return true;
         }
@@ -94,7 +94,7 @@ namespace fork.Logic.Controller
             
             //Start proxy server
             viewModel.ConsoleOutList.Add("Starting proxy server...");
-            DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ApplicationPath, viewModel.Network.Name));
+            DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Network.Name));
             if (!directoryInfo.Exists)
             {
                 viewModel.ConsoleOutList.Add("ERROR: Can't find network directory: "+directoryInfo.FullName);
@@ -195,14 +195,14 @@ namespace fork.Logic.Controller
                 }
 
                 DirectoryInfo deletedDirectory =
-                    Directory.CreateDirectory(Path.Combine(App.ApplicationPath, "backup", "deleted"));
+                    Directory.CreateDirectory(Path.Combine(App.ServerPath, "backup", "deleted"));
                 if (File.Exists(Path.Combine(deletedDirectory.FullName, networkViewModel.Name + ".zip")))
                 {
                     File.Delete(Path.Combine(deletedDirectory.FullName, networkViewModel.Name + ".zip"));
                 }
 
                 DirectoryInfo serverDirectory =
-                    new DirectoryInfo(Path.Combine(App.ApplicationPath, networkViewModel.Name));
+                    new DirectoryInfo(Path.Combine(App.ServerPath, networkViewModel.Name));
                 ZipFile.CreateFromDirectory(serverDirectory.FullName,
                     Path.Combine(deletedDirectory.FullName, networkViewModel.Name + ".zip"));
                 serverDirectory.Delete(true);
@@ -228,7 +228,7 @@ namespace fork.Logic.Controller
             }
             try
             {
-                DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ApplicationPath, viewModel.Name));
+                DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Name));
                 if (!directoryInfo.Exists)
                 {
                     ErrorLogger.Append(
@@ -245,7 +245,7 @@ namespace fork.Logic.Controller
                 newNetwork.UID = Guid.NewGuid().ToString();
                 NetworkViewModel newNetworkViewModel = new NetworkViewModel(newNetwork);
 
-                string newNetworkPath = Path.Combine(App.ApplicationPath, newName);
+                string newNetworkPath = Path.Combine(App.ServerPath, newName);
                 newNetworkViewModel.StartImport();
                 Application.Current.Dispatcher?.Invoke(() => ServerManager.Instance.Entities.Add(newNetworkViewModel));
                 ApplicationManager.Instance.MainViewModel.SelectedEntity = newNetworkViewModel;
@@ -285,7 +285,7 @@ namespace fork.Logic.Controller
             }
             try
             {
-                DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ApplicationPath, viewModel.Name));
+                DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Name));
                 if (!directoryInfo.Exists)
                 {
                     ErrorLogger.Append(
@@ -293,7 +293,7 @@ namespace fork.Logic.Controller
                     return false;
                 }
 
-                directoryInfo.MoveTo(Path.Combine(App.ApplicationPath, newName));
+                directoryInfo.MoveTo(Path.Combine(App.ServerPath, newName));
 
                 viewModel.Name = newName;
                 return true;

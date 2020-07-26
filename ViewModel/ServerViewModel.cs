@@ -209,7 +209,7 @@ namespace fork.ViewModel
         {
             new Thread(() =>
             {
-                new FileWriter().WriteServerSettings(Path.Combine(App.ApplicationPath, Server.Name),
+                new FileWriter().WriteServerSettings(Path.Combine(App.ServerPath, Server.Name),
                     Server.ServerSettings.SettingsDictionary);
             }).Start();
         }
@@ -227,7 +227,7 @@ namespace fork.ViewModel
 
         public void InitializeWorldsList()
         {
-            DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ApplicationPath, Server.Name));
+            DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ServerPath, Server.Name));
             if (!serverDir.Exists)
             {
                 return;

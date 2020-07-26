@@ -24,15 +24,14 @@ namespace fork
                 if (applicationPath == null)
                 {
                     DirectoryInfo directoryInfo = Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Fork"));
-                    //applicationPath = Assembly.GetExecutingAssembly().Location;
-                    //FileInfo applicationExe = new FileInfo(applicationPath);
-                    //applicationPath = applicationExe.Directory.FullName;
                     applicationPath = directoryInfo.FullName;
                     Console.WriteLine("Data directory of Fork is: "+applicationPath);
                 }
                 return applicationPath;
             }
         }
+
+        public static string ServerPath => ApplicationManager.Instance.AppSettings.ServerPath;
 
         protected override void OnStartup(StartupEventArgs e)
         {

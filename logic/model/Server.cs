@@ -29,7 +29,7 @@ namespace fork.Logic.Model
             get
             {
                 if (serverSettings == null)
-                    serverSettings = new ServerSettings(new FileReader().ReadServerSettings(Path.Combine(App.ApplicationPath,Name)));
+                    serverSettings = new ServerSettings(new FileReader().ReadServerSettings(Path.Combine(App.ServerPath,Name)));
                 return serverSettings;
             }
             set => serverSettings = value;

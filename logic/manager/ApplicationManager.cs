@@ -55,6 +55,8 @@ namespace fork.Logic.Manager
                 Patch = int.Parse(rm.GetString("VersionPatch"))
             };
         }
+
+        private AppSettings appSettings;
         
         
         public MainViewModel MainViewModel { get; } = new MainViewModel();
@@ -63,6 +65,13 @@ namespace fork.Logic.Manager
         public List<SettingsReader> SettingsReaders { get; } = new List<SettingsReader>();
         public bool HasExited { get; set; } = false;
         public ForkVersion CurrentForkVersion { get; }
+
+        public AppSettings AppSettings => appSettings ??= AppSettingsSerializer.ReadAppSettings();
+
+        public void SaveAppSettings()
+        {
+            AppSettingsSerializer.WriteAppSettings(AppSettings);
+        }
 
         public void ExitApplication()
         {

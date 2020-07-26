@@ -68,7 +68,7 @@ namespace fork.Logic.Model.ProxyModels
             if (configSerializer == null)
             {
                 configSerializer =
-                    new BungeeSettingsSerializer(new FileInfo(Path.Combine(App.ApplicationPath, Name, "config.yml")));
+                    new BungeeSettingsSerializer(new FileInfo(Path.Combine(App.ServerPath, Name, "config.yml")));
             }
 
             Config = configSerializer.ReadSettings();
@@ -79,7 +79,7 @@ namespace fork.Logic.Model.ProxyModels
             if (configSerializer == null)
             {
                 configSerializer =
-                    new BungeeSettingsSerializer(new FileInfo(Path.Combine(App.ApplicationPath, Name, "config.yml")));
+                    new BungeeSettingsSerializer(new FileInfo(Path.Combine(App.ServerPath, Name, "config.yml")));
             }
 
             configSerializer.WriteSettings(Config);
