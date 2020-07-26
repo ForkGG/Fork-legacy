@@ -101,7 +101,7 @@
                                                                                   Click="RenameOpen_Click" />
                                                                         <MenuItem Header="Clone"
                                                                                   Style="{DynamicResource ContextMenuItem}"
-                                                                                  IsEnabled="False" />
+                                                                                  Click="CloneOpen_Click" />
                                                                         <MenuItem Header="Delete"
                                                                                   Style="{DynamicResource RedContextMenuItem}"
                                                                                   Click="DeleteOpen_Click" />
@@ -414,8 +414,8 @@
                     <Border CornerRadius="4" Width="200" DockPanel.Dock="Right" Height="26"
                             Background="{DynamicResource textBackground}">
                         <TextBox Margin="5 0" Background="{DynamicResource textBackground}"
-                                 x:Name="NewServerName"
-                                 BorderThickness="0" Text="{Binding Name, Mode=OneTime}"
+                                 x:Name="NewServerName" TextAlignment="Center"
+                                 BorderThickness="0" Text="{Binding SelectedEntity.Name, Mode=OneTime}"
                                  Foreground="{DynamicResource backgroundDark}"
                                  FontFamily="{DynamicResource Montserrat-SemiBold}"
                                  FontSize="17" Height="20" />
@@ -454,8 +454,8 @@
                     <Border CornerRadius="4" Width="200" DockPanel.Dock="Right" Height="26"
                             Background="{DynamicResource textBackground}">
                         <TextBox Margin="5 0" Background="{DynamicResource textBackground}"
-                                 x:Name="NewNetworkName"
-                                 BorderThickness="0" Text="{Binding Name, Mode=OneTime}"
+                                 x:Name="NewNetworkName" TextAlignment="Center"
+                                 BorderThickness="0" Text="{Binding SelectedEntity.Name, Mode=OneTime}"
                                  Foreground="{DynamicResource backgroundDark}"
                                  FontFamily="{DynamicResource Montserrat-SemiBold}"
                                  FontSize="17" Height="20" />
@@ -480,6 +480,60 @@
                             Style="{DynamicResource RoundedTextButton}" Width="100" Margin="20" Click="Abort_Click" />
                     <Button x:Name="NetworkRenameBtn" Content="Rename" Style="{DynamicResource RoundedTextButton}"
                             MinWidth="100" Margin="20" Click="Rename_Click" />
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        <Grid Panel.ZIndex="1" x:Name="CloneServerOverlay" Visibility="Collapsed">
+            <Rectangle Fill="#1F2234" Opacity="0.9" Margin="-5 0 0 0" />
+            <StackPanel Panel.ZIndex="1" VerticalAlignment="Center">
+                <TextBlock Text="Clone Server" FontSize="28" FontFamily="{DynamicResource Montserrat-Bold}"
+                           TextAlignment="Center" Margin="0 0 0 20" />
+                <TextBlock Text="WARNING: Cloning will stop your Server" Margin="0 0 0 5" FontSize="17"
+                           HorizontalAlignment="Center" FontFamily="{DynamicResource Montserrat-SemiBold}"
+                           Foreground="{DynamicResource buttonBgrRed}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedEntity.CurrentStatus}"
+                                             Value="{x:Static model:ServerStatus.STOPPED}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5 0 30">
+                    <Button x:Name="ServerCloneCancelBtn" Content="Cancel" Style="{DynamicResource RoundedTextButton}"
+                            Width="100" Margin="20" Click="Abort_Click" />
+                    <Button x:Name="ServerCloneBtn" Content="Clone" Style="{DynamicResource RoundedTextButton}"
+                            MinWidth="100" Margin="20" Click="Clone_Click" />
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        <Grid Panel.ZIndex="1" x:Name="CloneNetworkOverlay" Visibility="Collapsed">
+            <Rectangle Fill="#1F2234" Opacity="0.9" Margin="-5 0 0 0" />
+            <StackPanel Panel.ZIndex="1" VerticalAlignment="Center">
+                <TextBlock Text="Clone Network" FontSize="28" FontFamily="{DynamicResource Montserrat-Bold}"
+                           TextAlignment="Center" Margin="0 0 0 20" />
+                <TextBlock Text="WARNING: Cloning will stop your Network" Margin="0 0 0 5" FontSize="17"
+                           HorizontalAlignment="Center" FontFamily="{DynamicResource Montserrat-SemiBold}"
+                           Foreground="{DynamicResource buttonBgrRed}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedEntity.CurrentStatus}"
+                                             Value="{x:Static model:ServerStatus.STOPPED}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5 0 30">
+                    <Button x:Name="NetworkCloneCancelBtn" Content="Cancel"
+                            Style="{DynamicResource RoundedTextButton}" Width="100" Margin="20" Click="Abort_Click" />
+                    <Button x:Name="NetworkCloneBtn" Content="Clone" Style="{DynamicResource RoundedTextButton}"
+                            MinWidth="100" Margin="20" Click="Clone_Click" />
                 </StackPanel>
             </StackPanel>
         </Grid>

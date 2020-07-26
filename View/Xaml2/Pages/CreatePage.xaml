@@ -21,7 +21,7 @@
 
         <!-- Center Section -->
             <DockPanel Margin="10 0">            
-                <TextBlock DockPanel.Dock="Top" Text="Create a server" HorizontalAlignment="Center" FontSize="30" FontFamily="{StaticResource Montserrat-Bold}" Foreground="{DynamicResource textSelected}" Margin="15"/>
+                <TextBlock DockPanel.Dock="Top" Text="Create a server" HorizontalAlignment="Center" FontSize="30" FontFamily="{StaticResource Montserrat-Bold}" Foreground="{DynamicResource textTitle}" Margin="15"/>
 
             <ScrollViewer Margin="0 10 0 10">
                 <StackPanel MaxWidth="900">

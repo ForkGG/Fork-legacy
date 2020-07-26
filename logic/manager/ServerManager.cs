@@ -7,11 +7,10 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Automation;
-using System.Windows.Media;
 using fork.Logic.BackgroundWorker;
 using fork.Logic.Controller;
 using fork.Logic.CustomConsole;
@@ -19,9 +18,9 @@ using fork.Logic.ImportLogic;
 using fork.Logic.Logging;
 using fork.Logic.Model;
 using fork.Logic.Persistence;
-using fork.Logic.RoleManagement;
 using fork.Logic.WebRequesters;
 using fork.ViewModel;
+using Newtonsoft.Json;
 
 namespace fork.Logic.Manager
 {
@@ -145,6 +144,14 @@ namespace fork.Logic.Manager
             return r;
         }
 
+        public async Task<bool> CloneServerAsync(ServerViewModel viewModel)
+        {
+            Task<bool> t = new Task<bool>(() => CloneServer(viewModel));
+            t.Start();
+            bool r = await t;
+            return r;
+        }
+
         public async Task<bool> DeleteServerAsync(ServerViewModel serverViewModel)
         {
             if (serverViewModel.CurrentStatus != ServerStatus.STOPPED)
@@ -256,6 +263,15 @@ namespace fork.Logic.Manager
         {
             Task<bool> t = new Task<bool>(() =>
                 networkController.RenameNetwork(viewModel, newName));
+            t.Start();
+            bool r = await t;
+            return r;
+        }
+        
+        public async Task<bool> CloneNetworkAsync(NetworkViewModel viewModel)
+        {
+            Task<bool> t = new Task<bool>(() =>
+                networkController.CloneNetwork(viewModel, serverNames));
             t.Start();
             bool r = await t;
             return r;
@@ -493,6 +509,63 @@ namespace fork.Logic.Manager
                 directoryInfo.MoveTo(Path.Combine(App.ApplicationPath, newName));
 
                 viewModel.Name = newName;
+                return true;
+            }
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
+                return false;
+            }
+        }
+
+        private bool CloneServer(ServerViewModel viewModel)
+        {
+            if (viewModel.CurrentStatus != ServerStatus.STOPPED)
+            {
+                StopServer(viewModel);
+                while (viewModel.CurrentStatus != ServerStatus.STOPPED)
+                {
+                    Thread.Sleep(500);
+                }
+            }
+            try
+            {
+                DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ApplicationPath, viewModel.Name));
+                if (!directoryInfo.Exists)
+                {
+                    ErrorLogger.Append(
+                        new DirectoryNotFoundException("Could not find Directory " + directoryInfo.FullName));
+                    return false;
+                }
+                string newName = RefineName(viewModel.Name+"-Clone");
+                
+                //Better to use a object copy function
+                string oldServerJson = JsonConvert.SerializeObject(viewModel.Server);
+                Server newServer = JsonConvert.DeserializeObject<Server>(oldServerJson);
+                
+                newServer.Name = newName;
+                newServer.UID = Guid.NewGuid().ToString();
+                ServerViewModel newServerViewModel = new ServerViewModel(newServer);
+
+                string newServerPath = Path.Combine(App.ApplicationPath, newName);
+                newServerViewModel.StartImport();
+                Application.Current.Dispatcher?.Invoke(() => Entities.Add(newServerViewModel));
+                ApplicationManager.Instance.MainViewModel.SelectedEntity = newServerViewModel;
+            
+                //Create server directory
+                Directory.CreateDirectory(newServerPath);
+            
+                //Import server files
+                Thread copyThread = new Thread(() =>
+                {
+                    FileImporter fileImporter = new FileImporter();
+                    fileImporter.CopyProgressChanged += newServerViewModel.CopyProgressChanged;
+                    fileImporter.DirectoryCopy(directoryInfo.FullName, newServerPath, true, new List<string>{"server.jar"});
+                    Console.WriteLine("Finished copying server files for server "+newServerPath);
+                    newServerViewModel.FinishedCopying();
+                });
+                copyThread.Start();
+                
                 return true;
             }
             catch (Exception e)

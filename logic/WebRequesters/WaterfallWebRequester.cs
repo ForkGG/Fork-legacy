@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using fork.Logic.Logging;
 using fork.Logic.Model;
 using Newtonsoft.Json;
 
@@ -15,16 +16,24 @@ namespace fork.Logic.WebRequesters
             string json = ResponseCache.Instance.UncacheResponse(url);
             if (json == null)
             {
-                Uri uri = new Uri(url);
-                HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uri);
-                using (var response =  request.GetResponse())
-                using (Stream stream = response.GetResponseStream())
-                using (StreamReader reader = new StreamReader(stream))
+                try
                 {
-                    json = reader.ReadToEnd();
-                }
-                
-                ResponseCache.Instance.CacheResponse(url, json);
+                    Uri uri = new Uri(url);
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+                    using (var response = request.GetResponse())
+                    using (Stream stream = response.GetResponseStream())
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        json = reader.ReadToEnd();
+                    }
+
+                    ResponseCache.Instance.CacheResponse(url, json);
+                } catch(WebException e)
+                {
+                    ErrorLogger.Append(e);
+                    Console.WriteLine("WebException while requesting latest Waterfall Version (Either papermc.io is down or your internet connection is not working)");
+                    return null;
+                }                
             }
 
             WaterfallVersions waterfallVersions = JsonConvert.DeserializeObject<WaterfallVersions>(json);

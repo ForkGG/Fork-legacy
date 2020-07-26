@@ -73,7 +73,27 @@ namespace fork.View.Xaml2
                 RenameNetworkOverlay.Visibility = Visibility.Visible;
             }
         }
-        
+
+        private void CloneOpen_Click(object sender, RoutedEventArgs e)
+        {
+            if (viewModel.SelectedEntity is ServerViewModel serverViewModel)
+            {
+                if(serverViewModel.CurrentStatus == ServerStatus.STOPPED)
+                {
+                    Clone_Click(sender, e);
+                }
+                CloneServerOverlay.Visibility = Visibility.Visible;
+            }
+            else if(viewModel.SelectedEntity is NetworkViewModel networkViewModel)
+            {
+                if (networkViewModel.CurrentStatus == ServerStatus.STOPPED)
+                {
+                    Clone_Click(sender, e);
+                }
+                CloneNetworkOverlay.Visibility = Visibility.Visible;
+            }
+        }
+
         private void ImportServer_Click(object sender, RoutedEventArgs e)
         {
             if (ImportPage.Visibility == Visibility.Hidden)
@@ -225,6 +245,8 @@ namespace fork.View.Xaml2
             DeleteNetworkOverlay.Visibility = Visibility.Collapsed;
             RenameServerOverlay.Visibility = Visibility.Collapsed;
             RenameNetworkOverlay.Visibility = Visibility.Collapsed;
+            CloneServerOverlay.Visibility = Visibility.Collapsed;
+            CloneNetworkOverlay.Visibility = Visibility.Collapsed;
         }
 
         private async void Rename_Click(object sender, RoutedEventArgs e)
@@ -287,7 +309,55 @@ namespace fork.View.Xaml2
             
             Abort_Click(this, e);
         }
-        
+
+        private async void Clone_Click(object sender, RoutedEventArgs e)
+        {
+            if (viewModel.SelectedEntity is ServerViewModel serverViewModel)
+            {
+                ServerCloneBtn.IsEnabled = false;
+                ServerCloneCancelBtn.IsEnabled = false;
+
+                bool success = await ServerManager.Instance.CloneServerAsync(serverViewModel);
+                if (success)
+                {
+                    Console.WriteLine("Successfully cloned Server:"+ serverViewModel.Name);
+                }
+                else
+                {
+                    //TODO Show error
+                    Console.WriteLine("Error cloning Server: " + serverViewModel.Name);
+                }
+
+                ServerCloneBtn.IsEnabled = true;
+                ServerCloneCancelBtn.IsEnabled = true;
+            }
+            else if (viewModel.SelectedEntity is NetworkViewModel networkViewModel)
+            {
+                NetworkCloneBtn.IsEnabled = false;
+                NetworkCloneCancelBtn.IsEnabled = false;
+
+                bool success = await ServerManager.Instance.CloneNetworkAsync(networkViewModel);
+                if (success)
+                {
+                    Console.WriteLine("Successfully renamed Network to: " + networkViewModel.Name);
+                }
+                else
+                {
+                    //TODO Show error
+                    Console.WriteLine("Error renaming Network: " + networkViewModel.Name);
+                }
+
+                NetworkCloneBtn.IsEnabled = true;
+                NetworkCloneCancelBtn.IsEnabled = true;
+            }
+            else
+            {
+                throw new NotImplementedException("Rename does not support this type of entity: " + viewModel.GetType());
+            }
+
+            Abort_Click(this, e);
+        }
+
         private async void Delete_Click(object sender, RoutedEventArgs e)
         {
             EntityViewModel entityToDelete = viewModel.SelectedEntity;

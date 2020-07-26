@@ -6,6 +6,7 @@ using System.IO.Compression;
 using System.Threading;
 using System.Windows;
 using fork.Logic.CustomConsole;
+using fork.Logic.ImportLogic;
 using fork.Logic.Logging;
 using fork.Logic.Manager;
 using fork.Logic.Model;
@@ -13,6 +14,7 @@ using fork.Logic.Model.ProxyModels;
 using Fork.Logic.Model.ProxyModels;
 using fork.Logic.WebRequesters;
 using fork.ViewModel;
+using Newtonsoft.Json;
 
 namespace fork.Logic.Controller
 {
@@ -210,6 +212,63 @@ namespace fork.Logic.Controller
             catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);
+                return false;
+            }
+        }
+
+        public bool CloneNetwork(NetworkViewModel viewModel, List<string> usedEntityNames)
+        {
+            if (viewModel.CurrentStatus != ServerStatus.STOPPED)
+            {
+                StopNetwork(viewModel, false);
+                while (viewModel.CurrentStatus != ServerStatus.STOPPED)
+                {
+                    Thread.Sleep(500);
+                }
+            }
+            try
+            {
+                DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ApplicationPath, viewModel.Name));
+                if (!directoryInfo.Exists)
+                {
+                    ErrorLogger.Append(
+                        new DirectoryNotFoundException("Could not find Directory " + directoryInfo.FullName));
+                    return false;
+                }
+                string newName = RefineName(viewModel.Name+"-Clone", usedEntityNames);
+                
+                //Better to use a object copy function
+                string oldNetworkJson = JsonConvert.SerializeObject(viewModel.Network);
+                Network newNetwork = JsonConvert.DeserializeObject<Network>(oldNetworkJson);
+                
+                newNetwork.Name = newName;
+                newNetwork.UID = Guid.NewGuid().ToString();
+                NetworkViewModel newNetworkViewModel = new NetworkViewModel(newNetwork);
+
+                string newNetworkPath = Path.Combine(App.ApplicationPath, newName);
+                newNetworkViewModel.StartImport();
+                Application.Current.Dispatcher?.Invoke(() => ServerManager.Instance.Entities.Add(newNetworkViewModel));
+                ApplicationManager.Instance.MainViewModel.SelectedEntity = newNetworkViewModel;
+            
+                //Create server directory
+                Directory.CreateDirectory(newNetworkPath);
+            
+                //Import server files
+                Thread copyThread = new Thread(() =>
+                {
+                    FileImporter fileImporter = new FileImporter();
+                    fileImporter.CopyProgressChanged += newNetworkViewModel.CopyProgressChanged;
+                    fileImporter.DirectoryCopy(directoryInfo.FullName, newNetworkPath, true, new List<string>{"server.jar"});
+                    Console.WriteLine("Finished copying server files for server "+newNetworkPath);
+                    newNetworkViewModel.FinishedCopying();
+                });
+                copyThread.Start();
+                
+                return true;
+            }
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
                 return false;
             }
         }

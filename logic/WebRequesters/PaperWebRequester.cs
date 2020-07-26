@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using fork.Logic.Logging;
 using Newtonsoft.Json;
 
 namespace fork.Logic.WebRequesters
@@ -14,16 +15,24 @@ namespace fork.Logic.WebRequesters
             string json = ResponseCache.Instance.UncacheResponse(url);
             if (json == null)
             {
-                Uri uri = new Uri(url);
-                HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uri);
-                using (var response =  request.GetResponse())
-                using (Stream stream = response.GetResponseStream())
-                using (StreamReader reader = new StreamReader(stream))
+                try
                 {
-                    json = reader.ReadToEnd();
-                }
-                
-                ResponseCache.Instance.CacheResponse(url, json);
+                    Uri uri = new Uri(url);
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+                    using (var response = request.GetResponse())
+                    using (Stream stream = response.GetResponseStream())
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        json = reader.ReadToEnd();
+                    }
+
+                    ResponseCache.Instance.CacheResponse(url, json);
+                } catch(WebException e)
+                {
+                    ErrorLogger.Append(e);
+                    Console.WriteLine("Could not receive Paper Versions (either papermc.io is down or your Internet connection is not working)");
+                    return new List<string>();
+                }                                
             }
 
             PaperVersions paperVersions = JsonConvert.DeserializeObject<PaperVersions>(json);
