@@ -1,17 +1,22 @@
 using System;
 using System.IO;
-using System.Text.Json.Serialization;
 using fork.Logic.Logging;
-using fork.Logic.Manager;
 using fork.Logic.Model;
 using Newtonsoft.Json;
-using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace fork.Logic.Persistence
 {
     public class AppSettingsSerializer
     {
-        public static AppSettings ReadAppSettings()
+        private static AppSettings appSettings;
+        public static AppSettings AppSettings => appSettings ??= ReadAppSettings();
+
+        public static void SaveSettings()
+        {
+            WriteAppSettings(AppSettings);
+        }
+
+        private static AppSettings ReadAppSettings()
         {
             FileInfo settingsFile = new FileInfo(Path.Combine(App.ApplicationPath,"persistence","settings.json"));
             if (!settingsFile.Exists)
@@ -31,7 +36,7 @@ namespace fork.Logic.Persistence
             }
         }
 
-        public static void WriteAppSettings(AppSettings appSettings)
+        private static void WriteAppSettings(AppSettings appSettings)
         {
             DirectoryInfo persistenceDir = new DirectoryInfo(Path.Combine(App.ApplicationPath, "persistence"));
             if (!persistenceDir.Exists)
@@ -41,12 +46,13 @@ namespace fork.Logic.Persistence
             FileInfo settingsFile = new FileInfo(Path.Combine(persistenceDir.FullName, "settings.json"));
             if (!settingsFile.Exists)
             {
-                settingsFile.Create();
+                var stream = settingsFile.Create();
+                stream.Close();
             }
 
             try
             {
-                string settingsJson = JsonConvert.SerializeObject(appSettings);
+                string settingsJson = JsonConvert.SerializeObject(appSettings, Formatting.Indented);
                 File.WriteAllText(settingsFile.FullName,settingsJson);
             }
             catch (Exception e)

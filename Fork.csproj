@@ -38,6 +38,8 @@
     <None Remove="View\Resources\images\Icons\CreateW.png" />
     <None Remove="View\Resources\images\Icons\Delete.png" />
     <None Remove="View\Resources\images\Icons\DeleteW.png" />
+    <None Remove="View\Resources\images\Icons\DiscordD.png" />
+    <None Remove="View\Resources\images\Icons\DiscordW.png" />
     <None Remove="View\Resources\images\Icons\Download.png" />
     <None Remove="View\Resources\images\Icons\DownloadW.png" />
     <None Remove="View\Resources\images\Icons\dude.png" />
@@ -59,6 +61,7 @@
     <None Remove="View\Resources\images\Icons\Restart.png" />
     <None Remove="View\Resources\images\Icons\RestartW.png" />
     <None Remove="View\Resources\images\Icons\Settings.png" />
+    <None Remove="View\Resources\images\Icons\SettingsD.png" />
     <None Remove="View\Resources\images\Icons\SettingsW.png" />
     <None Remove="View\Resources\images\Icons\Spigot.png" />
     <None Remove="View\Resources\images\Icons\SpigotD.png" />
@@ -139,6 +142,8 @@
     <Resource Include="View\Resources\images\Icons\CreateW.png" />
     <Resource Include="View\Resources\images\Icons\Delete.png" />
     <Resource Include="View\Resources\images\Icons\DeleteW.png" />
+    <Resource Include="View\Resources\images\Icons\DiscordD.png" />
+    <Resource Include="View\Resources\images\Icons\DiscordW.png" />
     <Resource Include="View\Resources\images\Icons\Download.png" />
     <Resource Include="View\Resources\images\Icons\DownloadW.png" />
     <Resource Include="View\Resources\images\Icons\dude.png" />
@@ -160,6 +165,7 @@
     <Resource Include="View\Resources\images\Icons\Restart.png" />
     <Resource Include="View\Resources\images\Icons\RestartW.png" />
     <Resource Include="View\Resources\images\Icons\Settings.png" />
+    <Resource Include="View\Resources\images\Icons\SettingsD.png" />
     <Resource Include="View\Resources\images\Icons\SettingsW.png" />
     <Resource Include="View\Resources\images\Icons\Spigot.png" />
     <Resource Include="View\Resources\images\Icons\SpigotD.png" />

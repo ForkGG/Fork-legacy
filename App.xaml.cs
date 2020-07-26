@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using fork.Logic.ApplicationConsole;
 using fork.Logic.Logging;
 using fork.Logic.Manager;
+using fork.Logic.Persistence;
 
 namespace fork
 {
@@ -31,7 +32,7 @@ namespace fork
             }
         }
 
-        public static string ServerPath => ApplicationManager.Instance.AppSettings.ServerPath;
+        public static string ServerPath => AppSettingsSerializer.AppSettings.ServerPath;
 
         protected override void OnStartup(StartupEventArgs e)
         {

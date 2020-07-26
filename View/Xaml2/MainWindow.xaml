@@ -22,6 +22,7 @@
                 <Grid Panel.ZIndex="1">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="140" />
+                        <RowDefinition Height="35"/>
                         <RowDefinition Height="5*" />
                         <RowDefinition Height="Auto" MinHeight="120" />
                     </Grid.RowDefinitions>
@@ -44,7 +45,17 @@
                             </Image.Style>
                         </Image>
                     </Grid>
-                    <Grid Grid.Row="1" VerticalAlignment="Center" MinWidth="243">
+                    <StackPanel Margin="0 0 5 0" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <controls:IconButton Margin="10 0" Background="{DynamicResource buttonBgrDefault}" Height="35" Width="50" IconHeight="25" IconWidth="100"
+                                             IconSource="pack://application:,,,/View/Resources/images/Icons/SettingsD.png"
+                                             HoverIconSource="pack://application:,,,/View/Resources/images/Icons/SettingsW.png"
+                                             HoverBackground="{DynamicResource buttonBgrDefault}"/>
+                        <controls:IconButton Margin="10 0" Background="{DynamicResource buttonBgrDefault}" Height="35" Width="50" IconHeight="25" IconWidth="100" 
+                                             IconSource="pack://application:,,,/View/Resources/images/Icons/DiscordD.png"
+                                             HoverIconSource="pack://application:,,,/View/Resources/images/Icons/DiscordW.png"
+                                             HoverBackground="{DynamicResource buttonBgrDefault}" Click="DiscordOpen_Click"/>
+                    </StackPanel>
+                    <Grid Grid.Row="2" VerticalAlignment="Center" MinWidth="243">
                         <Border Background="{DynamicResource backgroundDark}" Margin="0 0 5 0" />
                         <Grid Panel.ZIndex="1">
                             <Grid.RowDefinitions>
@@ -124,6 +135,7 @@
                                                         <Trigger Property="IsSelected" Value="False">
                                                             <Setter TargetName="dot" Property="Fill"
                                                                     Value="{Binding IconColor}" />
+                                                            <Setter Property="Cursor" Value="Hand"/>
                                                         </Trigger>
                                                         <Trigger Property="IsMouseOver" Value="True">
                                                             <Setter TargetName="title" Property="Foreground"
@@ -140,10 +152,10 @@
                             </ListView>
                         </Grid>
                     </Grid>
-                    <DockPanel Grid.Row="2" LastChildFill="False" Margin="0 0 5 0"
+                    <DockPanel Grid.Row="3" LastChildFill="False" Margin="0 0 5 0"
                                Background="{DynamicResource backgroundDark}">
                         <StackPanel DockPanel.Dock="Bottom" Background="{DynamicResource backgroundDarker}">
-                            <Border CornerRadius="0 10 10 0" Height="55" Margin="0 3"
+                            <Border CornerRadius="0 10 10 0" Height="55" Margin="0 3 -5 3"
                                     Background="{DynamicResource buttonBgrBlue}"
                                     Visibility="{Binding NewerVersionExists, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <Button>

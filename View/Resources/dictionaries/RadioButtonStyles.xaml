@@ -4,10 +4,11 @@
                     xmlns:controls2="clr-namespace:fork.View.Xaml2.Controls">
 
     <Style TargetType="RadioButton">
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Foreground" Value="{DynamicResource foregroundDefault}" />
     </Style>
 
-    <Style TargetType="RadioButton" x:Key="CustomRadioButton">
+    <Style TargetType="RadioButton" x:Key="CustomRadioButton" BasedOn="{StaticResource {x:Type RadioButton}}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
@@ -59,16 +60,13 @@
     </Style>
 
     <Style TargetType="controls2:ServerTypeRadioButton" BasedOn="{StaticResource {x:Type RadioButton}}">
-        <Style.Resources>
-            <FontFamily x:Key="Montserrat-Bold">pack://application:,,,/View/Resources/Fonts/Montserrat-Bold.ttf#Montserrat</FontFamily>
-        </Style.Resources>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
                     <Border x:Name="background" Background="{DynamicResource buttonBgrDefault}" Height="55" CornerRadius="8">
                         <StackPanel Orientation="Horizontal" Margin="10 0">
                             <Image x:Name="image" Source="{Binding IconSource, RelativeSource={RelativeSource TemplatedParent}}" Margin="5 8 5 8"/>
-                            <TextBlock x:Name="header" Margin="5 0 10 0" Text="{Binding Header, RelativeSource={RelativeSource TemplatedParent}}" Foreground="{DynamicResource backgroundDark}" FontSize="23" FontFamily="{StaticResource Montserrat-Bold}" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="header" Margin="5 0 10 0" Text="{Binding Header, RelativeSource={RelativeSource TemplatedParent}}" Foreground="{DynamicResource backgroundDark}" FontSize="23" FontFamily="{DynamicResource Montserrat-Bold}" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -80,6 +78,7 @@
                             <Setter TargetName="background" Property="Background" Value="{DynamicResource tabSelected}"/>
                             <Setter TargetName="header" Property="Foreground" Value="{DynamicResource textSelected}"/>
                             <Setter TargetName="image" Property="Source" Value="{Binding HoverIconSource, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <Setter Property="Cursor" Value="Arrow"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -101,6 +100,7 @@
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="imageBorder" Property="Background" Value="{DynamicResource tabSelected}"/>
                             <Setter TargetName="image" Property="Source" Value="{Binding HoverIconSource, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <Setter Property="Cursor" Value="Arrow"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

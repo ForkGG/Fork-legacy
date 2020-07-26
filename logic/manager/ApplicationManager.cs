@@ -59,19 +59,14 @@ namespace fork.Logic.Manager
         private AppSettings appSettings;
         
         
-        public MainViewModel MainViewModel { get; } = new MainViewModel();
-        public ConsoleViewModel ConsoleViewModel { get; } = new ConsoleViewModel();
+        public MainViewModel MainViewModel { get; } = 
+            new MainViewModel();
+        public ConsoleViewModel ConsoleViewModel { get; } = 
+            new ConsoleViewModel();
         public Dictionary<Entity, Process> ActiveEntities { get; } = new Dictionary<Entity, Process>();
         public List<SettingsReader> SettingsReaders { get; } = new List<SettingsReader>();
         public bool HasExited { get; set; } = false;
         public ForkVersion CurrentForkVersion { get; }
-
-        public AppSettings AppSettings => appSettings ??= AppSettingsSerializer.ReadAppSettings();
-
-        public void SaveAppSettings()
-        {
-            AppSettingsSerializer.WriteAppSettings(AppSettings);
-        }
 
         public void ExitApplication()
         {
