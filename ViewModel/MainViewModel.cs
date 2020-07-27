@@ -11,8 +11,11 @@ using fork.Annotations;
 using fork.Logic.ApplicationConsole;
 using fork.Logic.Controller;
 using fork.Logic.Manager;
+using fork.Logic.Model;
 using fork.Logic.Model.APIModel;
+using fork.Logic.Persistence;
 using fork.View.Xaml2.Pages;
+using Fork.View.Xaml2.Pages;
 using Timer = System.Timers.Timer;
 
 namespace fork.ViewModel
@@ -25,7 +28,8 @@ namespace fork.ViewModel
         
         public ObservableCollection<EntityViewModel> Entities { get; set; }
         public EntityViewModel SelectedEntity { get; set; }
-        public ImportViewModel ImportViewModel { get; set; }
+        //public ImportViewModel ImportViewModel { get; }
+        public AppSettingsViewModel AppSettingsViewModel { get; }
         public bool HasServers { get; set; }
         public bool NewerVersionExists { get; set; }
         public ForkVersion CurrentForkVersion { get; set; }
@@ -45,7 +49,8 @@ namespace fork.ViewModel
             {
                 SetupVersionChecking();
             }
-            ImportViewModel = new ImportViewModel();
+            //ImportViewModel = new ImportViewModel();
+            AppSettingsViewModel = new AppSettingsViewModel(this);
             Entities = ServerManager.Instance.Entities;
             Entities.CollectionChanged += ServerListChanged;
             if (Entities.Count != 0)

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -37,6 +38,13 @@ namespace fork.View.Xaml2
             Closing += OnMainWindowClose;
             viewModel = ApplicationManager.Instance.MainViewModel;
             DataContext = viewModel;
+
+            viewModel.AppSettingsViewModel.AppSettingsCloseEvent += CloseAppSettings;
+        }
+
+        private void OpenAppSettings_Click(object sender, RoutedEventArgs e)
+        {
+            OpenAppSettings();
         }
 
         private void CreateServer_Click(object sender, RoutedEventArgs e)
@@ -120,6 +128,10 @@ namespace fork.View.Xaml2
 
         private void OpenCreateServer()
         {
+            if (AppSettingsPage.Visibility == Visibility.Visible)
+            {
+                CloseAppSettings();
+            }
             lastSelected = ServerList.SelectedItem;
             ServerList.UnselectAll();
             
@@ -140,6 +152,7 @@ namespace fork.View.Xaml2
 
         private void CloseCreateServer()
         {
+            
             if (!createOpen)
             {
                 return;
@@ -168,6 +181,10 @@ namespace fork.View.Xaml2
         
         private void OpenImportServer()
         {
+            if (AppSettingsPage.Visibility == Visibility.Visible)
+            {
+                CloseAppSettings();
+            }
             lastSelected = ServerList.SelectedItem;
             ServerList.UnselectAll();
             
@@ -234,7 +251,54 @@ namespace fork.View.Xaml2
             ImportButton.IconWidth = DeleteButton.IconWidth;
         }
 
+        private void OpenAppSettings()
+        {
+            CloseNonEntityPages();
+            lastSelected = ServerList.SelectedItem;
+            ServerList.UnselectAll();
+            
+            
+            //TODO make loading icon or smth
+            viewModel.AppSettingsViewModel.ReadAppSettingsAsync();
+            
+            //Open importServer Frame
+            ServerPage.Visibility = Visibility.Hidden;
+            AppSettingsPage.Visibility = Visibility.Visible;
+            AppSettingsButton.IsEnabled = false;
+            AppSettingsButton.Background = (Brush) Application.Current.FindResource("tabSelected");
+
+            //Change Buttons
+            //TODO
+        }
+
+        private void CloseAppSettings()
+        {
+            //Close importServer Frame
+            ServerPage.Visibility = Visibility.Visible;
+            AppSettingsPage.Visibility = Visibility.Hidden;
+            AppSettingsButton.IsEnabled = true;
+            AppSettingsButton.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
+            
+            if (ServerList.SelectedItems.Count == 0)
+            {
+                ServerList.SelectedItem = lastSelected;
+            }
+            
+            //Change Buttons
+            //TODO
+        }
+
+        private void CloseAppSettings(object sender)
+        {
+            CloseAppSettings();
+        }
+
         private void ServerList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CloseNonEntityPages();
+        }
+
+        private void CloseNonEntityPages()
         {
             if (CreatePage.Visibility == Visibility.Visible){
                 CloseCreateServer();
@@ -243,6 +307,11 @@ namespace fork.View.Xaml2
             if (ImportPage.Visibility == Visibility.Visible)
             {
                 CloseImportServer();
+            }
+
+            if (AppSettingsPage.Visibility == Visibility.Visible)
+            {
+                CloseAppSettings();
             }
         }
 

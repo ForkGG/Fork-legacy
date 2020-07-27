@@ -5,11 +5,17 @@
     <ShowAllFiles>false</ShowAllFiles>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Update="View\Xaml2\Pages\AppSettingsPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\Xaml2\TextGenerator.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="View\Xaml2\Pages\AppSettingsPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="View\Xaml2\TextGenerator.xaml">
       <SubType>Designer</SubType>
     </Page>

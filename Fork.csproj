@@ -49,6 +49,8 @@
     <None Remove="View\Resources\images\Icons\dudeSmall.png" />
     <None Remove="View\Resources\images\Icons\DudeTransparent.png" />
     <None Remove="View\Resources\images\Icons\DudeTransparentHover.png" />
+    <None Remove="View\Resources\images\Icons\FolderD.png" />
+    <None Remove="View\Resources\images\Icons\FolderW.png" />
     <None Remove="View\Resources\images\Icons\Import.png" />
     <None Remove="View\Resources\images\Icons\ImportW.png" />
     <None Remove="View\Resources\images\Icons\Paper.png" />
@@ -153,6 +155,8 @@
     <Resource Include="View\Resources\images\Icons\dudeSmall.png" />
     <Resource Include="View\Resources\images\Icons\DudeTransparent.png" />
     <Resource Include="View\Resources\images\Icons\DudeTransparentHover.png" />
+    <Resource Include="View\Resources\images\Icons\FolderD.png" />
+    <Resource Include="View\Resources\images\Icons\FolderW.png" />
     <Resource Include="View\Resources\images\Icons\Import.png" />
     <Resource Include="View\Resources\images\Icons\ImportW.png" />
     <Resource Include="View\Resources\images\Icons\Paper.png" />

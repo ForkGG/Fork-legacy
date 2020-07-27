@@ -16,6 +16,11 @@ namespace fork.Logic.Persistence
             WriteAppSettings(AppSettings);
         }
 
+        public static void ReadSettings()
+        {
+            appSettings = ReadAppSettings();
+        }
+
         private static AppSettings ReadAppSettings()
         {
             FileInfo settingsFile = new FileInfo(Path.Combine(App.ApplicationPath,"persistence","settings.json"));

@@ -47,9 +47,9 @@
                     </Grid>
                     <StackPanel Margin="0 0 5 0" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                         <controls:IconButton Margin="10 0" Background="{DynamicResource buttonBgrDefault}" Height="35" Width="50" IconHeight="25" IconWidth="100"
-                                             IconSource="pack://application:,,,/View/Resources/images/Icons/SettingsD.png"
+                                             IconSource="pack://application:,,,/View/Resources/images/Icons/SettingsD.png" x:Name="AppSettingsButton"
                                              HoverIconSource="pack://application:,,,/View/Resources/images/Icons/SettingsW.png"
-                                             HoverBackground="{DynamicResource buttonBgrDefault}"/>
+                                             HoverBackground="{DynamicResource buttonBgrDefault}" Click="OpenAppSettings_Click"/>
                         <controls:IconButton Margin="10 0" Background="{DynamicResource buttonBgrDefault}" Height="35" Width="50" IconHeight="25" IconWidth="100" 
                                              IconSource="pack://application:,,,/View/Resources/images/Icons/DiscordD.png"
                                              HoverIconSource="pack://application:,,,/View/Resources/images/Icons/DiscordW.png"
@@ -365,6 +365,9 @@
                 <Frame x:Name="ImportPage" Grid.Column="1" Content="{Binding ImportPage}"
                        NavigationUIVisibility="Hidden" Visibility="Hidden"
                        Background="{DynamicResource backgroundDefault}" />
+                <Frame x:Name="AppSettingsPage" Grid.Column="1" Content="{Binding AppSettingsViewModel.AppSettingsPage}"
+                       NavigationUIVisibility="Hidden" Visibility="Hidden"
+                       Background="{DynamicResource backgroundDefault}"/>
             </Grid>
         </DockPanel>
         <Grid Panel.ZIndex="1" x:Name="DeleteServerOverlay" Visibility="Collapsed">
