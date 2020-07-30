@@ -35,9 +35,17 @@ namespace fork.Logic.Controller
                 return ApplicationManager.Instance.CurrentForkVersion;
             }
 
-            var response = RequestRawResponse(apiBaseURL + "versions/fork/latest");
-            string versionJson = RetrieveResponseBody(response);
-            return JsonConvert.DeserializeObject<ForkVersion>(versionJson);
+            try
+            {
+                var response = RequestRawResponse(apiBaseURL + "versions/fork/latest");
+                string versionJson = RetrieveResponseBody(response);
+                return JsonConvert.DeserializeObject<ForkVersion>(versionJson);
+            }
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
+                return ApplicationManager.Instance.CurrentForkVersion;
+            }
         }
         
         private bool IsAPIAvailable()
