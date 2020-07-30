@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using fork.Logic.Logging;
 using fork.Logic.Model;
@@ -66,6 +67,7 @@ namespace fork.ViewModel
             });
             t.Start();
             bool r = await t;
+            RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(AppSettings)));
             return r;
         }
     }

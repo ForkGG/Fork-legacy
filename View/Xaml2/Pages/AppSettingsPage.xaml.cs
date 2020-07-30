@@ -35,6 +35,13 @@ namespace Fork.View.Xaml2.Pages
             Process.Start("explorer.exe", "-p, " + path);
         }
 
+        private async void ApplyNewServerDir_Click(object sender, RoutedEventArgs e)
+        {
+            bool result = await ServerManager.Instance.MoveEntitiesAsync(forkServerPath.Text);
+            ServerDirChangedGrid.Visibility = Visibility.Collapsed;
+            serverPathBgr.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
+        }
+
         private void ServerDirPath_MouseDown(object sender, MouseButtonEventArgs e)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog {SelectedPath = forkServerPath.Text};

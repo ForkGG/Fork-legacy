@@ -90,6 +90,7 @@
     <None Remove="View\Resources\images\minimize.png" />
     <None Remove="View\Resources\images\paperSymbol.png" />
     <None Remove="View\Resources\images\spigotSymbol.png" />
+    <None Remove="View\Resources\images\Splash.png" />
     <None Remove="View\Resources\images\title.png" />
     <None Remove="View\Resources\images\vanillaSymbol.png" />
     <None Remove="View\Resources\SyntaxHighlighting\Python.xshd" />
@@ -190,16 +191,15 @@
     <Resource Include="View\Resources\images\Icons\WhiteListW.png" />
     <Resource Include="View\Resources\images\Icons\World.png" />
     <Resource Include="View\Resources\images\Icons\WorldW.png" />
-    <Resource Include="View\Resources\images\ImportServer.png" />
     <Resource Include="View\Resources\images\maximize1.png" />
     <Resource Include="View\Resources\images\maximize2.png" />
     <Resource Include="View\Resources\images\minimize.png" />
-    <Resource Include="View\Resources\images\paperSymbol.png" />
-    <Resource Include="View\Resources\images\spigotSymbol.png" />
-    <Resource Include="View\Resources\images\title.png" />
-    <Resource Include="View\Resources\images\vanillaSymbol.png" />
     <Resource Include="View\Resources\SyntaxHighlighting\Python.xshd" />
     <Resource Include="View\Resources\SyntaxHighlighting\YAML.xshd" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SplashScreen Include="View\Resources\images\Splash.png" />
   </ItemGroup>
 
 </Project>

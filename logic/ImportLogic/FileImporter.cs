@@ -22,6 +22,14 @@ namespace fork.Logic.ImportLogic
             eventArgs = new CopyProgressChangedEventArgs(0,null,0,filesToCopy);
             DirectoryCopyInternal(sourceDirName,destDirName,copySubDirs,ignoredFiles);
         }
+
+        public void DirectoryMove(string sourceDirName, string destDirName, bool moveSubDirs = false)
+        {
+            int filesToCopy = FilesToCopy(sourceDirName, moveSubDirs, new List<string>());
+            eventArgs = new CopyProgressChangedEventArgs(0,null,0,filesToCopy);
+            DirectoryMoveInternal(sourceDirName,destDirName,moveSubDirs);
+            Directory.Delete(sourceDirName, true);
+        }
         
         private void DirectoryCopyInternal(string sourceDirName, string destDirName, bool copySubDirs, 
             List<string> ignoredFiles)
@@ -64,6 +72,46 @@ namespace fork.Logic.ImportLogic
                 {
                     string temppath = Path.Combine(destDirName, subdir.Name);
                     DirectoryCopyInternal(subdir.FullName, temppath, copySubDirs, ignoredFiles);
+                }
+            }
+        }
+
+        private void DirectoryMoveInternal(string sourceDirName, string destDirName, bool moveSubDirs)
+        {
+            // Get the subdirectories for the specified directory.
+            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+
+            if (!dir.Exists)
+            {
+                throw new DirectoryNotFoundException(
+                    "Source directory does not exist or could not be found: "
+                    + sourceDirName);
+            }
+            
+            DirectoryInfo[] dirs = dir.GetDirectories();
+            // If the destination directory doesn't exist, create it.
+            if (!Directory.Exists(destDirName))
+            {
+                Directory.CreateDirectory(destDirName);
+            }
+            
+            // Get the files in the directory and copy them to the new location.
+            FileInfo[] files = dir.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                string temppath = Path.Combine(destDirName, file.Name);
+                file.MoveTo(temppath, true);
+                eventArgs.FilesCopied++;
+                OnCopyProgressChanged(eventArgs);
+            }
+
+            // If copying subdirectories, copy them and their contents to new location.
+            if (moveSubDirs)
+            {
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    string temppath = Path.Combine(destDirName, subdir.Name);
+                    DirectoryMoveInternal(subdir.FullName, temppath, moveSubDirs);
                 }
             }
         }

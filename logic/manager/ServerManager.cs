@@ -84,8 +84,15 @@ namespace fork.Logic.Manager
         }
 
 
+        public async Task<bool> MoveEntitiesAsync(string newPath)
+        {
+            Task<bool> t = new Task<bool>(() => MoveEntities(newPath));
+            t.Start();
+            bool r = await t;
+            return r;
+        }
+        
         #region Server Managment Methods
-
         public async Task<bool> CreateServerAsync(string serverName, ServerVersion serverVersion, ServerSettings serverSettings,
             JavaSettings javaSettings, string worldPath = null)
         {
@@ -296,7 +303,6 @@ namespace fork.Logic.Manager
         }
 
         #endregion
-        
 
         public void AddEntity(EntityViewModel entityViewModel)
         {
@@ -319,6 +325,37 @@ namespace fork.Logic.Manager
         {
             EntitySerializer.Instance.StoreEntities(Entities);
             ApplicationManager.Instance.MainViewModel.SetServerList(ref entities);
+        }
+
+        private bool MoveEntities(string newPath)
+        {
+            DirectoryInfo newDir = new DirectoryInfo(newPath);
+            if (!newDir.Exists)
+            {
+                ErrorLogger.Append(new Exception("Can't move Servers/Networks to not existing dir: "+newPath));
+                return false;
+            }
+
+            foreach (EntityViewModel entityViewModel in Entities)
+            {
+                string currEntityPath = Path.Combine(App.ServerPath, entityViewModel.Entity.Name);
+                string newEntityPath = Path.Combine(newPath, entityViewModel.Entity.Name);
+                
+                entityViewModel.StartImport();
+                new Thread(() =>
+                {
+                    //Directory.Move(currEntityPath,newEntityPath);
+                    FileImporter fileImporter = new FileImporter();
+                    fileImporter.CopyProgressChanged += entityViewModel.CopyProgressChanged;
+                    fileImporter.DirectoryMove(currEntityPath, newEntityPath, true);
+                    Console.WriteLine("Finished moving entity files for entity "+entityViewModel.Name);
+                    entityViewModel.FinishedCopying();
+                }).Start();
+            }
+
+            AppSettingsSerializer.AppSettings.ServerPath = newPath;
+            AppSettingsSerializer.SaveSettings();
+            return true;
         }
 
         private bool ImportServer(ServerVersion version, ServerValidationInfo validationInfo,

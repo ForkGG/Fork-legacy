@@ -20,7 +20,7 @@
                         <StackPanel Background="Transparent" Margin="0 10">
                             <TextBlock Text="General Settings" Foreground="{DynamicResource textHeader}" FontFamily="{StaticResource Montserrat-SemiBold}" FontSize="23" Margin="15 0 5 20"/>
                             <StackPanel Margin="25 0">
-                                <CheckBox Margin="0 0 0 30" IsChecked="{Binding AppSettings.SendTelemetry, Mode=OneWay}" Content="Send Application Telemetry" Style="{DynamicResource TextCheckBox}" FontSize="20"/>
+                                <!--CheckBox Margin="0 0 0 30" IsChecked="{Binding AppSettings.SendTelemetry, Mode=OneWay}" Content="Send Application Telemetry" Style="{DynamicResource TextCheckBox}" FontSize="20"/-->
                                 <StackPanel Height="40" Orientation="Horizontal">
                                     <TextBlock Text="Server Directory"  Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0"/>
                                     <Border x:Name="serverPathBgr" CornerRadius="4" Height="26" Background="{DynamicResource buttonBgrDefault}">
@@ -53,12 +53,12 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Text="WARNING:" Margin="10 0 0 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="16" Foreground="{DynamicResource buttonBgrRed}"/>
                                         <StackPanel Grid.Column="1" Margin="5 0 0 0">
-                                            <TextBlock Text="This will move ALL your existing and future Servers to the selected directory." TextWrapping="Wrap" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="16" Foreground="{DynamicResource buttonBgrRed}"/>
-                                            <TextBlock Text="Make sure the selected Disk has enough space, else this will cause trouble!" TextWrapping="Wrap" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="16" Foreground="{DynamicResource buttonBgrRed}"/>
+                                            <TextBlock Text="This will move ALL your existing and future servers to the selected directory." TextWrapping="Wrap" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="16" Foreground="{DynamicResource buttonBgrRed}"/>
+                                            <TextBlock Text="Make sure the selected disk has enough space, else this will cause trouble!" TextWrapping="Wrap" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="16" Foreground="{DynamicResource buttonBgrRed}"/>
                                             <TextBlock Text="This also will stop all running servers and it might take some time to move them." TextWrapping="Wrap" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="16" Foreground="{DynamicResource buttonBgrRed}"/>
                                         </StackPanel>
                                     </Grid>
-                                    <Button Grid.Column="1" Grid.Row="1" Content="Apply" Style="{DynamicResource RoundedTextButton}" Margin="15 10 0 10" VerticalAlignment="Center"/>
+                                    <Button Grid.Column="1" Grid.Row="1" Content="Apply" Style="{DynamicResource RoundedTextButton}" Margin="15 10 0 10" VerticalAlignment="Center" Click="ApplyNewServerDir_Click"/>
                                 </Grid>
                             </StackPanel>
                         </StackPanel>

@@ -47,10 +47,5 @@ namespace fork
         {
             ApplicationManager.Instance.ExitApplication();
         }
-
-        void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
-        {
-            
-        }
     }
 }

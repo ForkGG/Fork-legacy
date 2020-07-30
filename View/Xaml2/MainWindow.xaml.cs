@@ -264,11 +264,10 @@ namespace fork.View.Xaml2
             //Open importServer Frame
             ServerPage.Visibility = Visibility.Hidden;
             AppSettingsPage.Visibility = Visibility.Visible;
-            AppSettingsButton.IsEnabled = false;
-            AppSettingsButton.Background = (Brush) Application.Current.FindResource("tabSelected");
 
             //Change Buttons
-            //TODO
+            AppSettingsButton.IsEnabled = false;
+            AppSettingsButton.Background = (Brush) Application.Current.FindResource("tabSelected");
         }
 
         private void CloseAppSettings()
@@ -276,8 +275,6 @@ namespace fork.View.Xaml2
             //Close importServer Frame
             ServerPage.Visibility = Visibility.Visible;
             AppSettingsPage.Visibility = Visibility.Hidden;
-            AppSettingsButton.IsEnabled = true;
-            AppSettingsButton.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
             
             if (ServerList.SelectedItems.Count == 0)
             {
@@ -285,7 +282,8 @@ namespace fork.View.Xaml2
             }
             
             //Change Buttons
-            //TODO
+            AppSettingsButton.IsEnabled = true;
+            AppSettingsButton.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
         }
 
         private void CloseAppSettings(object sender)
