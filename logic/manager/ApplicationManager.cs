@@ -7,7 +7,7 @@ using System.Threading;
 using fork.Logic.ApplicationConsole;
 using fork.Logic.Controller;
 using fork.Logic.Model;
-using fork.Logic.Model.APIModel;
+using fork.Logic.Model.APIModels;
 using fork.Logic.Persistence;
 using Fork.Properties;
 using fork.ViewModel;

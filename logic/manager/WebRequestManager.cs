@@ -7,7 +7,7 @@ using System.Threading;
 using fork.Logic.Logging;
 using Newtonsoft.Json;
 using fork.Logic.Model;
-using fork.Logic.Model.MinecraftVersionModel;
+using fork.Logic.Model.MinecraftVersionModels;
 using fork.Logic.WebRequesters;
 using fork.ViewModel;
 using JsonSerializer = System.Text.Json.JsonSerializer;

@@ -3,7 +3,7 @@ using System.IO;
 using System.Net;
 using fork.Logic.Logging;
 using fork.Logic.Manager;
-using fork.Logic.Model.APIModel;
+using fork.Logic.Model.APIModels;
 using Newtonsoft.Json;
 
 namespace fork.Logic.Controller

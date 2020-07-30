@@ -202,4 +202,8 @@
     <SplashScreen Include="View\Resources\images\Splash.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="logic\model\PluginModels" />
+  </ItemGroup>
+
 </Project>

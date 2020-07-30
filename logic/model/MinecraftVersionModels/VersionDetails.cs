@@ -1,4 +1,4 @@
-namespace fork.Logic.Model.MinecraftVersionModel
+namespace fork.Logic.Model.MinecraftVersionModels
 {
     public class VersionDetails
     {

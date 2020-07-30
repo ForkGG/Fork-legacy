@@ -1,6 +1,6 @@
 using System;
 
-namespace fork.Logic.Model.APIModel
+namespace fork.Logic.Model.APIModels
 {
     public class ForkVersion : IComparable, IComparable<ForkVersion>
     {
