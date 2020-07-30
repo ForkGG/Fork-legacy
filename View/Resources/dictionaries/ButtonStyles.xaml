@@ -9,6 +9,7 @@
         <Setter Property="Foreground" Value="{DynamicResource foregroundDefault}" />
         <Setter Property="BorderBrush" Value="{DynamicResource backgroundLight}" />
         <Setter Property="Padding" Value="5,3" />
+        <Setter Property="Cursor" Value="Hand"/>
 
         <Setter Property="Template">
             <Setter.Value>
@@ -55,7 +56,7 @@
     </Style>
     
     <!-- RoundedTextButton -->
-    <Style x:Key="RoundedTextButton" TargetType="Button">
+    <Style x:Key="RoundedTextButton" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -74,7 +75,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="RoundedTextButtonRed" TargetType="Button">
+    <Style x:Key="RoundedTextButtonRed" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">

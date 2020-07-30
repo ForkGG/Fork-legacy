@@ -60,7 +60,7 @@ namespace fork.ViewModel
             set
             {
                 Entity.Name = value; 
-                EntityPathChangedEvent?.Invoke(this, new EntityPathChangedEventArgs(Path.Combine(App.ApplicationPath,value)));
+                EntityPathChangedEvent?.Invoke(this, new EntityPathChangedEventArgs(Path.Combine(App.ServerPath,value)));
                 new Thread(()=>
                 {
                     if (this is ServerViewModel s)

@@ -7,11 +7,10 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Automation;
-using System.Windows.Media;
 using fork.Logic.BackgroundWorker;
 using fork.Logic.Controller;
 using fork.Logic.CustomConsole;
@@ -19,9 +18,9 @@ using fork.Logic.ImportLogic;
 using fork.Logic.Logging;
 using fork.Logic.Model;
 using fork.Logic.Persistence;
-using fork.Logic.RoleManagement;
 using fork.Logic.WebRequesters;
 using fork.ViewModel;
+using Newtonsoft.Json;
 
 namespace fork.Logic.Manager
 {
@@ -45,7 +44,7 @@ namespace fork.Logic.Manager
             {
                 if (!viewModel.Entity.Initialized)
                 {
-                    Downloader.DownloadJarAsync(viewModel, new DirectoryInfo(Path.Combine(App.ApplicationPath, viewModel.Name)));
+                    Downloader.DownloadJarAsync(viewModel, new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Name)));
                 }
             }
 
@@ -85,8 +84,15 @@ namespace fork.Logic.Manager
         }
 
 
+        public async Task<bool> MoveEntitiesAsync(string newPath)
+        {
+            Task<bool> t = new Task<bool>(() => MoveEntities(newPath));
+            t.Start();
+            bool r = await t;
+            return r;
+        }
+        
         #region Server Managment Methods
-
         public async Task<bool> CreateServerAsync(string serverName, ServerVersion serverVersion, ServerSettings serverSettings,
             JavaSettings javaSettings, string worldPath = null)
         {
@@ -140,6 +146,14 @@ namespace fork.Logic.Manager
         public async Task<bool> RenameServerAsync(ServerViewModel viewModel, string newName)
         {
             Task<bool> t = new Task<bool>(() => RenameServer(viewModel, newName));
+            t.Start();
+            bool r = await t;
+            return r;
+        }
+
+        public async Task<bool> CloneServerAsync(ServerViewModel viewModel)
+        {
+            Task<bool> t = new Task<bool>(() => CloneServer(viewModel));
             t.Start();
             bool r = await t;
             return r;
@@ -261,6 +275,15 @@ namespace fork.Logic.Manager
             return r;
         }
         
+        public async Task<bool> CloneNetworkAsync(NetworkViewModel viewModel)
+        {
+            Task<bool> t = new Task<bool>(() =>
+                networkController.CloneNetwork(viewModel, serverNames));
+            t.Start();
+            bool r = await t;
+            return r;
+        }
+        
         public async Task<bool> DeleteNetworkAsync(NetworkViewModel viewModel)
         {
             Task<bool> t = new Task<bool>(() =>
@@ -280,7 +303,6 @@ namespace fork.Logic.Manager
         }
 
         #endregion
-        
 
         public void AddEntity(EntityViewModel entityViewModel)
         {
@@ -305,10 +327,41 @@ namespace fork.Logic.Manager
             ApplicationManager.Instance.MainViewModel.SetServerList(ref entities);
         }
 
+        private bool MoveEntities(string newPath)
+        {
+            DirectoryInfo newDir = new DirectoryInfo(newPath);
+            if (!newDir.Exists)
+            {
+                ErrorLogger.Append(new Exception("Can't move Servers/Networks to not existing dir: "+newPath));
+                return false;
+            }
+
+            foreach (EntityViewModel entityViewModel in Entities)
+            {
+                string currEntityPath = Path.Combine(App.ServerPath, entityViewModel.Entity.Name);
+                string newEntityPath = Path.Combine(newPath, entityViewModel.Entity.Name);
+                
+                entityViewModel.StartImport();
+                new Thread(() =>
+                {
+                    //Directory.Move(currEntityPath,newEntityPath);
+                    FileImporter fileImporter = new FileImporter();
+                    fileImporter.CopyProgressChanged += entityViewModel.CopyProgressChanged;
+                    fileImporter.DirectoryMove(currEntityPath, newEntityPath, true);
+                    Console.WriteLine("Finished moving entity files for entity "+entityViewModel.Name);
+                    entityViewModel.FinishedCopying();
+                }).Start();
+            }
+
+            AppSettingsSerializer.AppSettings.ServerPath = newPath;
+            AppSettingsSerializer.SaveSettings();
+            return true;
+        }
+
         private bool ImportServer(ServerVersion version, ServerValidationInfo validationInfo,
             string originalServerDirectory, string serverName)
         {
-            string serverPath = Path.Combine(App.ApplicationPath, serverName);
+            string serverPath = Path.Combine(App.ServerPath, serverName);
             while (Directory.Exists(serverPath))
             {
                 serverPath += "-Copy";
@@ -375,7 +428,7 @@ namespace fork.Logic.Manager
         {
             try
             {
-                DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ApplicationPath,viewModel.Server.Name));
+                DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ServerPath,viewModel.Server.Name));
                 DirectoryInfo importWorldDir = new DirectoryInfo(worldSource);
                 string worldName = importWorldDir.Name;
                 List<string> worlds = new List<string>();
@@ -408,7 +461,7 @@ namespace fork.Logic.Manager
         {
             try
             {
-                DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ApplicationPath,viewModel.Server.Name));
+                DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ServerPath,viewModel.Server.Name));
                 List<string> worlds = new List<string>();
                 foreach (World world in viewModel.Worlds)
                 {
@@ -440,7 +493,7 @@ namespace fork.Logic.Manager
             JavaSettings javaSettings, string worldPath = null)
         {
             serverName = RefineName(serverName);
-            string serverPath = Path.Combine(App.ApplicationPath, serverName);
+            string serverPath = Path.Combine(App.ServerPath, serverName);
             serverNames.Add(serverName);
             if (string.IsNullOrEmpty(serverSettings.LevelName))
             {
@@ -463,8 +516,8 @@ namespace fork.Logic.Manager
             }
             
             //Writing necessary files
-            new FileWriter().WriteEula(Path.Combine(App.ApplicationPath, directoryInfo.Name));
-            new FileWriter().WriteServerSettings(Path.Combine(App.ApplicationPath, directoryInfo.Name),
+            new FileWriter().WriteEula(Path.Combine(App.ServerPath, directoryInfo.Name));
+            new FileWriter().WriteServerSettings(Path.Combine(App.ServerPath, directoryInfo.Name),
                 serverSettings.SettingsDictionary);
 
             return true;
@@ -482,7 +535,7 @@ namespace fork.Logic.Manager
             }
             try
             {
-                DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ApplicationPath, viewModel.Name));
+                DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Name));
                 if (!directoryInfo.Exists)
                 {
                     ErrorLogger.Append(
@@ -490,9 +543,66 @@ namespace fork.Logic.Manager
                     return false;
                 }
 
-                directoryInfo.MoveTo(Path.Combine(App.ApplicationPath, newName));
+                directoryInfo.MoveTo(Path.Combine(App.ServerPath, newName));
 
                 viewModel.Name = newName;
+                return true;
+            }
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
+                return false;
+            }
+        }
+
+        private bool CloneServer(ServerViewModel viewModel)
+        {
+            if (viewModel.CurrentStatus != ServerStatus.STOPPED)
+            {
+                StopServer(viewModel);
+                while (viewModel.CurrentStatus != ServerStatus.STOPPED)
+                {
+                    Thread.Sleep(500);
+                }
+            }
+            try
+            {
+                DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Name));
+                if (!directoryInfo.Exists)
+                {
+                    ErrorLogger.Append(
+                        new DirectoryNotFoundException("Could not find Directory " + directoryInfo.FullName));
+                    return false;
+                }
+                string newName = RefineName(viewModel.Name+"-Clone");
+                
+                //Better to use a object copy function
+                string oldServerJson = JsonConvert.SerializeObject(viewModel.Server);
+                Server newServer = JsonConvert.DeserializeObject<Server>(oldServerJson);
+                
+                newServer.Name = newName;
+                newServer.UID = Guid.NewGuid().ToString();
+                ServerViewModel newServerViewModel = new ServerViewModel(newServer);
+
+                string newServerPath = Path.Combine(App.ServerPath, newName);
+                newServerViewModel.StartImport();
+                Application.Current.Dispatcher?.Invoke(() => Entities.Add(newServerViewModel));
+                ApplicationManager.Instance.MainViewModel.SelectedEntity = newServerViewModel;
+            
+                //Create server directory
+                Directory.CreateDirectory(newServerPath);
+            
+                //Import server files
+                Thread copyThread = new Thread(() =>
+                {
+                    FileImporter fileImporter = new FileImporter();
+                    fileImporter.CopyProgressChanged += newServerViewModel.CopyProgressChanged;
+                    fileImporter.DirectoryCopy(directoryInfo.FullName, newServerPath, true, new List<string>{"server.jar"});
+                    Console.WriteLine("Finished copying server files for server "+newServerPath);
+                    newServerViewModel.FinishedCopying();
+                });
+                copyThread.Start();
+                
                 return true;
             }
             catch (Exception e)
@@ -516,14 +626,14 @@ namespace fork.Logic.Manager
                 }
 
                 DirectoryInfo deletedDirectory =
-                    Directory.CreateDirectory(Path.Combine(App.ApplicationPath, "backup", "deleted"));
+                    Directory.CreateDirectory(Path.Combine(App.ServerPath, "backup", "deleted"));
                 if (File.Exists(Path.Combine(deletedDirectory.FullName, serverViewModel.Name + ".zip")))
                 {
                     File.Delete(Path.Combine(deletedDirectory.FullName, serverViewModel.Name + ".zip"));
                 }
 
                 DirectoryInfo serverDirectory =
-                    new DirectoryInfo(Path.Combine(App.ApplicationPath, serverViewModel.Name));
+                    new DirectoryInfo(Path.Combine(App.ServerPath, serverViewModel.Name));
                 ZipFile.CreateFromDirectory(serverDirectory.FullName,
                     Path.Combine(deletedDirectory.FullName, serverViewModel.Name + ".zip"));
                 serverDirectory.Delete(true);
@@ -554,11 +664,11 @@ namespace fork.Logic.Manager
                 serverViewModel.DownloadCompleted = false;
 
                 //Delete old server.jar
-                File.Delete(Path.Combine(App.ApplicationPath, serverViewModel.Server.Name, "server.jar"));
+                File.Delete(Path.Combine(App.ServerPath, serverViewModel.Server.Name, "server.jar"));
 
                 //Download new server.jar
                 DirectoryInfo directoryInfo =
-                    new DirectoryInfo(Path.Combine(App.ApplicationPath, serverViewModel.Name));
+                    new DirectoryInfo(Path.Combine(App.ServerPath, serverViewModel.Name));
                 Downloader.DownloadJarAsync(serverViewModel, directoryInfo);
 
                 serverViewModel.Server.Version = newVersion;
@@ -585,7 +695,7 @@ namespace fork.Logic.Manager
             }
 
             DirectoryInfo dimBackups =
-                Directory.CreateDirectory(Path.Combine(App.ApplicationPath, server.Name, "DimensionBackups"));
+                Directory.CreateDirectory(Path.Combine(App.ServerPath, server.Name, "DimensionBackups"));
             string timeStamp = DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year + "_" +
                                DateTime.Now.Hour + "-" + DateTime.Now.Minute;
             ZipFile.CreateFromDirectory(dimensionDir.FullName,
@@ -603,11 +713,11 @@ namespace fork.Logic.Manager
                     switch (dimension)
                     {
                         case MinecraftDimension.Nether:
-                            return new DirectoryInfo(Path.Combine(App.ApplicationPath, server.Name, server.Name,
+                            return new DirectoryInfo(Path.Combine(App.ServerPath, server.Name, server.Name,
                                 "DIM-1"));
                         case MinecraftDimension.End:
                             return new DirectoryInfo(
-                                Path.Combine(App.ApplicationPath, server.Name, server.Name, "DIM1"));
+                                Path.Combine(App.ServerPath, server.Name, server.Name, "DIM1"));
                         default:
                             throw new ArgumentException("No implementation for deletion of dimension " + dimension +
                                                         " on Vanilla servers");
@@ -616,10 +726,10 @@ namespace fork.Logic.Manager
                     switch (dimension)
                     {
                         case MinecraftDimension.Nether:
-                            return new DirectoryInfo(Path.Combine(App.ApplicationPath, server.Name,
+                            return new DirectoryInfo(Path.Combine(App.ServerPath, server.Name,
                                 server.Name + "_nether"));
                         case MinecraftDimension.End:
-                            return new DirectoryInfo(Path.Combine(App.ApplicationPath, server.Name,
+                            return new DirectoryInfo(Path.Combine(App.ServerPath, server.Name,
                                 server.Name + "_the_end"));
                         default:
                             throw new ArgumentException("No implementation for deletion of dimension " + dimension +
@@ -635,7 +745,7 @@ namespace fork.Logic.Manager
         {
             viewModel.ConsoleOutList.Add("\nStarting server "+viewModel.Server+" on world: "+ viewModel.Server.ServerSettings.LevelName);
             Console.WriteLine("Starting server "+viewModel.Server.Name+" on world: "+ viewModel.Server.ServerSettings.LevelName);
-            DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ApplicationPath, viewModel.Server.Name));
+            DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Server.Name));
             if (!directoryInfo.Exists)
             {
                 return false;

@@ -191,12 +191,21 @@ namespace fork.Logic.Manager
             Uri uri = new Uri("https://launchermeta.mojang.com/mc/game/version_manifest.json");
             HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uri);
             string json;
-            using (var response =  request.GetResponse())
-            using (Stream stream = response.GetResponseStream())
-            using (StreamReader reader = new StreamReader(stream))
+            try
             {
-                json = reader.ReadToEnd();
+                using (var response = request.GetResponse())
+                using (Stream stream = response.GetResponseStream())
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    json = reader.ReadToEnd();
+                }
+            } catch(WebException e)
+            {
+                ErrorLogger.Append(e);
+                Console.WriteLine("WebException while updating Vanilla Versions (Either mojang.com is down or your internet coeenction is not working)");
+                return;
             }
+            
             
             Manifest manifest = JsonConvert.DeserializeObject<Manifest>(json);
             List<ServerVersion> result = new List<ServerVersion>();

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -36,6 +38,13 @@ namespace fork.View.Xaml2
             Closing += OnMainWindowClose;
             viewModel = ApplicationManager.Instance.MainViewModel;
             DataContext = viewModel;
+
+            viewModel.AppSettingsViewModel.AppSettingsCloseEvent += CloseAppSettings;
+        }
+
+        private void OpenAppSettings_Click(object sender, RoutedEventArgs e)
+        {
+            OpenAppSettings();
         }
 
         private void CreateServer_Click(object sender, RoutedEventArgs e)
@@ -72,7 +81,27 @@ namespace fork.View.Xaml2
                 RenameNetworkOverlay.Visibility = Visibility.Visible;
             }
         }
-        
+
+        private void CloneOpen_Click(object sender, RoutedEventArgs e)
+        {
+            if (viewModel.SelectedEntity is ServerViewModel serverViewModel)
+            {
+                if(serverViewModel.CurrentStatus == ServerStatus.STOPPED)
+                {
+                    Clone_Click(sender, e);
+                }
+                CloneServerOverlay.Visibility = Visibility.Visible;
+            }
+            else if(viewModel.SelectedEntity is NetworkViewModel networkViewModel)
+            {
+                if (networkViewModel.CurrentStatus == ServerStatus.STOPPED)
+                {
+                    Clone_Click(sender, e);
+                }
+                CloneNetworkOverlay.Visibility = Visibility.Visible;
+            }
+        }
+
         private void ImportServer_Click(object sender, RoutedEventArgs e)
         {
             if (ImportPage.Visibility == Visibility.Hidden)
@@ -85,6 +114,13 @@ namespace fork.View.Xaml2
             }
         }
 
+        private void DiscordOpen_Click(object sender, RoutedEventArgs e)
+        {
+            string url = "https://discord.fork.gg";
+            //hack for windows only https://github.com/dotnet/corefx/issues/10361
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+        }
+
         private void OnMainWindowClose(object sender, CancelEventArgs e)
         {
             Application.Current.Shutdown();
@@ -92,6 +128,10 @@ namespace fork.View.Xaml2
 
         private void OpenCreateServer()
         {
+            if (AppSettingsPage.Visibility == Visibility.Visible)
+            {
+                CloseAppSettings();
+            }
             lastSelected = ServerList.SelectedItem;
             ServerList.UnselectAll();
             
@@ -112,6 +152,7 @@ namespace fork.View.Xaml2
 
         private void CloseCreateServer()
         {
+            
             if (!createOpen)
             {
                 return;
@@ -140,6 +181,10 @@ namespace fork.View.Xaml2
         
         private void OpenImportServer()
         {
+            if (AppSettingsPage.Visibility == Visibility.Visible)
+            {
+                CloseAppSettings();
+            }
             lastSelected = ServerList.SelectedItem;
             ServerList.UnselectAll();
             
@@ -206,7 +251,52 @@ namespace fork.View.Xaml2
             ImportButton.IconWidth = DeleteButton.IconWidth;
         }
 
+        private void OpenAppSettings()
+        {
+            CloseNonEntityPages();
+            lastSelected = ServerList.SelectedItem;
+            ServerList.UnselectAll();
+            
+            
+            //TODO make loading icon or smth
+            viewModel.AppSettingsViewModel.ReadAppSettingsAsync();
+            
+            //Open importServer Frame
+            ServerPage.Visibility = Visibility.Hidden;
+            AppSettingsPage.Visibility = Visibility.Visible;
+
+            //Change Buttons
+            AppSettingsButton.IsEnabled = false;
+            AppSettingsButton.Background = (Brush) Application.Current.FindResource("tabSelected");
+        }
+
+        private void CloseAppSettings()
+        {
+            //Close importServer Frame
+            ServerPage.Visibility = Visibility.Visible;
+            AppSettingsPage.Visibility = Visibility.Hidden;
+            
+            if (ServerList.SelectedItems.Count == 0)
+            {
+                ServerList.SelectedItem = lastSelected;
+            }
+            
+            //Change Buttons
+            AppSettingsButton.IsEnabled = true;
+            AppSettingsButton.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
+        }
+
+        private void CloseAppSettings(object sender)
+        {
+            CloseAppSettings();
+        }
+
         private void ServerList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CloseNonEntityPages();
+        }
+
+        private void CloseNonEntityPages()
         {
             if (CreatePage.Visibility == Visibility.Visible){
                 CloseCreateServer();
@@ -216,6 +306,11 @@ namespace fork.View.Xaml2
             {
                 CloseImportServer();
             }
+
+            if (AppSettingsPage.Visibility == Visibility.Visible)
+            {
+                CloseAppSettings();
+            }
         }
 
         private void Abort_Click(object sender, RoutedEventArgs e)
@@ -224,6 +319,8 @@ namespace fork.View.Xaml2
             DeleteNetworkOverlay.Visibility = Visibility.Collapsed;
             RenameServerOverlay.Visibility = Visibility.Collapsed;
             RenameNetworkOverlay.Visibility = Visibility.Collapsed;
+            CloneServerOverlay.Visibility = Visibility.Collapsed;
+            CloneNetworkOverlay.Visibility = Visibility.Collapsed;
         }
 
         private async void Rename_Click(object sender, RoutedEventArgs e)
@@ -286,7 +383,55 @@ namespace fork.View.Xaml2
             
             Abort_Click(this, e);
         }
-        
+
+        private async void Clone_Click(object sender, RoutedEventArgs e)
+        {
+            if (viewModel.SelectedEntity is ServerViewModel serverViewModel)
+            {
+                ServerCloneBtn.IsEnabled = false;
+                ServerCloneCancelBtn.IsEnabled = false;
+
+                bool success = await ServerManager.Instance.CloneServerAsync(serverViewModel);
+                if (success)
+                {
+                    Console.WriteLine("Successfully cloned Server:"+ serverViewModel.Name);
+                }
+                else
+                {
+                    //TODO Show error
+                    Console.WriteLine("Error cloning Server: " + serverViewModel.Name);
+                }
+
+                ServerCloneBtn.IsEnabled = true;
+                ServerCloneCancelBtn.IsEnabled = true;
+            }
+            else if (viewModel.SelectedEntity is NetworkViewModel networkViewModel)
+            {
+                NetworkCloneBtn.IsEnabled = false;
+                NetworkCloneCancelBtn.IsEnabled = false;
+
+                bool success = await ServerManager.Instance.CloneNetworkAsync(networkViewModel);
+                if (success)
+                {
+                    Console.WriteLine("Successfully renamed Network to: " + networkViewModel.Name);
+                }
+                else
+                {
+                    //TODO Show error
+                    Console.WriteLine("Error renaming Network: " + networkViewModel.Name);
+                }
+
+                NetworkCloneBtn.IsEnabled = true;
+                NetworkCloneCancelBtn.IsEnabled = true;
+            }
+            else
+            {
+                throw new NotImplementedException("Rename does not support this type of entity: " + viewModel.GetType());
+            }
+
+            Abort_Click(this, e);
+        }
+
         private async void Delete_Click(object sender, RoutedEventArgs e)
         {
             EntityViewModel entityToDelete = viewModel.SelectedEntity;
@@ -348,6 +493,13 @@ namespace fork.View.Xaml2
         private void EntityMouseDown(object sender, MouseButtonEventArgs e)
         {
             e.Handled = true;
+        }
+
+        private void NewVersion_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            string url = viewModel.LatestForkVersion.URL;
+            //hack for windows only https://github.com/dotnet/corefx/issues/10361
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
         }
     }
 }

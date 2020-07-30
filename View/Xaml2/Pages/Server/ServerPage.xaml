@@ -26,7 +26,7 @@
                 <!-- Adress Info -->
                 <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Left" Orientation="Horizontal"  Margin="0 0 0 15">
                     <Rectangle Width="15" Height="15" Margin="20 0 10 0" Fill="{DynamicResource tabSelected}"/>
-                    <Border Background="{DynamicResource backgroundDark}" CornerRadius="3" Height="35">
+                    <Border Background="{DynamicResource backgroundDark}" CornerRadius="3" Height="35" MaxWidth="250">
                         <TextBlock x:Name="AddressInfoBox" Text="{Binding AddressInfo}" VerticalAlignment="Center" FontSize="20" Margin="10 7"></TextBlock>
                     </Border>
                     <Button x:Name="CopyButton" Click="CopyIP_Click" Width="89"  Margin="10 0 10 0" Style="{DynamicResource TextButton}">

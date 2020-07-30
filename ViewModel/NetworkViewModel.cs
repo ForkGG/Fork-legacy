@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
+using fork.Logic.Controller;
 using fork.Logic.Logging;
 using fork.Logic.Manager;
 using fork.Logic.Model;
@@ -34,13 +35,13 @@ namespace fork.ViewModel
         public ObservableCollection<Group> Groups { get; set; } = new ObservableCollection<Group>();
 
         public string NetworkTitle => Name + " - " + Network.Version.Type;
-        
+
         public ServerDropHandler DropHandler { get; }
 
         public NetworkViewModel(Network network) : base(network)
         {
             DateTime start = DateTime.Now;
-            Console.WriteLine("Starting initialization of ViewModel for Network "+network.Name);
+            Console.WriteLine("Starting initialization of ViewModel for Network " + network.Name);
             Network = network;
             TimeSpan t = DateTime.Now - start;
             ReadSettings();
@@ -50,22 +51,24 @@ namespace fork.ViewModel
             Application.Current.Dispatcher.Invoke(new Action(() => SettingsViewModel = new SettingsViewModel(this)));
 
             DropHandler = new ServerDropHandler(this);
-            
-            new Thread(() =>
+
+            if (!ApplicationManager.Initialized)
             {
-                while (ApplicationManager.Initialized == false)
-                {
-                    Thread.Sleep(100);
-                }
+                ApplicationManager.ApplicationInitialized +=
+                    () => Application.Current.Dispatcher?.Invoke(StartSettingsReader);
+            }
+            else
+            {
                 Application.Current.Dispatcher?.Invoke(StartSettingsReader);
-            }).Start();
-            
-            Console.WriteLine("Server ViewModel for " + network.Name + " initialized in "+t.Seconds+"."+t.Milliseconds+"s");
+            }
+
+            Console.WriteLine("Server ViewModel for " + network.Name + " initialized in " + t.Seconds + "." +
+                              t.Milliseconds + "s");
         }
 
         public void RemoveServer(NetworkServer networkServer)
         {
-            if (networkServer!=null && Servers.Contains(networkServer))
+            if (networkServer != null && Servers.Contains(networkServer))
             {
                 Application.Current.Dispatcher?.Invoke(() => Servers.Remove(networkServer));
                 SaveSettings();
@@ -77,14 +80,15 @@ namespace fork.ViewModel
             string uid = serverViewModel.Server.UID;
             fork.Logic.Model.Settings.Server server = new Logic.Model.Settings.Server
             {
-                address = "0.0.0.0:"+serverViewModel.Server.ServerSettings.ServerPort,
+                address = "0.0.0.0:" + serverViewModel.Server.ServerSettings.ServerPort,
                 forkServer = true,
                 forkServerUid = uid,
                 motd = serverViewModel.Server.ServerSettings.Motd,
                 restricted = false
             };
-            NetworkForkServer networkForkServer = new NetworkForkServer(serverViewModel, server, serverViewModel.Server.Name);
-            
+            NetworkForkServer networkForkServer =
+                new NetworkForkServer(serverViewModel, server, serverViewModel.Server.Name);
+
             bool contains = false;
             foreach (NetworkServer networkServer in Servers)
             {
@@ -96,6 +100,7 @@ namespace fork.ViewModel
                     }
                 }
             }
+
             if (!contains)
             {
                 Application.Current.Dispatcher?.Invoke(() => Servers.Insert(index, networkForkServer));
@@ -131,6 +136,7 @@ namespace fork.ViewModel
                     return;
                 }
             }
+
             Application.Current.Dispatcher?.Invoke(() => Permissions.Add(permission));
             SaveSettings();
         }
@@ -153,6 +159,7 @@ namespace fork.ViewModel
                     return;
                 }
             }
+
             Application.Current.Dispatcher?.Invoke(() => Groups.Add(group));
             SaveSettings();
         }
@@ -191,8 +198,7 @@ namespace fork.ViewModel
 
         private void UpdateAddressInfo()
         {
-            string externalIP = new WebClient().DownloadString("http://icanhazip.com").Trim();
-            AddressInfo = externalIP + ":" + Network.Port;
+            AddressInfo = new APIController().GetExternalIPAddress() + ":" + Network.Port;
         }
 
         private void LoadServersFromConfig(BungeeSettings settings)
@@ -201,12 +207,14 @@ namespace fork.ViewModel
             {
                 Thread.Sleep(500);
             }
+
             List<NetworkServer> servers = new List<NetworkServer>();
-            if (settings.servers==null)
+            if (settings.servers == null)
             {
                 Servers = new ObservableCollection<NetworkServer>();
                 return;
             }
+
             foreach (var settingsServer in settings.servers)
             {
                 string name = settingsServer.Key;
@@ -221,8 +229,11 @@ namespace fork.ViewModel
                     }
                     else
                     {
-                        Console.WriteLine("[FATAL] Error finding server with UID "+settingsServer.Value.forkServerUid+" for network "+Network.Name);
-                        ErrorLogger.Append(new Exception("[FATAL] Error finding server with UID "+settingsServer.Value.forkServerUid+" for network "+Network.Name));
+                        Console.WriteLine("[FATAL] Error finding server with UID " +
+                                          settingsServer.Value.forkServerUid + " for network " + Network.Name);
+                        ErrorLogger.Append(new Exception("[FATAL] Error finding server with UID " +
+                                                         settingsServer.Value.forkServerUid + " for network " +
+                                                         Network.Name));
                     }
                 }
                 else
@@ -231,6 +242,7 @@ namespace fork.ViewModel
                     servers.Add(server);
                 }
             }
+
             Servers = new ObservableCollection<NetworkServer>(servers);
         }
 
@@ -246,6 +258,7 @@ namespace fork.ViewModel
             {
                 settings.listeners.Add(new Listener());
             }
+
             settings.listeners[0].priorities = new List<string>();
             foreach (NetworkServer server in Servers)
             {
@@ -259,6 +272,7 @@ namespace fork.ViewModel
             {
                 Thread.Sleep(500);
             }
+
             List<Permission> permissions = new List<Permission>();
             if (settings.permissions == null)
             {
@@ -266,11 +280,12 @@ namespace fork.ViewModel
                 return;
             }
 
-            foreach (KeyValuePair<string,List<string>> keyValuePair in settings.permissions)
+            foreach (KeyValuePair<string, List<string>> keyValuePair in settings.permissions)
             {
                 Permission p = new Permission(keyValuePair.Key, new ObservableCollection<string>(keyValuePair.Value));
                 permissions.Add(p);
             }
+
             Permissions = new ObservableCollection<Permission>(permissions);
         }
 
@@ -289,6 +304,7 @@ namespace fork.ViewModel
             {
                 Thread.Sleep(500);
             }
+
             List<Group> groups = new List<Group>();
             if (settings.groups == null)
             {
@@ -296,11 +312,12 @@ namespace fork.ViewModel
                 return;
             }
 
-            foreach (KeyValuePair<string,List<string>> keyValuePair in settings.groups)
+            foreach (KeyValuePair<string, List<string>> keyValuePair in settings.groups)
             {
                 Group g = new Group(keyValuePair.Key, new ObservableCollection<string>(keyValuePair.Value));
                 groups.Add(g);
             }
+
             Groups = new ObservableCollection<Group>(groups);
         }
 
@@ -312,7 +329,7 @@ namespace fork.ViewModel
                 settings.groups.Add(group.User, new List<string>(group.Groups));
             }
         }
-        
+
         public class ServerDropHandler : IDropTarget
         {
             private NetworkViewModel networkViewModel;
@@ -328,7 +345,9 @@ namespace fork.ViewModel
                 if (dropInfo.Data is NetworkServer && dropInfo.TargetItem is NetworkServer)
                 {
                     dropHandler.DragOver(dropInfo);
-                } else if (dropInfo.Data is ServerViewModel) {
+                }
+                else if (dropInfo.Data is ServerViewModel)
+                {
                     dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                     dropInfo.Effects = DragDropEffects.Copy;
                 }

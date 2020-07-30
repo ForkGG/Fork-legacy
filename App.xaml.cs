@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using fork.Logic.ApplicationConsole;
 using fork.Logic.Logging;
 using fork.Logic.Manager;
+using fork.Logic.Persistence;
 
 namespace fork
 {
@@ -24,15 +25,14 @@ namespace fork
                 if (applicationPath == null)
                 {
                     DirectoryInfo directoryInfo = Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Fork"));
-                    //applicationPath = Assembly.GetExecutingAssembly().Location;
-                    //FileInfo applicationExe = new FileInfo(applicationPath);
-                    //applicationPath = applicationExe.Directory.FullName;
                     applicationPath = directoryInfo.FullName;
                     Console.WriteLine("Data directory of Fork is: "+applicationPath);
                 }
                 return applicationPath;
             }
         }
+
+        public static string ServerPath => AppSettingsSerializer.AppSettings.ServerPath;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -46,11 +46,6 @@ namespace fork
         private void ExitApplication(object sender, ExitEventArgs exitEventArgs)
         {
             ApplicationManager.Instance.ExitApplication();
-        }
-
-        void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
-        {
-            
         }
     }
 }

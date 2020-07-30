@@ -4,11 +4,19 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Timers;
 using System.Windows.Controls;
 using fork.Annotations;
 using fork.Logic.ApplicationConsole;
+using fork.Logic.Controller;
 using fork.Logic.Manager;
+using fork.Logic.Model;
+using fork.Logic.Model.APIModel;
+using fork.Logic.Persistence;
 using fork.View.Xaml2.Pages;
+using Fork.View.Xaml2.Pages;
+using Timer = System.Timers.Timer;
 
 namespace fork.ViewModel
 {
@@ -20,8 +28,12 @@ namespace fork.ViewModel
         
         public ObservableCollection<EntityViewModel> Entities { get; set; }
         public EntityViewModel SelectedEntity { get; set; }
-        public ImportViewModel ImportViewModel { get; set; }
+        //public ImportViewModel ImportViewModel { get; }
+        public AppSettingsViewModel AppSettingsViewModel { get; }
         public bool HasServers { get; set; }
+        public bool NewerVersionExists { get; set; }
+        public ForkVersion CurrentForkVersion { get; set; }
+        public ForkVersion LatestForkVersion { get; set; }
         
         public CreatePage CreatePage { get; } = new CreatePage();
         public ImportPage ImportPage { get; } = new ImportPage();
@@ -29,12 +41,17 @@ namespace fork.ViewModel
 
         public MainViewModel()
         {
-            //Writes console to Application Console
-            //Console.SetOut(ApplicationManager.ConsoleWriter);
-            
-            ImportViewModel = new ImportViewModel();
+            if (!ApplicationManager.Initialized)
+            {
+                ApplicationManager.ApplicationInitialized += SetupVersionChecking;
+            }
+            else
+            {
+                SetupVersionChecking();
+            }
+            //ImportViewModel = new ImportViewModel();
+            AppSettingsViewModel = new AppSettingsViewModel(this);
             Entities = ServerManager.Instance.Entities;
-            //Servers.Insert(0, ServerViewModel.HomeViewModel());
             Entities.CollectionChanged += ServerListChanged;
             if (Entities.Count != 0)
             {
@@ -53,6 +70,30 @@ namespace fork.ViewModel
         private void ServerListChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             raisePropertyChanged(nameof(Entities));
+        }
+
+        private void SetupVersionChecking()
+        {
+            CurrentForkVersion = ApplicationManager.Instance.CurrentForkVersion;
+            LatestForkVersion = new APIController().GetLatestForkVersion();
+            NewerVersionExists = false;
+            CheckForkVersion();
+            Timer timer = new Timer {Interval = 1000 * 60 * 60 * 12, AutoReset = true, Enabled = true};
+            timer.Elapsed += OnVersionTimerElapsed;
+        }
+
+        private void OnVersionTimerElapsed(object source, ElapsedEventArgs e)
+        {
+            CheckForkVersion();
+        }
+
+        private void CheckForkVersion()
+        {
+            LatestForkVersion = new APIController().GetLatestForkVersion();
+            if (!LatestForkVersion.Equals(CurrentForkVersion))
+            {
+                NewerVersionExists = true;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

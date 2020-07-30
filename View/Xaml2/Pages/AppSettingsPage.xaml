@@ -1,0 +1,79 @@
+﻿<Page x:Class="Fork.View.Xaml2.Pages.AppSettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:controls="clr-namespace:fork.View.Xaml2.Controls"
+      xmlns:local="clr-namespace:Fork.View.Xaml2.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="AppSettingsPage">
+
+    <Grid>
+        <DockPanel Margin="10 0">
+            <TextBlock DockPanel.Dock="Bottom" Text="All Changes will be saved automatically" HorizontalAlignment="Center" Margin="10 10 10 20"/>
+
+            <TextBlock DockPanel.Dock="Top" Text="Settings" HorizontalAlignment="Center" FontSize="30" FontFamily="{StaticResource Montserrat-Bold}" Foreground="{DynamicResource textTitle}" Margin="15"/>
+            <ScrollViewer Margin="0 10">
+                <StackPanel>
+                    <Border CornerRadius="10" Margin="5">
+                        <StackPanel Background="Transparent" Margin="0 10">
+                            <TextBlock Text="General Settings" Foreground="{DynamicResource textHeader}" FontFamily="{StaticResource Montserrat-SemiBold}" FontSize="23" Margin="15 0 5 20"/>
+                            <StackPanel Margin="25 0">
+                                <!--CheckBox Margin="0 0 0 30" IsChecked="{Binding AppSettings.SendTelemetry, Mode=OneWay}" Content="Send Application Telemetry" Style="{DynamicResource TextCheckBox}" FontSize="20"/-->
+                                <StackPanel Height="40" Orientation="Horizontal">
+                                    <TextBlock Text="Server Directory"  Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0"/>
+                                    <Border x:Name="serverPathBgr" CornerRadius="4" Height="26" Background="{DynamicResource buttonBgrDefault}">
+                                        <TextBlock Margin="10 0" Text="{Binding AppSettings.ServerPath, Mode=OneWay}" Background="Transparent"
+                                            Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                            FontSize="17" Height="20" PreviewMouseDown="ServerDirPath_MouseDown" Name="forkServerPath" Cursor="IBeam"/>                                        
+                                    </Border>
+
+                                    <controls:IconButton Background="{DynamicResource buttonBgrDefault}" HoverBackground="{DynamicResource buttonBgrDefault}"
+                                                         IconSource="pacK://application:,,,/View/Resources/images/Icons/FolderD.png"
+                                                         HoverIconSource="pacK://application:,,,/View/Resources/images/Icons/FolderW.png"
+                                                         Height="25" Width="25" IconHeight="100" IconWidth="15"
+                                                         Margin="10 0" Click="OpenForkServerDir_Click"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="15 10 0 0">
+                                </StackPanel>
+                                <Grid x:Name="ServerDirChangedGrid" Visibility="Collapsed">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>                                       
+                                    </Grid.ColumnDefinitions>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="WARNING:" Margin="10 0 0 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="16" Foreground="{DynamicResource buttonBgrRed}"/>
+                                        <StackPanel Grid.Column="1" Margin="5 0 0 0">
+                                            <TextBlock Text="This will move ALL your existing and future servers to the selected directory." TextWrapping="Wrap" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="16" Foreground="{DynamicResource buttonBgrRed}"/>
+                                            <TextBlock Text="Make sure the selected disk has enough space, else this will cause trouble!" TextWrapping="Wrap" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="16" Foreground="{DynamicResource buttonBgrRed}"/>
+                                            <TextBlock Text="This also will stop all running servers and it might take some time to move them." TextWrapping="Wrap" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="16" Foreground="{DynamicResource buttonBgrRed}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                    <Button Grid.Column="1" Grid.Row="1" Content="Apply" Style="{DynamicResource RoundedTextButton}" Margin="15 10 0 10" VerticalAlignment="Center" Click="ApplyNewServerDir_Click"/>
+                                </Grid>
+                            </StackPanel>
+                        </StackPanel>
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </DockPanel>
+    </Grid>
+</Page>

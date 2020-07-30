@@ -301,6 +301,9 @@
                             <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
                             <Setter TargetName="extension" Property="Foreground" Value="{DynamicResource textSelected}"/>
                         </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter Property="Cursor" Value="Hand"/>
+                        </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
                             <Setter TargetName="extension" Property="Foreground" Value="{DynamicResource textSelected}"/>

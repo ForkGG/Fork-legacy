@@ -2,10 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Resources;
 using System.Threading;
 using fork.Logic.ApplicationConsole;
+using fork.Logic.Controller;
 using fork.Logic.Model;
+using fork.Logic.Model.APIModel;
 using fork.Logic.Persistence;
+using Fork.Properties;
 using fork.ViewModel;
 
 namespace fork.Logic.Manager
@@ -15,6 +19,8 @@ namespace fork.Logic.Manager
         public static ConsoleWriter ConsoleWriter;
         private static ApplicationManager instance = null;
         public static bool Initialized { get; private set; } = false;
+        public delegate void OnApplicationInitialized();
+        public static event OnApplicationInitialized ApplicationInitialized;
 
         //Lock to ensure Singleton pattern
         private static object myLock = new object();
@@ -32,6 +38,7 @@ namespace fork.Logic.Manager
                             instance = new ApplicationManager();
                             ConsoleWriter.AppStarted();
                             Initialized = true;
+                            ApplicationInitialized?.Invoke();
                         }
                     }
                 }
@@ -39,14 +46,27 @@ namespace fork.Logic.Manager
             }
         }
         private ApplicationManager()
-        { }
+        {
+            ResourceManager rm = Resources.ResourceManager;
+            CurrentForkVersion = new ForkVersion
+            {
+                Major = int.Parse(rm.GetString("VersionMajor")),
+                Minor = int.Parse(rm.GetString("VersionMinor")),
+                Patch = int.Parse(rm.GetString("VersionPatch"))
+            };
+        }
+
+        private AppSettings appSettings;
         
         
-        public MainViewModel MainViewModel { get; } = new MainViewModel();
-        public ConsoleViewModel ConsoleViewModel { get; } = new ConsoleViewModel();
+        public MainViewModel MainViewModel { get; } = 
+            new MainViewModel();
+        public ConsoleViewModel ConsoleViewModel { get; } = 
+            new ConsoleViewModel();
         public Dictionary<Entity, Process> ActiveEntities { get; } = new Dictionary<Entity, Process>();
         public List<SettingsReader> SettingsReaders { get; } = new List<SettingsReader>();
         public bool HasExited { get; set; } = false;
+        public ForkVersion CurrentForkVersion { get; }
 
         public void ExitApplication()
         {
