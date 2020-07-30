@@ -5,6 +5,5 @@ obj
 UpgradeLog.htm
 *.html
 NihilusInstaller
-Fork.csproj.user
+*.user
 Properties/PublishProfiles
-Fork.csproj.user
