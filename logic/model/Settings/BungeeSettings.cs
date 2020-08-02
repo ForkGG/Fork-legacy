@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using YamlDotNet.Serialization;
 
-namespace fork.Logic.Model.Settings
+namespace Fork.Logic.Model.Settings
 {
     public enum TabListType
     {
@@ -15,8 +15,8 @@ namespace fork.Logic.Model.Settings
         public string motd { get; set; } = "Default MOTD";
         public string address { get; set; } = "0.0.0.0:25565";
         public bool restricted { get; set; } = false;
-        public bool forkServer { get; set; } = false;
-        public string forkServerUid { get; set; } = "";
+        public bool ForkServer { get; set; } = false;
+        public string ForkServerUid { get; set; } = "";
     }
 
     public class Listener

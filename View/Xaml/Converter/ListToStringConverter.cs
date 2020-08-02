@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
 
-namespace fork.View.Xaml.Converter
+namespace Fork.View.Xaml.Converter
 {
     [ValueConversion(typeof(ObservableCollection<string>), typeof(string))]
     public class ListToStringConverter : IValueConverter

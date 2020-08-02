@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using fork.ViewModel;
+using Fork.ViewModel;
 
-namespace fork.Logic.BackgroundWorker.Performance
+namespace Fork.Logic.BackgroundWorker.Performance
 {
     public class CPUTracker
     {

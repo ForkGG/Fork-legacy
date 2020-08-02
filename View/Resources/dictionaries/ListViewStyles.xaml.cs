@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using fork.Logic.Manager;
-using fork.Logic.Model;
+using Fork.Logic.Manager;
+using Fork.Logic.Model;
 using Fork.Logic.Model.ProxyModels;
-using fork.View.Xaml2.Controls;
-using fork.ViewModel;
+using Fork.View.Xaml2.Controls;
+using Fork.ViewModel;
 
 namespace Fork.View.Resources.dictionaries
 {

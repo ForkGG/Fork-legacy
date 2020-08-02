@@ -15,12 +15,12 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using fork.Logic.Manager;
-using fork.Logic.Model;
-using fork.ViewModel;
+using Fork.Logic.Manager;
+using Fork.Logic.Model;
+using Fork.ViewModel;
 using Brush = System.Windows.Media.Brush;
 
-namespace fork.View.Xaml2
+namespace Fork.View.Xaml2
 {
     /// <summary>
     /// Interaktionslogik für MainWindow.xaml
@@ -116,7 +116,7 @@ namespace fork.View.Xaml2
 
         private void DiscordOpen_Click(object sender, RoutedEventArgs e)
         {
-            string url = "https://discord.fork.gg";
+            string url = "https://discord.Fork.gg";
             //hack for windows only https://github.com/dotnet/corefx/issues/10361
             Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
         }
@@ -334,7 +334,7 @@ namespace fork.View.Xaml2
                 //TODO name verifier instead of this
                 if (newName.Equals(""))
                 {
-                    newName = "forkEntity";
+                    newName = "ForkEntity";
                 }
 
                 bool success = await ServerManager.Instance.RenameServerAsync(serverViewModel, newName);
@@ -359,7 +359,7 @@ namespace fork.View.Xaml2
                 //TODO name verifier instead of this
                 if (newName.Equals(""))
                 {
-                    newName = "forkEntity";
+                    newName = "ForkEntity";
                 }
 
                 bool success = await ServerManager.Instance.RenameNetworkAsync(networkViewModel, newName);

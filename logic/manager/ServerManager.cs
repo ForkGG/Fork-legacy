@@ -11,18 +11,18 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using fork.Logic.BackgroundWorker;
-using fork.Logic.Controller;
-using fork.Logic.CustomConsole;
-using fork.Logic.ImportLogic;
-using fork.Logic.Logging;
-using fork.Logic.Model;
-using fork.Logic.Persistence;
-using fork.Logic.WebRequesters;
-using fork.ViewModel;
+using Fork.Logic.BackgroundWorker;
+using Fork.Logic.Controller;
+using Fork.Logic.CustomConsole;
+using Fork.Logic.ImportLogic;
+using Fork.Logic.Logging;
+using Fork.Logic.Model;
+using Fork.Logic.Persistence;
+using Fork.Logic.WebRequesters;
+using Fork.ViewModel;
 using Newtonsoft.Json;
 
-namespace fork.Logic.Manager
+namespace Fork.Logic.Manager
 {
     public sealed class ServerManager
     {

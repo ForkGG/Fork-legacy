@@ -5,14 +5,14 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
-using fork.Logic.Logging;
-using fork.Logic.Model;
-using fork.Logic.Model.ProxyModels;
-using fork.ViewModel;
+using Fork.Logic.Logging;
+using Fork.Logic.Model;
+using Fork.Logic.Model.ProxyModels;
+using Fork.ViewModel;
 using Newtonsoft.Json;
 using Formatting = Newtonsoft.Json.Formatting;
 
-namespace fork.Logic.Persistence
+namespace Fork.Logic.Persistence
 {
     public sealed class EntitySerializer
     {

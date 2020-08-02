@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using fork.Logic.Logging;
-using fork.Logic.Model;
+using Fork.Logic.Logging;
+using Fork.Logic.Manager;
+using Fork.Logic.Model;
 using Newtonsoft.Json;
 
-namespace fork.Logic.WebRequesters
+namespace Fork.Logic.WebRequesters
 {
     public class WaterfallWebRequester
     {
@@ -20,6 +21,7 @@ namespace fork.Logic.WebRequesters
                 {
                     Uri uri = new Uri(url);
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+                    request.UserAgent = ApplicationManager.UserAgent;
                     using (var response = request.GetResponse())
                     using (Stream stream = response.GetResponseStream())
                     using (StreamReader reader = new StreamReader(stream))

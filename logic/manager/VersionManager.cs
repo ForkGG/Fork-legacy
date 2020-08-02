@@ -5,12 +5,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using fork.Logic.Model;
-using fork.Logic.Model.MinecraftVersionModels;
-using fork.Logic.WebRequesters;
-using fork.ViewModel;
+using Fork.Logic.Model;
+using Fork.Logic.Model.MinecraftVersionModels;
+using Fork.Logic.WebRequesters;
+using Fork.ViewModel;
 
-namespace fork.Logic.Manager
+namespace Fork.Logic.Manager
 {
     public sealed class VersionManager
     {

@@ -4,15 +4,15 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
-using fork.Logic.Logging;
+using Fork.Logic.Logging;
 using Newtonsoft.Json;
-using fork.Logic.Model;
-using fork.Logic.Model.MinecraftVersionModels;
-using fork.Logic.WebRequesters;
-using fork.ViewModel;
+using Fork.Logic.Model;
+using Fork.Logic.Model.MinecraftVersionModels;
+using Fork.Logic.WebRequesters;
+using Fork.ViewModel;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
-namespace fork.Logic.Manager
+namespace Fork.Logic.Manager
 {
     public sealed class WebRequestManager
     {

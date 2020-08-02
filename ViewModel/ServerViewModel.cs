@@ -17,24 +17,24 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using fork.Annotations;
-using fork.Logic.BackgroundWorker.Performance;
-using fork.Logic.Controller;
-using fork.Logic.CustomConsole;
-using fork.Logic.ImportLogic;
-using fork.Logic.Manager;
-using fork.Logic.Model;
-using fork.Logic.Persistence;
-using fork.Logic.RoleManagement;
-using fork.View.Xaml2.Pages;
+using Fork.Annotations;
+using Fork.Logic.BackgroundWorker.Performance;
+using Fork.Logic.Controller;
+using Fork.Logic.CustomConsole;
+using Fork.Logic.ImportLogic;
+using Fork.Logic.Manager;
+using Fork.Logic.Model;
+using Fork.Logic.Persistence;
+using Fork.Logic.RoleManagement;
 using Fork.View.Xaml2.Pages;
-using fork.View.Xaml2.Pages.Server;
+using Fork.View.Xaml2.Pages;
+using Fork.View.Xaml2.Pages.Server;
 using Fork.View.Xaml2.Pages.Server;
 using Console = System.Console;
 using RadioButton = System.Windows.Forms.RadioButton;
 using Timer = System.Timers.Timer;
 
-namespace fork.ViewModel
+namespace Fork.ViewModel
 {
     public class ServerViewModel : EntityViewModel
     {
@@ -67,6 +67,8 @@ namespace fork.ViewModel
         public string ServerTitle => Name + " - " + Server.Version.Type + " " + Server.Version.Version;
 
         public Page WorldsPage { get; set; }
+        
+        public Page PluginsPage { get; set; }
 
         public ServerViewModel(Server server) : base(server)
         {
@@ -92,6 +94,7 @@ namespace fork.ViewModel
             Application.Current.Dispatcher.Invoke(new Action(() => EntityPage = new ServerPage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => ConsolePage = new ConsolePage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => WorldsPage = new WorldsPage(this)));
+            Application.Current.Dispatcher.Invoke(new Action(() => PluginsPage = new PluginsPage(new PluginViewModel(this))));
             Application.Current.Dispatcher.Invoke(new Action(() => SettingsViewModel = new SettingsViewModel(this)));
 
             PlayerList.CollectionChanged += PlayerListChanged;

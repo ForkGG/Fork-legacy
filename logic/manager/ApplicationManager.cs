@@ -4,18 +4,35 @@ using System.Diagnostics;
 using System.IO;
 using System.Resources;
 using System.Threading;
-using fork.Logic.ApplicationConsole;
-using fork.Logic.Controller;
-using fork.Logic.Model;
-using fork.Logic.Model.APIModels;
-using fork.Logic.Persistence;
+using Fork.Logic.ApplicationConsole;
+using Fork.Logic.Controller;
+using Fork.Logic.Model;
+using Fork.Logic.Model.APIModels;
+using Fork.Logic.Persistence;
+using Fork.Logic.WebRequesters;
 using Fork.Properties;
-using fork.ViewModel;
+using Fork.ViewModel;
 
-namespace fork.Logic.Manager
+namespace Fork.Logic.Manager
 {
     public sealed class ApplicationManager
     {
+        private static string userAgent;
+
+        public static string UserAgent
+        {
+            get
+            {
+                if (userAgent == null)
+                {
+                    ResourceManager rm = Resources.ResourceManager;
+                    userAgent = rm.GetString("UserAgent") + " - v" + rm.GetString("VersionMajor") +
+                                "." + rm.GetString("VersionMinor") + "." + rm.GetString("VersionPatch");
+                }
+                return userAgent;
+            }
+        }
+
         public static ConsoleWriter ConsoleWriter;
         private static ApplicationManager instance = null;
         public static bool Initialized { get; private set; } = false;

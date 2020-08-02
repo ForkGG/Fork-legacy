@@ -1,4 +1,4 @@
-namespace fork.Logic.Model
+namespace Fork.Logic.Model
 {
     public class AppSettings
     {

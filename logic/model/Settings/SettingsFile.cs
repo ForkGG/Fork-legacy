@@ -2,13 +2,13 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading;
-using fork.Logic.Manager;
-using fork.Logic.Persistence;
-using fork.ViewModel;
+using Fork.Logic.Manager;
+using Fork.Logic.Persistence;
+using Fork.ViewModel;
 using ICSharpCode.AvalonEdit.Utils;
-using FileReader = fork.Logic.Persistence.FileReader;
+using FileReader = Fork.Logic.Persistence.FileReader;
 
-namespace fork.Logic.Model.Settings
+namespace Fork.Logic.Model.Settings
 {
     public class SettingsFile
     {

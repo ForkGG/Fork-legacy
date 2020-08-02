@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
-using fork.ViewModel;
+using Fork.ViewModel;
 
-namespace fork.Logic.BackgroundWorker.Performance
+namespace Fork.Logic.BackgroundWorker.Performance
 {
     public class DiskTracker
     {

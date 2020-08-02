@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Controls;
-using fork.ViewModel;
+using Fork.ViewModel;
 
 namespace Fork.View.Xaml2.Pages.Network
 {

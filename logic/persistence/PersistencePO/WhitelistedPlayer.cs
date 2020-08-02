@@ -1,6 +1,6 @@
 using System;
 
-namespace fork.Logic.Persistence.PersistencePO
+namespace Fork.Logic.Persistence.PersistencePO
 {
     public class WhitelistedPlayer
     {

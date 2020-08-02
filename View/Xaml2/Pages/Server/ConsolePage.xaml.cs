@@ -2,10 +2,10 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using fork.Logic.Manager;
-using fork.ViewModel;
+using Fork.Logic.Manager;
+using Fork.ViewModel;
 
-namespace fork.View.Xaml2.Pages.Server
+namespace Fork.View.Xaml2.Pages.Server
 {
     /// <summary>
     /// Interaktionslogik für ConsolePage.xaml

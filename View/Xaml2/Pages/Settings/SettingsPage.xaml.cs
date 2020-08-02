@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using fork.Logic.Model.Settings;
+using Fork.Logic.Model.Settings;
 using Fork.View.Xaml2.Pages.Settings;
-using fork.ViewModel;
+using Fork.ViewModel;
 
-namespace fork.View.Xaml2.Pages.Settings
+namespace Fork.View.Xaml2.Pages.Settings
 {
     public partial class SettingsPage : Page
     {

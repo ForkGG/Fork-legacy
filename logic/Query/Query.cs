@@ -5,9 +5,9 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading;
-using fork.Logic.Model;
+using Fork.Logic.Model;
 
-namespace fork.Logic.Query
+namespace Fork.Logic.Query
 {
     public class Query
     {

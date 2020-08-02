@@ -1,6 +1,6 @@
 using System.Windows.Controls;
 
-namespace fork.View.Xaml.ValidationRules
+namespace Fork.View.Xaml.ValidationRules
 {
     public class PositiveLongValidationRule : ValidationRule
     {

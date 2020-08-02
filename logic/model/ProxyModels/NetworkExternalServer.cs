@@ -1,6 +1,6 @@
 using System;
-using fork.Logic.Model;
-using Server = fork.Logic.Model.Settings.Server;
+using Fork.Logic.Model;
+using Server = Fork.Logic.Model.Settings.Server;
 
 namespace Fork.Logic.Model.ProxyModels
 {
@@ -12,9 +12,9 @@ namespace Fork.Logic.Model.ProxyModels
         public bool Restricted { get; set; }
         public bool IsForkServer => false;
         
-        public Server ProxyServer => new Server {address = Address, motd = Motd, restricted = Restricted, forkServer = IsForkServer};
+        public Settings.Server ProxyServer => new Settings.Server {address = Address, motd = Motd, restricted = Restricted, ForkServer = IsForkServer};
 
-        public NetworkExternalServer(Server server, string name)
+        public NetworkExternalServer(Settings.Server server, string name)
         {
             Name = name;
             Motd = server.motd;

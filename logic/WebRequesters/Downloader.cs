@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Net;
 using System.Threading;
-using fork.ViewModel;
+using Fork.ViewModel;
 
-namespace fork.Logic.WebRequesters
+namespace Fork.Logic.WebRequesters
 {
     public static class Downloader
     {

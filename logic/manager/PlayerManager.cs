@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using fork.Logic.Model;
-using fork.ViewModel;
+using Fork.Logic.Model;
+using Fork.ViewModel;
 
-namespace fork.Logic.Manager
+namespace Fork.Logic.Manager
 {
     public sealed class PlayerManager
     {

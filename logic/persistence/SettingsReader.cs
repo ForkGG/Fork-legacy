@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Windows;
-using fork.Logic.Logging;
-using fork.Logic.Manager;
-using fork.Logic.Model;
-using fork.Logic.Model.Settings;
-using fork.Logic.Persistence.PersistencePO;
-using fork.ViewModel;
+using Fork.Logic.Logging;
+using Fork.Logic.Manager;
+using Fork.Logic.Model;
+using Fork.Logic.Model.Settings;
+using Fork.Logic.Persistence.PersistencePO;
+using Fork.ViewModel;
 
-namespace fork.Logic.Persistence
+namespace Fork.Logic.Persistence
 {
     public class SettingsReader
     {

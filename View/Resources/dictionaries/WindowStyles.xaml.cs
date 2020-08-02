@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Media;
-using fork.View.Xaml;
+using Fork.View.Xaml;
 
-namespace fork
+namespace Fork
 {
     public partial class WindowStyles : ResourceDictionary
     {

@@ -2,9 +2,9 @@
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using fork.Logic.Manager;
-using fork.Logic.Model;
-using fork.ViewModel;
+using Fork.Logic.Manager;
+using Fork.Logic.Model;
+using Fork.ViewModel;
 
 namespace Fork.View.Xaml2.Pages.Network
 {

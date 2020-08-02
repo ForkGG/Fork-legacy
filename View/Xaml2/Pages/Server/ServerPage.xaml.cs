@@ -2,11 +2,11 @@
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using fork.Logic.Manager;
-using fork.Logic.Model;
-using fork.ViewModel;
+using Fork.Logic.Manager;
+using Fork.Logic.Model;
+using Fork.ViewModel;
 
-namespace fork.View.Xaml2.Pages.Server
+namespace Fork.View.Xaml2.Pages.Server
 {
     /// <summary>
     /// Interaktionslogik für ServerPage.xaml

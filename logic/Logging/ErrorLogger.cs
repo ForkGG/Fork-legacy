@@ -1,9 +1,9 @@
 using System;
 using System.Data;
 using System.Windows;
-using fork.Logic.Persistence;
+using Fork.Logic.Persistence;
 
-namespace fork.Logic.Logging
+namespace Fork.Logic.Logging
 {
     public class ErrorLogger
     {
@@ -19,7 +19,7 @@ namespace fork.Logic.Logging
             AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
             {
                 Exception e = eventArgs.ExceptionObject as Exception;
-                fileWriter.AppendToErrorLog("["+DateTime.Now+"] [UnhandledException] " +e?.StackTrace+"\n");
+                fileWriter.AppendToErrorLog("["+DateTime.Now+"] [UnhandledException] "+e?.GetType()+"\n" +e?.StackTrace+"\n");
             };
         }
 

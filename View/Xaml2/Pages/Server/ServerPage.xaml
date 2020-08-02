@@ -1,12 +1,12 @@
-﻿<Page x:Class="fork.View.Xaml2.Pages.Server.ServerPage"
+﻿<Page x:Class="Fork.View.Xaml2.Pages.Server.ServerPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:fork.View.Xaml2.Pages"
-      xmlns:converter="clr-namespace:fork.View.Xaml.Converter"      
-      xmlns:model="clr-namespace:fork.Logic.Model"
-      xmlns:controls="clr-namespace:fork.View.Xaml2.Controls"
+      xmlns:local="clr-namespace:Fork.View.Xaml2.Pages"
+      xmlns:converter="clr-namespace:Fork.View.Xaml.Converter"      
+      xmlns:model="clr-namespace:Fork.Logic.Model"
+      xmlns:controls="clr-namespace:Fork.View.Xaml2.Controls"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="700"
       Title="ServerPage">
@@ -89,7 +89,7 @@
                 <controls:IconRadioButton Margin="10" GroupName="MenuTabs" Click="SelectWorlds"
                                           IconSource="pack://application:,,,/View/Resources/images/Icons/World.png"
                                           HoverIconSource="pack://application:,,,/View/Resources/images/Icons/WorldW.png"/>
-                <controls:IconRadioButton Margin="10" GroupName="MenuTabs" Click="SelectPlugins" Visibility="Collapsed"
+                <controls:IconRadioButton Margin="10" GroupName="MenuTabs" Click="SelectPlugins" Visibility="{Binding Server.Version.HasPlugins, Converter={StaticResource BoolToVisibilityConverter}}"
                                           IconSource="pack://application:,,,/View/Resources/images/Icons/Plugins.png"
                                           HoverIconSource="pack://application:,,,/View/Resources/images/Icons/PluginsW.png"/>
             </StackPanel>
@@ -107,7 +107,7 @@
                 <Frame x:Name="terminalPage" Content="{Binding ConsolePage}" NavigationUIVisibility="Hidden"></Frame>
                 <Frame x:Name="settingsPage" Visibility="Hidden" Content="{Binding SettingsViewModel.SettingsPage}" NavigationUIVisibility="Hidden" Margin="-100 0 0 0"></Frame>
                 <Frame x:Name="worldsPage" Visibility="Hidden" Content="{Binding WorldsPage}" NavigationUIVisibility="Hidden"/>
-                <Frame x:Name="pluginsPage" Visibility="Hidden"/>
+                <Frame x:Name="pluginsPage" Visibility="Hidden" Content="{Binding PluginsPage}" NavigationUIVisibility="Hidden"/>
             </Grid>
         </DockPanel>
         <Grid Panel.ZIndex="1" x:Name="DownloadOverlay" Visibility="{Binding ReadyToUse, Converter={StaticResource InverseBoolToVisibilityConverter}}">

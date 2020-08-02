@@ -1,12 +1,12 @@
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using fork.Logic.Logging;
-using fork.Logic.Model;
-using fork.Logic.Persistence;
+using Fork.Logic.Logging;
+using Fork.Logic.Model;
+using Fork.Logic.Persistence;
 using Fork.View.Xaml2.Pages;
 
-namespace fork.ViewModel
+namespace Fork.ViewModel
 {
     public class AppSettingsViewModel : BaseViewModel
     {

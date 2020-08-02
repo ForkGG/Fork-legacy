@@ -5,18 +5,18 @@ using System.IO;
 using System.IO.Compression;
 using System.Threading;
 using System.Windows;
-using fork.Logic.CustomConsole;
-using fork.Logic.ImportLogic;
-using fork.Logic.Logging;
-using fork.Logic.Manager;
-using fork.Logic.Model;
-using fork.Logic.Model.ProxyModels;
+using Fork.Logic.CustomConsole;
+using Fork.Logic.ImportLogic;
+using Fork.Logic.Logging;
+using Fork.Logic.Manager;
+using Fork.Logic.Model;
 using Fork.Logic.Model.ProxyModels;
-using fork.Logic.WebRequesters;
-using fork.ViewModel;
+using Fork.Logic.Model.ProxyModels;
+using Fork.Logic.WebRequesters;
+using Fork.ViewModel;
 using Newtonsoft.Json;
 
-namespace fork.Logic.Controller
+namespace Fork.Logic.Controller
 {
     /// <summary>
     /// Backend Logic for managing Proxy Networks

@@ -11,7 +11,7 @@ using System.Threading;
 using Fork.Properties;
 using Newtonsoft.Json;
 
-namespace fork.Logic.Model
+namespace Fork.Logic.Model
 {
     public class Player
     {

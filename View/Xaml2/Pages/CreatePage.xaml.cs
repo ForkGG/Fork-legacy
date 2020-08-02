@@ -4,15 +4,15 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Forms;
-using fork.Logic.ImportLogic;
-using fork.Logic.Manager;
-using fork.Logic.Model;
-using fork.ViewModel;
+using Fork.Logic.ImportLogic;
+using Fork.Logic.Manager;
+using Fork.Logic.Model;
+using Fork.ViewModel;
 using Application = System.Windows.Application;
 using Binding = System.Windows.Data.Binding;
 using ComboBox = System.Windows.Controls.ComboBox;
 
-namespace fork.View.Xaml2.Pages
+namespace Fork.View.Xaml2.Pages
 {
     /// <summary>
     /// Interaktionslogik für CreatePage.xaml

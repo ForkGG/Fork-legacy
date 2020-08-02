@@ -1,7 +1,7 @@
 using System.IO;
-using fork.ViewModel;
+using Fork.ViewModel;
 
-namespace fork.Logic.CustomConsole
+namespace Fork.Logic.CustomConsole
 {
     public class ConsoleReader
     {

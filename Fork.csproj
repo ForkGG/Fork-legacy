@@ -7,10 +7,10 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <Version>0.7.0</Version>
-    <StartupObject>fork.App</StartupObject>
+    <StartupObject>Fork.App</StartupObject>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageProjectUrl>https://fork.gg</PackageProjectUrl>
+    <PackageProjectUrl>https://Fork.gg</PackageProjectUrl>
     <PackageIcon>icon.ico</PackageIcon>
     <RepositoryUrl>https://github.com/ChristianKern97/fork</RepositoryUrl>
   </PropertyGroup>
@@ -200,10 +200,6 @@
 
   <ItemGroup>
     <SplashScreen Include="View\Resources\images\Splash.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="logic\model\PluginModels" />
   </ItemGroup>
 
 </Project>

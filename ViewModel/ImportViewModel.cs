@@ -3,11 +3,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net;
 using System.Windows.Controls;
-using fork.Logic.ImportLogic;
-using fork.Logic.Manager;
-using fork.Logic.Model;
+using Fork.Logic.ImportLogic;
+using Fork.Logic.Manager;
+using Fork.Logic.Model;
 
-namespace fork.ViewModel
+namespace Fork.ViewModel
 {
     public class ImportViewModel : BaseViewModel
     {

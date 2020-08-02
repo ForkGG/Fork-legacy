@@ -27,7 +27,7 @@
                 <ControlTemplate TargetType="CheckBox">
                     <StackPanel Orientation="Horizontal">
                         <Rectangle x:Name="indicator" Width="17" Height="17" Fill="{DynamicResource backgroundDarker}" Margin="0 0 10 0"/>
-                        <TextBlock x:Name="text" Text="{TemplateBinding Content}"/>
+                        <TextBlock x:Name="text" Text="{TemplateBinding Content}" VerticalAlignment="Center"/>
                     </StackPanel>
 
                     <ControlTemplate.Triggers>

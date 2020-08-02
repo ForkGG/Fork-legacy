@@ -1,0 +1,130 @@
+﻿<Page x:Class="Fork.View.Xaml2.Pages.Server.PluginsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:controls="clr-namespace:Fork.View.Xaml2.Controls"
+      xmlns:converter="clr-namespace:Fork.View.Xaml.Converter"
+      xmlns:local="clr-namespace:Fork.View.Xaml2.Pages.Server"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="PluginsPage">
+
+    <Page.Resources>
+        <converter:RatingToFriendlyNameConverter x:Key="RatingToFriendlyNameConverter"/>
+        <converter:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
+    </Page.Resources>
+    <DockPanel>
+        <Grid DockPanel.Dock="Right" Width="230">
+            <Border Background="{DynamicResource backgroundDark}" Margin="35 0 0 0" CornerRadius="5 0 0 5"/>
+            <DockPanel Panel.ZIndex="1">
+                <TextBlock Text="Open in File Explorer" DockPanel.Dock="Bottom" TextAlignment="Center" Margin="45 10 10 10" 
+                           PreviewMouseLeftButtonDown="OpenExplorer_PreviewMouseLeftButtonDown" Cursor="Hand" Foreground="{DynamicResource textLink}">
+                </TextBlock>
+                <StackPanel Panel.ZIndex="1">
+                    <TextBlock Text="Plugins" Margin="45 10 10 10" Foreground="{DynamicResource textUnselected}" FontSize="20" 
+                               FontFamily="{DynamicResource Montserrat-SemiBold}" HorizontalAlignment="Center"/>
+                    <ListView Margin="0" Background="{DynamicResource backgroundDark}" Style="{DynamicResource SettingsListView}"
+                              ItemsSource="{Binding Worlds}">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>
+                                <Setter Property="Margin" Value="0 5 0 2"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                            <Border BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}">
+                                                <StackPanel>
+                                                    <Grid Width="280" Height="60">
+                                                        <Border x:Name="background" Background="Transparent" Width="250" CornerRadius="8 0 0 8" Margin="30 0 0 0"/>
+                                                        <DockPanel Panel.ZIndex="1" LastChildFill="True">
+                                                            <TextBlock Margin="50 0 0 0" x:Name="title" Text="{Binding Name}" VerticalAlignment="Center" FontSize="16" 
+                                                                       FontFamily="{DynamicResource Montserrat-SemiBold}" Foreground="{DynamicResource textSelected}"/>
+                                                        </DockPanel>
+                                                        <RadioButton  Width="20" Height="20" Margin="0 0 0 0"  HorizontalAlignment="Left" GroupName="Worlds" IsChecked="{Binding IsActive}" 
+                                                                     Style="{DynamicResource CustomRadioButton}"/>
+                                                    </Grid>
+                                                </StackPanel>
+                                            </Border>
+                                            <!--ControlTemplate.Triggers>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter TargetName="background" Property="Background" Value="{DynamicResource tabSelected}"/>
+                                                    <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
+                                                </Trigger>
+                                            </-->
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </StackPanel>
+            </DockPanel>
+        </Grid>
+        <DockPanel Margin="10 20 0 10">
+                <StackPanel DockPanel.Dock="Top">
+                    <DockPanel>
+                        <ComboBox x:Name="sortBox" DockPanel.Dock="Right" Margin="10 2 0 0" ItemsSource="{Binding Sortings}" SelectedItem="{Binding Sorting}" ItemContainerStyle="{DynamicResource SortingComboBoxItem}" 
+                              FontFamily="{DynamicResource Montserrat-Bold}" FontSize="15" Width="150" Style="{DynamicResource SortingComboBox}" SelectionChanged="FilterChanged" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="categoryBox" DockPanel.Dock="Right" Margin="10 2 0 0" ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}" ItemContainerStyle="{DynamicResource DefaultComboBoxItem}"
+                              FontFamily="{DynamicResource Montserrat-Bold}" FontSize="15" Width="200" SelectionChanged="FilterChanged" VerticalAlignment="Center"/>
+                        <Border CornerRadius="4" Height="27" Background="{DynamicResource textBackground}" VerticalAlignment="Center">
+                        <TextBox x:Name="searchBox" Text="{Binding SearchQuery}" BorderThickness="0" Margin="10 0" VerticalAlignment="Center"
+                                 Foreground="{DynamicResource backgroundDark}" KeyDown="searchBox_KeyDown"
+                                 FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="17" Height="20">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Style.Resources>
+                                        <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
+                                            <VisualBrush.Visual>
+                                                <Label Foreground="Red">
+                                                    <Label.Content>
+                                                        <TextBlock Text="Search..." Foreground="{DynamicResource backgroundDefault}" VerticalAlignment="Center" 
+                                                                   FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="17" Height="20" Opacity=".8"/>
+                                                    </Label.Content>
+                                                </Label>
+                                            </VisualBrush.Visual>
+                                        </VisualBrush>
+                                    </Style.Resources>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="Text" Value="">
+                                            <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                                        </Trigger>
+                                        <Trigger Property="Text" Value="{x:Null}">
+                                            <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                                        </Trigger>
+                                        <Trigger Property="IsKeyboardFocused" Value="True">
+                                            <Setter Property="Background" Value="Transparent" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                        
+                        </Border>
+                    </DockPanel>
+
+                </StackPanel>
+                <Border Margin="0 10 0 -10">
+                    <Grid>
+                        <ScrollViewer x:Name="pluginScrollViewer" Style="{DynamicResource SettingsScrollViewer}" ScrollChanged="ScrollViewer_ScrollChanged">
+                        <StackPanel>
+                            <ListView ItemsSource="{Binding Plugins}" Style="{DynamicResource PluginListView}" ItemContainerStyle="{DynamicResource PluginListItem}"/>
+                            <TextBlock Text="Loading more Plugins..." HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="{DynamicResource Montserrat-Bold}" Foreground="{DynamicResource textHeader}" FontSize="18"
+                                       Visibility="{Binding FullyLoaded, Mode=OneWay, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                    <Border x:Name="loadingOverlay" Background="{DynamicResource backgroundDark}" Opacity=".8" CornerRadius="20" Margin="-5" Visibility="Collapsed">
+                        <TextBlock Text="Loading..." HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="{DynamicResource Montserrat-Bold}" Foreground="{DynamicResource textHeader}" FontSize="20"/>
+                    </Border>
+                </Grid>
+                </Border>
+            </DockPanel>
+    </DockPanel>
+</Page>

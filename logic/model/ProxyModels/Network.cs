@@ -2,12 +2,12 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using fork.Logic.Model.Settings;
-using fork.Logic.Persistence.YMLReaders;
-using fork.Logic.WebRequesters;
+using Fork.Logic.Model.Settings;
+using Fork.Logic.Persistence.YMLReaders;
+using Fork.Logic.WebRequesters;
 using Newtonsoft.Json;
 
-namespace fork.Logic.Model.ProxyModels
+namespace Fork.Logic.Model.ProxyModels
 {
     [Serializable]
     public class Network : Entity

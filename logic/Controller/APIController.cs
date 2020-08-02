@@ -1,16 +1,17 @@
 using System;
 using System.IO;
 using System.Net;
-using fork.Logic.Logging;
-using fork.Logic.Manager;
-using fork.Logic.Model.APIModels;
+using System.Net.Cache;
+using Fork.Logic.Logging;
+using Fork.Logic.Manager;
+using Fork.Logic.Model.APIModels;
 using Newtonsoft.Json;
 
-namespace fork.Logic.Controller
+namespace Fork.Logic.Controller
 {
     public class APIController
     {
-        private string apiBaseURL = "https://api.fork.gg/";
+        private string apiBaseURL = "https://api.Fork.gg/";
 
         public string GetExternalIPAddress()
         {
@@ -21,8 +22,8 @@ namespace fork.Logic.Controller
             //Fallback in case of API outage
             else
             {
-                ErrorLogger.Append(new WebException("api.fork.gg is not online or operational"));
-                Console.WriteLine("api.fork.gg is not online or operational");
+                ErrorLogger.Append(new WebException("api.Fork.gg is not online or operational"));
+                Console.WriteLine("api.Fork.gg is not online or operational");
                 return new WebClient().DownloadString("http://icanhazip.com").Trim();
             }
         }
@@ -31,11 +32,11 @@ namespace fork.Logic.Controller
         {
             if (!IsAPIAvailable())
             {
-                ErrorLogger.Append(new WebException("api.fork.gg is not online or operational"));
+                ErrorLogger.Append(new WebException("api.Fork.gg is not online or operational"));
                 return ApplicationManager.Instance.CurrentForkVersion;
             }
 
-            var response = RequestRawResponse(apiBaseURL + "versions/fork/latest");
+            var response = RequestRawResponse(apiBaseURL + "versions/Fork/latest");
             string versionJson = RetrieveResponseBody(response);
             return JsonConvert.DeserializeObject<ForkVersion>(versionJson);
         }
@@ -57,6 +58,7 @@ namespace fork.Logic.Controller
         private HttpWebResponse RequestRawResponse(string requestUrl)
         {
             WebRequest request = WebRequest.Create(requestUrl);
+            request.Headers.Add("user-agent",ApplicationManager.UserAgent);
             return (HttpWebResponse) request.GetResponse();
         }
 

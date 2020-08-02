@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace fork.Logic.WebRequesters
+namespace Fork.Logic.WebRequesters
 {
     public class ResponseCache
     {
@@ -25,7 +25,7 @@ namespace fork.Logic.WebRequesters
         /// <summary>
         /// Attributes
         /// </summary>
-        private int maxCacheAgeHours = 12;
+        private int maxCacheAgeHours = 2;
         private Dictionary<string, Tuple<string, DateTime>> cachedResponses = new Dictionary<string, Tuple<string, DateTime>>();
 
         /// <summary>

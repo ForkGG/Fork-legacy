@@ -1,10 +1,10 @@
 using System;
 using System.IO;
-using fork.Logic.Logging;
-using fork.Logic.Model;
+using Fork.Logic.Logging;
+using Fork.Logic.Model;
 using Newtonsoft.Json;
 
-namespace fork.Logic.Persistence
+namespace Fork.Logic.Persistence
 {
     public class AppSettingsSerializer
     {

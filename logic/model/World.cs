@@ -1,7 +1,7 @@
 using System.IO;
-using fork.ViewModel;
+using Fork.ViewModel;
 
-namespace fork.Logic.Model
+namespace Fork.Logic.Model
 {
     public class World
     {

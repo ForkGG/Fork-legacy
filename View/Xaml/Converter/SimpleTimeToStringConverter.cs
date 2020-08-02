@@ -1,9 +1,9 @@
 using System;
 using System.Globalization;
 using System.Windows.Data;
-using fork.Logic.Model;
+using Fork.Logic.Model;
 
-namespace fork.View.Xaml.Converter
+namespace Fork.View.Xaml.Converter
 {
     [ValueConversion(typeof(SimpleTime), typeof(string))]
     public class SimpleTimeToStringConverter : IValueConverter
