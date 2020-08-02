@@ -1,9 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     x:Class="Fork.View.Resources.dictionaries.ListViewStyles"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:controls="clr-namespace:fork.View.Xaml2.Controls"
-                    xmlns:status="clr-namespace:fork.Logic.Model"
-                    xmlns:converter="clr-namespace:fork.View.Xaml.Converter">
+                    xmlns:status="clr-namespace:Fork.Logic.Model"
+                    xmlns:converter="clr-namespace:Fork.View.Xaml.Converter" 
+                    xmlns:controls="clr-namespace:Fork.View.Xaml2.Controls">
     <Style x:Key="{x:Static GridView.GridViewScrollViewerStyleKey}" TargetType="ScrollViewer">
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Template">
@@ -365,7 +365,7 @@
                                                      Height="20" Width="20" HoverBackground="{DynamicResource buttonBgrRed}" HoverIconSource="pack://application:,,,/view/resources/images/icons/deleteW.png"
                                                      Click="RemoveFromNetwork_Click" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}, Path=DataContext}"/>
                                 <TextBlock x:Name="externalServerTxt" Text="External Server" VerticalAlignment="Center" Margin="5 0" FontFamily="{DynamicResource Montserrat-Medium}" Foreground="{DynamicResource buttonBgrYellow}"/>
-                                <TextBlock x:Name="forkServerTxt" Text="Fork Server" PreviewMouseLeftButtonDown="OpenServer_Click" VerticalAlignment="Center" Margin="5 0" FontFamily="{DynamicResource Montserrat-Medium}" 
+                                <TextBlock x:Name="ForkServerTxt" Text="Fork Server" PreviewMouseLeftButtonDown="OpenServer_Click" VerticalAlignment="Center" Margin="5 0" FontFamily="{DynamicResource Montserrat-Medium}" 
                                            Foreground="{DynamicResource buttonBgrYellow}" Visibility="Collapsed" Cursor="Hand">
                                     <TextBlock.ToolTip>
                                         <TextBlock Text="{Binding ServerViewModel.ServerTitle}" VerticalAlignment="Center" Foreground="{DynamicResource textSelected}" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="14"/>
@@ -404,7 +404,7 @@
                     <ControlTemplate.Triggers>
                         <DataTrigger Binding="{Binding IsForkServer}" Value="True">
                             <Setter TargetName="externalServerTxt" Property="Visibility" Value="Collapsed"/>
-                            <Setter TargetName="forkServerTxt" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="ForkServerTxt" Property="Visibility" Value="Visible"/>
                             <Setter TargetName="address" Property="IsEnabled" Value="False"/>
                         </DataTrigger>
                     </ControlTemplate.Triggers>
@@ -505,6 +505,95 @@
                     </Border>
                     <ControlTemplate.Triggers>
 
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsForkServer}" Value="True">
+                <!--Setter Property="Template" Value="{DynamicResource NetworkForkServerListItemTemplate}"/-->
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- PluginList template -->
+    <Style x:Key="PluginListView" TargetType="{x:Type ListView}">
+        <Setter Property="Background" Value="{DynamicResource backgroundDefault}"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="10,10,10,10"/>
+        <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListView">
+                    <Border Name="Border" BorderThickness="0">
+                        <ItemsPresenter/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PluginListItem" TargetType="{x:Type ListViewItem}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>
+        <Setter Property="Margin" Value="0 7"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                    <Border BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}">
+                        <Grid Margin="0 0 10 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="96px"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="210px"/>
+                                <ColumnDefinition Width="100px"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Source="{Binding icon.URL}"/>
+                            <StackPanel Grid.Column="1" Margin="10 0" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding name}"  TextWrapping="Wrap"/>
+                                <StackPanel Margin="0 5" Orientation="Horizontal">
+                                    <TextBlock Text="{Binding author.name}"/>
+                                    <TextBlock Text=", "/>
+                                    <TextBlock Text="{Binding ReleaseDate}"/>
+                                    <TextBlock Text=", "/>
+                                    <TextBlock Text="{Binding category.name}"/>
+                                </StackPanel>
+                                <TextBlock Text="{Binding tag}" TextWrapping="Wrap"/>
+                                <TextBlock Width="1000000" Height="0"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                <DockPanel Margin="0 5" LastChildFill="False">
+                                    <controls:RatingsControl Value="{Binding rating.average}" NumberOfStars="5"/>
+                                    <StackPanel DockPanel.Dock="Right" Grid.Column="1" Orientation="Horizontal">
+                                        <TextBlock Text="{Binding rating.count}"/>
+                                        <TextBlock Text=" ratings"/>
+                                    </StackPanel>
+                                </DockPanel>
+                                <DockPanel Margin="0 5" LastChildFill="False">
+                                    <TextBlock Text="Downloads:"/>
+                                    <TextBlock DockPanel.Dock="Right" Text="{Binding downloads}"/>
+                                </DockPanel>
+                                <DockPanel Margin="0 5" LastChildFill="False">
+                                    <TextBlock Text="Updated:"/>
+                                    <TextBlock DockPanel.Dock="Right" Text="{Binding UpdateDate}"/>
+                                </DockPanel>
+                            </StackPanel>
+                            <StackPanel Grid.Column="3" VerticalAlignment="Center">
+                                <Button Margin="10 5 0 5" Content="Visit" Style="{DynamicResource RoundedTextButton}"/>
+                                <Button Margin="10 5 0 5" Content="Install" Style="{DynamicResource RoundedTextButton}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
