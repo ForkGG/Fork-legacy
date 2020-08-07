@@ -25,7 +25,7 @@
                     <TextBlock Text="Plugins" Margin="45 10 10 10" Foreground="{DynamicResource textUnselected}" FontSize="20" 
                                FontFamily="{DynamicResource Montserrat-SemiBold}" HorizontalAlignment="Center"/>
                     <ListView Margin="0" Background="{DynamicResource backgroundDark}" Style="{DynamicResource SettingsListView}"
-                              ItemsSource="{Binding Worlds}">
+                              ItemsSource="{Binding InstalledPlugins}">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="FocusVisualStyle" Value="{x:Null}"/>

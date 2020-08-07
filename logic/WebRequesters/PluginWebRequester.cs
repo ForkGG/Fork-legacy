@@ -15,6 +15,7 @@ namespace Fork.Logic.WebRequesters
     {
         private int pageSize = 10;
         private string baseURL = "https://api.spiget.org/v2/";
+        private string resourceFields = "id%2Cname%2Ctag%2Ccontributors%2Clikes%2Cfile%2CtestedVersions%2Crating%2Cauthor%2Ccategory%2CreleaseDate%2Cdownloads%2Cicon%2Cpremium%2Cprice%2Ccurrency";
 
         public List<Plugin> RequestResourceList(out bool fullyLoaded, int page = 1, PluginEnums.Sorting sort = PluginEnums.Sorting.RATING)
         {
@@ -174,6 +175,7 @@ namespace Fork.Logic.WebRequesters
                 {
                     Uri uri = new Uri(url);
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+                    request.UserAgent = ApplicationManager.UserAgent;
                     using (var response = request.GetResponse())
                     using (Stream stream = response.GetResponseStream())
                     using (StreamReader reader = new StreamReader(stream))
@@ -203,6 +205,7 @@ namespace Fork.Logic.WebRequesters
                 {
                     Uri uri = new Uri(url);
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+                    request.UserAgent = ApplicationManager.UserAgent;
                     using (var response = request.GetResponse())
                     using (Stream stream = response.GetResponseStream())
                     using (StreamReader reader = new StreamReader(stream))
@@ -223,6 +226,66 @@ namespace Fork.Logic.WebRequesters
             return JsonConvert.DeserializeObject<List<PluginCategory>>(json);
         }
 
+        public Plugin RequestPlugin(int pluginId)
+        {
+            string url = baseURL + "resources/" + pluginId+"?fields="+resourceFields;
+            string json = ResponseCache.Instance.UncacheResponse(url);
+            if (json == null)
+            {
+                try
+                {
+                    Uri uri = new Uri(url);
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+                    request.UserAgent = ApplicationManager.UserAgent;
+                    using (var response = request.GetResponse())
+                    using (Stream stream = response.GetResponseStream())
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        json = reader.ReadToEnd();
+                    }
+
+                    ResponseCache.Instance.CacheResponse(url, json);
+                }
+                catch (WebException e)
+                {
+                    ErrorLogger.Append(e);
+                    Console.WriteLine("Could not receive Spigot Plugin Details. (either spiget.org is down or your Internet connection is not working)\nRequest URL: " + url);
+                    return null;
+                }
+            }
+            return JsonConvert.DeserializeObject<Plugin>(json);
+        }
+        
+        public string RequestLatestVersion(int pluginId)
+        {
+            string url = baseURL + "resources/" + pluginId+"/versions/latest";
+            string json = ResponseCache.Instance.UncacheResponse(url);
+            if (json == null)
+            {
+                try
+                {
+                    Uri uri = new Uri(url);
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+                    request.UserAgent = ApplicationManager.UserAgent;
+                    using (var response = request.GetResponse())
+                    using (Stream stream = response.GetResponseStream())
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        json = reader.ReadToEnd();
+                    }
+
+                    ResponseCache.Instance.CacheResponse(url, json);
+                }
+                catch (WebException e)
+                {
+                    ErrorLogger.Append(e);
+                    Console.WriteLine("Could not receive latest Spigot Plugin Version. (either spiget.org is down or your Internet connection is not working)\nRequest URL: " + url);
+                    return "";
+                }
+            }
+            return JsonConvert.DeserializeObject<string>(json);
+        }
+
         private Category RequestCategory(int categoryId)
         {
             string url = baseURL + "categories/"+categoryId;
@@ -233,6 +296,7 @@ namespace Fork.Logic.WebRequesters
                 {
                     Uri uri = new Uri(url);
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+                    request.UserAgent = ApplicationManager.UserAgent;
                     using (var response = request.GetResponse())
                     using (Stream stream = response.GetResponseStream())
                     using (StreamReader reader = new StreamReader(stream))
@@ -252,6 +316,18 @@ namespace Fork.Logic.WebRequesters
             return JsonConvert.DeserializeObject<Category>(json);
         }
 
+        public string BuildDownloadURL(InstalledPlugin plugin)
+        {
+            if (plugin.Plugin.file.type.Equals("external"))
+            {
+                throw new ArgumentException("Download links for external plugins can not be built");
+            }
+
+            string url = baseURL + "resources/" + plugin.SpigetId + "/download";
+
+            return url;
+        }
+
         private string BuildResourceURL(int pageSize, int page = 1, PluginEnums.Sorting sort = PluginEnums.Sorting.RATING)
         {
             string URL = baseURL + "resources/free";
@@ -263,7 +339,7 @@ namespace Fork.Logic.WebRequesters
             }
             
             URL += "&sort=" + WebUtility.HtmlEncode(sort.APIName());
-            
+            URL += "&fields=" + resourceFields;
 
             return URL;
         }
@@ -279,6 +355,7 @@ namespace Fork.Logic.WebRequesters
             }
             
             URL += "&sort=" + WebUtility.HtmlEncode(sort.APIName());
+            URL += "&fields=" + resourceFields;
             
 
             return URL;
@@ -295,6 +372,7 @@ namespace Fork.Logic.WebRequesters
             }
             
             URL += "&sort=" + WebUtility.HtmlEncode(sort.APIName());
+            URL += "&fields=" + resourceFields;
             
 
             return URL;

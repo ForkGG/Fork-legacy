@@ -20,6 +20,7 @@ using Fork.Logic.CustomConsole;
 using Fork.Logic.ImportLogic;
 using Fork.Logic.Manager;
 using Fork.Logic.Model;
+using Fork.logic.model.PluginModels;
 using Fork.Logic.Model.Settings;
 using Fork.Logic.Persistence;
 using Server = Fork.Logic.Model.Server;
@@ -99,12 +100,11 @@ namespace Fork.ViewModel
         {
             get
             {
-                return readConsoleIn
-                       ?? (readConsoleIn = new ActionCommand(() =>
-                       {
-                           ConsoleReader?.Read(ConsoleIn, this);
-                           ConsoleIn = "";
-                       }));
+                return readConsoleIn ??= new ActionCommand(() =>
+                {
+                    ConsoleReader?.Read(ConsoleIn, this);
+                    ConsoleIn = "";
+                });
             }
         }
         

@@ -7,9 +7,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Fork.Logic.Logging;
+using Fork.Logic.Manager;
 using Fork.Logic.Model;
 using Fork.logic.model.PluginModels;
 using Fork.Logic.Model.PluginModels;
+using Fork.Logic.Persistence;
 using Fork.Logic.WebRequesters;
 
 namespace Fork.ViewModel
@@ -21,6 +23,8 @@ namespace Fork.ViewModel
         private bool fullyLoaded = false;
         
         public ObservableCollection<Plugin> Plugins { get; private set; }
+        
+        public ObservableCollection<InstalledPlugin> InstalledPlugins { get; }
         
         public List<PluginEnums.Sorting> Sortings { get; } = 
             new List<PluginEnums.Sorting>(Enum.GetValues(typeof(PluginEnums.Sorting)).Cast<PluginEnums.Sorting>());
@@ -34,6 +38,13 @@ namespace Fork.ViewModel
 
         public PluginViewModel(EntityViewModel entityViewModel)
         {
+            InstalledPlugins = new ObservableCollection<InstalledPlugin>(
+                InstalledPluginSerializer.Instance.LoadInstalledPlugins(entityViewModel));
+            foreach (InstalledPlugin plugin in InstalledPlugins)
+            {
+                PluginManager.Instance.DownloadPluginAsync(plugin, entityViewModel);
+            }
+            
             Categories = new List<PluginCategory>{new PluginCategory{id=0,name="All Categories"}};
             SelectedCategory = Categories[0];
             EntityViewModel = entityViewModel;

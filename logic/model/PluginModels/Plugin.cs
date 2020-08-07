@@ -13,6 +13,7 @@ namespace Fork.Logic.Model.PluginModels
     /// This class represents a Spigot Plugin in the form that is provided by spiget.org
     /// </summary>
     public class File {
+        public string actualType { get; set; }
         public string type { get; set; } 
         public double size { get; set; } 
         public string sizeUnit { get; set; } 
@@ -34,18 +35,6 @@ namespace Fork.Logic.Model.PluginModels
         public string url { get; set; } 
         public string data { get; set; }
         [JsonIgnore] public string URL => "https://www.spigotmc.org/" + url;
-    }
-
-    public class Review {
-        public int id { get; set; } 
-    }
-
-    public class Version {
-        public int id { get; set; } 
-    }
-
-    public class Update {
-        public int id { get; set; } 
     }
 
     public class Author {
@@ -80,9 +69,6 @@ namespace Fork.Logic.Model.PluginModels
         public bool premium { get; set; } 
         public double price { get; set; } 
         public string currency { get; set; } 
-        public List<Review> reviews { get; set; } 
-        public List<Version> versions { get; set; } 
-        public List<Update> updates { get; set; }
 
         private string DateTimeConverter(long date)
         {

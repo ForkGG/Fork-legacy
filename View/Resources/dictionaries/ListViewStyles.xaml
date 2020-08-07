@@ -582,8 +582,8 @@
                                 <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right" Orientation="Horizontal">
                                     <controls:IconButton Background="{DynamicResource buttonBgrDefault}" HoverBackground="{DynamicResource buttonBgrDefault}" Width="40" Height="35"
                                                          IconSource="pack://application:,,,/View/Resources/images/Icons/Download.png" IconWidth="100" IconHeight="20"
-                                                         HoverIconSource="pack://application:,,,/View/Resources/images/Icons/DownloadW.png"/>
-                                    <Button Margin="10 5 0 5" Content="Visit" Style="{DynamicResource RoundedTextButton}" Width="80"/>
+                                                         HoverIconSource="pack://application:,,,/View/Resources/images/Icons/DownloadW.png" x:Name="downloadBtn" Visibility="Collapsed"/>
+                                    <Button Margin="10 5 0 5" Content="Visit" Style="{DynamicResource RoundedTextButton}" Click="VisitPlugin_Click"/>
                                 </StackPanel>
                                 <StackPanel VerticalAlignment="Center" Margin="0 10 0 0">
                                     <StackPanel Margin="0 5" HorizontalAlignment="Right" Orientation="Horizontal">
@@ -618,6 +618,9 @@
                             <Setter TargetName="background" Property="Background" Value="{DynamicResource backgroundDarker}"/>
                             <Setter TargetName="rating" Property="BackgroundColor" Value="{DynamicResource backgroundDarker}"/>
                         </Trigger>
+                        <DataTrigger Binding="{Binding file.type}" Value=".jar">
+                            <Setter TargetName="downloadBtn" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

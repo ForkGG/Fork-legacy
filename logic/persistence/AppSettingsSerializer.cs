@@ -11,6 +11,8 @@ namespace Fork.Logic.Persistence
         private static AppSettings appSettings;
         public static AppSettings AppSettings => appSettings ??= ReadAppSettings();
 
+        private AppSettingsSerializer(){}
+
         public static void SaveSettings()
         {
             WriteAppSettings(AppSettings);

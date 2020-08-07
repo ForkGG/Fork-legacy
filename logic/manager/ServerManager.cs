@@ -17,6 +17,7 @@ using Fork.Logic.CustomConsole;
 using Fork.Logic.ImportLogic;
 using Fork.Logic.Logging;
 using Fork.Logic.Model;
+using Fork.logic.model.PluginModels;
 using Fork.Logic.Persistence;
 using Fork.Logic.WebRequesters;
 using Fork.ViewModel;
@@ -32,12 +33,12 @@ namespace Fork.Logic.Manager
         {
             if (new DirectoryInfo(Path.Combine(App.ApplicationPath, "persistence")).Exists)
             {
-                Entities = EntitySerializer.Instance.LoadEntities();
+                entities = EntitySerializer.Instance.LoadEntities();
             }
 
-            if (Entities == null)
+            if (entities == null)
             {
-                Entities = new ObservableCollection<EntityViewModel>();
+                entities = new ObservableCollection<EntityViewModel>();
             }
 
             foreach (EntityViewModel viewModel in Entities)
@@ -77,12 +78,8 @@ namespace Fork.Logic.Manager
 
         private ObservableCollection<EntityViewModel> entities;
 
-        public ObservableCollection<EntityViewModel> Entities
-        {
-            get => entities ?? (entities = new ObservableCollection<EntityViewModel>());
-            private set => entities = value;
-        }
-
+        public ObservableCollection<EntityViewModel> Entities => 
+            entities ??= new ObservableCollection<EntityViewModel>();
 
         public async Task<bool> MoveEntitiesAsync(string newPath)
         {
