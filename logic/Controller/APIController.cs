@@ -35,10 +35,17 @@ namespace Fork.Logic.Controller
                 ErrorLogger.Append(new WebException("api.Fork.gg is not online or operational"));
                 return ApplicationManager.Instance.CurrentForkVersion;
             }
-
-            var response = RequestRawResponse(apiBaseURL + "versions/Fork/latest");
-            string versionJson = RetrieveResponseBody(response);
-            return JsonConvert.DeserializeObject<ForkVersion>(versionJson);
+            try
+            {
+                var response = RequestRawResponse(apiBaseURL + "versions/fork/latest");
+                string versionJson = RetrieveResponseBody(response);
+                return JsonConvert.DeserializeObject<ForkVersion>(versionJson);
+            }
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
+                return ApplicationManager.Instance.CurrentForkVersion;
+            }
         }
         
         private bool IsAPIAvailable()
