@@ -173,15 +173,13 @@
                                 <ColumnDefinition />
                                 <ColumnDefinition Width="7"/>
                             </Grid.ColumnDefinitions>
-                            <Border Grid.Column="1" Background="Transparent" Width="30"/>
-                            <Border Grid.Column="1" Panel.ZIndex="1" Background="{DynamicResource backgroundDefault}" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
                             <ScrollBar Name="PART_VerticalScrollBar"
                                    Grid.Column="1"
-                                   Panel.ZIndex="2"
+                                   Grid.ZIndex="2" Style="{DynamicResource DefaultScrollBarLight}"
                                    Value="{TemplateBinding VerticalOffset}"
                                    Maximum="{TemplateBinding ScrollableHeight}"
                                    ViewportSize="{TemplateBinding ViewportHeight}"
-                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" />
 
                             <ScrollContentPresenter Margin="0 0 -10 0"/>
                         </Grid>

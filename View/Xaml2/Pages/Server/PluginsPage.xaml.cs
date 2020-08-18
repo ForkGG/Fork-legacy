@@ -4,6 +4,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using Fork.Logic.Manager;
+using Fork.logic.model.PluginModels;
+using Fork.View.Xaml2.Controls;
 using Fork.ViewModel;
 
 namespace Fork.View.Xaml2.Pages.Server
@@ -67,6 +70,18 @@ namespace Fork.View.Xaml2.Pages.Server
             {
                 searchBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
                 ReloadList();
+            }
+        }
+
+        private async void DeletePluginBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (e.Source is IconButton iconButton)
+            {
+                if (iconButton.CommandParameter is InstalledPlugin installedPlugin)
+                {
+                    //TODO implement error indicator
+                    bool result = await PluginManager.Instance.DeletePluginAsync(installedPlugin, viewModel);
+                }
             }
         }
     }

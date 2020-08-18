@@ -255,13 +255,12 @@
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
-        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
 
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListView">
                     <Border Name="Border" BorderThickness="0">
-                        <ScrollViewer>
+                        <ScrollViewer Style="{DynamicResource SettingsScrollViewer}">
                             <ItemsPresenter/>
                         </ScrollViewer>
                     </Border>
@@ -581,8 +580,9 @@
                             <DockPanel Grid.Column="2" Margin="0 0 0 10">
                                 <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right" Orientation="Horizontal">
                                     <controls:IconButton Background="{DynamicResource buttonBgrDefault}" HoverBackground="{DynamicResource buttonBgrDefault}" Width="40" Height="35"
-                                                         IconSource="pack://application:,,,/View/Resources/images/Icons/Download.png" IconWidth="100" IconHeight="20"
-                                                         HoverIconSource="pack://application:,,,/View/Resources/images/Icons/DownloadW.png" x:Name="downloadBtn" Visibility="Collapsed"/>
+                                                         IconSource="pack://application:,,,/View/Resources/images/Icons/Download.png" IconWidth="100" IconHeight="20" Click="InstallPlugin_Click"
+                                                         HoverIconSource="pack://application:,,,/View/Resources/images/Icons/DownloadW.png" x:Name="downloadBtn" Visibility="Collapsed"
+                                                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}, Path=DataContext}"/>
                                     <Button Margin="10 5 0 5" Content="Visit" Style="{DynamicResource RoundedTextButton}" Click="VisitPlugin_Click"/>
                                 </StackPanel>
                                 <StackPanel VerticalAlignment="Center" Margin="0 10 0 0">

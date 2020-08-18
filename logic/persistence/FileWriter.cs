@@ -54,11 +54,7 @@ namespace Fork.Logic.Persistence
             FileInfo errorFile = new FileInfo(Path.Combine(App.ApplicationPath, "logs","errorLog.txt"));
             if (!errorFile.Exists)
             {
-                if (!new DirectoryInfo(Path.Combine(App.ApplicationPath,"logs")).Exists)
-                {
-                    Directory.CreateDirectory(Path.Combine(App.ApplicationPath, "logs"));
-                }
-                errorFile.Create();
+                errorFile.Create().Close();
             }
 
             try
@@ -72,7 +68,7 @@ namespace Fork.Logic.Persistence
             {
                 if (typeof(Exception) != typeof(IOException))
                 {
-                    Console.WriteLine(e.StackTrace);
+                    Console.WriteLine("Exception occured during Exception writing:\n"+e.Message+"\n"+e.StackTrace+"\n\nError was: "+line);
                 }
             }
         }

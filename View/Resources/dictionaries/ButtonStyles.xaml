@@ -119,6 +119,28 @@
         </Setter>
     </Style>
 
+    <Style x:Key="RoundedIconButton" TargetType="controls:IconButton">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border x:Name="imageBorder" Background="{TemplateBinding Background}" CornerRadius="8000" 
+                            Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+                        <Image x:Name="image" Source="{Binding IconSource, RelativeSource={RelativeSource TemplatedParent}}" 
+                               Width="{Binding IconWidth, RelativeSource={RelativeSource TemplatedParent}}"
+                               Height="{Binding IconHeight, RelativeSource={RelativeSource TemplatedParent}}" 
+                               RenderOptions.BitmapScalingMode="Linear"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="image" Property="Source" Value="{Binding HoverIconSource, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <Setter TargetName="imageBorder" Property="Background" Value="{Binding HoverBackground, RelativeSource={RelativeSource TemplatedParent}}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="StartStopIconButton" TargetType="controls:IconButton" BasedOn="{StaticResource {x:Type controls:IconButton}}">        
         <Style.Triggers>
             <DataTrigger Binding="{Binding CurrentStatus}" Value="{x:Static model:ServerStatus.RUNNING}">

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
@@ -42,8 +43,13 @@ namespace Fork.ViewModel
                 InstalledPluginSerializer.Instance.LoadInstalledPlugins(entityViewModel));
             foreach (InstalledPlugin plugin in InstalledPlugins)
             {
-                PluginManager.Instance.DownloadPluginAsync(plugin, entityViewModel);
+                if (!plugin.IsDownloaded)
+                {
+                    PluginManager.Instance.DownloadPluginAsync(plugin, entityViewModel);
+                }
             }
+
+            InstalledPlugins.CollectionChanged += InstalledPluginsChanged;
             
             Categories = new List<PluginCategory>{new PluginCategory{id=0,name="All Categories"}};
             SelectedCategory = Categories[0];
@@ -54,6 +60,7 @@ namespace Fork.ViewModel
             {
                 var plugins = RequestPlugins();
                 Application.Current.Dispatcher?.Invoke(()=> Plugins = new ObservableCollection<Plugin>(plugins));
+                RemoveInstalledPluginsFromList();
                 var categories = pluginWebRequester.RequestCategories();
                 Application.Current.Dispatcher?.Invoke(()=> Categories.AddRange(categories));
             }).Start();
@@ -71,6 +78,8 @@ namespace Fork.ViewModel
                     List<Plugin> newPlugins = RequestPlugins();
 
                     Plugins = new ObservableCollection<Plugin>(newPlugins);
+                    
+                    RemoveInstalledPluginsFromList();
 
                     return true;
                 }
@@ -102,6 +111,8 @@ namespace Fork.ViewModel
                     {
                         Application.Current.Dispatcher?.Invoke(() => Plugins.Add(newPlugin));
                     }
+                    
+                    RemoveInstalledPluginsFromList();
 
                     return true;
                 }
@@ -145,6 +156,35 @@ namespace Fork.ViewModel
             var result3 = pluginWebRequester.RequestResourceList(out fullyLoaded, SelectedCategory, lastPage, Sorting);
             RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(FullyLoaded)));
             return result3;
+        }
+
+        private void InstalledPluginsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            //TODO re-sort
+            
+            RemoveInstalledPluginsFromList();
+            
+            InstalledPluginSerializer.Instance.StoreInstalledPlugins(InstalledPlugins.ToList(), EntityViewModel);
+        }
+
+        private void RemoveInstalledPluginsFromList()
+        {
+            List<Plugin> toRemove = new List<Plugin>();
+            foreach (Plugin plugin in Plugins)
+            {
+                foreach (InstalledPlugin installedPlugin in InstalledPlugins)
+                {
+                    if (plugin.id == installedPlugin.SpigetId)
+                    {
+                        toRemove.Add(plugin);
+                    }
+                }
+            }
+            //TODO in .NET 5 this can be simplified
+            foreach (Plugin plugin in toRemove)
+            {
+                Application.Current.Dispatcher?.Invoke(() => Plugins.Remove(plugin));
+            }
         }
     }
 }

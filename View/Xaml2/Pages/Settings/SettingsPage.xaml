@@ -12,38 +12,19 @@
         <Grid DockPanel.Dock="Right" Width="200">
             <Border Background="{DynamicResource backgroundDark}" Margin=" 5 0 0 0" CornerRadius="5 0 0 5"/>
             <DockPanel Panel.ZIndex="1">
-                <StackPanel Panel.ZIndex="1">
+                <DockPanel Panel.ZIndex="1">
                     <TextBlock Text="Files" Margin="15 10 10 10" Foreground="{DynamicResource textUnselected}" FontSize="20" 
-                               FontFamily="{DynamicResource Montserrat-SemiBold}" HorizontalAlignment="Center"/>
-                    <!--ListView Margin="0" Background="{DynamicResource backgroundDark}" Style="{DynamicResource SettingsListView}"
-                              ItemContainerStyle="{DynamicResource SettingsListItem}">
-                        <ListViewItem Content="server.properties" IsSelected="True" Selected="SelectMCSettings"/>
-                        <ListViewItem Content="bukkit.yml" Selected="SelectBukkitSettings"/>
-                        <ListViewItem Content="spigot.yml" Selected="SelectSpigotSettings"/>
-                    </-->
+                               FontFamily="{DynamicResource Montserrat-SemiBold}" HorizontalAlignment="Center" DockPanel.Dock="Top"/>
                     <ListView Margin="0" Background="{DynamicResource backgroundDark}" Style="{DynamicResource SettingsListView}"
                               ItemContainerStyle="{DynamicResource SettingsListItem}" ItemsSource="{Binding SettingsPages}" SelectedIndex="0"
                               SelectionChanged="FileSelectionChanged" x:Name="SelectionListView">
                         
                     </ListView>
-                </StackPanel>
+                </DockPanel>
             </DockPanel>
         </Grid>
         <Grid>
             <Frame x:Name="settingsFrame"/>
-            <!--Frame x:Name="mcSettings" Content="{Binding VanillaSettingsPage}"/>
-            <Frame x:Name="bukkitSettings" Visibility="Hidden">
-                <Frame.Content>
-                    <TextBlock Text="Coming soon" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="{DynamicResource Montserrat-SemiBold}"
-                       Foreground="{DynamicResource textSelected}"/>
-                </Frame.Content>
-            </Frame>
-            <Frame x:Name="spigotSettings" Visibility="Hidden">
-                <Frame.Content>
-                    <TextBlock Text="Coming soon" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="{DynamicResource Montserrat-SemiBold}"
-                       Foreground="{DynamicResource textSelected}"/>
-                </Frame.Content>
-            </Frame-->
         </Grid> 
     </DockPanel>
 </Page>

@@ -16,14 +16,14 @@
     </Page.Resources>
     <DockPanel>
         <Grid DockPanel.Dock="Right" Width="230">
-            <Border Background="{DynamicResource backgroundDark}" Margin="35 0 0 0" CornerRadius="5 0 0 5"/>
+            <Border Background="{DynamicResource backgroundDark}" Margin="30 0 0 0" CornerRadius="5 0 0 5"/>
             <DockPanel Panel.ZIndex="1">
                 <TextBlock Text="Open in File Explorer" DockPanel.Dock="Bottom" TextAlignment="Center" Margin="45 10 10 10" 
                            PreviewMouseLeftButtonDown="OpenExplorer_PreviewMouseLeftButtonDown" Cursor="Hand" Foreground="{DynamicResource textLink}">
                 </TextBlock>
-                <StackPanel Panel.ZIndex="1">
+                <DockPanel Panel.ZIndex="1">
                     <TextBlock Text="Plugins" Margin="45 10 10 10" Foreground="{DynamicResource textUnselected}" FontSize="20" 
-                               FontFamily="{DynamicResource Montserrat-SemiBold}" HorizontalAlignment="Center"/>
+                               FontFamily="{DynamicResource Montserrat-SemiBold}" HorizontalAlignment="Center" DockPanel.Dock="Top"/>
                     <ListView Margin="0" Background="{DynamicResource backgroundDark}" Style="{DynamicResource SettingsListView}"
                               ItemsSource="{Binding InstalledPlugins}">
                         <ListView.ItemContainerStyle>
@@ -37,43 +37,47 @@
                                         <ControlTemplate TargetType="{x:Type ListViewItem}">
                                             <Border BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}">
                                                 <StackPanel>
-                                                    <Grid Width="280" Height="60">
-                                                        <Border x:Name="background" Background="Transparent" Width="250" CornerRadius="8 0 0 8" Margin="30 0 0 0"/>
-                                                        <DockPanel Panel.ZIndex="1" LastChildFill="True">
-                                                            <TextBlock Margin="50 0 0 0" x:Name="title" Text="{Binding Name}" VerticalAlignment="Center" FontSize="16" 
-                                                                       FontFamily="{DynamicResource Montserrat-SemiBold}" Foreground="{DynamicResource textSelected}"/>
+                                                    <Grid Height="50" Margin="0 0 0 0">
+                                                        <Border x:Name="background" Background="Transparent" CornerRadius="8 0 0 8" Margin="30 0 0 0"/>
+                                                        <DockPanel Panel.ZIndex="1" Width="232">
+                                                            <controls:IconButton IconSource="pack://application:,,,/View/Resources/Images/Icons/Delete.png" CommandParameter="{Binding}"
+                                                                                 HoverIconSource="pack://application:,,,/View/Resources/Images/Icons/DeleteW.png"
+                                                                                 Width="26" Height="26" IconWidth="100" IconHeight="16" DockPanel.Dock="Right"
+                                                                                 Background="{DynamicResource buttonBgrDefault}" Margin="10 0 13 0" HoverBackground="{DynamicResource buttonBgrRed}"
+                                                                                 Style="{DynamicResource RoundedIconButton}" x:Name="deleteBtn" Click="DeletePluginBtn_Click"/>
+                                                            <TextBlock Margin="45 0 0 0" x:Name="title" Text="{Binding Name}" VerticalAlignment="Center" FontSize="16"
+                                                                       FontFamily="{DynamicResource Montserrat-SemiBold}"/>
                                                         </DockPanel>
-                                                        <RadioButton  Width="20" Height="20" Margin="0 0 0 0"  HorizontalAlignment="Left" GroupName="Worlds" IsChecked="{Binding IsActive}" 
-                                                                     Style="{DynamicResource CustomRadioButton}"/>
+                                                        <RadioButton  Width="20" Height="20" Margin="0 0 0 0"  HorizontalAlignment="Left" IsChecked="{Binding IsEnabled}" 
+                                                                     Style="{DynamicResource CustomRadioButton}" IsEnabled="False"/>
                                                     </Grid>
                                                 </StackPanel>
                                             </Border>
-                                            <!--ControlTemplate.Triggers>
-                                                <Trigger Property="IsSelected" Value="True">
-                                                    <Setter TargetName="background" Property="Background" Value="{DynamicResource tabSelected}"/>
-                                                    <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="False">
+                                                    <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textBackground}"/>
                                                 </Trigger>
                                                 <Trigger Property="IsMouseOver" Value="True">
                                                     <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
                                                 </Trigger>
-                                            </-->
+                                            </ControlTemplate.Triggers>
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
                             </Style>
                         </ListView.ItemContainerStyle>
                     </ListView>
-                </StackPanel>
+                </DockPanel>
             </DockPanel>
         </Grid>
-        <DockPanel Margin="10 20 0 10">
+        <DockPanel Margin="10 20 10 10">
                 <StackPanel DockPanel.Dock="Top">
                     <DockPanel>
                         <ComboBox x:Name="sortBox" DockPanel.Dock="Right" Margin="10 2 0 0" ItemsSource="{Binding Sortings}" SelectedItem="{Binding Sorting}" ItemContainerStyle="{DynamicResource SortingComboBoxItem}" 
                               FontFamily="{DynamicResource Montserrat-Bold}" FontSize="15" Width="150" Style="{DynamicResource SortingComboBox}" SelectionChanged="FilterChanged" VerticalAlignment="Center"/>
                         <ComboBox x:Name="categoryBox" DockPanel.Dock="Right" Margin="10 2 0 0" ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}" ItemContainerStyle="{DynamicResource DefaultComboBoxItem}"
                               FontFamily="{DynamicResource Montserrat-Bold}" FontSize="15" Width="200" SelectionChanged="FilterChanged" VerticalAlignment="Center"/>
-                        <Border CornerRadius="4" Height="27" Background="{DynamicResource textBackground}" VerticalAlignment="Center">
+                    <Border CornerRadius="4" Height="27" Background="{DynamicResource textBackground}" VerticalAlignment="Center">
                         <TextBox x:Name="searchBox" Text="{Binding SearchQuery}" BorderThickness="0" Margin="10 0" VerticalAlignment="Center"
                                  Foreground="{DynamicResource backgroundDark}" KeyDown="searchBox_KeyDown"
                                  FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="17" Height="20">
@@ -111,10 +115,26 @@
                     </DockPanel>
 
                 </StackPanel>
-                <Border Margin="0 10 0 -10">
-                    <Grid>
-                        <ScrollViewer x:Name="pluginScrollViewer" Style="{DynamicResource SettingsScrollViewer}" ScrollChanged="ScrollViewer_ScrollChanged">
+                <Border Margin="0 10 10 -10">
+                <Grid>
+                    <TextBlock Text="No Plugins found for your Filters" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="{DynamicResource Montserrat-Bold}" Foreground="{DynamicResource textHeader}" 
+                                       FontSize="18">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <Trigger Property="HorizontalAlignment" Value="Center">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </Trigger>
+                                    <DataTrigger Binding="{Binding Plugins.Count}" Value="0">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <ScrollViewer x:Name="pluginScrollViewer" Style="{DynamicResource SettingsScrollViewer}" ScrollChanged="ScrollViewer_ScrollChanged">
                         <StackPanel>
+                            
                             <ListView ItemsSource="{Binding Plugins}" Style="{DynamicResource PluginListView}" ItemContainerStyle="{DynamicResource PluginListItem}"/>
                             <TextBlock Text="Loading more Plugins..." HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="{DynamicResource Montserrat-Bold}" Foreground="{DynamicResource textHeader}" FontSize="18"
                                        Visibility="{Binding FullyLoaded, Mode=OneWay, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>

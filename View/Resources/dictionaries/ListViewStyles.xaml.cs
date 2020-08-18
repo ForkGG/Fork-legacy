@@ -61,5 +61,16 @@ namespace Fork.View.Resources.dictionaries
                 }
             }
         }
+
+        private async void InstallPlugin_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is IconButton iconButton)
+            {
+                if (iconButton.CommandParameter is PluginViewModel pluginViewModel && iconButton.DataContext is Plugin plugin)
+                {
+                    bool result = await PluginManager.Instance.InstallPluginAsync(plugin, pluginViewModel);
+                }
+            }
+        }
     }
 }

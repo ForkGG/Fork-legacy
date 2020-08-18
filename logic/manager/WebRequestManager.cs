@@ -169,10 +169,11 @@ namespace Fork.Logic.Manager
                 {
                     string json = File.ReadAllText(path,Encoding.UTF8);
                     VanillaVersionCache versionCache = JsonSerializer.Deserialize<VanillaVersionCache>(json);
-                    if (DateTime.Now.Subtract(versionCache.CacheCreation).Hours < 12)
+                    if (DateTime.Now.Subtract(versionCache.CacheCreation).TotalHours < 12)
                     {
                         return versionCache.Versions;
                     }
+                    //TODO update visual list after updating
                     UpdateVanillaVersionsAsync(versionType);
                     return versionCache.Versions;
                 }

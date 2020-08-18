@@ -53,7 +53,7 @@ namespace Fork.Logic.WebRequesters
         private bool VerifyCacheAge(DateTime cacheAge)
         {
             TimeSpan difference = DateTime.Now - cacheAge;
-            if (difference.Hours < maxCacheAgeHours)
+            if (difference.TotalHours < maxCacheAgeHours)
             {
                 return true;
             }

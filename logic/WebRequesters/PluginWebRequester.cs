@@ -256,7 +256,7 @@ namespace Fork.Logic.WebRequesters
             return JsonConvert.DeserializeObject<Plugin>(json);
         }
         
-        public string RequestLatestVersion(int pluginId)
+        public long RequestLatestVersion(int pluginId)
         {
             string url = baseURL + "resources/" + pluginId+"/versions/latest";
             string json = ResponseCache.Instance.UncacheResponse(url);
@@ -280,10 +280,10 @@ namespace Fork.Logic.WebRequesters
                 {
                     ErrorLogger.Append(e);
                     Console.WriteLine("Could not receive latest Spigot Plugin Version. (either spiget.org is down or your Internet connection is not working)\nRequest URL: " + url);
-                    return "";
+                    return 0;
                 }
             }
-            return JsonConvert.DeserializeObject<string>(json);
+            return JsonConvert.DeserializeObject<PluginVersion>(json).date;
         }
 
         private Category RequestCategory(int categoryId)
