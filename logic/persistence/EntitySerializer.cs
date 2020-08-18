@@ -102,6 +102,13 @@ namespace Fork.Logic.Persistence
             {
                 foreach (Server server in entities.ServerList)
                 {
+                    DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ServerPath,server.Name));
+                    if (!serverDir.Exists)
+                    {
+                        ErrorLogger.Append(
+                            new Exception("Could not find server "+server.Name+" that was listed in entities.json . Removing it..."));
+                        continue;
+                    }
                     ServerViewModel serverViewModel = new ServerViewModel(server);
                     if (!entityViewModels.Contains(serverViewModel))
                     {
@@ -111,6 +118,13 @@ namespace Fork.Logic.Persistence
 
                 foreach (Network network in entities.NetworkList)
                 {
+                    DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ServerPath,network.Name));
+                    if (!serverDir.Exists)
+                    {
+                        ErrorLogger.Append(
+                            new Exception("Could not find network "+network.Name+" that was listed in entities.json . Removing it..."));
+                        continue;
+                    }
                     entityViewModels.Add(new NetworkViewModel(network));
                 }
             }
