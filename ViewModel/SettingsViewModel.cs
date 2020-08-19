@@ -73,9 +73,13 @@ namespace Fork.ViewModel
                             SettingsPages.Add(new VanillaSettingsPage(this, settingsFile)));
                         break;
                     case SettingsFile.SettingsType.Bungee:
-                        Application.Current.Dispatcher?.Invoke(() =>
-                            SettingsPages.Add(new ProxySettingsPage(this, settingsFile)));
-                        break;
+                        if (EntityViewModel is NetworkViewModel)
+                        {
+                            Application.Current.Dispatcher?.Invoke(() =>
+                                SettingsPages.Add(new ProxySettingsPage(this, settingsFile)));
+                            break;
+                        }
+                        goto default;
                     default:
                         Application.Current.Dispatcher?.Invoke(() =>
                             SettingsPages.Add(new DefaultSettingsPage(settingsFile)));
@@ -112,9 +116,13 @@ namespace Fork.ViewModel
                                 SettingsPages.Add(new VanillaSettingsPage(this, settingsFile)));
                             break;
                         case SettingsFile.SettingsType.Bungee:
-                            Application.Current.Dispatcher?.Invoke(() =>
-                                SettingsPages.Add(new ProxySettingsPage(this, settingsFile)));
-                            break;
+                            if (EntityViewModel is NetworkViewModel)
+                            {
+                                Application.Current.Dispatcher?.Invoke(() =>
+                                    SettingsPages.Add(new ProxySettingsPage(this, settingsFile)));
+                                break;
+                            }
+                            goto default;
                         default:
                             Application.Current.Dispatcher?.Invoke(() =>
                                 SettingsPages.Add(new DefaultSettingsPage(settingsFile)));
