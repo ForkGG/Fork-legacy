@@ -138,7 +138,6 @@ namespace Fork.Logic.Manager
         {
             try
             {
-                plugin.IsLoading = true;
                 string folder = plugin.IsEnabled ? "plugins" : "plugins_disabled";
                 FileInfo jarFile = new FileInfo(Path.Combine(App.ServerPath,
                     viewModel.EntityViewModel.Name, folder, StringUtils.PluginNameToJarName(plugin.Name)+".jar"));
@@ -158,7 +157,6 @@ namespace Fork.Logic.Manager
             catch (Exception e)
             {
                 ErrorLogger.Append(e);
-                plugin.IsLoading = false;
                 Console.WriteLine("Error while deleting Plugin "+plugin.Name);
                 return false;
             }
@@ -168,10 +166,8 @@ namespace Fork.Logic.Manager
         {
             try
             {
-                plugin.IsLoading = true;
                 if (!plugin.IsEnabled)
                 {
-                    plugin.IsLoading = false;
                     return true;
                 }
                 FileInfo jarFile = new FileInfo(Path.Combine(App.ServerPath,
@@ -190,18 +186,16 @@ namespace Fork.Logic.Manager
                     {
                         directoryInfo.Create();
                     }
-                    jarFile.MoveTo(Path.Combine(directoryInfo.FullName,jarFile.Name));
+                    jarFile.MoveTo(Path.Combine(directoryInfo.FullName,jarFile.Name), true);
                 }
 
                 Console.WriteLine("Disabled Plugin "+plugin.Name);
-                plugin.IsEnabled = false;
-                plugin.IsLoading = false;
+                viewModel.DisablePlugin(plugin);
                 return true;
             }
             catch (Exception e)
             {
                 ErrorLogger.Append(e);
-                plugin.IsLoading = false;
                 Console.WriteLine("Error while disabling Plugin "+plugin.Name);
                 return false;
             }
@@ -211,10 +205,8 @@ namespace Fork.Logic.Manager
         {
             try
             {
-                plugin.IsLoading = true;
                 if (plugin.IsEnabled)
                 {
-                    plugin.IsLoading = false;
                     return true;
                 }
                 FileInfo jarFile = new FileInfo(Path.Combine(App.ServerPath,
@@ -233,18 +225,16 @@ namespace Fork.Logic.Manager
                     {
                         directoryInfo.Create();
                     }
-                    jarFile.MoveTo(Path.Combine(directoryInfo.FullName,jarFile.Name));
+                    jarFile.MoveTo(Path.Combine(directoryInfo.FullName,jarFile.Name), true);
                 }
 
                 Console.WriteLine("Enabled Plugin "+plugin.Name);
-                plugin.IsEnabled = true;
-                plugin.IsLoading = false;
+                viewModel.EnablePlugin(plugin);
                 return true;
             }
             catch (Exception e)
             {
                 ErrorLogger.Append(e);
-                plugin.IsLoading = false;
                 Console.WriteLine("Error while enabling Plugin "+plugin.Name);
                 return false;
             }

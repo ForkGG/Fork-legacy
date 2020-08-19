@@ -67,6 +67,20 @@ namespace Fork.ViewModel
             
         }
 
+        public void DisablePlugin(InstalledPlugin installedPlugin)
+        {
+            installedPlugin.IsEnabled = false;
+            RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(installedPlugin.IsEnabled)));
+            InstalledPluginSerializer.Instance.StoreInstalledPlugins(InstalledPlugins.ToList(), EntityViewModel);
+        }
+        
+        public void EnablePlugin(InstalledPlugin installedPlugin)
+        {
+            installedPlugin.IsEnabled = true;
+            RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(installedPlugin.IsEnabled)));
+            InstalledPluginSerializer.Instance.StoreInstalledPlugins(InstalledPlugins.ToList(), EntityViewModel);
+        }
+
         public async Task<bool> Reload()
         {
             fullyLoaded = false;

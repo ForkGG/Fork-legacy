@@ -84,5 +84,32 @@ namespace Fork.View.Xaml2.Pages.Server
                 }
             }
         }
+
+        private async void EnableDisablePlugin_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkBox)
+            {
+                checkBox.IsEnabled = false;
+                if (checkBox.CommandParameter is InstalledPlugin installedPlugin)
+                {
+                    bool result;
+                    if (installedPlugin.IsEnabled)
+                    {
+                        result = await PluginManager.Instance.DisablePluginAsync(installedPlugin, viewModel);
+                    }
+                    else
+                    {
+                        result = await PluginManager.Instance.EnablePluginAsync(installedPlugin, viewModel);
+                    }
+                    //TODO show error if result=false
+                }
+                checkBox.IsEnabled = true;
+            }
+        }
+
+        private void Help_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+
+        }
     }
 }

@@ -15,7 +15,6 @@ namespace Fork.logic.model.PluginModels
         public long InstalledVersion { get; set; }
         public bool IsDownloaded { get; set; } = false;
         public bool IsEnabled { get; set; } = true;
-        public bool IsLoading { get; set; } = false;
 
         [Newtonsoft.Json.JsonIgnore, JsonIgnore]
         public Plugin Plugin { get; private set; }
