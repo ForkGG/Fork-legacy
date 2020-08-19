@@ -23,25 +23,8 @@
                            PreviewMouseLeftButtonDown="OpenExplorer_PreviewMouseLeftButtonDown" Cursor="Hand" Foreground="{DynamicResource textLink}">
                     </TextBlock>
                     <DockPanel Panel.ZIndex="1">
-                        <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Center" Width="218">
-                            <TextBlock Text="?" Margin="10 10 10 10" FontSize="20" IsMouseDirectlyOverChanged="Help_IsMouseDirectlyOverChanged"
-                                       FontFamily="{DynamicResource Montserrat-Bold}" DockPanel.Dock="Right">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseDirectlyOver" Value="True">
-                                                <Setter Property="Foreground" Value="Orange"/>
-                                            </Trigger>
-                                            <Trigger Property="IsMouseDirectlyOver" Value="False">
-                                                <Setter Property="Foreground" Value="{DynamicResource textLink}"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                            <TextBlock Text="Plugins" Margin="65 10 10 10" Foreground="{DynamicResource textUnselected}" FontSize="20" 
-                               FontFamily="{DynamicResource Montserrat-SemiBold}" HorizontalAlignment="Center"/>
-                        </DockPanel>
+                        <TextBlock Text="Plugins" Margin="35 10 10 10" Foreground="{DynamicResource textUnselected}" FontSize="20" 
+                               FontFamily="{DynamicResource Montserrat-SemiBold}"  DockPanel.Dock="Top" HorizontalAlignment="Center"/>
                         <ListView Margin="0" Background="{DynamicResource backgroundDark}" Style="{DynamicResource SettingsListView}"
                               ItemsSource="{Binding InstalledPlugins}">
                             <ListView.ItemContainerStyle>
