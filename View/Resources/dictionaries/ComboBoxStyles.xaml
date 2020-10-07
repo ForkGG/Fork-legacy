@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converter="clr-namespace:Fork.View.Xaml.Converter">
     <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
         <Grid Height="30">
             <Grid.ColumnDefinitions>
@@ -129,6 +130,109 @@
                         <Grid>
                             <Border HorizontalAlignment="Left" Margin="5 0">
                                 <TextBlock x:Name="textBlock" Text="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"
+                                       FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}"
+                                       Foreground="{DynamicResource backgroundDark}"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="background" Property="Background" Value="{DynamicResource backgroundDefault}"/>
+                            <Setter TargetName="textBlock" Property="TextBlock.Foreground" Value="{DynamicResource textSelected}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SortingComboBox" TargetType="ComboBox">
+        <Style.Resources>
+            <converter:RatingToFriendlyNameConverter x:Key="RatingToFriendlyNameConverter"/>
+        </Style.Resources>
+        <Setter Property="SnapsToDevicePixels" Value="true"/>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+        <Setter Property="MinWidth" Value="120"/>
+        <Setter Property="MinHeight" Value="20"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBox}">
+                    <Grid Width="{TemplateBinding Width}">
+                        <ToggleButton 
+                            Name="ToggleButton" 
+                            Template="{StaticResource ComboBoxToggleButton}" 
+                            Grid.Column="2" 
+                            Focusable="false"
+                            IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
+                            ClickMode="Press">
+                        </ToggleButton>
+                        <TextBlock Margin="5 0 5 3" IsHitTestVisible="False" Name="ContentSite" 
+                                   VerticalAlignment="Center" HorizontalAlignment="Left" 
+                                   Text="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource RatingToFriendlyNameConverter}}"
+                                   FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}"
+                                   Foreground="{DynamicResource backgroundDark}"/>
+                        <Popup 
+                            Name="Popup"
+                            Width="{TemplateBinding Width}"
+                            Placement="Bottom"
+                            IsOpen="{TemplateBinding IsDropDownOpen}"
+                            AllowsTransparency="True" 
+                            Focusable="False"
+                            PopupAnimation="Fade">
+
+                            <Grid Name="DropDown"
+                              SnapsToDevicePixels="True"                
+                              MinWidth="{TemplateBinding ActualWidth}"
+                              MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                <Border x:Name="DropDownBorder" Background="Transparent"
+                                BorderThickness="0" BorderBrush="Transparent"/>
+                                <ScrollViewer Margin="0" SnapsToDevicePixels="True" MaxHeight="100" Style="{DynamicResource CustomScrollViewer}">
+                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                </ScrollViewer>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HasItems" Value="false">
+                            <Setter TargetName="Popup" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="#888888"/>
+                        </Trigger>
+                        <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="true">
+                            <Setter TargetName="DropDownBorder" Property="CornerRadius" Value="0"/>
+                            <Setter TargetName="DropDownBorder" Property="Margin" Value="0,2,0,0"/>
+                        </Trigger>
+                        <Trigger Property="IsEditable"  Value="true">
+                            <Setter Property="IsTabStop" Value="false"/>
+                            <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="SortingComboBoxItem" TargetType="ComboBoxItem">
+        <Style.Resources>
+            <converter:RatingToFriendlyNameConverter x:Key="RatingToFriendlyNameConverter"/>
+        </Style.Resources>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBoxItem">
+                    <Border x:Name="background" Background="{DynamicResource textBackground}" CornerRadius="4">
+                        <Grid>
+                            <Border HorizontalAlignment="Left" Margin="5 0">
+                                <TextBlock x:Name="textBlock" Text="{Binding Content, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource RatingToFriendlyNameConverter}}"
                                        FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}"
                                        Foreground="{DynamicResource backgroundDark}"/>
                             </Border>

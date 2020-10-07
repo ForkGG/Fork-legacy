@@ -2,10 +2,10 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net;
-using fork.Logic.Manager;
-using fork.Logic.Model;
+using Fork.Logic.Manager;
+using Fork.Logic.Model;
 
-namespace fork.ViewModel
+namespace Fork.ViewModel
 {
     
     public class AddServerViewModel : BaseViewModel

@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
-namespace fork.Logic.Model
+namespace Fork.Logic.Model
 {
     [Serializable]
     public class ServerVersion : IComparable
@@ -21,7 +22,10 @@ namespace fork.Logic.Model
         public VersionType Type { get; set; }
         public string Version { get; set; }
         public string JarLink { get; set; }
-        public bool IsProxy => Type == VersionType.Waterfall;
+        [JsonIgnore] public bool IsProxy => Type == VersionType.Waterfall;
+
+        [JsonIgnore]
+        public bool HasPlugins => Type == VersionType.Paper || Type == VersionType.Spigot;
 
         public ServerVersion()
         {
@@ -82,6 +86,7 @@ namespace fork.Logic.Model
                 {
                     return 1;
                 }
+
                 return 0;
             }
 

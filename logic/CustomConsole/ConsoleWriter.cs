@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
-using fork.Logic.Model;
-using fork.ViewModel;
+using Fork.Logic.Model;
+using Fork.ViewModel;
 
-namespace fork.Logic.CustomConsole
+namespace Fork.Logic.CustomConsole
 {
     public class ConsoleWriter
     {

@@ -10,15 +10,15 @@ using System.Windows.Controls;
 using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
 using System.Windows.Threading;
-using fork.Annotations;
-using fork.Logic.Manager;
-using fork.Logic.Model;
-using fork.Logic.Model.Settings;
-using fork.View.Xaml2.Pages.Settings;
+using Fork.Annotations;
+using Fork.Logic.Manager;
+using Fork.Logic.Model;
+using Fork.Logic.Model.Settings;
+using Fork.View.Xaml2.Pages.Settings;
 using Fork.View.Xaml2.Pages.Settings;
 using ICSharpCode.AvalonEdit.Rendering;
 
-namespace fork.ViewModel
+namespace Fork.ViewModel
 {
     public class SettingsViewModel : BaseViewModel
     {
@@ -73,9 +73,13 @@ namespace fork.ViewModel
                             SettingsPages.Add(new VanillaSettingsPage(this, settingsFile)));
                         break;
                     case SettingsFile.SettingsType.Bungee:
-                        Application.Current.Dispatcher?.Invoke(() =>
-                            SettingsPages.Add(new ProxySettingsPage(this, settingsFile)));
-                        break;
+                        if (EntityViewModel is NetworkViewModel)
+                        {
+                            Application.Current.Dispatcher?.Invoke(() =>
+                                SettingsPages.Add(new ProxySettingsPage(this, settingsFile)));
+                            break;
+                        }
+                        goto default;
                     default:
                         Application.Current.Dispatcher?.Invoke(() =>
                             SettingsPages.Add(new DefaultSettingsPage(settingsFile)));
@@ -112,9 +116,13 @@ namespace fork.ViewModel
                                 SettingsPages.Add(new VanillaSettingsPage(this, settingsFile)));
                             break;
                         case SettingsFile.SettingsType.Bungee:
-                            Application.Current.Dispatcher?.Invoke(() =>
-                                SettingsPages.Add(new ProxySettingsPage(this, settingsFile)));
-                            break;
+                            if (EntityViewModel is NetworkViewModel)
+                            {
+                                Application.Current.Dispatcher?.Invoke(() =>
+                                    SettingsPages.Add(new ProxySettingsPage(this, settingsFile)));
+                                break;
+                            }
+                            goto default;
                         default:
                             Application.Current.Dispatcher?.Invoke(() =>
                                 SettingsPages.Add(new DefaultSettingsPage(settingsFile)));

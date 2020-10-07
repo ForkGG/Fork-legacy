@@ -7,18 +7,18 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Timers;
 using System.Windows.Controls;
-using fork.Annotations;
-using fork.Logic.ApplicationConsole;
-using fork.Logic.Controller;
-using fork.Logic.Manager;
-using fork.Logic.Model;
-using fork.Logic.Model.APIModel;
-using fork.Logic.Persistence;
-using fork.View.Xaml2.Pages;
+using Fork.Annotations;
+using Fork.Logic.ApplicationConsole;
+using Fork.Logic.Controller;
+using Fork.Logic.Manager;
+using Fork.Logic.Model;
+using Fork.Logic.Model.APIModels;
+using Fork.Logic.Persistence;
+using Fork.View.Xaml2.Pages;
 using Fork.View.Xaml2.Pages;
 using Timer = System.Timers.Timer;
 
-namespace fork.ViewModel
+namespace Fork.ViewModel
 {
     public sealed class MainViewModel : INotifyPropertyChanged
     {
@@ -90,7 +90,7 @@ namespace fork.ViewModel
         private void CheckForkVersion()
         {
             LatestForkVersion = new APIController().GetLatestForkVersion();
-            if (!LatestForkVersion.Equals(CurrentForkVersion))
+            if (LatestForkVersion.CompareTo(CurrentForkVersion)>0)
             {
                 NewerVersionExists = true;
             }

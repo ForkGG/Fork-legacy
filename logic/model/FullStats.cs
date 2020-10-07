@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using fork.Logic.Utils;
+using Fork.Logic.Utils;
 
-namespace fork.Logic.Model
+namespace Fork.Logic.Model
 {
     public class FullStats
     {

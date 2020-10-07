@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace fork.ViewModel
+namespace Fork.ViewModel
 {
     public abstract class BaseViewModel : INotifyPropertyChanged
     {

@@ -3,7 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:controls="clr-namespace:fork.View.Xaml2.Controls"
+      xmlns:controls="clr-namespace:Fork.View.Xaml2.Controls"
       xmlns:local="clr-namespace:Fork.View.Xaml2.Pages"
       mc:Ignorable="d"
       Title="WorldsPage" d:DesignHeight="450" d:DesignWidth="800">
@@ -12,14 +12,8 @@
             <Border Background="{DynamicResource backgroundDark}" Margin="35 0 0 0" CornerRadius="5 0 0 5"/>
             <DockPanel Panel.ZIndex="1">
                 <TextBlock Text="Open in File Explorer" DockPanel.Dock="Bottom" TextAlignment="Center" Margin="45 10 10 10" 
-                           PreviewMouseLeftButtonDown="OpenExplorer_PreviewMouseLeftButtonDown" Cursor="Hand" Foreground="{DynamicResource textLink}">                    
+                           PreviewMouseLeftButtonDown="OpenExplorer_PreviewMouseLeftButtonDown" Cursor="Hand" Foreground="{DynamicResource textLink}">
                 </TextBlock>
-                <controls:IconButton Margin="45 10 10 0" VerticalAlignment="Bottom" Background="{DynamicResource buttonBgrDefault}"
-                                             Width="40" Height="40" IconWidth="21" IconHeight="24" x:Name="CreateWorldButton" Click="ToggleCreateWorld_Click"
-                                             IconSource="pack://application:,,,/View/Resources/images/Icons/Start.png" Visibility="Collapsed"
-                                             HoverIconSource="pack://application:,,,/View/Resources/images/Icons/StartW.png"
-                                             HoverBackground="{DynamicResource buttonBgrBlue}" HorizontalAlignment="Center"
-                                     DockPanel.Dock="Bottom"/>
                 <StackPanel Panel.ZIndex="1">
                     <TextBlock Text="Worlds" Margin="45 10 10 10" Foreground="{DynamicResource textUnselected}" FontSize="20" 
                                FontFamily="{DynamicResource Montserrat-SemiBold}" HorizontalAlignment="Center"/>

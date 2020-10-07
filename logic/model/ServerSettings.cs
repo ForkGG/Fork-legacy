@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace fork.Logic.Model
+namespace Fork.Logic.Model
 {
     public class ServerSettings
     {

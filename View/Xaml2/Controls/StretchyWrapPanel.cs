@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace fork.View.Xaml2.Controls
+namespace Fork.View.Xaml2.Controls
 {
     public class StretchyWrapPanel : Panel
     {

@@ -1,4 +1,4 @@
-namespace fork.Logic.RoleManagement
+namespace Fork.Logic.RoleManagement
 {
     public enum RoleType
     {

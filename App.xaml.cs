@@ -5,12 +5,12 @@ using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
-using fork.Logic.ApplicationConsole;
-using fork.Logic.Logging;
-using fork.Logic.Manager;
-using fork.Logic.Persistence;
+using Fork.Logic.ApplicationConsole;
+using Fork.Logic.Logging;
+using Fork.Logic.Manager;
+using Fork.Logic.Persistence;
 
-namespace fork
+namespace Fork
 {
     /// <summary>
     /// Interaction logic for App.xaml

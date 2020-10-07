@@ -14,17 +14,18 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using fork.Annotations;
-using fork.Logic.BackgroundWorker.Performance;
-using fork.Logic.CustomConsole;
-using fork.Logic.ImportLogic;
-using fork.Logic.Manager;
-using fork.Logic.Model;
-using fork.Logic.Model.Settings;
-using fork.Logic.Persistence;
-using Server = fork.Logic.Model.Server;
+using Fork.Annotations;
+using Fork.Logic.BackgroundWorker.Performance;
+using Fork.Logic.CustomConsole;
+using Fork.Logic.ImportLogic;
+using Fork.Logic.Manager;
+using Fork.Logic.Model;
+using Fork.logic.model.PluginModels;
+using Fork.Logic.Model.Settings;
+using Fork.Logic.Persistence;
+using Server = Fork.Logic.Model.Server;
 
-namespace fork.ViewModel
+namespace Fork.ViewModel
 {
     public abstract class EntityViewModel : BaseViewModel
     {
@@ -99,12 +100,11 @@ namespace fork.ViewModel
         {
             get
             {
-                return readConsoleIn
-                       ?? (readConsoleIn = new ActionCommand(() =>
-                       {
-                           ConsoleReader?.Read(ConsoleIn, this);
-                           ConsoleIn = "";
-                       }));
+                return readConsoleIn ??= new ActionCommand(() =>
+                {
+                    ConsoleReader?.Read(ConsoleIn, this);
+                    ConsoleIn = "";
+                });
             }
         }
         

@@ -1,8 +1,8 @@
 using System.Globalization;
 using System.Windows.Controls;
-using fork.Logic.Model;
+using Fork.Logic.Model;
 
-namespace fork.View.Xaml.ValidationRules
+namespace Fork.View.Xaml.ValidationRules
 {
     public class TimeValidationRule : ValidationRule
     {

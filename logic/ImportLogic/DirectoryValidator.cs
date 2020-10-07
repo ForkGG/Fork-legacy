@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Controls;
 
-namespace fork.Logic.ImportLogic
+namespace Fork.Logic.ImportLogic
 {
     public static class DirectoryValidator
     {

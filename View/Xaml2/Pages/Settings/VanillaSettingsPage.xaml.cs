@@ -4,15 +4,15 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
-using fork.Logic.Manager;
-using fork.Logic.Model;
-using fork.Logic.Model.Settings;
-using fork.View.Xaml2.Pages.Server;
+using Fork.Logic.Manager;
+using Fork.Logic.Model;
+using Fork.Logic.Model.Settings;
+using Fork.View.Xaml2.Pages.Server;
 using Fork.View.Xaml2.Pages.Settings;
-using fork.ViewModel;
+using Fork.ViewModel;
 using Path = System.IO.Path;
 
-namespace fork.View.Xaml2.Pages.Settings
+namespace Fork.View.Xaml2.Pages.Settings
 {
     public partial class VanillaSettingsPage : Page, ISettingsPage
     {

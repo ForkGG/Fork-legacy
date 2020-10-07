@@ -1,6 +1,5 @@
 using System;
-using fork.ViewModel;
-using Server = fork.Logic.Model.Settings.Server;
+using Fork.ViewModel;
 
 namespace Fork.Logic.Model.ProxyModels
 {
@@ -19,12 +18,12 @@ namespace Fork.Logic.Model.ProxyModels
         public string Address { get; set; }
         public bool Restricted { get; set; }
 
-        public Server ProxyServer => new Server {address = Address, motd = motdEscaped, restricted = Restricted, forkServer = IsForkServer, forkServerUid = ServerViewModel.Server.UID};
+        public Settings.Server ProxyServer => new Settings.Server{address = Address, motd = motdEscaped, restricted = Restricted, ForkServer = IsForkServer, ForkServerUid = ServerViewModel.Server.UID};
         public bool IsForkServer => true;
 
         public ServerViewModel ServerViewModel { get; set; }
 
-        public NetworkForkServer(ServerViewModel serverViewModel, Server server, string name)
+        public NetworkForkServer(ServerViewModel serverViewModel, Settings.Server server, string name)
         {
             ServerViewModel = serverViewModel;
             Name = name;

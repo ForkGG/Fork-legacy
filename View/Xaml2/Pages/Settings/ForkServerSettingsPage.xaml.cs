@@ -13,11 +13,11 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using fork.Logic.Manager;
-using fork.Logic.Model;
-using fork.Logic.Model.Settings;
-using fork.View.Xaml2.Pages.Server;
-using fork.ViewModel;
+using Fork.Logic.Manager;
+using Fork.Logic.Model;
+using Fork.Logic.Model.Settings;
+using Fork.View.Xaml2.Pages.Server;
+using Fork.ViewModel;
 
 namespace Fork.View.Xaml2.Pages.Settings
 {

@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
-using fork.Logic.Model;
-using fork.ViewModel;
+using Fork.Logic.Model;
+using Fork.ViewModel;
 
-namespace fork.Logic.Manager
+namespace Fork.Logic.Manager
 {
     public sealed class AutoRestartManager
     {

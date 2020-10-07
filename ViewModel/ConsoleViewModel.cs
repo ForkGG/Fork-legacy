@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 
-namespace fork.ViewModel
+namespace Fork.ViewModel
 {
     public class ConsoleViewModel : BaseViewModel
     {

@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace fork.View.Xaml2.Controls
+namespace Fork.View.Xaml2.Controls
 {
     class IconRadioButton : RadioButton
     {

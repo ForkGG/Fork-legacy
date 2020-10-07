@@ -1,9 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     x:Class="Fork.View.Resources.dictionaries.ListViewStyles"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:controls="clr-namespace:fork.View.Xaml2.Controls"
-                    xmlns:status="clr-namespace:fork.Logic.Model"
-                    xmlns:converter="clr-namespace:fork.View.Xaml.Converter">
+                    xmlns:status="clr-namespace:Fork.Logic.Model"
+                    xmlns:converter="clr-namespace:Fork.View.Xaml.Converter"
+                    xmlns:controls="clr-namespace:Fork.View.Xaml2.Controls">
     <Style x:Key="{x:Static GridView.GridViewScrollViewerStyleKey}" TargetType="ScrollViewer">
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Template">
@@ -255,13 +255,12 @@
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
-        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
 
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListView">
                     <Border Name="Border" BorderThickness="0">
-                        <ScrollViewer>
+                        <ScrollViewer Style="{DynamicResource SettingsScrollViewer}">
                             <ItemsPresenter/>
                         </ScrollViewer>
                     </Border>
@@ -365,7 +364,7 @@
                                                      Height="20" Width="20" HoverBackground="{DynamicResource buttonBgrRed}" HoverIconSource="pack://application:,,,/view/resources/images/icons/deleteW.png"
                                                      Click="RemoveFromNetwork_Click" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}, Path=DataContext}"/>
                                 <TextBlock x:Name="externalServerTxt" Text="External Server" VerticalAlignment="Center" Margin="5 0" FontFamily="{DynamicResource Montserrat-Medium}" Foreground="{DynamicResource buttonBgrYellow}"/>
-                                <TextBlock x:Name="forkServerTxt" Text="Fork Server" PreviewMouseLeftButtonDown="OpenServer_Click" VerticalAlignment="Center" Margin="5 0" FontFamily="{DynamicResource Montserrat-Medium}" 
+                                <TextBlock x:Name="ForkServerTxt" Text="Fork Server" PreviewMouseLeftButtonDown="OpenServer_Click" VerticalAlignment="Center" Margin="5 0" FontFamily="{DynamicResource Montserrat-Medium}" 
                                            Foreground="{DynamicResource buttonBgrYellow}" Visibility="Collapsed" Cursor="Hand">
                                     <TextBlock.ToolTip>
                                         <TextBlock Text="{Binding ServerViewModel.ServerTitle}" VerticalAlignment="Center" Foreground="{DynamicResource textSelected}" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="14"/>
@@ -404,7 +403,7 @@
                     <ControlTemplate.Triggers>
                         <DataTrigger Binding="{Binding IsForkServer}" Value="True">
                             <Setter TargetName="externalServerTxt" Property="Visibility" Value="Collapsed"/>
-                            <Setter TargetName="forkServerTxt" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="ForkServerTxt" Property="Visibility" Value="Visible"/>
                             <Setter TargetName="address" Property="IsEnabled" Value="False"/>
                         </DataTrigger>
                     </ControlTemplate.Triggers>
@@ -505,6 +504,123 @@
                     </Border>
                     <ControlTemplate.Triggers>
 
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsForkServer}" Value="True">
+                <!--Setter Property="Template" Value="{DynamicResource NetworkForkServerListItemTemplate}"/-->
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- PluginList template -->
+    <Style x:Key="PluginListView" TargetType="{x:Type ListView}">
+        <Setter Property="Background" Value="{DynamicResource backgroundDefault}"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListView">
+                    <Border Name="Border" BorderThickness="0">
+                        <ItemsPresenter/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PluginListItem" TargetType="{x:Type ListViewItem}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>
+        <Setter Property="Margin" Value="0 7"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                    <Border x:Name="background" BorderBrush="Transparent" BorderThickness="0" Background="{DynamicResource backgroundDark}" CornerRadius="15" Height="150" Margin="0 0 20 0">
+                        <Grid Margin="15 0 15 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="96px"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="200px"/>
+                            </Grid.ColumnDefinitions>
+                            <Border CornerRadius="10" Height="96" Width="96">
+                                <Border.Background>
+                                    <ImageBrush ImageSource="{Binding icon.URL}"/>
+                                </Border.Background>
+                            </Border>
+                            <StackPanel Grid.Column="1" Margin="10 0" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding name}" TextWrapping="Wrap" MaxHeight="52" FontFamily="{DynamicResource Montserrat-Bold}" FontSize="21">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock Text="{Binding name}"/>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <StackPanel Margin="0 3 0 12" Orientation="Horizontal">
+                                    <TextBlock Text="{Binding author.name}" FontFamily="{DynamicResource Montserrat-SemiBold}" />
+                                    <TextBlock Text=" - " FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                                    <TextBlock Text="{Binding ReleaseDate}" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                                    <TextBlock Text=" - " FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                                    <TextBlock Text="{Binding category.name}" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                                </StackPanel>
+                                <TextBlock Text="{Binding tag}" TextWrapping="Wrap" Foreground="{DynamicResource textBackground}"/>
+                                <TextBlock Width="1000000" Height="0"/>
+                            </StackPanel>
+                            <DockPanel Grid.Column="2" Margin="0 0 0 10">
+                                <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right" Orientation="Horizontal">
+                                    <controls:IconButton Background="{DynamicResource buttonBgrDefault}" HoverBackground="{DynamicResource buttonBgrDefault}" Width="40" Height="35"
+                                                         IconSource="pack://application:,,,/View/Resources/images/Icons/Download.png" IconWidth="100" IconHeight="20" Click="InstallPlugin_Click"
+                                                         HoverIconSource="pack://application:,,,/View/Resources/images/Icons/DownloadW.png" x:Name="downloadBtn" Visibility="Collapsed"
+                                                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}, Path=DataContext}"/>
+                                    <Button Margin="10 5 0 5" Content="Visit" Style="{DynamicResource RoundedTextButton}" Click="VisitPlugin_Click"/>
+                                </StackPanel>
+                                <StackPanel VerticalAlignment="Center" Margin="0 10 0 0">
+                                    <StackPanel Margin="0 5" HorizontalAlignment="Right" Orientation="Horizontal">
+                                    <controls:RatingsControl Value="{Binding rating.average}" NumberOfStars="5" BackgroundColor="{DynamicResource backgroundDark}" StarForegroundColor="{DynamicResource tabSelected}" StarOutlineColor="{DynamicResource backgroundLight}"
+                                                             HorizontalAlignment="Center" Margin="0 0 5 0" x:Name="rating">
+                                        <controls:RatingsControl.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock Text="{Binding rating.average}"/>
+                                            </ToolTip>
+                                        </controls:RatingsControl.ToolTip>
+                                    </controls:RatingsControl>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                                        <TextBlock Text="{Binding rating.count}" Foreground="{DynamicResource textBackground}" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                                        <TextBlock Text=" Ratings" Foreground="{DynamicResource textBackground}" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                                <StackPanel Margin="0 2" HorizontalAlignment="Right" Orientation="Horizontal">
+                                        <TextBlock DockPanel.Dock="Right" Text="{Binding downloads}" Foreground="{DynamicResource textBackground}" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                                        <TextBlock Text=" Downloads" Foreground="{DynamicResource textBackground}" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                                </StackPanel>
+                                <StackPanel Margin="0 2" HorizontalAlignment="Right" Orientation="Horizontal">
+                                        <TextBlock Text="Updated - " Foreground="{DynamicResource textBackground}" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                                        <TextBlock DockPanel.Dock="Right" Text="{Binding UpdateDate}" Foreground="{DynamicResource textBackground}" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                                </StackPanel>                                
+                                </StackPanel>
+                            </DockPanel>
+                            
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="background" Property="Background" Value="{DynamicResource backgroundDarker}"/>
+                            <Setter TargetName="rating" Property="BackgroundColor" Value="{DynamicResource backgroundDarker}"/>
+                        </Trigger>
+                        <DataTrigger Binding="{Binding file.type}" Value=".jar">
+                            <Setter TargetName="downloadBtn" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

@@ -11,18 +11,19 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using fork.Logic.BackgroundWorker;
-using fork.Logic.Controller;
-using fork.Logic.CustomConsole;
-using fork.Logic.ImportLogic;
-using fork.Logic.Logging;
-using fork.Logic.Model;
-using fork.Logic.Persistence;
-using fork.Logic.WebRequesters;
-using fork.ViewModel;
+using Fork.Logic.BackgroundWorker;
+using Fork.Logic.Controller;
+using Fork.Logic.CustomConsole;
+using Fork.Logic.ImportLogic;
+using Fork.Logic.Logging;
+using Fork.Logic.Model;
+using Fork.logic.model.PluginModels;
+using Fork.Logic.Persistence;
+using Fork.Logic.WebRequesters;
+using Fork.ViewModel;
 using Newtonsoft.Json;
 
-namespace fork.Logic.Manager
+namespace Fork.Logic.Manager
 {
     public sealed class ServerManager
     {
@@ -32,12 +33,12 @@ namespace fork.Logic.Manager
         {
             if (new DirectoryInfo(Path.Combine(App.ApplicationPath, "persistence")).Exists)
             {
-                Entities = EntitySerializer.Instance.LoadEntities();
+                entities = EntitySerializer.Instance.LoadEntities();
             }
 
-            if (Entities == null)
+            if (entities == null)
             {
-                Entities = new ObservableCollection<EntityViewModel>();
+                entities = new ObservableCollection<EntityViewModel>();
             }
 
             foreach (EntityViewModel viewModel in Entities)
@@ -77,12 +78,8 @@ namespace fork.Logic.Manager
 
         private ObservableCollection<EntityViewModel> entities;
 
-        public ObservableCollection<EntityViewModel> Entities
-        {
-            get => entities ?? (entities = new ObservableCollection<EntityViewModel>());
-            private set => entities = value;
-        }
-
+        public ObservableCollection<EntityViewModel> Entities => 
+            entities ??= new ObservableCollection<EntityViewModel>();
 
         public async Task<bool> MoveEntitiesAsync(string newPath)
         {
@@ -824,7 +821,7 @@ namespace fork.Logic.Manager
             Process process = ApplicationManager.Instance.ActiveEntities[entityViewModel.Entity];
             try
             {
-                process?.Kill();
+                process.Kill();
                 entityViewModel.ConsoleOutList.Add("Killed server "+entityViewModel.Entity);
                 Console.WriteLine("Killed server "+entityViewModel.Entity);
             }

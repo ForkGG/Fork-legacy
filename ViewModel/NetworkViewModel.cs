@@ -8,19 +8,19 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
-using fork.Logic.Controller;
-using fork.Logic.Logging;
-using fork.Logic.Manager;
-using fork.Logic.Model;
-using fork.Logic.Model.ProxyModels;
+using Fork.Logic.Controller;
+using Fork.Logic.Logging;
+using Fork.Logic.Manager;
+using Fork.Logic.Model;
 using Fork.Logic.Model.ProxyModels;
-using fork.Logic.Model.Settings;
-using fork.Logic.Persistence;
+using Fork.Logic.Model.ProxyModels;
+using Fork.Logic.Model.Settings;
+using Fork.Logic.Persistence;
 using Fork.View.Xaml2.Pages.Network;
 using GongSolutions.Wpf.DragDrop;
-using Server = fork.Logic.Model.Server;
+using Server = Fork.Logic.Model.Server;
 
-namespace fork.ViewModel
+namespace Fork.ViewModel
 {
     public class NetworkViewModel : EntityViewModel
     {
@@ -78,11 +78,11 @@ namespace fork.ViewModel
         public void AddServer(ServerViewModel serverViewModel, int index)
         {
             string uid = serverViewModel.Server.UID;
-            fork.Logic.Model.Settings.Server server = new Logic.Model.Settings.Server
+            Fork.Logic.Model.Settings.Server server = new Logic.Model.Settings.Server
             {
                 address = "0.0.0.0:" + serverViewModel.Server.ServerSettings.ServerPort,
-                forkServer = true,
-                forkServerUid = uid,
+                ForkServer = true,
+                ForkServerUid = uid,
                 motd = serverViewModel.Server.ServerSettings.Motd,
                 restricted = false
             };
@@ -92,9 +92,9 @@ namespace fork.ViewModel
             bool contains = false;
             foreach (NetworkServer networkServer in Servers)
             {
-                if (networkServer is NetworkForkServer forkServer)
+                if (networkServer is NetworkForkServer ForkServer)
                 {
-                    if (forkServer.ServerViewModel.Server.UID.Equals(uid))
+                    if (ForkServer.ServerViewModel.Server.UID.Equals(uid))
                     {
                         contains = true;
                     }
@@ -108,7 +108,7 @@ namespace fork.ViewModel
             }
         }
 
-        public void AddServer(fork.Logic.Model.Settings.Server server, string name)
+        public void AddServer(Fork.Logic.Model.Settings.Server server, string name)
         {
             NetworkExternalServer networkExternalServer = new NetworkExternalServer(server, name);
             if (!Network.Config.servers.ContainsKey(name))
@@ -218,10 +218,10 @@ namespace fork.ViewModel
             foreach (var settingsServer in settings.servers)
             {
                 string name = settingsServer.Key;
-                if (settingsServer.Value.forkServer)
+                if (settingsServer.Value.ForkServer)
                 {
                     EntityViewModel viewModel =
-                        ServerManager.Instance.GetEntityViewModelByUid(settingsServer.Value.forkServerUid);
+                        ServerManager.Instance.GetEntityViewModelByUid(settingsServer.Value.ForkServerUid);
                     if (viewModel is ServerViewModel serverViewModel)
                     {
                         NetworkForkServer server = new NetworkForkServer(serverViewModel, settingsServer.Value, name);
@@ -230,9 +230,9 @@ namespace fork.ViewModel
                     else
                     {
                         Console.WriteLine("[FATAL] Error finding server with UID " +
-                                          settingsServer.Value.forkServerUid + " for network " + Network.Name);
+                                          settingsServer.Value.ForkServerUid + " for network " + Network.Name);
                         ErrorLogger.Append(new Exception("[FATAL] Error finding server with UID " +
-                                                         settingsServer.Value.forkServerUid + " for network " +
+                                                         settingsServer.Value.ForkServerUid + " for network " +
                                                          Network.Name));
                     }
                 }

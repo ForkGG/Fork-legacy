@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
-using fork.Logic.Persistence;
+using Fork.Logic.Persistence;
 using Newtonsoft.Json;
 
-namespace fork.Logic.Model
+namespace Fork.Logic.Model
 {
     [Serializable]
     public class Server : Entity

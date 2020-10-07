@@ -4,8 +4,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Shapes;
 using Fork.Logic.Model.ProxyModels;
-using fork.Logic.Model.Settings;
-using fork.ViewModel;
+using Fork.Logic.Model.Settings;
+using Fork.ViewModel;
 
 namespace Fork.View.Xaml2.Pages.Settings
 {
@@ -59,11 +59,11 @@ namespace Fork.View.Xaml2.Pages.Settings
         private void AddServerApply_Click(object sender, RoutedEventArgs e)
         {
             string name = newServerName.Text;
-            fork.Logic.Model.Settings.Server server = new fork.Logic.Model.Settings.Server
+            Fork.Logic.Model.Settings.Server server = new Fork.Logic.Model.Settings.Server
             {
                 address = newServerAddress.Text,
                 motd = newServerMotd.Text,
-                forkServer = false,
+                ForkServer = false,
                 restricted = false
             };
             networkViewModel.AddServer(server, name);

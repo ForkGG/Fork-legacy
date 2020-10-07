@@ -1,6 +1,6 @@
 using System;
 
-namespace fork.Logic.Model
+namespace Fork.Logic.Model
 {
     [Serializable]
     public class SimpleTime

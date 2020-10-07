@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
-using fork.Logic.Manager;
-using fork.Logic.Persistence;
+using Fork.Logic.Manager;
+using Fork.Logic.Persistence;
 
-namespace fork.Logic.ApplicationConsole
+namespace Fork.Logic.ApplicationConsole
 {
     public class ConsoleWriter : TextWriter
     {

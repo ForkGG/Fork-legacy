@@ -10,7 +10,7 @@ using System.Windows.Media;
 using Brush = System.Windows.Media.Brush;
 using Button = System.Windows.Controls.Button;
 
-namespace fork.View.Xaml2.Controls
+namespace Fork.View.Xaml2.Controls
 {
     class IconButton : Button
     {

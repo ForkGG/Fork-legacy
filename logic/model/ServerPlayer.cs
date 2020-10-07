@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using fork.ViewModel;
+using Fork.ViewModel;
 
-namespace fork.Logic.Model
+namespace Fork.Logic.Model
 {
     public class ServerPlayer : IComparable<ServerPlayer>
     {

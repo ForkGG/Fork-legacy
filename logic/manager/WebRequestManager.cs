@@ -4,15 +4,15 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
-using fork.Logic.Logging;
+using Fork.Logic.Logging;
 using Newtonsoft.Json;
-using fork.Logic.Model;
-using fork.Logic.Model.MinecraftVersionModel;
-using fork.Logic.WebRequesters;
-using fork.ViewModel;
+using Fork.Logic.Model;
+using Fork.Logic.Model.MinecraftVersionModels;
+using Fork.Logic.WebRequesters;
+using Fork.ViewModel;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
-namespace fork.Logic.Manager
+namespace Fork.Logic.Manager
 {
     public sealed class WebRequestManager
     {
@@ -169,10 +169,11 @@ namespace fork.Logic.Manager
                 {
                     string json = File.ReadAllText(path,Encoding.UTF8);
                     VanillaVersionCache versionCache = JsonSerializer.Deserialize<VanillaVersionCache>(json);
-                    if (DateTime.Now.Subtract(versionCache.CacheCreation).Hours < 12)
+                    if (DateTime.Now.Subtract(versionCache.CacheCreation).TotalHours < 12)
                     {
                         return versionCache.Versions;
                     }
+                    //TODO update visual list after updating
                     UpdateVanillaVersionsAsync(versionType);
                     return versionCache.Versions;
                 }

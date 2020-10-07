@@ -1,5 +1,5 @@
 using System;
-using fork.Logic.Model.Settings;
+using Fork.Logic.Model.Settings;
 
 namespace Fork.Logic.Model.ProxyModels
 {
@@ -10,6 +10,6 @@ namespace Fork.Logic.Model.ProxyModels
         string Address { get; set; }
         bool Restricted { get; set; }
         bool IsForkServer { get; }
-        Server ProxyServer { get; }
+        Settings.Server ProxyServer { get; }
     }
 }

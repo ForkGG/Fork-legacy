@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.AccessControl;
 using System.Threading;
-using fork.Annotations;
-using fork.Logic.Model;
-using fork.Logic.Model.Settings;
-using fork.ViewModel;
+using Fork.Annotations;
+using Fork.Logic.Model;
+using Fork.Logic.Model.Settings;
+using Fork.ViewModel;
 using YamlDotNet.Serialization;
-using Server = fork.Logic.Model.Settings.Server;
+using Server = Fork.Logic.Model.Settings.Server;
 
-namespace fork.Logic.Persistence.YMLReaders
+namespace Fork.Logic.Persistence.YMLReaders
 {
     public class BungeeSettingsSerializer
     {

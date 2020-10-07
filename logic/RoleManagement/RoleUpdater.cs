@@ -7,12 +7,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using fork.Logic.Manager;
-using fork.Logic.Model;
-using fork.Logic.Persistence;
-using fork.ViewModel;
+using Fork.Logic.Manager;
+using Fork.Logic.Model;
+using Fork.Logic.Persistence;
+using Fork.ViewModel;
 
-namespace fork.Logic.RoleManagement
+namespace Fork.Logic.RoleManagement
 {
     public class RoleUpdater
     {

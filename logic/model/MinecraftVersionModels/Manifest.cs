@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace fork.Logic.Model.MinecraftVersionModel
+namespace Fork.Logic.Model.MinecraftVersionModels
 {
     public class Manifest
     {

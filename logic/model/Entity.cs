@@ -1,6 +1,7 @@
 using System;
+using Fork.logic.model.PluginModels;
 
-namespace fork.Logic.Model
+namespace Fork.Logic.Model
 {
     public interface Entity
     {

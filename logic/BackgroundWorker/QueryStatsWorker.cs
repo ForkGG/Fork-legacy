@@ -4,13 +4,13 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using fork.Logic.CustomConsole;
-using fork.Logic.Logging;
-using fork.Logic.Manager;
-using fork.Logic.Model;
-using fork.ViewModel;
+using Fork.Logic.CustomConsole;
+using Fork.Logic.Logging;
+using Fork.Logic.Manager;
+using Fork.Logic.Model;
+using Fork.ViewModel;
 
-namespace fork.Logic.BackgroundWorker
+namespace Fork.Logic.BackgroundWorker
 {
     public class QueryStatsWorker
     {

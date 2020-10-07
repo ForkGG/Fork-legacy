@@ -5,14 +5,14 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
-using fork.Logic.Logging;
-using fork.Logic.Model;
-using fork.Logic.Model.ProxyModels;
-using fork.ViewModel;
+using Fork.Logic.Logging;
+using Fork.Logic.Model;
+using Fork.Logic.Model.ProxyModels;
+using Fork.ViewModel;
 using Newtonsoft.Json;
 using Formatting = Newtonsoft.Json.Formatting;
 
-namespace fork.Logic.Persistence
+namespace Fork.Logic.Persistence
 {
     public sealed class EntitySerializer
     {
@@ -102,6 +102,13 @@ namespace fork.Logic.Persistence
             {
                 foreach (Server server in entities.ServerList)
                 {
+                    DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ServerPath,server.Name));
+                    if (!serverDir.Exists)
+                    {
+                        ErrorLogger.Append(
+                            new Exception("Could not find server "+server.Name+" that was listed in entities.json . Removing it..."));
+                        continue;
+                    }
                     ServerViewModel serverViewModel = new ServerViewModel(server);
                     if (!entityViewModels.Contains(serverViewModel))
                     {
@@ -111,6 +118,13 @@ namespace fork.Logic.Persistence
 
                 foreach (Network network in entities.NetworkList)
                 {
+                    DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ServerPath,network.Name));
+                    if (!serverDir.Exists)
+                    {
+                        ErrorLogger.Append(
+                            new Exception("Could not find network "+network.Name+" that was listed in entities.json . Removing it..."));
+                        continue;
+                    }
                     entityViewModels.Add(new NetworkViewModel(network));
                 }
             }
