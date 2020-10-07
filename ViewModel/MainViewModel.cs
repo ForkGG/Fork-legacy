@@ -90,7 +90,7 @@ namespace Fork.ViewModel
         private void CheckForkVersion()
         {
             LatestForkVersion = new APIController().GetLatestForkVersion();
-            if (!LatestForkVersion.Equals(CurrentForkVersion))
+            if (LatestForkVersion.CompareTo(CurrentForkVersion)>0)
             {
                 NewerVersionExists = true;
             }
