@@ -63,5 +63,12 @@ namespace Fork.View.Xaml2.Pages
                 
             }
         }
+
+        private void BecomePatron_Click(object sender, RoutedEventArgs e)
+        {
+            string url = "https://www.patreon.com/forkgg";
+            //hack for windows only https://github.com/dotnet/corefx/issues/10361
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+        }
     }
 }

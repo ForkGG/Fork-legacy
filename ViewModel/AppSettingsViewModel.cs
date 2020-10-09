@@ -1,6 +1,9 @@
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Windows;
+using Fork.Logic.Controller;
 using Fork.Logic.Logging;
 using Fork.Logic.Model;
 using Fork.Logic.Persistence;
@@ -13,6 +16,7 @@ namespace Fork.ViewModel
         public AppSettings AppSettings => AppSettingsSerializer.AppSettings;
         public AppSettingsPage AppSettingsPage { get; }
         public MainViewModel MainViewModel { get; }
+        public ObservableCollection<string> Patrons { get; set; }
 
 
         public delegate void HandlePageClose(object sender);
@@ -22,6 +26,7 @@ namespace Fork.ViewModel
         {
             MainViewModel = mainViewModel;
             AppSettingsPage = new AppSettingsPage(this);
+            Patrons = new ObservableCollection<string>(new APIController().GetPatrons());
         }
 
         public void ClosePage(object sender)
@@ -56,6 +61,8 @@ namespace Fork.ViewModel
             {
                 try
                 {
+                    var patronsNew = new ObservableCollection<string>(new APIController().GetPatrons());
+                    Application.Current.Dispatcher.InvokeAsync(() => { Patrons = patronsNew; });
                     AppSettingsSerializer.ReadSettings();
                     return true;
                 }

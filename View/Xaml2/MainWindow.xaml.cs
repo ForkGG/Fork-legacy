@@ -116,7 +116,7 @@ namespace Fork.View.Xaml2
 
         private void DiscordOpen_Click(object sender, RoutedEventArgs e)
         {
-            string url = "https://discord.Fork.gg";
+            string url = "https://discord.fork.gg";
             //hack for windows only https://github.com/dotnet/corefx/issues/10361
             Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
         }
