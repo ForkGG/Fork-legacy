@@ -140,6 +140,17 @@ namespace Fork.ViewModel
             return await t;
         }
 
+        public void CheckForDeletedPlugin(Plugin plugin)
+        {
+            foreach (Plugin plugin1 in Plugins)
+            {
+                if (plugin1.id == plugin.id)
+                {
+                    plugin1.installed = false;
+                }
+            }
+        }
+
         private List<Plugin> RequestPlugins()
         {
             //SearchQuery and Category
@@ -183,21 +194,15 @@ namespace Fork.ViewModel
 
         private void RemoveInstalledPluginsFromList()
         {
-            List<Plugin> toRemove = new List<Plugin>();
             foreach (Plugin plugin in Plugins)
             {
                 foreach (InstalledPlugin installedPlugin in InstalledPlugins)
                 {
                     if (plugin.id == installedPlugin.SpigetId)
                     {
-                        toRemove.Add(plugin);
+                        plugin.installed = true;
                     }
                 }
-            }
-            //TODO in .NET 5 this can be simplified
-            foreach (Plugin plugin in toRemove)
-            {
-                Application.Current.Dispatcher?.Invoke(() => Plugins.Remove(plugin));
             }
         }
     }

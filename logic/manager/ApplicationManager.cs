@@ -69,7 +69,8 @@ namespace Fork.Logic.Manager
             {
                 Major = int.Parse(rm.GetString("VersionMajor")),
                 Minor = int.Parse(rm.GetString("VersionMinor")),
-                Patch = int.Parse(rm.GetString("VersionPatch"))
+                Patch = int.Parse(rm.GetString("VersionPatch")),
+                Beta = int.Parse(rm.GetString("VersionBeta"))
             };
         }
 

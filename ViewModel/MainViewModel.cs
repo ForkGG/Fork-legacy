@@ -1,20 +1,12 @@
-using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Timers;
-using System.Windows.Controls;
 using Fork.Annotations;
-using Fork.Logic.ApplicationConsole;
 using Fork.Logic.Controller;
 using Fork.Logic.Manager;
-using Fork.Logic.Model;
 using Fork.Logic.Model.APIModels;
-using Fork.Logic.Persistence;
-using Fork.View.Xaml2.Pages;
 using Fork.View.Xaml2.Pages;
 using Timer = System.Timers.Timer;
 
@@ -32,6 +24,7 @@ namespace Fork.ViewModel
         public AppSettingsViewModel AppSettingsViewModel { get; }
         public bool HasServers { get; set; }
         public bool NewerVersionExists { get; set; }
+        public bool IsBetaVersion => CurrentForkVersion.Beta != 0;
         public ForkVersion CurrentForkVersion { get; set; }
         public ForkVersion LatestForkVersion { get; set; }
         
