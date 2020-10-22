@@ -33,21 +33,27 @@ namespace Fork.Logic.WebRequesters
         /// </summary>
         public void CacheResponse(string URL, string Response)
         {
-            cachedResponses[URL] = new Tuple<string, DateTime>(Response,DateTime.Now);
+            lock (cachedResponses)
+            {
+                cachedResponses[URL] = new Tuple<string, DateTime>(Response,DateTime.Now);
+            }
         }
         
         public string UncacheResponse(string URL)
         {
-            if (!cachedResponses.ContainsKey(URL))
+            lock (cachedResponses)
             {
-                return null;
+                if (!cachedResponses.ContainsKey(URL))
+                {
+                    return null;
+                }
+                var responseTuple = cachedResponses[URL];
+                if (!VerifyCacheAge(responseTuple.Item2))
+                {
+                    return null;
+                }
+                return responseTuple.Item1;
             }
-            var responseTuple = cachedResponses[URL];
-            if (!VerifyCacheAge(responseTuple.Item2))
-            {
-                return null;
-            }
-            return responseTuple.Item1;
         }
 
         private bool VerifyCacheAge(DateTime cacheAge)
