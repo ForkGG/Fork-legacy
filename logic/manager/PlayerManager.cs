@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Fork.Logic.Model;
@@ -34,6 +36,19 @@ namespace Fork.Logic.Manager
         private PlayerManager()
         {
             PlayerSet = InitializePlayerSet();
+            
+            //Check for old player data and update
+            bool anyUpdate = false;
+            foreach (var player in PlayerSet.Where(player => !player.offlineChar && (DateTime.Now - player.LastUpdated).TotalDays > 7d))
+            {
+                player.Update();
+                Console.WriteLine("Updated data for player "+player);
+                anyUpdate = true;
+            }
+            if (anyUpdate)
+            {
+                SafePlayersToFile();
+            }
         }
         #endregion
 
@@ -148,8 +163,11 @@ namespace Fork.Logic.Manager
             foreach (string uuid in playerIDsToAdd)
             {
                 Player p = GetPlayerFromUUID(uuid);
-                ServerPlayer player = new ServerPlayer(p,viewModel,viewModel.OPList.Contains(p), false);
-                result.Add(player);
+                if (p != null)
+                {
+                    ServerPlayer player = new ServerPlayer(p,viewModel,viewModel.OPList.Contains(p), false);
+                    result.Add(player);
+                }
             }
 
             return result;
@@ -170,13 +188,25 @@ namespace Fork.Logic.Manager
                 }
             }
             Player p = CreatePlayerFromUUID(uuid);
-            PlayerSet.Add(p);
-            SafePlayersToFile();
+            if (p != null)
+            {
+                PlayerSet.Add(p);
+                SafePlayersToFile();
+            }
+            else
+            {
+                DirectoryInfo playerDir = new DirectoryInfo(Path.Combine(App.ApplicationPath, "players", uuid));
+                if (playerDir.Exists)
+                {
+                    playerDir.Delete(true);
+                }
+            }
             return p;
         }
         private Player CreatePlayerFromUUID(string uuid)
         {
-            return new Player(uuid, true);
+            Player p = new Player(uuid, true);
+            return CheckPlayerName(p) ? p : null;
         }
 
         private void SafePlayersToFile()
@@ -195,6 +225,18 @@ namespace Fork.Logic.Manager
             }
             string json = File.ReadAllText(PlayerJsonPath);
             return JsonConvert.DeserializeObject<HashSet<Player>>(json);
+        }
+
+        /// <summary>
+        /// Check if a given Player has a valid name
+        /// This is used to remove players with UUID name (This happens if UUID is not in mojang database)
+        /// </summary>
+        /// <param name="player">The Player to check</param>
+        /// <returns>Validity of Player.Name</returns>
+        private bool CheckPlayerName(Player player)
+        {
+            Regex regex = new Regex(@"^[A-Za-z0-9_]{3,16}$");
+            return regex.Matches(player.Name).Count != 0;
         }
     }
 }

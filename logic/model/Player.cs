@@ -15,11 +15,11 @@ namespace Fork.Logic.Model
 {
     public class Player
     {
-        
         public bool offlineChar = false;
         public string Name { get; set; }
         public string Uid { get; set; }
         public string Head { get; set; }
+        public DateTime LastUpdated { get; private set; } = DateTime.MinValue;
         
         [JsonIgnore]
         public Player Self => this;
@@ -41,12 +41,20 @@ namespace Fork.Logic.Model
             {
                 RetrieveHead();
             }
+            LastUpdated = DateTime.Now;
         }
 
         public Player(string uid, bool useUid)
         {
             Uid = uid;
             RetrieveNameAndHead();
+            LastUpdated = DateTime.Now;
+        }
+
+        public void Update()
+        {
+            RetrieveNameAndHead();
+            LastUpdated = DateTime.Now;
         }
 
         public override string ToString()
