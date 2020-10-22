@@ -49,8 +49,6 @@ namespace Fork.ViewModel
         public string ServerTitle => Name + " - " + Server.Version.Type + " " + Server.Version.Version;
 
         public Page WorldsPage { get; set; }
-        
-        public Page PluginsPage { get; set; }
 
         public ServerViewModel(Server server) : base(server)
         {

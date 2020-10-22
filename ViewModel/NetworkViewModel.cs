@@ -17,7 +17,9 @@ using Fork.Logic.Model.ProxyModels;
 using Fork.Logic.Model.Settings;
 using Fork.Logic.Persistence;
 using Fork.View.Xaml2.Pages.Network;
+using Fork.View.Xaml2.Pages.Server;
 using GongSolutions.Wpf.DragDrop;
+using ConsolePage = Fork.View.Xaml2.Pages.Network.ConsolePage;
 using Server = Fork.Logic.Model.Server;
 
 namespace Fork.ViewModel
@@ -48,6 +50,7 @@ namespace Fork.ViewModel
             UpdateAddressInfo();
             Application.Current.Dispatcher.Invoke(new Action(() => EntityPage = new NetworkPage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => ConsolePage = new ConsolePage(this)));
+            Application.Current.Dispatcher.Invoke(new Action(() => PluginsPage = new PluginsPage(new PluginViewModel(this))));
             Application.Current.Dispatcher.Invoke(new Action(() => SettingsViewModel = new SettingsViewModel(this)));
 
             DropHandler = new ServerDropHandler(this);

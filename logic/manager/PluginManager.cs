@@ -39,13 +39,6 @@ namespace Fork.Logic.Manager
         {
         }
 
-        public delegate void HandlePluginAddedEvent(InstalledPlugin addedPlugin);
-        public delegate void HandlePluginRemoveEvent(InstalledPlugin removedPlugin);
-        public delegate void HandlePluginChangedEvent(InstalledPlugin changedPlugin);
-        public event HandlePluginAddedEvent PluginAddedEvent;
-        public event HandlePluginRemoveEvent PluginRemovedEvent;
-        public event HandlePluginChangedEvent PluginChangedEvent;
-
         public async Task<bool> DownloadPluginAsync(InstalledPlugin plugin, EntityViewModel viewModel)
         {
             return await DownloadPlugin(plugin, viewModel);
@@ -112,6 +105,10 @@ namespace Fork.Logic.Manager
         {
             foreach (InstalledPlugin iPlugin in pluginViewModel.InstalledPlugins)
             {
+                if (iPlugin.Plugin == null)
+                {
+                    continue;
+                }
                 if (iPlugin.Plugin.id == plugin.id)
                 {
                     Console.WriteLine("Error installing plugin: Plugin "+plugin.name+" is already installed.");

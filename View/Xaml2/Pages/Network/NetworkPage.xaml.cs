@@ -23,12 +23,6 @@ namespace Fork.View.Xaml2.Pages.Network
             subPages.Add(settingsPage);
             subPages.Add(pluginsPage);
         }
-        
-        public void OpenTerminal()
-        {
-            TerminalTab.IsChecked = true;
-            SelectTerminal(this, new RoutedEventArgs());
-        }
 
         private async void ButtonStartStop_Click(object sender, RoutedEventArgs e)
         {
