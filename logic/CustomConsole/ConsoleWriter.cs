@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows;
 using Fork.Logic.Model;
+using Fork.Logic.Model.ServerConsole;
 using Fork.ViewModel;
 
 namespace Fork.Logic.CustomConsole
@@ -28,11 +30,15 @@ namespace Fork.Logic.CustomConsole
                     if (line != null)
                     {
                         ConsoleWriteLine?.Invoke(line,viewModel);
+                        
+                        //bool used to generate green success message in console
+                        bool isSuccess = false;
                         if (viewModel is ServerViewModel serverViewModel)
                         {
                             if (line.Contains("For help, type \"help\""))
                             {
                                 serverViewModel.CurrentStatus = ServerStatus.RUNNING;
+                                isSuccess = true;
                             }
                             serverViewModel.RoleInputHandler(line);
                         }
@@ -42,9 +48,13 @@ namespace Fork.Logic.CustomConsole
                             if (waterfallStarted.Match(line).Success)
                             {
                                 networkViewModel.CurrentStatus = ServerStatus.RUNNING;
+                                isSuccess = true;
                             }
                         }
-                        viewModel.ConsoleOutList.Add(line);
+
+                        viewModel.AddToConsole(isSuccess
+                            ? new ConsoleMessage(line, ConsoleMessage.MessageLevel.SUCCESS)
+                            : new ConsoleMessage(line));
                     }
                 }
             }).Start();
@@ -56,10 +66,12 @@ namespace Fork.Logic.CustomConsole
                     string line = errOut.ReadLine();
                     if (line != null)
                     {
+                        bool isSuccess = false;
                         // For early minecraft versions
                         if (line.Contains("For help, type \"help\""))
                         {
                             viewModel.CurrentStatus = ServerStatus.RUNNING;
+                            isSuccess = true;
                         }
 
                         if (viewModel is ServerViewModel serverViewModel)
@@ -67,7 +79,10 @@ namespace Fork.Logic.CustomConsole
                             serverViewModel.RoleInputHandler(line);
                         }
                         ConsoleWriteLine?.Invoke(line,viewModel);
-                        viewModel.ConsoleOutList.Add(line);
+
+                        viewModel.AddToConsole(isSuccess
+                            ? new ConsoleMessage(line, ConsoleMessage.MessageLevel.SUCCESS)
+                            : new ConsoleMessage(line));
                     }
                 }
             }).Start();
@@ -75,7 +90,7 @@ namespace Fork.Logic.CustomConsole
 
         public static void Write(string line, EntityViewModel target)
         {
-            target.ConsoleOutList.Add(line);
+            target.AddToConsole(new ConsoleMessage(line));
         }
     }
 }

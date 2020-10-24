@@ -1,8 +1,14 @@
 ﻿using System;
+using System.Collections.Specialized;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
+using Fork.Logic;
 using Fork.Logic.Manager;
+using Fork.Logic.Model.ServerConsole;
+using Fork.View.Xaml.Converter;
 using Fork.ViewModel;
 
 namespace Fork.View.Xaml2.Pages.Server
@@ -21,10 +27,9 @@ namespace Fork.View.Xaml2.Pages.Server
             DataContext = this.viewModel;
 
             PlayerToWhitelist.KeyDown += HandleKeyDownText;
-        }
-        
 
-        
+            viewModel.ConsoleOutList.CollectionChanged += UpdateConsoleOut;
+        }
         #region autoscrolling
         /// <summary>
         /// Automatically scrolls the scrollviewer
@@ -112,6 +117,31 @@ namespace Fork.View.Xaml2.Pages.Server
             if (e.Key == Key.Enter)
             {
                 WhitelistAddConfirm_Click(sender, e);
+            }
+        }
+
+        private void UpdateConsoleOut(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null)
+            {
+                foreach (var newItem in e.NewItems)
+                {
+                    if (newItem is ConsoleMessage newConsoleMessage)
+                    { 
+                        ConsoleParagraph.Inlines.Add(
+                            new Run{Text = newConsoleMessage.Content, Foreground = newConsoleMessage.Level.Color()});
+                        ConsoleParagraph.Inlines.Add(new LineBreak());
+                    }
+                } 
+            }
+
+            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null)
+            {
+                int amountToRemove = e.OldItems.Count;
+                for (int i = 0; i < amountToRemove*2; i++)
+                {
+                    ConsoleParagraph.Inlines.Remove(ConsoleParagraph.Inlines.FirstInline);
+                }
             }
         }
     }

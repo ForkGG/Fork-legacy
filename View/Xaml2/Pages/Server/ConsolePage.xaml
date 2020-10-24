@@ -359,14 +359,18 @@
             </Grid>
 
             <!-- Console -->
-            <DockPanel Grid.Row="1">
-                <Border x:Name="consoleInBorder" Margin="10 0 10 10" DockPanel.Dock="Bottom" CornerRadius="10" Background="{DynamicResource backgroundConsole}" Height="30">
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="35"/>
+                </Grid.RowDefinitions>
+                <Border x:Name="consoleInBorder" Margin="10 0 10 10" Grid.Row="1" CornerRadius="10" Background="{DynamicResource backgroundConsole}" Height="30">
                     <Border.Resources>
                         <helper:BindingProxy x:Key="ServerRunningBinding" Data="{Binding}"/>
                     </Border.Resources>
                     <TextBox Margin="10 0" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Center" Text="{Binding ConsoleIn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}">
                         <TextBox.InputBindings>
-                            <KeyBinding Key="Enter" Command="{Binding Path=ReadConsoleIn}"></KeyBinding>
+                            <KeyBinding Key="Enter" Command="{Binding ReadConsoleIn}"></KeyBinding>
                         </TextBox.InputBindings>
                         <TextBox.Style>
                             <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
@@ -374,35 +378,31 @@
                                 <Setter Property="BorderThickness" Value="0"/>
                                 <Style.Triggers>
                                     <Trigger Property="IsFocused" Value="True">
-                                        
+
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
                         </TextBox.Style>
                     </TextBox>
                 </Border>
+
+                
                 <Border Margin="10" CornerRadius="10" Background="{DynamicResource backgroundConsole}">
                     <ScrollViewer Margin="10" ScrollChanged="ScrollViewer_ScrollChanged" Style="{DynamicResource ConsoleScrollViewer}">
-                        <TextBox FontFamily="Consolas" Foreground="{DynamicResource textTerminal}" 
-                                 Text="{Binding Path=ConsoleOutList, Converter={StaticResource ListToStringConverter}, Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True"
-                                 Background="{x:Null}" BorderBrush="{x:Null}">
-                            <TextBox.Style>
-                                <Style TargetType="TextBox">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="{x:Type TextBoxBase}">
-                                                <Grid>
-                                                    <ScrollViewer Name="PART_ContentHost"/>
-                                                </Grid>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </TextBox.Style>
-                        </TextBox>
+                        <RichTextBox BorderThickness="0" FontFamily="Consolas" Background="Transparent" IsReadOnly="True">
+                            <FlowDocument PageWidth="Auto">
+                                <Paragraph x:Name="ConsoleParagraph"/>
+                            </FlowDocument>
+                        </RichTextBox>
                     </ScrollViewer>
-                </Border>                
-            </DockPanel>
+                </Border>
+
+                <!--Border Margin="10" CornerRadius="10" Background="{DynamicResource backgroundConsole}">
+                    <ScrollViewer Margin="10" ScrollChanged="ScrollViewer_ScrollChanged" Style="{DynamicResource ConsoleScrollViewer}">
+                        <ListView Style="{DynamicResource ConsoleListView}" ItemContainerStyle="{DynamicResource ConsolerListItem}" ItemsSource="{Binding ConsoleOutList}" />
+                    </ScrollViewer>
+                </-->
+            </Grid>
         </DockPanel>
     </DockPanel>
 </Page>

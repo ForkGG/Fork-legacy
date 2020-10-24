@@ -35,8 +35,7 @@
                                                          Height="25" Width="25" IconHeight="100" IconWidth="15"
                                                          Margin="10 0" Click="OpenForkServerDir_Click"/>
                                 </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="15 10 0 0">
-                                </StackPanel>
+                                
                                 <Grid x:Name="ServerDirChangedGrid" Visibility="Collapsed">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
@@ -60,6 +59,13 @@
                                     </Grid>
                                     <Button Grid.Column="1" Grid.Row="1" Content="Apply" Style="{DynamicResource RoundedTextButton}" Margin="15 10 0 10" VerticalAlignment="Center" Click="ApplyNewServerDir_Click"/>
                                 </Grid>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Console lines" Style="{DynamicResource CreateServerTextBlock}"/>
+                                    <Slider Minimum="50" Maximum="1000" Width="200" VerticalAlignment="Center" Margin="10 0" Value="{Binding AppSettings.MaxConsoleLines}"
+                                             TickFrequency="10" IsSnapToTickEnabled="True"/>
+                                    <TextBlock Text="{Binding AppSettings.MaxConsoleLines}" VerticalAlignment="Center"/>
+                                </StackPanel>
                             </StackPanel>
                         </StackPanel>
                         <Border.Style>

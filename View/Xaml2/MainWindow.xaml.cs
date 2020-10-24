@@ -276,6 +276,9 @@ namespace Fork.View.Xaml2
             ServerPage.Visibility = Visibility.Visible;
             AppSettingsPage.Visibility = Visibility.Hidden;
             
+            //Save settings:
+            viewModel.AppSettingsViewModel.SaveAppSettingsAsync();
+            
             if (ServerList.SelectedItems.Count == 0)
             {
                 ServerList.SelectedItem = lastSelected;

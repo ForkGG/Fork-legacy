@@ -18,9 +18,11 @@ using Fork.Annotations;
 using Fork.Logic.BackgroundWorker.Performance;
 using Fork.Logic.CustomConsole;
 using Fork.Logic.ImportLogic;
+using Fork.Logic.Logging;
 using Fork.Logic.Manager;
 using Fork.Logic.Model;
 using Fork.logic.model.PluginModels;
+using Fork.Logic.Model.ServerConsole;
 using Fork.Logic.Model.Settings;
 using Fork.Logic.Persistence;
 using Server = Fork.Logic.Model.Server;
@@ -77,7 +79,7 @@ namespace Fork.ViewModel
         }
         
         public ConsoleReader ConsoleReader;
-        public ObservableCollection<string> ConsoleOutList { get; set; }
+        public ObservableCollection<ConsoleMessage> ConsoleOutList { get; set; }
         
         public string ConsoleIn { get; set; } = "";
         public ServerStatus CurrentStatus { get; set; }
@@ -205,7 +207,7 @@ namespace Fork.ViewModel
         public SettingsViewModel SettingsViewModel { get; set; }
 
 
-        public EntityViewModel(Entity entity)
+        protected EntityViewModel(Entity entity)
         {
             Entity = entity;
             
@@ -215,8 +217,25 @@ namespace Fork.ViewModel
                 Console.WriteLine("Persistence file storing servers probably is corrupted (entities.json). Can not start Fork!");
             }
             CurrentStatus = ServerStatus.STOPPED;
-            ConsoleOutList = new ObservableCollection<string>();
+            ConsoleOutList = new ObservableCollection<ConsoleMessage>();
             ConsoleOutList.CollectionChanged += ConsoleOutChanged;
+        }
+
+        public void AddToConsole(ConsoleMessage message)
+        {
+            try
+            {
+                Application.Current?.Dispatcher?.Invoke(() => ConsoleOutList.Add(message));
+                while (ConsoleOutList.Count > AppSettingsSerializer.AppSettings.MaxConsoleLines)
+                {
+                    Application.Current?.Dispatcher?.Invoke(() => ConsoleOutList.RemoveAt(0));
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error while adding line to console: "+message);
+                ErrorLogger.Append(e);
+            }
         }
 
         public void UpdateSettingsFiles(List<SettingsFile> files, bool initial = false)

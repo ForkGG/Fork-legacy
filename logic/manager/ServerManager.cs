@@ -738,7 +738,7 @@ namespace Fork.Logic.Manager
 
         private bool StartServer(ServerViewModel viewModel)
         {
-            viewModel.ConsoleOutList.Add("\nStarting server "+viewModel.Server+" on world: "+ viewModel.Server.ServerSettings.LevelName);
+            ConsoleWriter.Write("\nStarting server "+viewModel.Server+" on world: "+ viewModel.Server.ServerSettings.LevelName, viewModel);
             Console.WriteLine("Starting server "+viewModel.Server.Name+" on world: "+ viewModel.Server.ServerSettings.LevelName);
             DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Server.Name));
             if (!directoryInfo.Exists)
@@ -820,7 +820,7 @@ namespace Fork.Logic.Manager
             try
             {
                 process.Kill(entireProcessTree: true);
-                entityViewModel.ConsoleOutList.Add("Killed server "+entityViewModel.Entity);
+                ConsoleWriter.Write("Killed server "+entityViewModel.Entity, entityViewModel);
                 Console.WriteLine("Killed server "+entityViewModel.Entity);
             }
             catch (Exception e)
