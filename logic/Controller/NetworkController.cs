@@ -121,7 +121,7 @@ namespace Fork.Logic.Controller
             new Thread(() =>
             {
                 viewModel.TrackPerformance(process);
-            }).Start();
+            }){IsBackground = true}.Start();
             viewModel.CurrentStatus = ServerStatus.STARTING;
             ConsoleWriter.RegisterApplication(viewModel, process.StandardOutput, process.StandardError);
             ConsoleReader consoleReader = new ConsoleReader(process.StandardInput);

@@ -69,7 +69,7 @@ namespace Fork.ViewModel
                 {
                     Versions = VersionManager.Instance.SpigotVersions;
                 }
-            }).Start();
+            }){IsBackground = true}.Start();
 
             UpdateAddressInfo();
             Application.Current.Dispatcher.Invoke(new Action(() => EntityPage = new ServerPage(this)));
@@ -120,7 +120,7 @@ namespace Fork.ViewModel
                 banlistUpdater = new RoleUpdater(RoleType.BAN_LIST, BanList, Server.Version);
                 oplistUpdater = new RoleUpdater(RoleType.OP_LIST, OPList, Server.Version);
                 Initialized = true;
-            }).Start();
+            }){IsBackground = true}.Start();
         }
 
         public void RoleInputHandler(string line)
@@ -130,7 +130,7 @@ namespace Fork.ViewModel
                 whitelistUpdater.HandleOutputLine(line);
                 banlistUpdater.HandleOutputLine(line);
                 oplistUpdater.HandleOutputLine(line);
-            }).Start();
+            }){IsBackground = true}.Start();
         }
 
         public void SetRestartTime(double time)
@@ -172,7 +172,7 @@ namespace Fork.ViewModel
                 };
                 restartTimer.AutoReset = true;
                 restartTimer.Enabled = true;
-            }).Start();
+            }){IsBackground = true}.Start();
         }
 
         private void UpdateAddressInfo()

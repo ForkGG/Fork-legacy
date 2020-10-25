@@ -232,7 +232,7 @@ namespace Fork.Logic.Manager
             new Thread(() =>
             {
                 UpdateVanillaVersions(versionType);
-            }).Start();
+            }){IsBackground = true}.Start();
         }
 
         private bool VanillaCacheUpToDate(Manifest.VersionType versionType)

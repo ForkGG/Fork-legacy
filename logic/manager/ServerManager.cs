@@ -408,7 +408,7 @@ namespace Fork.Logic.Manager
                 webClient.DownloadFileCompleted += viewModel.DownloadCompletedHandler;
                 webClient.DownloadFileAsync(new Uri(server.Version.JarLink),
                     Path.Combine(serverDirectory.FullName, "server.jar"));
-            });
+            }){IsBackground = true};
             thread.Start();
             
             if (!validationInfo.EulaTxt)
@@ -765,7 +765,7 @@ namespace Fork.Logic.Manager
             new Thread(() =>
             {
                 viewModel.TrackPerformance(process);
-            }).Start();
+            }){IsBackground = true}.Start();
             viewModel.CurrentStatus = ServerStatus.STARTING;
             ConsoleWriter.RegisterApplication(viewModel, process.StandardOutput, process.StandardError);
             ConsoleReader consoleReader = new ConsoleReader(process.StandardInput);
@@ -782,7 +782,7 @@ namespace Fork.Logic.Manager
             }).Start();
             viewModel.ConsoleReader = consoleReader;
             ApplicationManager.Instance.ActiveEntities[viewModel.Server] = process;
-            new Thread(() => { new QueryStatsWorker(viewModel); }).Start();
+            new Thread(() => { new QueryStatsWorker(viewModel); }){IsBackground = true}.Start();
             Console.WriteLine("Started server "+ viewModel.Server);
             
             //Register new world if created
@@ -793,7 +793,7 @@ namespace Fork.Logic.Manager
                     Thread.Sleep(500);
                 }
                 viewModel.InitializeWorldsList();
-            }).Start();
+            }){IsBackground = true}.Start();
             return true;
         }
 

@@ -63,7 +63,7 @@ namespace Fork.ViewModel
                 RemoveInstalledPluginsFromList();
                 var categories = pluginWebRequester.RequestCategories();
                 Application.Current.Dispatcher?.Invoke(()=> Categories.AddRange(categories));
-            }).Start();
+            }){IsBackground = true}.Start();
             
         }
 

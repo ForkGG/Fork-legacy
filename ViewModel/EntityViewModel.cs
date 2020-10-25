@@ -78,7 +78,7 @@ namespace Fork.ViewModel
                         raisePropertyChanged(nameof(n.NetworkTitle));
                     }
                     EntitySerializer.Instance.StoreEntities(ServerManager.Instance.Entities);
-                }).Start();
+                }){IsBackground = true}.Start();
             }
         }
         

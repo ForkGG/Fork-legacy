@@ -57,7 +57,7 @@ namespace Fork.Logic.CustomConsole
                             : new ConsoleMessage(line));
                     }
                 }
-            }).Start();
+            }){IsBackground = true}.Start();
 
             new Thread(() =>
             {
@@ -85,7 +85,7 @@ namespace Fork.Logic.CustomConsole
                             : new ConsoleMessage(line));
                     }
                 }
-            }).Start();
+            }){IsBackground = true}.Start();
         }
 
         public static void Write(string line, EntityViewModel target)

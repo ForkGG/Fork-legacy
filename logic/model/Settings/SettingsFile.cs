@@ -81,7 +81,7 @@ namespace Fork.Logic.Model.Settings
                     Text = File.ReadAllText(FileInfo.FullName);
                     TextReadUpdateEvent?.Invoke(this, new TextReadUpdatedEventArgs(Text));
                 }
-            }).Start();
+            }){IsBackground = true}.Start();
         }
 
         public void SaveText()
