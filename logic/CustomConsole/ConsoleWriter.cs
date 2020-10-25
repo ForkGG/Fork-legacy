@@ -30,6 +30,11 @@ namespace Fork.Logic.CustomConsole
                     if (line != null)
                     {
                         ConsoleWriteLine?.Invoke(line,viewModel);
+
+                        if (line.Contains(@"WARN Advanced terminal features are not available in this environment"))
+                        {
+                            continue;
+                        }
                         
                         //bool used to generate green success message in console
                         bool isSuccess = false;
