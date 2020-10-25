@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using Fork.Logic;
@@ -65,21 +66,38 @@ namespace Fork.View.Xaml2.Pages.Network
                 {
                     if (newItem is ConsoleMessage newConsoleMessage)
                     {
-                        ConsoleParagraph.Inlines.Add(
-                            new Run { Text = newConsoleMessage.Content, Foreground = newConsoleMessage.Level.Color() });
-                        ConsoleParagraph.Inlines.Add(new LineBreak());
+                        if (e.NewStartingIndex*2 < ConsoleParagraph.Inlines.Count)
+                        {
+                            var elementAfter = ConsoleParagraph.Inlines.ElementAt(e.NewStartingIndex*2);
+                            ConsoleParagraph.Inlines.InsertBefore(elementAfter,
+                                new Run{Text = newConsoleMessage.Content, Foreground = newConsoleMessage.Level.Color()});
+                            ConsoleParagraph.Inlines.InsertBefore(elementAfter, new LineBreak());
+                        }
+                        else
+                        {
+                            ConsoleParagraph.Inlines.Add(
+                                new Run{Text = newConsoleMessage.Content, Foreground = newConsoleMessage.Level.Color()});
+                            ConsoleParagraph.Inlines.Add(new LineBreak());
+                        }
                     }
-                }
+                } 
             }
-
+            
             if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null)
             {
-                int amountToRemove = e.OldItems.Count;
-                for (int i = 0; i < amountToRemove * 2; i++)
+                int amountToRemove = e.OldItems.Count * 2;
+                int index = e.OldStartingIndex * 2;
+                for (int i = 0; i < amountToRemove; i++)
                 {
-                    ConsoleParagraph.Inlines.Remove(ConsoleParagraph.Inlines.FirstInline);
+                    ConsoleParagraph.Inlines.Remove(ConsoleParagraph.Inlines.ElementAt(index));
                 }
             }
+        }
+
+        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string query = SearchBox.Text;
+            viewModel.ApplySearchQueryToConsole(query);
         }
     }
 }
