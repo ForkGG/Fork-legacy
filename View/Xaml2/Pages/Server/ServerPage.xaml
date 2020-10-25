@@ -68,7 +68,7 @@
                 </Grid>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <controls:IconButton x:Name="StartStopButton" Margin="10" VerticalAlignment="Bottom" Click="ButtonStartStop_Click"
+                    <controls:IconButton x:Name="StartStopButton" Margin="10" VerticalAlignment="Bottom" Click="ButtonStartStop_Click" IsEnabled="{Binding Initialized}"
                                          Width="55" Height="55" IconWidth="25.2" IconHeight="28.8" Style="{DynamicResource StartStopIconButton}">
                     </controls:IconButton>
 

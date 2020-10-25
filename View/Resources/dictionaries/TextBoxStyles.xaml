@@ -1,0 +1,47 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Fork.View.Resources.dictionaries">
+
+    <Style x:Key="SearchStyle" TargetType="TextBox">
+        <Style.Resources>
+            <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
+                <VisualBrush.Visual>
+                    <Label Foreground="Red">
+                        <Label.Content>
+                            <TextBlock Text="Search..." Foreground="{DynamicResource backgroundDefault}" VerticalAlignment="Center" 
+                                                                   FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="17" Height="20" Opacity=".8"/>
+                        </Label.Content>
+                    </Label>
+                </VisualBrush.Visual>
+            </VisualBrush>
+        </Style.Resources>
+        <Setter Property="FontSize" Value="17"/>
+        <Setter Property="Foreground" Value="{DynamicResource backgroundDark}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource Montserrat-SemiBold}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>       
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border CornerRadius="4" Height="27" Background="{DynamicResource textBackground}">
+                        <Border x:Name="border" >
+                            <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Center" Margin="5 0"/>
+                        </Border>
+                    </Border>
+                    
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Text" Value="">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource CueBannerBrush}" />
+                        </Trigger>
+                        <Trigger Property="Text" Value="{x:Null}">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource CueBannerBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="Transparent" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

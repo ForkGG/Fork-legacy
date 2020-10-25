@@ -1,4 +1,6 @@
-﻿namespace Fork.Logic.Model.ServerConsole
+﻿using System;
+
+namespace Fork.Logic.Model.ServerConsole
 {
     public class ConsoleMessage
     {
@@ -9,17 +11,20 @@
         
         public string Content { get; }
         public MessageLevel Level { get; }
+        public DateTime CreationTime { get; }
 
         public ConsoleMessage(string content)
         {
             Content = content;
             Level = CategorizeContent(content);
+            CreationTime = DateTime.Now;
         }
 
         public ConsoleMessage(string content, MessageLevel level)
         {
             Content = content;
             Level = level;
+            CreationTime = DateTime.Now;
         }
 
         private MessageLevel CategorizeContent(string content)

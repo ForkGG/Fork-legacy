@@ -62,9 +62,9 @@
 
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="Console lines" Style="{DynamicResource CreateServerTextBlock}"/>
-                                    <Slider Minimum="50" Maximum="1000" Width="200" VerticalAlignment="Center" Margin="10 0" Value="{Binding AppSettings.MaxConsoleLines}"
-                                             TickFrequency="10" IsSnapToTickEnabled="True"/>
-                                    <TextBlock Text="{Binding AppSettings.MaxConsoleLines}" VerticalAlignment="Center"/>
+                                    <Slider Minimum="50" Maximum="5000" Width="200" VerticalAlignment="Center" Margin="10 0" Value="{Binding AppSettings.MaxConsoleLines}"
+                                             TickFrequency="50" IsSnapToTickEnabled="True"/>
+                                    <TextBlock Text="{Binding AppSettings.MaxConsoleLines}" VerticalAlignment="Center"/>                                    
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>

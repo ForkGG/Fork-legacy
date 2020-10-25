@@ -14,6 +14,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using Fork.Annotations;
 using Fork.Logic.BackgroundWorker.Performance;
 using Fork.Logic.CustomConsole;
@@ -31,6 +32,9 @@ namespace Fork.ViewModel
 {
     public abstract class EntityViewModel : BaseViewModel
     {
+        private List<ConsoleMessage> consoleOutListNoQuery;
+        private string currentQuery = "";
+        
         private CPUTracker cpuTracker;
         private List<double> cpuList;
         private double cpuValue;
@@ -42,7 +46,7 @@ namespace Fork.ViewModel
         private DiskTracker diskTracker;
         private List<double> diskList;
         private double diskValue;
-        
+
         public class EntityPathChangedEventArgs
         {
             public string NewPath { get; }
@@ -217,6 +221,7 @@ namespace Fork.ViewModel
                 Console.WriteLine("Persistence file storing servers probably is corrupted (entities.json). Can not start Fork!");
             }
             CurrentStatus = ServerStatus.STOPPED;
+            consoleOutListNoQuery = new List<ConsoleMessage>();
             ConsoleOutList = new ObservableCollection<ConsoleMessage>();
             ConsoleOutList.CollectionChanged += ConsoleOutChanged;
         }
@@ -225,10 +230,15 @@ namespace Fork.ViewModel
         {
             try
             {
-                Application.Current?.Dispatcher?.Invoke(() => ConsoleOutList.Add(message));
-                while (ConsoleOutList.Count > AppSettingsSerializer.AppSettings.MaxConsoleLines)
+                consoleOutListNoQuery.Add(message);
+                if (message.Content.Contains(currentQuery))
                 {
-                    Application.Current?.Dispatcher?.Invoke(() => ConsoleOutList.RemoveAt(0));
+                    Application.Current?.Dispatcher?.Invoke(() => ConsoleOutList.Add(message));
+                }
+                while (consoleOutListNoQuery.Count > AppSettingsSerializer.AppSettings.MaxConsoleLines)
+                {
+                    consoleOutListNoQuery.RemoveAt(0);
+                    ApplySearchQueryToConsole(currentQuery);
                 }
             }
             catch (Exception e)
@@ -236,6 +246,24 @@ namespace Fork.ViewModel
                 Console.WriteLine("Error while adding line to console: "+message);
                 ErrorLogger.Append(e);
             }
+        }
+        
+        public void ApplySearchQueryToConsole(string query)
+        {
+            if (query.Equals(""))
+            {
+                ResetConsoleOutList();
+            } else if (query.StartsWith(currentQuery))
+            {
+                RemoveNotMatchingMessages(query);
+            }
+            else
+            {
+                ResetConsoleOutList();
+                RemoveNotMatchingMessages(query);
+            }
+
+            currentQuery = query;
         }
 
         public void UpdateSettingsFiles(List<SettingsFile> files, bool initial = false)
@@ -377,6 +405,31 @@ namespace Fork.ViewModel
             ApplicationManager.Instance.SettingsReaders.Add(settingsReader);
         }
         
+        private void RemoveNotMatchingMessages(string query)
+        {
+            List<ConsoleMessage> original = new List<ConsoleMessage>(ConsoleOutList);
+            foreach (ConsoleMessage consoleMessage in original)
+            {
+                if (!consoleMessage.Content.ToLower().Contains(query.ToLower()))
+                {
+                    Application.Current.Dispatcher?.Invoke(() => ConsoleOutList.Remove(consoleMessage), DispatcherPriority.Send);
+                }
+            }
+        }
+
+        private void ResetConsoleOutList()
+        {
+            Application.Current.Dispatcher?.Invoke(() =>
+            {
+                for (int i = 0; i < consoleOutListNoQuery.Count; i++)
+                {
+                    if (ConsoleOutList.Count <= i || consoleOutListNoQuery[i] != ConsoleOutList[i])
+                    {
+                        ConsoleOutList.Insert(i, consoleOutListNoQuery[i]);
+                    }
+                }
+            });
+        }
 
 
 

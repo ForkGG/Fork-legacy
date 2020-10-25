@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Fork"
              StartupUri="View/Xaml2/MainWindow.xaml"
+             ShutdownMode="OnMainWindowClose"
              Exit="ExitApplication">
     <Application.Resources>        
         <ResourceDictionary>
@@ -20,6 +21,7 @@
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/TextBlockStyles.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/CheckBoxStyles.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/AvalonStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/TextBoxStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <FontFamily x:Key="MaterialIO">View/Resources/Fonts/MaterialIcons-Regular.ttf#Material Icons</FontFamily>
             <FontFamily x:Key="Montserrat-Medium">View/Resources/Fonts/Montserrat-Medium.ttf#Montserrat Medium</FontFamily>

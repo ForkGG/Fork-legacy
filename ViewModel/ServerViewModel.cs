@@ -41,6 +41,7 @@ namespace Fork.ViewModel
             set => Entity = value;
         }
 
+        public bool Initialized { get; set; } = false;
         public bool RestartEnabled { get; set; }
         public string NextRestartHours { get; set; }
         public string NextRestartMinutes { get; set; }
@@ -118,6 +119,7 @@ namespace Fork.ViewModel
                 whitelistUpdater = new RoleUpdater(RoleType.WHITELIST, WhiteList, Server.Version);
                 banlistUpdater = new RoleUpdater(RoleType.BAN_LIST, BanList, Server.Version);
                 oplistUpdater = new RoleUpdater(RoleType.OP_LIST, OPList, Server.Version);
+                Initialized = true;
             }).Start();
         }
 

@@ -51,7 +51,7 @@ namespace Fork.Logic.CustomConsole
                                 isSuccess = true;
                             }
                         }
-
+                        
                         viewModel.AddToConsole(isSuccess
                             ? new ConsoleMessage(line, ConsoleMessage.MessageLevel.SUCCESS)
                             : new ConsoleMessage(line));
