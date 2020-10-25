@@ -19,7 +19,7 @@ namespace Fork.Logic.Model
         public string Name { get; set; }
         public string Uid { get; set; }
         public string Head { get; set; }
-        public DateTime LastUpdated { get; private set; } = DateTime.MinValue;
+        public DateTime LastUpdated { get; set; } = DateTime.MinValue;
         
         [JsonIgnore]
         public Player Self => this;
