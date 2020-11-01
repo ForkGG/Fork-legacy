@@ -371,6 +371,7 @@
                             <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
                                 <Setter Property="CaretBrush" Value="{DynamicResource textTerminal}"/>
                                 <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Foreground" Value="{DynamicResource textTerminal}"/>
                                 <Style.Triggers>
                                     <Trigger Property="IsFocused" Value="True">
 
