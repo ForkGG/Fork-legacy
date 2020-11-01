@@ -142,35 +142,38 @@ namespace Fork.Logic.Manager
 
         public List<ServerPlayer> GetInitialPlayerList(ServerViewModel viewModel)
         {
-            HashSet<string> playerIDsToAdd = new HashSet<string>();
-            foreach (World world in viewModel.Worlds)
+            lock (Instance)
             {
-                if (world.Directory.Exists)
+                HashSet<string> playerIDsToAdd = new HashSet<string>();
+                foreach (World world in viewModel.Worlds)
                 {
-                    DirectoryInfo playerData = new DirectoryInfo(Path.Combine(world.Directory.FullName,"playerdata"));
-                    if (playerData.Exists)
+                    if (world.Directory.Exists)
                     {
-                        foreach (string fileName in Directory.GetFiles(playerData.FullName, "*.dat", SearchOption.TopDirectoryOnly))
+                        DirectoryInfo playerData = new DirectoryInfo(Path.Combine(world.Directory.FullName,"playerdata"));
+                        if (playerData.Exists)
                         {
-                            string uuid = new FileInfo(fileName).Name;
-                            playerIDsToAdd.Add(uuid.Replace("-", "").Replace(".dat", ""));
+                            foreach (string fileName in Directory.GetFiles(playerData.FullName, "*.dat", SearchOption.TopDirectoryOnly))
+                            {
+                                string uuid = new FileInfo(fileName).Name;
+                                playerIDsToAdd.Add(uuid.Replace("-", "").Replace(".dat", ""));
+                            }
                         }
                     }
                 }
-            }
 
-            List<ServerPlayer> result = new List<ServerPlayer>();
-            foreach (string uuid in playerIDsToAdd)
-            {
-                Player p = GetPlayerFromUUID(uuid);
-                if (p != null)
+                List<ServerPlayer> result = new List<ServerPlayer>();
+                foreach (string uuid in playerIDsToAdd)
                 {
-                    ServerPlayer player = new ServerPlayer(p,viewModel,viewModel.OPList.Contains(p), false);
-                    result.Add(player);
+                    Player p = GetPlayerFromUUID(uuid);
+                    if (p != null)
+                    {
+                        ServerPlayer player = new ServerPlayer(p,viewModel,viewModel.OPList.Contains(p), false);
+                        result.Add(player);
+                    }
                 }
-            }
 
-            return result;
+                return result;
+            }
         }
 
         private Player CreatePlayer(string name)
