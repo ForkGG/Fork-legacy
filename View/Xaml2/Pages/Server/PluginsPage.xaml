@@ -13,6 +13,7 @@
     <Page.Resources>
         <converter:RatingToFriendlyNameConverter x:Key="RatingToFriendlyNameConverter"/>
         <converter:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
+        <converter:EntityStatusToVisibilityConverter x:Key="EntityStatusToVisibilityConverter"/>
     </Page.Resources>
     <Grid>
         <DockPanel>
@@ -148,5 +149,11 @@
                 </Border>
             </DockPanel>
         </DockPanel>
+        <Border Background="{DynamicResource backgroundDark}" Opacity="0.9" CornerRadius="10" Visibility="{Binding EntityViewModel.CurrentStatus, Converter={StaticResource EntityStatusToVisibilityConverter}}">
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Stop the server to manage your Plugins" FontSize="18" HorizontalAlignment="Center" Foreground="{DynamicResource textSelected}"
+                           FontFamily="{DynamicResource Montserrat-Medium}"/>
+            </Grid>
+        </Border>
     </Grid>
 </Page>

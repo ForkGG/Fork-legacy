@@ -73,7 +73,7 @@ namespace Fork.View.Xaml2.Pages.Server
                     CopyButtonText.Text = "Copy";
                     CopyButton.IsEnabled = true;
                 });
-            }).Start();
+            }){IsBackground = true}.Start();
         }
         
         private void SelectTerminal(object sender, RoutedEventArgs e)

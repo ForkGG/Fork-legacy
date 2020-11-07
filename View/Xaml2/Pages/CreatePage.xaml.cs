@@ -85,6 +85,7 @@ namespace Fork.View.Xaml2.Pages
 
         private async void BtnApply_Click(object sender, RoutedEventArgs e)
         {
+            CreateBtn.IsEnabled = false;
             if (isProxy)
             {
                 string networkName = NetworkName.Text;
@@ -131,6 +132,7 @@ namespace Fork.View.Xaml2.Pages
                 bool createServerSuccess = await ServerManager.Instance.CreateServerAsync(serverName,selectedVersion, viewModel.ServerSettings, new JavaSettings(),worldPath);
             }
             viewModel.GenerateNewSettings();
+            CreateBtn.IsEnabled = true;
 
             //TODO Do something if creating fails
         }

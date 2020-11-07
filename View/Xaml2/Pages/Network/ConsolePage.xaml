@@ -371,6 +371,7 @@
                             <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
                                 <Setter Property="CaretBrush" Value="{DynamicResource textTerminal}"/>
                                 <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Foreground" Value="{DynamicResource textTerminal}"/>
                                 <Style.Triggers>
                                     <Trigger Property="IsFocused" Value="True">
 
@@ -380,27 +381,20 @@
                         </TextBox.Style>
                     </TextBox>
                 </Border>
-                <Border Margin="10" CornerRadius="10" Background="{DynamicResource backgroundConsole}">
-                    <ScrollViewer Margin="10"  ScrollChanged="ScrollViewer_ScrollChanged">
-                        <TextBox FontFamily="Consolas" Foreground="{DynamicResource textTerminal}" 
-                                 Text="{Binding Path=ConsoleOutList, Converter={StaticResource ListToStringConverter}, Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True"
-                                 Background="{x:Null}" BorderBrush="{x:Null}">
-                            <TextBox.Style>
-                                <Style TargetType="TextBox">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="{x:Type TextBoxBase}">
-                                                <Grid>
-                                                    <ScrollViewer Name="PART_ContentHost"/>
-                                                </Grid>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </TextBox.Style>
-                        </TextBox>
-                    </ScrollViewer>
-                </Border>
+                <Grid>
+                    <Border Margin="10" CornerRadius="10" Background="{DynamicResource backgroundConsole}">
+                        <ScrollViewer Margin="10" ScrollChanged="ScrollViewer_ScrollChanged" Style="{DynamicResource ConsoleScrollViewer}">
+                            <RichTextBox BorderThickness="0" FontFamily="Consolas" Background="Transparent" IsReadOnly="True">
+                                <FlowDocument PageWidth="Auto">
+                                    <Paragraph x:Name="ConsoleParagraph"/>
+                                </FlowDocument>
+                            </RichTextBox>
+                        </ScrollViewer>
+                    </Border>
+                    <Border Panel.ZIndex="1" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="20">
+                        <TextBox x:Name="SearchBox" MinWidth="150" Style="{DynamicResource SearchStyle}" TextChanged="SearchBox_TextChanged"/>
+                    </Border>
+                </Grid>
             </DockPanel>
         </DockPanel>
     </DockPanel>

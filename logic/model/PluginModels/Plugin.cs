@@ -1,11 +1,12 @@
+
+
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.ComponentModel;
 using System.Globalization;
-using System.IO;
-using System.Windows.Media;
+using System.Runtime.CompilerServices;
+using Fork.Annotations;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace Fork.Logic.Model.PluginModels
 {
@@ -48,7 +49,7 @@ namespace Fork.Logic.Model.PluginModels
         public string name { get; set; }
     }
 
-    public class Plugin{
+    public class Plugin : INotifyPropertyChanged{
         public int id { get; set; } 
         public string name { get; set; } 
         public string tag { get; set; } 
@@ -68,13 +69,32 @@ namespace Fork.Logic.Model.PluginModels
         public Icon icon { get; set; } 
         public bool premium { get; set; } 
         public double price { get; set; } 
-        public string currency { get; set; } 
+        public string currency { get; set; }
+
+        private bool _installed = false;
+        public bool installed
+        {
+            get => _installed;
+            set
+            {
+                _installed = value;
+                OnPropertyChanged(nameof(installed));
+            }
+        }
 
         private string DateTimeConverter(long date)
         {
             DateTime dateTime = new DateTime(1970,1,1,0,0,0, DateTimeKind.Utc);
             dateTime = dateTime.AddSeconds(date);
             return dateTime.ToString("MMM dd, yyyy", new CultureInfo("ISO"));
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        public void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

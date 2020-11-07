@@ -18,7 +18,7 @@ namespace Fork.Logic.WebRequesters
                 webClient.DownloadFileCompleted += viewModel.DownloadCompletedHandler;
                 webClient.DownloadFileAsync(new Uri(viewModel.Entity.Version.JarLink),
                     Path.Combine(directoryInfo.FullName, "server.jar"));
-            });
+            }){IsBackground = true};
             thread.Start();
         }
     }

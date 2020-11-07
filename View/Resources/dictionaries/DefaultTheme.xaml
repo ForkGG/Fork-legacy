@@ -8,6 +8,7 @@
     <SolidColorBrush x:Key="backgroundDefault" Color="#272A41"/>
     <SolidColorBrush x:Key="backgroundSelected" Color="#232323"/>
     <SolidColorBrush x:Key="backgroundLight" Color="#424242" />
+    <SolidColorBrush x:Key="backgroundPatron" Color="#EE7E6F"/>
 
     <!-- order by brightness, from dark to light -->
     <SolidColorBrush x:Key="inputDefault" Color="#303030"/>
@@ -20,6 +21,7 @@
     <SolidColorBrush x:Key="buttonBgrYellow" Color="#EBED78"/>
     <SolidColorBrush x:Key="buttonBgrGreen" Color="#5EED80"/>
     <SolidColorBrush x:Key="buttonBgrBlue" Color="#5E93ED"/>
+    <SolidColorBrush x:Key="buttonPatron" Color="#F5B4A9"/>
 
 
     <!-- order by brightness, from dark to light -->
@@ -40,6 +42,10 @@
     <SolidColorBrush x:Key="textSelected" Color="#F9EFD7" />
     <SolidColorBrush x:Key="textLink" Color="#5E93ED" />
     <SolidColorBrush x:Key="textTerminal" Color="#D1C2EF" />
+    <SolidColorBrush x:Key="textTerminalGreen" Color="#72E388"/>
+    <SolidColorBrush x:Key="textTerminalYellow" Color="#E3BD72"/>
+    <SolidColorBrush x:Key="textTerminalRed" Color="#E37272"/>    
+    <SolidColorBrush x:Key="textPatron" Color="#052D49"/>
 
     <SolidColorBrush x:Key="caretColor" Color="#272A41"/>
 

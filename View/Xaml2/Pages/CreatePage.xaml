@@ -275,7 +275,7 @@
 
         <!-- Create Button -->
         <DockPanel Grid.Column="1" LastChildFill="False">
-            <controls:IconButton Margin="20 30" HorizontalAlignment="Center" DockPanel.Dock="Bottom"
+            <controls:IconButton Margin="20 30" HorizontalAlignment="Center" DockPanel.Dock="Bottom" x:Name="CreateBtn"
                                  Width="80" Height="80" IconWidth="48" IconHeight="31" Background="{DynamicResource buttonBgrGreen}" HoverBackground="{DynamicResource buttonBgrGreen}"
                                  IconSource="pack://application:,,,/View/Resources/images/Icons/Create.png" Click="BtnApply_Click"
                                  HoverIconSource="pack://application:,,,/View/Resources/images/Icons/CreateW.png"/>

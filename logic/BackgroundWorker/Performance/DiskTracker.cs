@@ -34,6 +34,7 @@ namespace Fork.Logic.BackgroundWorker.Performance
                 viewModel.DiskValueUpdate(0.0);
             });
             t.Start();
+            t.IsBackground = true;
             threads.Add(t);
         }
         

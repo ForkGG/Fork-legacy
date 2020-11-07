@@ -408,7 +408,7 @@ namespace Fork.Logic.Manager
                 webClient.DownloadFileCompleted += viewModel.DownloadCompletedHandler;
                 webClient.DownloadFileAsync(new Uri(server.Version.JarLink),
                     Path.Combine(serverDirectory.FullName, "server.jar"));
-            });
+            }){IsBackground = true};
             thread.Start();
             
             if (!validationInfo.EulaTxt)
@@ -693,28 +693,28 @@ namespace Fork.Logic.Manager
 
             DirectoryInfo dimBackups =
                 Directory.CreateDirectory(Path.Combine(App.ServerPath, server.Name, "DimensionBackups"));
-            string timeStamp = DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year + "_" +
-                               DateTime.Now.Hour + "-" + DateTime.Now.Minute;
+            DateTime now = DateTime.Now;
+            string timeStamp = now.Day + "-" + now.Month + "-" + now.Year + "_" +
+                               now.Hour + "-" + now.Minute + "-" + now.Second;
             ZipFile.CreateFromDirectory(dimensionDir.FullName,
                 Path.Combine(dimBackups.FullName, dimension + "_" + timeStamp + ".zip"));
             dimensionDir.Delete(true);
-            return !dimensionDir.Exists;
+            return !new DirectoryInfo(dimensionDir.FullName).Exists;
         }
 
         private DirectoryInfo GetDimensionFolder(MinecraftDimension dimension, Server server)
         {
-            //TODO Select folder of current world...
+            string worldFolder = Path.Combine(App.ServerPath, server.Name, server.ServerSettings.LevelName);
             switch (server.Version.Type)
             {
                 case ServerVersion.VersionType.Vanilla:
                     switch (dimension)
                     {
                         case MinecraftDimension.Nether:
-                            return new DirectoryInfo(Path.Combine(App.ServerPath, server.Name, server.Name,
-                                "DIM-1"));
+                            return new DirectoryInfo(Path.Combine(worldFolder, "DIM-1"));
                         case MinecraftDimension.End:
                             return new DirectoryInfo(
-                                Path.Combine(App.ServerPath, server.Name, server.Name, "DIM1"));
+                                Path.Combine(worldFolder, "DIM1"));
                         default:
                             throw new ArgumentException("No implementation for deletion of dimension " + dimension +
                                                         " on Vanilla servers");
@@ -723,11 +723,9 @@ namespace Fork.Logic.Manager
                     switch (dimension)
                     {
                         case MinecraftDimension.Nether:
-                            return new DirectoryInfo(Path.Combine(App.ServerPath, server.Name,
-                                server.Name + "_nether"));
+                            return new DirectoryInfo(worldFolder + "_nether");
                         case MinecraftDimension.End:
-                            return new DirectoryInfo(Path.Combine(App.ServerPath, server.Name,
-                                server.Name + "_the_end"));
+                            return new DirectoryInfo(worldFolder+ "_the_end");
                         default:
                             throw new ArgumentException("No implementation for deletion of dimension " + dimension +
                                                         " on Paper servers");
@@ -740,7 +738,7 @@ namespace Fork.Logic.Manager
 
         private bool StartServer(ServerViewModel viewModel)
         {
-            viewModel.ConsoleOutList.Add("\nStarting server "+viewModel.Server+" on world: "+ viewModel.Server.ServerSettings.LevelName);
+            ConsoleWriter.Write("\nStarting server "+viewModel.Server+" on world: "+ viewModel.Server.ServerSettings.LevelName, viewModel);
             Console.WriteLine("Starting server "+viewModel.Server.Name+" on world: "+ viewModel.Server.ServerSettings.LevelName);
             DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Server.Name));
             if (!directoryInfo.Exists)
@@ -767,7 +765,7 @@ namespace Fork.Logic.Manager
             new Thread(() =>
             {
                 viewModel.TrackPerformance(process);
-            }).Start();
+            }){IsBackground = true}.Start();
             viewModel.CurrentStatus = ServerStatus.STARTING;
             ConsoleWriter.RegisterApplication(viewModel, process.StandardOutput, process.StandardError);
             ConsoleReader consoleReader = new ConsoleReader(process.StandardInput);
@@ -784,7 +782,7 @@ namespace Fork.Logic.Manager
             }).Start();
             viewModel.ConsoleReader = consoleReader;
             ApplicationManager.Instance.ActiveEntities[viewModel.Server] = process;
-            new Thread(() => { new QueryStatsWorker(viewModel); }).Start();
+            new Thread(() => { new QueryStatsWorker(viewModel); }){IsBackground = true}.Start();
             Console.WriteLine("Started server "+ viewModel.Server);
             
             //Register new world if created
@@ -795,7 +793,7 @@ namespace Fork.Logic.Manager
                     Thread.Sleep(500);
                 }
                 viewModel.InitializeWorldsList();
-            }).Start();
+            }){IsBackground = true}.Start();
             return true;
         }
 
@@ -821,8 +819,8 @@ namespace Fork.Logic.Manager
             Process process = ApplicationManager.Instance.ActiveEntities[entityViewModel.Entity];
             try
             {
-                process.Kill();
-                entityViewModel.ConsoleOutList.Add("Killed server "+entityViewModel.Entity);
+                process.Kill(entireProcessTree: true);
+                ConsoleWriter.Write("Killed server "+entityViewModel.Entity, entityViewModel);
                 Console.WriteLine("Killed server "+entityViewModel.Entity);
             }
             catch (Exception e)

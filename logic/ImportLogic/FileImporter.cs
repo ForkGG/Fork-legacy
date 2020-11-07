@@ -34,6 +34,12 @@ namespace Fork.Logic.ImportLogic
         private void DirectoryCopyInternal(string sourceDirName, string destDirName, bool copySubDirs, 
             List<string> ignoredFiles)
         {
+            List<string> ignoredFilesInternal = new List<string>();
+            foreach(string ignoredFile in ignoredFiles)
+            {
+                ignoredFilesInternal.Add(ignoredFile.ToLower());
+            }
+            ignoredFiles = ignoredFilesInternal;
             // Get the subdirectories for the specified directory.
             DirectoryInfo dir = new DirectoryInfo(sourceDirName);
 
@@ -55,7 +61,7 @@ namespace Fork.Logic.ImportLogic
             FileInfo[] files = dir.GetFiles();
             foreach (FileInfo file in files)
             {
-                if (ignoredFiles.Contains(file.Name))
+                if (ignoredFiles.Contains(file.Name.ToLower()))
                 {
                     continue;
                 }

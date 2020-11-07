@@ -8,14 +8,14 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AppSettingsPage">
-
+        
     <Grid>
         <DockPanel Margin="10 0">
             <TextBlock DockPanel.Dock="Bottom" Text="All Changes will be saved automatically" HorizontalAlignment="Center" Margin="10 10 10 20"/>
 
             <TextBlock DockPanel.Dock="Top" Text="Settings" HorizontalAlignment="Center" FontSize="30" FontFamily="{StaticResource Montserrat-Bold}" Foreground="{DynamicResource textTitle}" Margin="15"/>
             <ScrollViewer Margin="0 10">
-                <StackPanel>
+                <StackPanel>                    
                     <Border CornerRadius="10" Margin="5">
                         <StackPanel Background="Transparent" Margin="0 10">
                             <TextBlock Text="General Settings" Foreground="{DynamicResource textHeader}" FontFamily="{StaticResource Montserrat-SemiBold}" FontSize="23" Margin="15 0 5 20"/>
@@ -26,7 +26,7 @@
                                     <Border x:Name="serverPathBgr" CornerRadius="4" Height="26" Background="{DynamicResource buttonBgrDefault}">
                                         <TextBlock Margin="10 0" Text="{Binding AppSettings.ServerPath, Mode=OneWay}" Background="Transparent"
                                             Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                            FontSize="17" Height="20" PreviewMouseDown="ServerDirPath_MouseDown" Name="ForkServerPath" Cursor="IBeam"/>                                        
+                                            FontSize="17" Height="20" PreviewMouseDown="ServerDirPath_MouseDown" Cursor="IBeam" x:Name="ForkServerPath"/>                                        
                                     </Border>
 
                                     <controls:IconButton Background="{DynamicResource buttonBgrDefault}" HoverBackground="{DynamicResource buttonBgrDefault}"
@@ -35,8 +35,7 @@
                                                          Height="25" Width="25" IconHeight="100" IconWidth="15"
                                                          Margin="10 0" Click="OpenForkServerDir_Click"/>
                                 </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="15 10 0 0">
-                                </StackPanel>
+                                
                                 <Grid x:Name="ServerDirChangedGrid" Visibility="Collapsed">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
@@ -60,6 +59,47 @@
                                     </Grid>
                                     <Button Grid.Column="1" Grid.Row="1" Content="Apply" Style="{DynamicResource RoundedTextButton}" Margin="15 10 0 10" VerticalAlignment="Center" Click="ApplyNewServerDir_Click"/>
                                 </Grid>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Console lines" Style="{DynamicResource CreateServerTextBlock}"/>
+                                    <Slider Minimum="50" Maximum="5000" Width="200" VerticalAlignment="Center" Margin="10 0" Value="{Binding AppSettings.MaxConsoleLines}"
+                                             TickFrequency="50" IsSnapToTickEnabled="True"/>
+                                    <TextBlock Text="{Binding AppSettings.MaxConsoleLines}" VerticalAlignment="Center"/>                                    
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+                    <Border CornerRadius="10" Margin="5">
+                        <StackPanel Background="Transparent" Margin="0 10">
+                            <TextBlock Text="Patreon Supporters" Foreground="{DynamicResource textHeader}" FontFamily="{StaticResource Montserrat-SemiBold}" FontSize="23" Margin="15 0 5 20"/>
+                            <StackPanel Margin="25 0">
+                                <ItemsControl ItemsSource="{Binding Patrons}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Margin="10" Background="{DynamicResource backgroundPatron}" CornerRadius="6">
+                                                <TextBlock Text="{Binding}" Foreground="{DynamicResource textPatron}" Margin="30 10" 
+                                                           FontFamily="{DynamicResource Montserrat-Bold}" FontSize="16"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="Become a Patron" Style="{DynamicResource BecomePatronBtn}" Click="BecomePatron_Click"/>
+                                </StackPanel>
                             </StackPanel>
                         </StackPanel>
                         <Border.Style>

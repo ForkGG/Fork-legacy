@@ -16,6 +16,8 @@ namespace Fork.Logic.RoleManagement
 {
     public class RoleUpdater
     {
+        private static object locker = new object();
+        
         private readonly Regex regexWhitelistAdd = new Regex(": Added ([A-Za-z0-9_]+) to the whitelist$");
         private readonly Regex regexWhitelistRemove = new Regex(": Removed ([A-Za-z0-9_]+) from the whitelist$");
         private readonly Regex regexBanlistAddNew = new Regex(": Banned ([A-Za-z0-9_]+):(.*)$"); //This needs an additional method
@@ -156,13 +158,15 @@ namespace Fork.Logic.RoleManagement
                         throw new ArgumentException("RoleUpdater.InitializeList() is ignoring an enum value!");
                 }
             }
-            //Add names to PlayerList
-            Dispatcher viewDisp = Application.Current.Dispatcher;
-            foreach (string name in names)
+            lock (locker)
             {
-                Player p = await PlayerManager.Instance.GetPlayer(name);
-                //Player p = new Player(name);
-                viewDisp.Invoke(() => playerList.Add(p), DispatcherPriority.Background);
+                //Add names to PlayerList
+                Dispatcher viewDisp = Application.Current.Dispatcher;
+                foreach (string name in names)
+                {
+                    Player p = PlayerManager.Instance.GetPlayer(name).Result;
+                    viewDisp.Invoke(() => playerList.Add(p), DispatcherPriority.Background);
+                } 
             }
         }
     }

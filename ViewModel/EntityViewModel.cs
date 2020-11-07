@@ -14,13 +14,16 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using Fork.Annotations;
 using Fork.Logic.BackgroundWorker.Performance;
 using Fork.Logic.CustomConsole;
 using Fork.Logic.ImportLogic;
+using Fork.Logic.Logging;
 using Fork.Logic.Manager;
 using Fork.Logic.Model;
 using Fork.logic.model.PluginModels;
+using Fork.Logic.Model.ServerConsole;
 using Fork.Logic.Model.Settings;
 using Fork.Logic.Persistence;
 using Server = Fork.Logic.Model.Server;
@@ -29,6 +32,9 @@ namespace Fork.ViewModel
 {
     public abstract class EntityViewModel : BaseViewModel
     {
+        private List<ConsoleMessage> consoleOutListNoQuery;
+        private string currentQuery = "";
+        
         private CPUTracker cpuTracker;
         private List<double> cpuList;
         private double cpuValue;
@@ -40,7 +46,7 @@ namespace Fork.ViewModel
         private DiskTracker diskTracker;
         private List<double> diskList;
         private double diskValue;
-        
+
         public class EntityPathChangedEventArgs
         {
             public string NewPath { get; }
@@ -72,12 +78,12 @@ namespace Fork.ViewModel
                         raisePropertyChanged(nameof(n.NetworkTitle));
                     }
                     EntitySerializer.Instance.StoreEntities(ServerManager.Instance.Entities);
-                }).Start();
+                }){IsBackground = true}.Start();
             }
         }
         
         public ConsoleReader ConsoleReader;
-        public ObservableCollection<string> ConsoleOutList { get; set; }
+        public ObservableCollection<ConsoleMessage> ConsoleOutList { get; set; }
         
         public string ConsoleIn { get; set; } = "";
         public ServerStatus CurrentStatus { get; set; }
@@ -205,7 +211,7 @@ namespace Fork.ViewModel
         public SettingsViewModel SettingsViewModel { get; set; }
 
 
-        public EntityViewModel(Entity entity)
+        protected EntityViewModel(Entity entity)
         {
             Entity = entity;
             
@@ -215,8 +221,49 @@ namespace Fork.ViewModel
                 Console.WriteLine("Persistence file storing servers probably is corrupted (entities.json). Can not start Fork!");
             }
             CurrentStatus = ServerStatus.STOPPED;
-            ConsoleOutList = new ObservableCollection<string>();
+            consoleOutListNoQuery = new List<ConsoleMessage>();
+            ConsoleOutList = new ObservableCollection<ConsoleMessage>();
             ConsoleOutList.CollectionChanged += ConsoleOutChanged;
+        }
+
+        public void AddToConsole(ConsoleMessage message)
+        {
+            try
+            {
+                consoleOutListNoQuery.Add(message);
+                if (message.Content.Contains(currentQuery))
+                {
+                    Application.Current?.Dispatcher?.Invoke(() => ConsoleOutList.Add(message));
+                }
+                while (consoleOutListNoQuery.Count > AppSettingsSerializer.AppSettings.MaxConsoleLines)
+                {
+                    consoleOutListNoQuery.RemoveAt(0);
+                    ApplySearchQueryToConsole(currentQuery);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error while adding line to console: "+message);
+                ErrorLogger.Append(e);
+            }
+        }
+        
+        public void ApplySearchQueryToConsole(string query)
+        {
+            if (query.Equals(""))
+            {
+                ResetConsoleOutList();
+            } else if (query.StartsWith(currentQuery))
+            {
+                RemoveNotMatchingMessages(query);
+            }
+            else
+            {
+                ResetConsoleOutList();
+                RemoveNotMatchingMessages(query);
+            }
+
+            currentQuery = query;
         }
 
         public void UpdateSettingsFiles(List<SettingsFile> files, bool initial = false)
@@ -358,6 +405,31 @@ namespace Fork.ViewModel
             ApplicationManager.Instance.SettingsReaders.Add(settingsReader);
         }
         
+        private void RemoveNotMatchingMessages(string query)
+        {
+            List<ConsoleMessage> original = new List<ConsoleMessage>(ConsoleOutList);
+            foreach (ConsoleMessage consoleMessage in original)
+            {
+                if (!consoleMessage.Content.ToLower().Contains(query.ToLower()))
+                {
+                    Application.Current.Dispatcher?.Invoke(() => ConsoleOutList.Remove(consoleMessage), DispatcherPriority.Send);
+                }
+            }
+        }
+
+        private void ResetConsoleOutList()
+        {
+            Application.Current.Dispatcher?.Invoke(() =>
+            {
+                for (int i = 0; i < consoleOutListNoQuery.Count; i++)
+                {
+                    if (ConsoleOutList.Count <= i || consoleOutListNoQuery[i] != ConsoleOutList[i])
+                    {
+                        ConsoleOutList.Insert(i, consoleOutListNoQuery[i]);
+                    }
+                }
+            });
+        }
 
 
 

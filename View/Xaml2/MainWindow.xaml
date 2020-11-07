@@ -254,6 +254,12 @@
                                     <TextBlock Text="." Foreground="{DynamicResource textUnselected}" />
                                     <TextBlock Text="{Binding CurrentForkVersion.Patch}"
                                                Foreground="{DynamicResource textUnselected}" />
+                                    <TextBlock Visibility="{Binding IsBetaVersion, Converter={StaticResource BoolToVisibilityConverter}}">
+                                        <TextBlock Text=" (Beta " Foreground="{DynamicResource textUnselected}" />
+                                        <TextBlock Text="{Binding CurrentForkVersion.Beta}" Margin="-3 0 0 0"
+                                               Foreground="{DynamicResource textUnselected}" />
+                                        <TextBlock Text=")" Foreground="{DynamicResource textUnselected}" Margin="-3 0 0 0"/>                                        
+                                    </TextBlock>                                    
                                 </StackPanel>
                             </Label>
                         </StackPanel>

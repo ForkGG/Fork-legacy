@@ -68,7 +68,7 @@
                 </Grid>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <controls:IconButton x:Name="StartStopButton" Margin="10" VerticalAlignment="Bottom" Click="ButtonStartStop_Click"
+                    <controls:IconButton x:Name="StartStopButton" Margin="10" VerticalAlignment="Bottom" Click="ButtonStartStop_Click" IsEnabled="{Binding Initialized}"
                                          Width="55" Height="55" IconWidth="25.2" IconHeight="28.8" Style="{DynamicResource StartStopIconButton}">
                     </controls:IconButton>
 
@@ -89,9 +89,10 @@
                 <controls:IconRadioButton Margin="10" GroupName="MenuTabs" Click="SelectWorlds"
                                           IconSource="pack://application:,,,/View/Resources/images/Icons/World.png"
                                           HoverIconSource="pack://application:,,,/View/Resources/images/Icons/WorldW.png"/>
-                <!--controls:IconRadioButton Margin="10" GroupName="MenuTabs" Click="SelectPlugins" Visibility="{Binding Server.Version.HasPlugins, Converter={StaticResource BoolToVisibilityConverter}}"
-                                          IconSource="pack://application:,,,/View/Resources/images/Icons/Plugins.png"
-                                          HoverIconSource="pack://application:,,,/View/Resources/images/Icons/PluginsW.png"/-->
+                <controls:IconRadioButton Margin="10" GroupName="MenuTabs" Click="SelectPlugins" 
+                                          IconSource="pack://application:,,,/View/Resources/images/Icons/Plugins.png" Visibility="Collapsed"
+                                          HoverIconSource="pack://application:,,,/View/Resources/images/Icons/PluginsW.png"/>
+                <!--Visibility="{Binding Server.Version.HasPlugins, Converter={StaticResource BoolToVisibilityConverter}}"-->
             </StackPanel>
             
             <!-- Title -->
@@ -107,7 +108,7 @@
                 <Frame x:Name="terminalPage" Content="{Binding ConsolePage}" NavigationUIVisibility="Hidden"></Frame>
                 <Frame x:Name="settingsPage" Visibility="Hidden" Content="{Binding SettingsViewModel.SettingsPage}" NavigationUIVisibility="Hidden" Margin="-100 0 0 0"></Frame>
                 <Frame x:Name="worldsPage" Visibility="Hidden" Content="{Binding WorldsPage}" NavigationUIVisibility="Hidden"/>
-                <Frame x:Name="pluginsPage" Visibility="Hidden" Content="{Binding PluginsPage}" NavigationUIVisibility="Hidden"/>
+                <Frame x:Name="pluginsPage" Visibility="Hidden" Content="{Binding PluginsPage}" NavigationUIVisibility="Hidden" />
             </Grid>
         </DockPanel>
         <Grid Panel.ZIndex="1" x:Name="DownloadOverlay" Visibility="{Binding ReadyToUse, Converter={StaticResource InverseBoolToVisibilityConverter}}">

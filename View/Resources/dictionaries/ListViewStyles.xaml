@@ -579,6 +579,10 @@
                             </StackPanel>
                             <DockPanel Grid.Column="2" Margin="0 0 0 10">
                                 <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right" Orientation="Horizontal">
+                                    <Border Background="{DynamicResource buttonBgrDefault}" Height="35" CornerRadius="5" x:Name="installedText">
+                                        <TextBlock Text="Installed" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="{DynamicResource Montserrat-Bold}"
+                                                     Foreground="{DynamicResource backgroundLight}" FontSize="17" Margin="10 0"/>
+                                    </Border>
                                     <controls:IconButton Background="{DynamicResource buttonBgrDefault}" HoverBackground="{DynamicResource buttonBgrDefault}" Width="40" Height="35"
                                                          IconSource="pack://application:,,,/View/Resources/images/Icons/Download.png" IconWidth="100" IconHeight="20" Click="InstallPlugin_Click"
                                                          HoverIconSource="pack://application:,,,/View/Resources/images/Icons/DownloadW.png" x:Name="downloadBtn" Visibility="Collapsed"
@@ -621,6 +625,13 @@
                         <DataTrigger Binding="{Binding file.type}" Value=".jar">
                             <Setter TargetName="downloadBtn" Property="Visibility" Value="Visible"/>
                         </DataTrigger>
+                        <DataTrigger Binding="{Binding installed}" Value="true">
+                            <Setter TargetName="installedText" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="downloadBtn" Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding installed}" Value="false">
+                            <Setter TargetName="installedText" Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -631,5 +642,55 @@
                 <!--Setter Property="Template" Value="{DynamicResource NetworkForkServerListItemTemplate}"/-->
             </DataTrigger>
         </Style.Triggers>
+    </Style>
+
+    <!-- Console list template -->
+    <Style x:Key="ConsoleListView" TargetType="{x:Type ListView}">
+        <Setter Property="Background" Value="{DynamicResource backgroundDefault}"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="0"/>        
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListView">
+                    <Border Name="Border" BorderThickness="0">
+                        <ItemsPresenter/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ConsolerListItem" TargetType="{x:Type ListViewItem}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>
+        <Setter Property="Margin" Value="0 0.5"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                    <TextBox Text="{Binding Content, Mode=OneWay}" TextWrapping="Wrap" FontFamily="Consolas" Foreground="{DynamicResource textTerminal}" 
+                                Background="{x:Null}" BorderThickness="0" IsReadOnly="True" x:Name="text"/>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Level}" Value="INFO">
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource textTerminal}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Level}" Value="WARN">
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource textTerminalYellow}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Level}" Value="ERROR">
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource textTerminalRed}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Level}" Value="SUCCESS">
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource textTerminalGreen}"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 </ResourceDictionary>

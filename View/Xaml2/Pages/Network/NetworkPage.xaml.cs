@@ -23,12 +23,6 @@ namespace Fork.View.Xaml2.Pages.Network
             subPages.Add(settingsPage);
             subPages.Add(pluginsPage);
         }
-        
-        public void OpenTerminal()
-        {
-            TerminalTab.IsChecked = true;
-            SelectTerminal(this, new RoutedEventArgs());
-        }
 
         private async void ButtonStartStop_Click(object sender, RoutedEventArgs e)
         {
@@ -55,7 +49,7 @@ namespace Fork.View.Xaml2.Pages.Network
         private void CopyIP_Click(object sender, RoutedEventArgs e)
         {
             Clipboard.SetText(AddressInfoBox.Text);
-            
+
             new Thread(() =>
             {
                 Application.Current.Dispatcher?.Invoke(() =>
@@ -69,7 +63,7 @@ namespace Fork.View.Xaml2.Pages.Network
                     CopyButtonText.Text = "Copy";
                     CopyButton.IsEnabled = true;
                 });
-            }).Start();
+            }) {IsBackground = true}.Start();
         }
         
         private void SelectTerminal(object sender, RoutedEventArgs e)

@@ -53,7 +53,7 @@
                 <controls:IconRadioButton Margin="10" GroupName="MenuTabs" Click="SelectSettings"
                                           IconSource="pack://application:,,,/View/Resources/images/Icons/Settings.png"
                                           HoverIconSource="pack://application:,,,/View/Resources/images/Icons/SettingsW.png"/>
-                <controls:IconRadioButton Margin="10" GroupName="MenuTabs" Click="SelectPlugins" Visibility="Collapsed"
+                <controls:IconRadioButton Margin="10" GroupName="MenuTabs" Click="SelectPlugins"
                                           IconSource="pack://application:,,,/View/Resources/images/Icons/Plugins.png"
                                           HoverIconSource="pack://application:,,,/View/Resources/images/Icons/PluginsW.png"/>
             </StackPanel>
@@ -70,7 +70,7 @@
             <Grid>
                 <Frame x:Name="terminalPage" Content="{Binding ConsolePage}" NavigationUIVisibility="Hidden"></Frame>
                 <Frame x:Name="settingsPage" Visibility="Hidden" Content="{Binding SettingsViewModel.SettingsPage}" NavigationUIVisibility="Hidden" Margin="-100 0 0 0"></Frame>
-                <Frame x:Name="pluginsPage" Visibility="Hidden"/>
+                <Frame x:Name="pluginsPage" Content="{Binding PluginsPage}" Visibility="Hidden"/>
             </Grid>
         </DockPanel>
         <Border>

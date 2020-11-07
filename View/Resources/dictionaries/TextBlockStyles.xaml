@@ -7,4 +7,8 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         
     </Style>
+
+    <Style x:Key="PatronBlock" TargetType="TextBlock">
+        <Setter Property="Margin" Value="20 10"/>
+    </Style>
 </ResourceDictionary>

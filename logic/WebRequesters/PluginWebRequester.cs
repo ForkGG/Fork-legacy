@@ -14,7 +14,8 @@ namespace Fork.Logic.WebRequesters
     public class PluginWebRequester
     {
         private int pageSize = 10;
-        private string baseURL = "https://api.spiget.org/v2/";
+        //TODO this can be https if https://github.com/SpiGetOrg/Spiget/issues/29 gets fixed
+        private string baseURL = "http://api.spiget.org/v2/";
         private string resourceFields = "id%2Cname%2Ctag%2Ccontributors%2Clikes%2Cfile%2CtestedVersions%2Crating%2Cauthor%2Ccategory%2CreleaseDate%2Cdownloads%2Cicon%2Cpremium%2CupdateDate";
 
         public List<Plugin> RequestResourceList(out bool fullyLoaded, int page = 1, PluginEnums.Sorting sort = PluginEnums.Sorting.RATING)

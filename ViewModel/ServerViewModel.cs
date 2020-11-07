@@ -41,6 +41,7 @@ namespace Fork.ViewModel
             set => Entity = value;
         }
 
+        public bool Initialized { get; set; } = false;
         public bool RestartEnabled { get; set; }
         public string NextRestartHours { get; set; }
         public string NextRestartMinutes { get; set; }
@@ -49,8 +50,6 @@ namespace Fork.ViewModel
         public string ServerTitle => Name + " - " + Server.Version.Type + " " + Server.Version.Version;
 
         public Page WorldsPage { get; set; }
-        
-        public Page PluginsPage { get; set; }
 
         public ServerViewModel(Server server) : base(server)
         {
@@ -70,7 +69,7 @@ namespace Fork.ViewModel
                 {
                     Versions = VersionManager.Instance.SpigotVersions;
                 }
-            }).Start();
+            }){IsBackground = true}.Start();
 
             UpdateAddressInfo();
             Application.Current.Dispatcher.Invoke(new Action(() => EntityPage = new ServerPage(this)));
@@ -120,7 +119,8 @@ namespace Fork.ViewModel
                 whitelistUpdater = new RoleUpdater(RoleType.WHITELIST, WhiteList, Server.Version);
                 banlistUpdater = new RoleUpdater(RoleType.BAN_LIST, BanList, Server.Version);
                 oplistUpdater = new RoleUpdater(RoleType.OP_LIST, OPList, Server.Version);
-            }).Start();
+                Initialized = true;
+            }){IsBackground = true}.Start();
         }
 
         public void RoleInputHandler(string line)
@@ -130,7 +130,7 @@ namespace Fork.ViewModel
                 whitelistUpdater.HandleOutputLine(line);
                 banlistUpdater.HandleOutputLine(line);
                 oplistUpdater.HandleOutputLine(line);
-            }).Start();
+            }){IsBackground = true}.Start();
         }
 
         public void SetRestartTime(double time)
@@ -172,7 +172,7 @@ namespace Fork.ViewModel
                 };
                 restartTimer.AutoReset = true;
                 restartTimer.Enabled = true;
-            }).Start();
+            }){IsBackground = true}.Start();
         }
 
         private void UpdateAddressInfo()

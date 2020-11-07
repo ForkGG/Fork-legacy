@@ -12,6 +12,7 @@ using Fork.Logic.Manager;
 using Fork.Logic.Model;
 using Fork.Logic.Model.ProxyModels;
 using Fork.Logic.Model.ProxyModels;
+using Fork.Logic.Model.ServerConsole;
 using Fork.Logic.WebRequesters;
 using Fork.ViewModel;
 using Newtonsoft.Json;
@@ -51,17 +52,17 @@ namespace Fork.Logic.Controller
 
         public bool StartNetwork(NetworkViewModel viewModel, bool startServers)
         {
-            viewModel.ConsoleOutList.Add("\n Starting network "+viewModel.Entity.Name);
+            ConsoleWriter.Write("\n Starting network "+viewModel.Entity.Name, viewModel);
             Console.WriteLine("Starting network "+viewModel.Entity.Name);
             if (startServers)
             {
                 if (viewModel.Servers.Count == 0)
                 {
-                    viewModel.ConsoleOutList.Add("WARNING: This network contains no Servers. Players will not be able to join.");
+                    ConsoleWriter.Write("WARNING: This network contains no Servers. Players will not be able to join.", viewModel);
                 }
                 else
                 {
-                    viewModel.ConsoleOutList.Add("Starting all "+viewModel.Servers.Count+" servers of this network...");
+                    ConsoleWriter.Write("Starting all "+viewModel.Servers.Count+" servers of this network...", viewModel);
                     foreach (NetworkServer networkServer in viewModel.Servers)
                     {
                         if (networkServer is NetworkForkServer networkForkServer)
@@ -69,35 +70,35 @@ namespace Fork.Logic.Controller
                             ServerViewModel serverViewModel = networkForkServer.ServerViewModel;
                             if (serverViewModel.CurrentStatus == ServerStatus.STOPPED)
                             {
-                                viewModel.ConsoleOutList.Add("\nStarting server " + serverViewModel.Server + " on world: " +
-                                                             serverViewModel.Server.ServerSettings.LevelName);
+                                ConsoleWriter.Write("\nStarting server " + serverViewModel.Server + " on world: " +
+                                                    serverViewModel.Server.ServerSettings.LevelName, viewModel);
                                 ServerManager.Instance.StartServerAsync(serverViewModel);
                             } else if (serverViewModel.CurrentStatus == ServerStatus.STARTING)
                             {
-                                viewModel.ConsoleOutList.Add("Server "+serverViewModel.Server+" is already starting.");
+                                ConsoleWriter.Write("Server "+serverViewModel.Server+" is already starting.", viewModel);
                             } else if (serverViewModel.CurrentStatus == ServerStatus.RUNNING)
                             {                            
-                                viewModel.ConsoleOutList.Add("Server "+serverViewModel.Server+" is already running.");
+                                ConsoleWriter.Write("Server "+serverViewModel.Server+" is already running.", viewModel);
                             }
                         }
                         else
                         {
-                            viewModel.ConsoleOutList.Add("Server "+networkServer.Name+" can't be started automatically because it is no Fork server.");
+                            ConsoleWriter.Write("Server "+networkServer.Name+" can't be started automatically because it is no Fork server.", viewModel);
                         }
                     }
                 }
             }
             else
             {
-                viewModel.ConsoleOutList.Add("Make sure that at least one server configured in the settings is running, else Players won't be able to join this network.");
+                ConsoleWriter.Write("Make sure that at least one server configured in the settings is running, else Players won't be able to join this network.", viewModel);
             }
             
             //Start proxy server
-            viewModel.ConsoleOutList.Add("Starting proxy server...");
+            ConsoleWriter.Write("Starting proxy server...", viewModel);
             DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Network.Name));
             if (!directoryInfo.Exists)
             {
-                viewModel.ConsoleOutList.Add("ERROR: Can't find network directory: "+directoryInfo.FullName);
+                ConsoleWriter.Write("ERROR: Can't find network directory: "+directoryInfo.FullName, viewModel);
                 return false;
             }
             
@@ -120,7 +121,7 @@ namespace Fork.Logic.Controller
             new Thread(() =>
             {
                 viewModel.TrackPerformance(process);
-            }).Start();
+            }){IsBackground = true}.Start();
             viewModel.CurrentStatus = ServerStatus.STARTING;
             ConsoleWriter.RegisterApplication(viewModel, process.StandardOutput, process.StandardError);
             ConsoleReader consoleReader = new ConsoleReader(process.StandardInput);
@@ -148,7 +149,7 @@ namespace Fork.Logic.Controller
 
             if (stopServers)
             {
-                viewModel.ConsoleOutList.Add("Stopping all "+viewModel.Servers.Count+" servers of this network...");
+                ConsoleWriter.Write("Stopping all "+viewModel.Servers.Count+" servers of this network...", viewModel);
                 foreach (NetworkServer networkServer in viewModel.Servers)
                 {
                     if (networkServer is NetworkForkServer networkForkServer)
@@ -156,19 +157,19 @@ namespace Fork.Logic.Controller
                         ServerViewModel serverViewModel = networkForkServer.ServerViewModel;
                         if (serverViewModel.CurrentStatus == ServerStatus.RUNNING)
                         {
-                            viewModel.ConsoleOutList.Add("Stopping server " + serverViewModel.Server);
+                            ConsoleWriter.Write("Stopping server " + serverViewModel.Server, viewModel);
                             ServerManager.Instance.StopServer(serverViewModel);
                         } else if (serverViewModel.CurrentStatus == ServerStatus.STOPPED)
                         {
-                            viewModel.ConsoleOutList.Add("Server "+serverViewModel.Server+" is already stopped.");
+                            ConsoleWriter.Write("Server "+serverViewModel.Server+" is already stopped.", viewModel);
                         } else if (serverViewModel.CurrentStatus == ServerStatus.STARTING)
                         {                            
-                            viewModel.ConsoleOutList.Add("Server "+serverViewModel.Server+" is currently starting (manual stop needed)");
+                            ConsoleWriter.Write("Server "+serverViewModel.Server+" is currently starting (manual stop needed)", viewModel);
                         }
                     }
                     else
                     {
-                        viewModel.ConsoleOutList.Add("Server "+networkServer.Name+" can't be stopped automatically because it is no Fork server.");
+                        ConsoleWriter.Write("Server "+networkServer.Name+" can't be stopped automatically because it is no Fork server.", viewModel);
                     }
                 }
             }
@@ -319,7 +320,7 @@ namespace Fork.Logic.Controller
                         if (server.CurrentStatus == ServerStatus.RUNNING || server.CurrentStatus == ServerStatus.STARTING)
                         {
                             ServerManager.Instance.KillEntity(server);
-                            viewModel.ConsoleOutList.Add("Killed server "+server.Server);
+                            ConsoleWriter.Write("Killed server "+server.Server, viewModel);
                         }
                     }
                 }

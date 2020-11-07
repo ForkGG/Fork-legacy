@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Cache;
@@ -45,6 +46,26 @@ namespace Fork.Logic.Controller
             {
                 ErrorLogger.Append(e);
                 return ApplicationManager.Instance.CurrentForkVersion;
+            }
+        }
+
+        public List<string> GetPatrons()
+        {
+            if (!IsAPIAvailable())
+            {
+                ErrorLogger.Append(new WebException("api.Fork.gg is not online or operational"));
+                return new List<string>();
+            }
+            try
+            {
+                var response = RequestRawResponse(apiBaseURL + "patrons");
+                string patronsJson = RetrieveResponseBody(response);
+                return JsonConvert.DeserializeObject<List<string>>(patronsJson);
+            }
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
+                return new List<string>();
             }
         }
         
