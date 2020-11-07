@@ -22,6 +22,7 @@
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/CheckBoxStyles.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/AvalonStyles.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/TextBoxStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/SliderStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <FontFamily x:Key="MaterialIO">View/Resources/Fonts/MaterialIcons-Regular.ttf#Material Icons</FontFamily>
             <FontFamily x:Key="Montserrat-Medium">View/Resources/Fonts/Montserrat-Medium.ttf#Montserrat Medium</FontFamily>
