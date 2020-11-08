@@ -89,8 +89,8 @@
                 <controls:IconRadioButton Margin="10" GroupName="MenuTabs" Click="SelectWorlds"
                                           IconSource="pack://application:,,,/View/Resources/images/Icons/World.png"
                                           HoverIconSource="pack://application:,,,/View/Resources/images/Icons/WorldW.png"/>
-                <controls:IconRadioButton Margin="10" GroupName="MenuTabs" Click="SelectPlugins" 
-                                          IconSource="pack://application:,,,/View/Resources/images/Icons/Plugins.png" Visibility="Collapsed"
+                <controls:IconRadioButton Margin="10" GroupName="MenuTabs" Click="SelectPlugins" Visibility="{Binding Server.Version.HasPlugins, Converter={StaticResource BoolToVisibilityConverter}}"
+                                          IconSource="pack://application:,,,/View/Resources/images/Icons/Plugins.png"
                                           HoverIconSource="pack://application:,,,/View/Resources/images/Icons/PluginsW.png"/>
                 <!--Visibility="{Binding Server.Version.HasPlugins, Converter={StaticResource BoolToVisibilityConverter}}"-->
             </StackPanel>
