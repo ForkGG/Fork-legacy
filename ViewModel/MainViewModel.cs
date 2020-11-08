@@ -68,7 +68,6 @@ namespace Fork.ViewModel
         private void SetupVersionChecking()
         {
             CurrentForkVersion = ApplicationManager.Instance.CurrentForkVersion;
-            LatestForkVersion = new APIController().GetLatestForkVersion();
             NewerVersionExists = false;
             CheckForkVersion();
             Timer timer = new Timer {Interval = 1000 * 60 * 60 * 12, AutoReset = true, Enabled = true};
