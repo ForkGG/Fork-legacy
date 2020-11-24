@@ -364,36 +364,22 @@
                     <Border.Resources>
                         <helper:BindingProxy x:Key="ServerRunningBinding" Data="{Binding}"/>
                     </Border.Resources>
-                    <TextBox Margin="10 0" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Center" Text="{Binding ConsoleIn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}">
-                        <TextBox.InputBindings>
-                            <KeyBinding Key="Enter" Command="{Binding ReadConsoleIn}"></KeyBinding>
-                        </TextBox.InputBindings>
-                        <TextBox.Style>
-                            <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
-                                <Setter Property="CaretBrush" Value="{DynamicResource textTerminal}"/>
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="Foreground" Value="{DynamicResource textTerminal}"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsFocused" Value="True">
-
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBox.Style>
-                    </TextBox>
+                    <DockPanel LastChildFill="True">
+                        <TextBlock Text="/" VerticalAlignment="Center" Margin="10 3 0 0" Foreground="{DynamicResource foregroundDisabled}" DockPanel.Dock="Left" Opacity="0.8"/>
+                        <TextBox Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Center" Text="{Binding ConsoleIn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                 IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}" CaretBrush="{DynamicResource textTerminal}"
+                                 BorderThickness="0" Foreground="{DynamicResource textTerminal}">
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding ReadConsoleIn}"></KeyBinding>
+                            </TextBox.InputBindings>
+                        </TextBox>
+                    </DockPanel>
                 </Border>
 
                 <Grid>
                     <Border Margin="10" CornerRadius="10" Background="{DynamicResource backgroundConsole}">
                         <ScrollViewer Margin="10" ScrollChanged="ScrollViewer_ScrollChanged" Style="{DynamicResource ConsoleScrollViewer}" FocusManager.IsFocusScope="True">
                             <ListBox ItemsSource="{Binding ConsoleOutList}" Style="{DynamicResource ConsoleListBox}" ItemContainerStyle="{DynamicResource ConsoleListBoxItem}"/>
-
-
-                            <!--RichTextBox BorderThickness="0" FontFamily="Consolas" Background="Transparent" IsReadOnly="True">
-                                <FlowDocument PageWidth="Auto">
-                                    <Paragraph x:Name="ConsoleParagraph"/>
-                                </FlowDocument>
-                            </-->
                         </ScrollViewer>
                     </Border>
                     <Border Panel.ZIndex="1" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="20">
