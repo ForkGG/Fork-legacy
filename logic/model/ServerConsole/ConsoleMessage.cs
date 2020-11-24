@@ -1,8 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Net.NetworkInformation;
+using System.Runtime.CompilerServices;
+using Fork.Annotations;
 
 namespace Fork.Logic.Model.ServerConsole
 {
-    public class ConsoleMessage
+    public class ConsoleMessage : INotifyPropertyChanged
     {
         public enum MessageLevel
         {
@@ -12,6 +18,13 @@ namespace Fork.Logic.Model.ServerConsole
         public string Content { get; }
         public MessageLevel Level { get; }
         public DateTime CreationTime { get; }
+
+        /// <summary>
+        /// SubContent are messages with a very similar content as this message.
+        /// This is used instead of a new message to reduce application lag when console is spammed
+        /// (shout-outs to the Chunky plugin ^^)
+        /// </summary>
+        public int SubContents { get; set; }
 
         public ConsoleMessage(string content)
         {
@@ -42,7 +55,19 @@ namespace Fork.Logic.Model.ServerConsole
 
         public override string ToString()
         {
-            return Content;
+            if (SubContents == 0)
+            {
+                return Content;
+            }
+            return Content + "\n    + " + SubContents + " suppressed messages";
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
