@@ -255,7 +255,7 @@ namespace Fork.ViewModel
                 {
                     int dist = StringUtils.DamerauLevenshteinDistance(
                         lastConsoleMessage.Content, message.Content, 
-                        (int)Math.Round(Math.Min(lastConsoleMessage.Content.Length, message.Content.Length) * 0.15));
+                        (int)Math.Round(Math.Min(lastConsoleMessage.Content.Length, message.Content.Length) * 0.10));
                     if (dist < int.MaxValue)
                     {
                         lastConsoleMessage.SubContents++;
