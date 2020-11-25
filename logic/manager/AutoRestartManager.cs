@@ -47,7 +47,8 @@ namespace Fork.Logic.Manager
                 {
                     nextTimer = t;
                     hasRestart = true;
-                }            }
+                }            
+            }
             if (server.Server.Restart3.Enabled)
             {
                 double t = CalculateTime(server.Server.Restart3);
@@ -55,7 +56,8 @@ namespace Fork.Logic.Manager
                 {
                     nextTimer = t;
                     hasRestart = true;
-                }            }
+                }            
+            }
             if (server.Server.Restart4.Enabled)
             {
                 double t = CalculateTime(server.Server.Restart4);
