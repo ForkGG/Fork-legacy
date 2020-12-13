@@ -17,11 +17,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Fork.Annotations;
 using Fork.Logic.BackgroundWorker.Performance;
+using Fork.Logic.Controller;
 using Fork.Logic.CustomConsole;
 using Fork.Logic.ImportLogic;
 using Fork.Logic.Logging;
 using Fork.Logic.Manager;
 using Fork.Logic.Model;
+using Fork.Logic.Model.ProxyModels;
 using Fork.Logic.Model.ServerConsole;
 using Fork.Logic.Model.Settings;
 using Fork.Logic.Persistence;
@@ -91,6 +93,8 @@ namespace Fork.ViewModel
 
         public ConsoleReader ConsoleReader;
         public ObservableCollection<ConsoleMessage> ConsoleOutList { get; set; }
+
+        public AppSettings AppSettings => AppSettingsSerializer.Instance.AppSettings;
 
         public string ConsoleIn { get; set; } = "";
         public ServerStatus CurrentStatus { get; set; }
@@ -245,6 +249,18 @@ namespace Fork.ViewModel
             consoleOutListNoQuery = new List<ConsoleMessage>();
             ConsoleOutList = new ObservableCollection<ConsoleMessage>();
             ConsoleOutList.CollectionChanged += ConsoleOutChanged;
+
+            UpdateAddressInfo();
+        }
+
+        public void SaveSettings()
+        {
+            new Thread(() =>
+            {
+                UpdateAddressInfo();
+                SettingsViewModel.SaveChanges();
+                EntitySerializer.Instance.StoreEntities(ServerManager.Instance.Entities);
+            }).Start();
         }
 
         public void AddToConsole(ConsoleMessage message)
@@ -261,7 +277,7 @@ namespace Fork.ViewModel
                         lastConsoleMessage.SubContents++;
                         return;
                     }
-                    if (consoleMessagesLastSecond > AppSettingsSerializer.AppSettings.MaxConsoleLinesPerSecond)
+                    if (consoleMessagesLastSecond > AppSettings.MaxConsoleLinesPerSecond)
                     {
                         return;
                     }
@@ -279,7 +295,7 @@ namespace Fork.ViewModel
                         Application.Current?.Dispatcher?.Invoke(() => ConsoleOutList.Add(message), DispatcherPriority.ApplicationIdle);
                     }
 
-                    while (consoleOutListNoQuery.Count > AppSettingsSerializer.AppSettings.MaxConsoleLines)
+                    while (consoleOutListNoQuery.Count > AppSettings.MaxConsoleLines)
                     {
                         ConsoleMessage messageToDelete = consoleOutListNoQuery[0];
                         if (ConsoleOutList.Contains(messageToDelete))
@@ -315,6 +331,14 @@ namespace Fork.ViewModel
             }
 
             currentQuery = query;
+        }
+
+        public void UpdateDefaultJavaPath(string oldPath, string newPath)
+        {
+            if (Entity.JavaSettings.JavaPath.Equals(oldPath))
+            {
+                Entity.JavaSettings.JavaPath = newPath;
+            }
         }
 
         public void UpdateSettingsFiles(List<SettingsFile> files, bool initial = false)
@@ -457,6 +481,14 @@ namespace Fork.ViewModel
         {
             SettingsReader settingsReader = new SettingsReader(this);
             ApplicationManager.Instance.SettingsReaders.Add(settingsReader);
+        }
+
+        private void UpdateAddressInfo()
+        {
+            if (Entity is Server server)
+            {
+                AddressInfo = new APIController().GetExternalIPAddress() + ":" + server.ServerSettings.ServerPort;
+            }
         }
 
         private void RemoveNotMatchingMessages(string query)

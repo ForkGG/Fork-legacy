@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Fork.Logic.Controller;
 using Fork.Logic.Logging;
+using Fork.Logic.Manager;
 using Fork.Logic.Model;
 using Fork.Logic.Persistence;
 using Fork.View.Xaml2.Pages;
@@ -13,14 +14,12 @@ namespace Fork.ViewModel
 {
     public class AppSettingsViewModel : BaseViewModel
     {
-        public AppSettings AppSettings => AppSettingsSerializer.AppSettings;
+        private string oldDefaultJavaPath;
+        
+        public AppSettings AppSettings => AppSettingsSerializer.Instance.AppSettings;
         public AppSettingsPage AppSettingsPage { get; }
         public MainViewModel MainViewModel { get; }
         public ObservableCollection<string> Patrons { get; set; }
-
-
-        public delegate void HandlePageClose(object sender);
-        public event HandlePageClose AppSettingsCloseEvent;
 
         public AppSettingsViewModel(MainViewModel mainViewModel)
         {
@@ -29,19 +28,32 @@ namespace Fork.ViewModel
             Patrons = new ObservableCollection<string>(new APIController().GetPatrons());
         }
 
-        public void ClosePage(object sender)
+        public async Task OpenAppSettingsPage()
         {
-            AppSettingsCloseEvent?.Invoke(sender);
-            SaveAppSettingsAsync();
+            await ReadAppSettingsAsync();
+            oldDefaultJavaPath = AppSettings.DefaultJavaPath;
         }
 
-        public async Task<bool> SaveAppSettingsAsync()
+        public async Task CloseAppSettingsPage()
+        {
+            if (oldDefaultJavaPath!=null && !oldDefaultJavaPath.Equals(AppSettings.DefaultJavaPath))
+            {
+                foreach (EntityViewModel entityViewModel in MainViewModel.Entities)
+                {
+                    entityViewModel.UpdateDefaultJavaPath(oldDefaultJavaPath, AppSettings.DefaultJavaPath);
+                }
+                EntitySerializer.Instance.StoreEntities(ServerManager.Instance.Entities);
+            }
+            await WriteAppSettingsAsync();
+        }
+
+        private async Task<bool> WriteAppSettingsAsync()
         {
             Task<bool> t = new Task<bool>(() =>
             {
                 try
                 {
-                    AppSettingsSerializer.SaveSettings();
+                    AppSettingsSerializer.Instance.SaveSettings();
                     return true;
                 }
                 catch (Exception e)
@@ -55,7 +67,7 @@ namespace Fork.ViewModel
             return r;
         }
 
-        public async Task<bool> ReadAppSettingsAsync()
+        private async Task<bool> ReadAppSettingsAsync()
         {
             Task<bool> t = new Task<bool>(() =>
             {
@@ -63,7 +75,7 @@ namespace Fork.ViewModel
                 {
                     var patronsNew = new ObservableCollection<string>(new APIController().GetPatrons());
                     Application.Current.Dispatcher.InvokeAsync(() => { Patrons = patronsNew; });
-                    AppSettingsSerializer.ReadSettings();
+                    AppSettingsSerializer.Instance.ReadSettings();
                     return true;
                 }
                 catch (Exception e)

@@ -8,6 +8,7 @@
       xmlns:converter="clr-namespace:Fork.View.Xaml.Converter"
       xmlns:helper="clr-namespace:Fork.View.Resources.Helper"
       xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+      xmlns:avalon="http://icsharpcode.net/sharpdevelop/avalonedit"
       xmlns:controls="clr-namespace:Fork.View.Xaml2.Controls"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"

@@ -16,7 +16,7 @@ namespace Fork.Logic.BackgroundWorker.Performance
 
         public void TrackP(Process p, EntityViewModel viewModel)
         {
-            string instanceName = GetProcessInstanceName(p.Id);
+            /*string instanceName = GetProcessInstanceName(p.Id);
             PerformanceCounter memCounter = new PerformanceCounter
             {
                 CategoryName = "Process",
@@ -39,6 +39,23 @@ namespace Fork.Logic.BackgroundWorker.Performance
                 viewModel.MemValueUpdate(0.0);
             });
             t.IsBackground = true;
+            t.Start();
+            threads.Add(t);*/
+            Thread t = new Thread(() =>
+            {
+                while (!interrupted && !p.HasExited)
+                {
+                    try
+                    {
+                        long x = p.WorkingSet64;
+                        viewModel.MemValueUpdate(p.WorkingSet64/(1024d*1024d));
+                    }
+                    catch { break; }
+                }
+                viewModel.MemValueUpdate(0.0);
+                viewModel.MemValueUpdate(0.0);
+                viewModel.MemValueUpdate(0.0);
+            }){IsBackground = true};
             t.Start();
             threads.Add(t);
         }

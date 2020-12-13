@@ -1,14 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using Fork.Logic.Manager;
-using Fork.Logic.Model;
+using System.Windows.Forms;
+using System.Windows.Input;
 using Fork.Logic.Model.Settings;
-using Fork.View.Xaml2.Pages.Server;
-using Fork.View.Xaml2.Pages.Settings;
 using Fork.ViewModel;
 using Path = System.IO.Path;
 
@@ -35,6 +30,30 @@ namespace Fork.View.Xaml2.Pages.Settings
         public void SaveSettings()
         {
             serverViewModel.SaveProperties();
+        }
+        
+        private void JavaPath_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog{Multiselect = false, Filter = "Java executable|java.exe", Title = "Select a java.exe"};
+            if (!ServerJavaPath.Text.Equals("java.exe") && new DirectoryInfo(ServerJavaPath.Text.Replace(@"\java.exe","")).Exists)
+            {
+                ofd.InitialDirectory = ServerJavaPath.Text.Replace(@"\java.exe","");
+            }
+            else
+            {
+                ofd.InitialDirectory = @"C:\Program Files";
+            }
+                
+            DialogResult result = ofd.ShowDialog();
+            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(ofd.FileName))
+            {
+                ServerJavaPath.Text = ofd.FileName;
+            }
+        }
+        
+        private void DefaultJavaDirReset_Click(object sender, RoutedEventArgs e)
+        {
+            ServerJavaPath.Text = "java.exe";
         }
     }
 }

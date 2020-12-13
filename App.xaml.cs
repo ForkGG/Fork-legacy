@@ -32,7 +32,7 @@ namespace Fork
             }
         }
 
-        public static string ServerPath => AppSettingsSerializer.AppSettings.ServerPath;
+        public static string ServerPath => AppSettingsSerializer.Instance.AppSettings.ServerPath;
 
         protected override void OnStartup(StartupEventArgs e)
         {

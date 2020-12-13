@@ -1,10 +1,13 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Fork;
 using Fork.Logic.ImportLogic;
 using Fork.Logic.Manager;
@@ -22,11 +25,6 @@ namespace Fork.View.Xaml2.Pages
             InitializeComponent();
             this.viewModel = viewModel;
             DataContext = this.viewModel;
-        }
-
-        private void CloseAppSettings()
-        {
-            viewModel.ClosePage(this);
         }
 
         private void OpenForkServerDir_Click(object sender, RoutedEventArgs e)
@@ -62,6 +60,30 @@ namespace Fork.View.Xaml2.Pages
                 }
                 
             }
+        }
+        
+        private void JavaPath_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog{Multiselect = false, Filter = "Java executable|java.exe", Title = "Select a java.exe"};
+            if (new DirectoryInfo(ForkDefaultJavaPath.Text.Replace(@"\java.exe","")).Exists)
+            {
+                ofd.InitialDirectory = ForkDefaultJavaPath.Text.Replace(@"\java.exe","");
+            }
+            else
+            {
+                ofd.InitialDirectory = @"C:\Program Files";
+            }
+                
+            DialogResult result = ofd.ShowDialog();
+            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(ofd.FileName))
+            {
+                ForkDefaultJavaPath.Text = ofd.FileName;
+            }
+        }
+        
+        private void DefaultJavaDirReset_Click(object sender, RoutedEventArgs e)
+        {
+            ForkDefaultJavaPath.Text = "java.exe";
         }
 
         private void BecomePatron_Click(object sender, RoutedEventArgs e)

@@ -38,8 +38,6 @@ namespace Fork.View.Xaml2
             Closing += OnMainWindowClose;
             viewModel = ApplicationManager.Instance.MainViewModel;
             DataContext = viewModel;
-
-            viewModel.AppSettingsViewModel.AppSettingsCloseEvent += CloseAppSettings;
         }
 
         private void OpenAppSettings_Click(object sender, RoutedEventArgs e)
@@ -259,7 +257,7 @@ namespace Fork.View.Xaml2
             
             
             //TODO make loading icon or smth
-            viewModel.AppSettingsViewModel.ReadAppSettingsAsync();
+            viewModel.AppSettingsViewModel.OpenAppSettingsPage();
             
             //Open importServer Frame
             ServerPage.Visibility = Visibility.Hidden;
@@ -277,7 +275,7 @@ namespace Fork.View.Xaml2
             AppSettingsPage.Visibility = Visibility.Hidden;
             
             //Save settings:
-            viewModel.AppSettingsViewModel.SaveAppSettingsAsync();
+            viewModel.AppSettingsViewModel.CloseAppSettingsPage();
             
             if (ServerList.SelectedItems.Count == 0)
             {
@@ -296,6 +294,10 @@ namespace Fork.View.Xaml2
 
         private void ServerList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (e.RemovedItems.Count > 0 && e.RemovedItems[0] is EntityViewModel entityViewModel)
+            {
+                entityViewModel.SaveSettings();
+            }
             CloseNonEntityPages();
         }
 

@@ -29,8 +29,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
                     <StackPanel>
-                        <TextBlock Text="{Binding Content, Mode=OneWay}" FontFamily="Consolas" TextWrapping="Wrap"  Foreground="{DynamicResource textTerminal}" 
-                                Background="{x:Null}" x:Name="text"/>
+                        <TextBox Text="{Binding Content, Mode=OneWay}" FontFamily="Consolas" TextWrapping="Wrap"  Foreground="{DynamicResource textTerminal}" 
+                                Background="{x:Null}" x:Name="text" Style="{DynamicResource SelectOnly}"/>
                         <StackPanel Orientation="Horizontal" x:Name="suppressedText">
                             <TextBlock Text=" + " Foreground="{DynamicResource foregroundDisabled}" FontFamily="Consolas"/>
                             <TextBlock Text="{Binding SubContents}" Foreground="{DynamicResource foregroundDisabled}" FontFamily="Consolas"/>

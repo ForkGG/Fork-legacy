@@ -109,7 +109,7 @@ namespace Fork.Logic.Controller
                 RedirectStandardError = true,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
-                FileName = "java.exe",
+                FileName = viewModel.Network.JavaSettings.JavaPath,
                 WorkingDirectory = directoryInfo.FullName,
                 Arguments = "-Xmx" + viewModel.Network.JavaSettings.MaxRam + "m -Xms" +
                             viewModel.Network.JavaSettings.MinRam + "m -jar server.jar nogui",

@@ -71,7 +71,6 @@ namespace Fork.ViewModel
                 }
             }){IsBackground = true}.Start();
 
-            UpdateAddressInfo();
             Application.Current.Dispatcher.Invoke(new Action(() => EntityPage = new ServerPage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => ConsolePage = new ConsolePage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => WorldsPage = new WorldsPage(this)));
@@ -225,21 +224,6 @@ namespace Fork.ViewModel
             }){IsBackground = true}.Start();
         }
 
-        private void UpdateAddressInfo()
-        {
-            AddressInfo = new APIController().GetExternalIPAddress() + ":" + Server.ServerSettings.ServerPort;
-        }
-
-        public void UpdateSettings()
-        {
-            new Thread(() =>
-            {
-                UpdateAddressInfo();
-                SettingsViewModel.SaveChanges();
-                EntitySerializer.Instance.StoreEntities(ServerManager.Instance.Entities);
-            }).Start();
-        }
-
         public void SaveProperties()
         {
             new Thread(() =>
@@ -252,7 +236,7 @@ namespace Fork.ViewModel
         public void UpdateActiveWorld(World world)
         {
             Server.ServerSettings.LevelName = world.Name;
-            UpdateSettings();
+            SaveSettings();
         }
 
         public void ServerNameChanged()

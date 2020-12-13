@@ -6,7 +6,7 @@
       xmlns:controls="clr-namespace:Fork.View.Xaml2.Controls"
       xmlns:local="clr-namespace:Fork.View.Xaml2.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="850" d:DesignWidth="800"
       Title="AppSettingsPage">
         
     <Grid>
@@ -23,7 +23,7 @@
                                 <!--CheckBox Margin="0 0 0 30" IsChecked="{Binding AppSettings.SendTelemetry, Mode=OneWay}" Content="Send Application Telemetry" Style="{DynamicResource TextCheckBox}" FontSize="20"/-->
                                 <StackPanel Height="40" Orientation="Horizontal">
                                     <TextBlock Text="Server Directory"  Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0"/>
-                                    <Border x:Name="serverPathBgr" CornerRadius="4" Height="26" Background="{DynamicResource buttonBgrDefault}">
+                                    <Border x:Name="serverPathBgr" CornerRadius="4" Height="26" Background="{DynamicResource textBackground}">
                                         <TextBlock Margin="10 0" Text="{Binding AppSettings.ServerPath, Mode=OneWay}" Background="Transparent"
                                             Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}"
                                             FontSize="17" Height="20" PreviewMouseDown="ServerDirPath_MouseDown" Cursor="IBeam" x:Name="ForkServerPath"/>                                        
@@ -34,8 +34,8 @@
                                                          HoverIconSource="pacK://application:,,,/View/Resources/images/Icons/FolderW.png"
                                                          Height="25" Width="25" IconHeight="100" IconWidth="15"
                                                          Margin="10 0" Click="OpenForkServerDir_Click"/>
-                                </StackPanel>
-                                
+                                </StackPanel>                                
+
                                 <Grid x:Name="ServerDirChangedGrid" Visibility="Collapsed">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
@@ -60,7 +60,21 @@
                                     <Button Grid.Column="1" Grid.Row="1" Content="Apply" Style="{DynamicResource RoundedTextButton}" Margin="15 10 0 10" VerticalAlignment="Center" Click="ApplyNewServerDir_Click"/>
                                 </Grid>
 
-                                <StackPanel Orientation="Horizontal">
+                                <StackPanel Height="40" Orientation="Horizontal">
+                                    <TextBlock Text="Default Java Path"  Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0"/>
+                                    <Border CornerRadius="4" Height="26" Background="{DynamicResource textBackground}" MinWidth="300">
+                                        <TextBlock Margin="10 0" Text="{Binding AppSettings.DefaultJavaPath, Mode=TwoWay}" Background="Transparent"
+                                            Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                            FontSize="17" Height="20" PreviewMouseDown="JavaPath_MouseDown" Cursor="IBeam" x:Name="ForkDefaultJavaPath"/>
+                                    </Border>
+                                    <controls:IconButton Background="{DynamicResource buttonBgrDefault}" HoverBackground="{DynamicResource buttonBgrDefault}"
+                                                         IconSource="pacK://application:,,,/View/Resources/images/Icons/FolderD.png"
+                                                         HoverIconSource="pacK://application:,,,/View/Resources/images/Icons/FolderW.png"
+                                                         Height="25" Width="25" IconHeight="100" IconWidth="15"
+                                                         Margin="10 0" Click="DefaultJavaDirReset_Click"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Height="40">
                                     <TextBlock Text="Console lines" Style="{DynamicResource CreateServerTextBlock}"/>
                                     <Slider Minimum="50" Maximum="5000" Width="200" VerticalAlignment="Center" Margin="10 0" Value="{Binding AppSettings.MaxConsoleLines}"
                                              TickFrequency="50" IsSnapToTickEnabled="True"/>

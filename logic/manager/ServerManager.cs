@@ -350,8 +350,8 @@ namespace Fork.Logic.Manager
                 }).Start();
             }
 
-            AppSettingsSerializer.AppSettings.ServerPath = newPath;
-            AppSettingsSerializer.SaveSettings();
+            AppSettingsSerializer.Instance.AppSettings.ServerPath = newPath;
+            AppSettingsSerializer.Instance.SaveSettings();
             return true;
         }
 
@@ -753,7 +753,7 @@ namespace Fork.Logic.Manager
                 RedirectStandardError = true,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
-                FileName = "java.exe",
+                FileName = viewModel.Server.JavaSettings.JavaPath,
                 WorkingDirectory = directoryInfo.FullName,
                 Arguments = "-Xmx" + viewModel.Server.JavaSettings.MaxRam + "m -Xms" +
                             viewModel.Server.JavaSettings.MinRam + "m -jar server.jar nogui",

@@ -576,21 +576,25 @@
                                    Style="{DynamicResource CreateServerTextBlock}" />
                             </Grid>
                             <StackPanel Margin="0 20 0 0">
-                                <TextBlock Grid.Row="3" Text="Java Executable Path"
-                                   Style="{DynamicResource CreateServerTextBlock}"
-                                   Margin="0 5 10 5" />
-                                <Border Grid.Row="3" Grid.Column="1" CornerRadius="4" Width="400" Height="26"
-                                Background="{DynamicResource textBackground}" Margin="0 5 0 5">
-                                    <TextBox Margin="5 0" Text="{Binding Server.JavaSettings.JavaPath}"
-                                     Background="{DynamicResource textBackground}" BorderThickness="0"
-                                     Foreground="{DynamicResource backgroundDark}"
-                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                     FontSize="17" Height="20" />
-                                </Border>
+                                <TextBlock Text="Custom Java Executable Path"
+                                        Style="{DynamicResource CreateServerTextBlock}"
+                                        Margin="0 5 10 5" />
+                                <StackPanel Height="40" Orientation="Horizontal">
+                                    <Border x:Name="javaPathBgr" CornerRadius="4" Height="26" Background="{DynamicResource textBackground}">
+                                        <TextBlock Margin="10 0" Text="{Binding Server.JavaSettings.JavaPath, Mode=TwoWay}" Background="Transparent"
+                                            Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}" Width="400"
+                                            FontSize="17" Height="20" PreviewMouseDown="JavaPath_MouseDown" Cursor="IBeam" x:Name="ServerJavaPath"/>
+                                    </Border>
+                                    <controls:IconButton Background="{DynamicResource buttonBgrDefault}" HoverBackground="{DynamicResource buttonBgrDefault}"
+                                                         IconSource="pacK://application:,,,/View/Resources/images/Icons/FolderD.png"
+                                                         HoverIconSource="pacK://application:,,,/View/Resources/images/Icons/FolderW.png"
+                                                         Height="25" Width="25" IconHeight="100" IconWidth="15"
+                                                         Margin="10 0" Click="DefaultJavaDirReset_Click"/>
+                                </StackPanel>
                                 <TextBlock Grid.Row="3" Text="Custom Startup Parameters"
                                    Style="{DynamicResource CreateServerTextBlock}" Margin="0 15 10 5" />
-                                <Border Grid.Row="3" Grid.Column="1" CornerRadius="4" Width="400" Height="26"
-                                Background="{DynamicResource textBackground}" Margin="0 5 0 5">
+                                <Border Grid.Row="3" Grid.Column="1" CornerRadius="4" Width="420" Height="26"
+                                Background="{DynamicResource textBackground}" Margin="0 5 0 5" HorizontalAlignment="Left">
                                     <TextBox Margin="5 0" Text="{Binding Server.JavaSettings.StartupParameters}"
                                      Background="{DynamicResource textBackground}" BorderThickness="0"
                                      Foreground="{DynamicResource backgroundDark}"

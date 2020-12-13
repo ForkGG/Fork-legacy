@@ -23,21 +23,12 @@
                         <StackPanel Background="Transparent" Margin="0 10" Width="720" HorizontalAlignment="Left">
                             <TextBlock Text="Java and Networking" Foreground="{DynamicResource textHeader}"
                                FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="95 0 5 0" />
-                            <StackPanel Margin="110 10 50 10" HorizontalAlignment="Left">                                
-                                <Grid Margin="0 20 0 0">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition />
-                                        <ColumnDefinition />
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                    </Grid.RowDefinitions>
+                            <StackPanel Margin="110 10 50 10" HorizontalAlignment="Left">
 
-                                    <TextBlock Text="Max Ram" TextAlignment="Right"
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Max Ram " TextAlignment="Right"
                                    Style="{DynamicResource CreateServerTextBlock}" Margin="0 5 10 5" />
-                                    <Border Grid.Column="1" CornerRadius="4" Width="100" Height="26"
+                                    <Border  CornerRadius="4" Width="100" Height="26"
                                 Background="{DynamicResource textBackground}" Margin="0 5 0 5">
                                         <TextBox Margin="5 0" Text="{Binding Network.JavaSettings.MaxRam}"
                                      Background="{DynamicResource textBackground}" BorderThickness="0"
@@ -45,43 +36,49 @@
                                      FontFamily="{DynamicResource Montserrat-SemiBold}"
                                      FontSize="17" Height="20" />
                                     </Border>
-                                    <TextBlock Grid.Column="2" Text=" MB"
-                                   Style="{DynamicResource CreateServerTextBlock}" />
-
-                                    <TextBlock Grid.Row="1" Text="Min Ram" TextAlignment="Right"
-                                   Style="{DynamicResource CreateServerTextBlock}" Margin="0 5 10 5" />
-                                    <Border Grid.Row="1" Grid.Column="1" CornerRadius="4" Width="100" Height="26"
-                                Background="{DynamicResource textBackground}" Margin="0 5 0 5">
+                                    <TextBlock Text=" MB" Style="{DynamicResource CreateServerTextBlock}" />
+                                    
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Min Ram " TextAlignment="Right"
+                                        Style="{DynamicResource CreateServerTextBlock}" Margin="0 5 10 5" />
+                                    <Border Grid.Column="1" CornerRadius="4" Width="100" Height="26"
+                                        Background="{DynamicResource textBackground}" Margin="0 5 0 5">
                                         <TextBox Margin="5 0" Text="{Binding Network.JavaSettings.MinRam}"
-                                     Background="{DynamicResource textBackground}" BorderThickness="0"
-                                     Foreground="{DynamicResource backgroundDark}"
-                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                     FontSize="17" Height="20" />
+                                            Background="{DynamicResource textBackground}" BorderThickness="0"
+                                            Foreground="{DynamicResource backgroundDark}"
+                                            FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                            FontSize="17" Height="20" />
                                     </Border>
-                                    <TextBlock Grid.Row="1" Grid.Column="2" Text=" MB"
-                                   Style="{DynamicResource CreateServerTextBlock}" />
-                                </Grid>
+                                    <TextBlock Text=" MB" Style="{DynamicResource CreateServerTextBlock}" />
+                                </StackPanel>
+                                
                                 <StackPanel Margin="0 20 0 0">
-                                    <TextBlock Grid.Row="3" Text="Java Executable Path"
-                                   Style="{DynamicResource CreateServerTextBlock}"
-                                   Margin="0 5 10 5" />
-                                    <Border Grid.Row="3" Grid.Column="1" CornerRadius="4" Width="400" Height="26"
-                                Background="{DynamicResource textBackground}" Margin="0 5 0 5">
-                                        <TextBox Margin="5 0" Text="{Binding Network.JavaSettings.JavaPath}"
-                                     Background="{DynamicResource textBackground}" BorderThickness="0"
-                                     Foreground="{DynamicResource backgroundDark}"
-                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                     FontSize="17" Height="20" />
-                                    </Border>
-                                    <TextBlock Grid.Row="3" Text="Custom Startup Parameters"
-                                   Style="{DynamicResource CreateServerTextBlock}" Margin="0 15 10 5" />
-                                    <Border Grid.Row="3" Grid.Column="1" CornerRadius="4" Width="400" Height="26"
-                                Background="{DynamicResource textBackground}" Margin="0 5 0 5">
+                                    <TextBlock Text="Custom Java Executable Path"
+                                        Style="{DynamicResource CreateServerTextBlock}"
+                                        Margin="0 5 10 5" />
+                                    <StackPanel Height="40" Orientation="Horizontal">
+                                        <Border x:Name="javaPathBgr" CornerRadius="4" Height="26" Background="{DynamicResource textBackground}">
+                                            <TextBlock Margin="10 0" Text="{Binding Network.JavaSettings.JavaPath, Mode=TwoWay}" Background="Transparent"
+                                            Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}" Width="400"
+                                            FontSize="17" Height="20" PreviewMouseDown="JavaPath_MouseDown" Cursor="IBeam" x:Name="ServerJavaPath"/>
+                                        </Border>
+                                        <controls:IconButton Background="{DynamicResource buttonBgrDefault}" HoverBackground="{DynamicResource buttonBgrDefault}"
+                                                         IconSource="pacK://application:,,,/View/Resources/images/Icons/FolderD.png"
+                                                         HoverIconSource="pacK://application:,,,/View/Resources/images/Icons/FolderW.png"
+                                                         Height="25" Width="25" IconHeight="100" IconWidth="15"
+                                                         Margin="10 0" Click="DefaultJavaDirReset_Click"/>
+                                    </StackPanel>
+
+                                    <TextBlock Text="Custom Startup Parameters"
+                                        Style="{DynamicResource CreateServerTextBlock}" Margin="0 15 10 5" />
+                                    <Border Grid.Column="1" CornerRadius="4" Width="420" Height="26" HorizontalAlignment="Left"
+                                        Background="{DynamicResource textBackground}" Margin="0 5 0 5">
                                         <TextBox Margin="5 0" Text="{Binding Network.JavaSettings.StartupParameters}"
-                                     Background="{DynamicResource textBackground}" BorderThickness="0"
-                                     Foreground="{DynamicResource backgroundDark}"
-                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                     FontSize="17" Height="20" />
+                                            Background="{DynamicResource textBackground}" BorderThickness="0"
+                                            Foreground="{DynamicResource backgroundDark}"
+                                            FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                            FontSize="17" Height="20" />
                                     </Border>
                                 </StackPanel>
                             </StackPanel>
