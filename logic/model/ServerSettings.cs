@@ -232,7 +232,7 @@ namespace Fork.Logic.Model
             set => SettingsDictionary["rcon.password"] = value;
         }
 
-        public bool GenerateStructures
+        public bool GenerateStructure
         {
             get => bool.Parse(SettingsDictionary["generate-structure"]);
             set => SettingsDictionary["generate-structure"] = value.ToString().ToLower();
@@ -348,7 +348,7 @@ namespace Fork.Logic.Model
             AllowFlight = false;
             SpawnAnimals = true;
             Whitelist = false;
-            GenerateStructures = true;
+            GenerateStructure = true;
             OnlineMode = true;
             UseNativeTransport = true;
             PreventProxyConnections = false;
