@@ -276,6 +276,7 @@ namespace Fork.View.Xaml2
             
             //Save settings:
             viewModel.AppSettingsViewModel.CloseAppSettingsPage();
+            viewModel.UpdateInstalledJavaVersion();
             
             if (ServerList.SelectedItems.Count == 0)
             {
@@ -285,11 +286,6 @@ namespace Fork.View.Xaml2
             //Change Buttons
             AppSettingsButton.IsEnabled = true;
             AppSettingsButton.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
-        }
-
-        private void CloseAppSettings(object sender)
-        {
-            CloseAppSettings();
         }
 
         private void ServerList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -487,6 +483,26 @@ namespace Fork.View.Xaml2
             
             DeleteServerOverlay.Visibility = Visibility.Collapsed;
             DeleteNetworkOverlay.Visibility = Visibility.Collapsed;
+        }
+
+        private void Ignore_Click(object sender, RoutedEventArgs e)
+        {
+            viewModel.UpdateInstalledJavaVersion(true);
+        }
+        
+        private void CheckAgain_Click(object sender, RoutedEventArgs e)
+        {
+            viewModel.UpdateInstalledJavaVersion();
+        }
+
+        private void TextBlock_Link_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is TextBlock textBlock)
+            {
+                string url = textBlock.Text;
+                //hack for windows only https://github.com/dotnet/corefx/issues/10361
+                Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+            }
         }
 
         private void EntityMouseUp(object sender, MouseButtonEventArgs e)

@@ -13,6 +13,7 @@ using Fork.Logic.Model;
 using Fork.Logic.Model.ProxyModels;
 using Fork.Logic.Model.ProxyModels;
 using Fork.Logic.Model.ServerConsole;
+using Fork.Logic.Utils;
 using Fork.Logic.WebRequesters;
 using Fork.ViewModel;
 using Newtonsoft.Json;
@@ -100,6 +101,20 @@ namespace Fork.Logic.Controller
             {
                 ConsoleWriter.Write("ERROR: Can't find network directory: "+directoryInfo.FullName, viewModel);
                 return false;
+            }
+            JavaVersion javaVersion = JavaVersionUtils.GetInstalledJavaVersion(viewModel.Network.JavaSettings.JavaPath);
+            if (javaVersion == null)
+            {
+                ConsoleWriter.Write("ERROR: Java is not installed! Minecraft networks require Java!", viewModel);
+                return false;
+            } 
+            if (!javaVersion.Is64Bit)
+            {
+                ConsoleWriter.Write("WARN: The Java installation selected for this network is a 32-bit version, which can cause errors.", viewModel);
+            }
+            if (javaVersion.VersionComputed < 11)
+            {
+                ConsoleWriter.Write("WARN: The Java installation selected for this network is outdated. Please update Java to version 11 or higher.", viewModel);
             }
             
             Process process = new Process();

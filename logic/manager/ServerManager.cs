@@ -18,7 +18,9 @@ using Fork.Logic.ImportLogic;
 using Fork.Logic.Logging;
 using Fork.Logic.Model;
 using Fork.logic.model.PluginModels;
+using Fork.Logic.Model.ServerConsole;
 using Fork.Logic.Persistence;
+using Fork.Logic.Utils;
 using Fork.Logic.WebRequesters;
 using Fork.ViewModel;
 using Newtonsoft.Json;
@@ -744,6 +746,21 @@ namespace Fork.Logic.Manager
             if (!directoryInfo.Exists)
             {
                 return false;
+            }
+
+            JavaVersion javaVersion = JavaVersionUtils.GetInstalledJavaVersion(viewModel.Server.JavaSettings.JavaPath);
+            if (javaVersion == null)
+            {
+                ConsoleWriter.Write("ERROR: Java is not installed! Minecraft servers require Java!", viewModel);
+                return false;
+            } 
+            if (!javaVersion.Is64Bit)
+            {
+                ConsoleWriter.Write("WARN: The Java installation selected for this server is a 32-bit version, which can cause errors.", viewModel);
+            }
+            if (javaVersion.VersionComputed < 11)
+            {
+                ConsoleWriter.Write("WARN: The Java installation selected for this server is outdated. Please update Java to version 11 or higher.", viewModel);
             }
 
             Process process = new Process();
