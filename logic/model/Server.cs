@@ -19,6 +19,7 @@ namespace Fork.Logic.Model
         public JavaSettings JavaSettings { get; set; }
 
         public bool Initialized { get; set; } = false;
+        public bool StartWithFork { get; set; } = false;
         
         public ServerRestart Restart1 { get; set; }
         public ServerRestart Restart2 { get; set; }

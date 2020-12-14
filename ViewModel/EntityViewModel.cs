@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -239,6 +240,7 @@ namespace Fork.ViewModel
             Entity = entity;
 
             //Error weird crash (should not happen unless entities.json is corrupted)
+            //TODO check for json errors in entities.json
             if (Entity.Version == null)
             {
                 Console.WriteLine(
@@ -251,6 +253,27 @@ namespace Fork.ViewModel
             ConsoleOutList.CollectionChanged += ConsoleOutChanged;
 
             UpdateAddressInfo();
+
+            if (Entity.StartWithFork)
+            {
+                Task.Run(async () =>
+                {
+                    while (!ServerManager.Initialized)
+                    {
+                        await Task.Delay(500);
+                    }
+
+                    switch (this)
+                    {
+                        case ServerViewModel serverViewModel:
+                            await ServerManager.Instance.StartServerAsync(serverViewModel);
+                            break;
+                        case NetworkViewModel networkViewModel:
+                            await ServerManager.Instance.StartNetworkAsync(networkViewModel);
+                            break;
+                    }
+                });
+            }
         }
 
         public void SaveSettings()

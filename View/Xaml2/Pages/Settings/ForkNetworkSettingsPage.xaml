@@ -101,6 +101,7 @@
                                FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="95 0 5 0" />
                             <StackPanel Margin="110 10 50 10" HorizontalAlignment="Left">
                                 <CheckBox Content="Start/Stop Servers with the Network" Style="{DynamicResource TextCheckBox}" FontSize="18" IsChecked="{Binding Network.SyncServers}"/>
+                                <CheckBox Content="Start Network with Fork" Style="{DynamicResource TextCheckBox}" FontSize="18" IsChecked="{Binding Network.StartWithFork}" Margin="0 5 0 0"/>
                             </StackPanel> 
                         </StackPanel>
                         <Border.Style>
