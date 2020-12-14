@@ -27,8 +27,8 @@ namespace Fork.Logic.Model
 
         public long MaxTickTime
         {
-            get => long.Parse(SettingsDictionary["max-tick-rate"]);
-            set => SettingsDictionary["max-tick-rate"] = value.ToString();
+            get => long.Parse(SettingsDictionary["max-tick-time"]);
+            set => SettingsDictionary["max-tick-time"] = value.ToString();
         }
 
         public int QueryPort
@@ -232,16 +232,22 @@ namespace Fork.Logic.Model
             set => SettingsDictionary["rcon.password"] = value;
         }
 
-        public bool GenerateStructure
+        public bool GenerateStructures
         {
-            get => bool.Parse(SettingsDictionary["generate-structure"]);
-            set => SettingsDictionary["generate-structure"] = value.ToString().ToLower();
+            get => bool.Parse(SettingsDictionary["generate-structures"]);
+            set => SettingsDictionary["generate-structures"] = value.ToString().ToLower();
         }
 
         public int MaxBuildHeight
         {
             get => int.Parse(SettingsDictionary["max-build-height"]);
             set => SettingsDictionary["max-build-height"] = value.ToString();
+        }
+
+        public int RateLimit
+        {
+            get => int.Parse(SettingsDictionary["rate-limit"]);
+            set => SettingsDictionary["rate-limit"] = value.ToString();
         }
 
         public bool OnlineMode
@@ -278,6 +284,36 @@ namespace Fork.Logic.Model
         {
             get => SettingsDictionary["motd"];
             set => SettingsDictionary["motd"] = value;
+        }
+
+        public bool SyncChunkWrites
+        {
+            get => bool.Parse(SettingsDictionary["sync-chunk-writes"]);
+            set => SettingsDictionary["sync-chunk-writes"] = value.ToString().ToLower();
+        }
+        
+        public bool EnableJmxMonitoring
+        {
+            get => bool.Parse(SettingsDictionary["enable-jmx-monitoring"]);
+            set => SettingsDictionary["enable-jmx-monitoring"] = value.ToString().ToLower();
+        }
+        
+        public bool EnableStatus
+        {
+            get => bool.Parse(SettingsDictionary["enable-status"]);
+            set => SettingsDictionary["enable-status"] = value.ToString().ToLower();
+        }
+        
+        public bool RequireResourcePack
+        {
+            get => bool.Parse(SettingsDictionary["require-resource-pack"]);
+            set => SettingsDictionary["require-resource-pack"] = value.ToString().ToLower();
+        }
+
+        public int EntityBroadcastRangePercentage
+        {
+            get => int.Parse(SettingsDictionary["entity-broadcast-range-percentage"]);
+            set => SettingsDictionary["entity-broadcast-range-percentage"] = value.ToString();
         }
         #endregion
 
@@ -319,6 +355,7 @@ namespace Fork.Logic.Model
             ServerPort = 25565;
             ViewDistance = 10;
             MaxBuildHeight = 256;
+            RateLimit = 0;
 
             MaxTickTime = 60000L;
             PlayerIdleTimeout = 0L;
@@ -348,11 +385,17 @@ namespace Fork.Logic.Model
             AllowFlight = false;
             SpawnAnimals = true;
             Whitelist = false;
-            GenerateStructure = true;
+            GenerateStructures = true;
             OnlineMode = true;
             UseNativeTransport = true;
             PreventProxyConnections = false;
             EnableRcon = false;
+
+            SyncChunkWrites = false;
+            EnableJmxMonitoring = false;
+            EnableStatus = true;
+            RequireResourcePack = false;
+            EntityBroadcastRangePercentage = 100;
 
             CurrGamemode = Gamemode.Survival;
             CurrDifficulty = Difficulty.Easy;
