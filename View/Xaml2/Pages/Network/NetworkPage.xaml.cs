@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Fork.Logic.Manager;
@@ -36,7 +37,7 @@ namespace Fork.View.Xaml2.Pages.Network
 
             else if (viewModel.CurrentStatus == ServerStatus.STARTING)
             {
-                ServerManager.Instance.KillEntity(viewModel);
+                await Task.Run(() => ServerManager.Instance.KillEntity(viewModel));
             }
 
             else if (viewModel.CurrentStatus == ServerStatus.RUNNING)

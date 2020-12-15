@@ -836,7 +836,7 @@ namespace Fork.Logic.Manager
             Process process = ApplicationManager.Instance.ActiveEntities[entityViewModel.Entity];
             try
             {
-                process.Kill(entireProcessTree: true);
+                process.Kill(true);
                 ConsoleWriter.Write("Killed server "+entityViewModel.Entity, entityViewModel);
                 Console.WriteLine("Killed server "+entityViewModel.Entity);
             }
