@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -126,14 +130,6 @@ namespace Fork.Logic.Manager
             serverViewModel.RefreshPlayerList();
         }
         
-        public async Task<bool> StartServerAsync(ServerViewModel serverViewModel)
-        {
-            Task<bool> t = new Task<bool>(() => StartServer(serverViewModel));
-            t.Start();
-            bool result = await t;
-            return result;
-        }
-        
         public async Task<bool> RestartServerAsync(ServerViewModel serverViewModel)
         {
             Task<bool> t = new Task<bool>(() => RestartServer(serverViewModel));
@@ -190,7 +186,7 @@ namespace Fork.Logic.Manager
                 Thread.Sleep(500);
             }
 
-            StartServer(serverViewModel);
+            Task.Run(async () => await StartServerAsync(serverViewModel));
 
             return true;
         }
@@ -738,7 +734,7 @@ namespace Fork.Logic.Manager
             }
         }
 
-        private bool StartServer(ServerViewModel viewModel)
+        public async Task<bool> StartServerAsync(ServerViewModel viewModel)
         {
             ConsoleWriter.Write("\nStarting server "+viewModel.Server+" on world: "+ viewModel.Server.ServerSettings.LevelName, viewModel);
             Console.WriteLine("Starting server "+viewModel.Server.Name+" on world: "+ viewModel.Server.ServerSettings.LevelName);
@@ -763,6 +759,43 @@ namespace Fork.Logic.Manager
                 ConsoleWriter.Write("WARN: The Java installation selected for this server is outdated. Please update Java to version 11 or higher.", viewModel);
             }
 
+            if (!viewModel.Server.ServerSettings.ResourcePack.Equals("") && viewModel.Server.AutoSetSha1)
+            {
+                ConsoleWriter.Write(new ConsoleMessage("Generating Resource Pack hash...", 
+                    ConsoleMessage.MessageLevel.INFO), viewModel);
+                string resourcePackUrl = viewModel.Server.ServerSettings.ResourcePack.Replace("\\", "");
+                bool isHashUpToDate = await IsHashUpToDate(viewModel.Server.ResourcePackHashAge, resourcePackUrl);
+                if (!string.IsNullOrEmpty(viewModel.Server.ServerSettings.ResourcePackSha1) && isHashUpToDate)
+                {
+                    ConsoleWriter.Write(new ConsoleMessage("Resource Pack hash is still up to date. Staring server...", 
+                        ConsoleMessage.MessageLevel.SUCCESS), viewModel);
+                }
+                else
+                {
+                    ConsoleWriter.Write(new ConsoleMessage("Resource Pack hash is outdated. Updating it...", 
+                        ConsoleMessage.MessageLevel.WARN), viewModel);
+                    DateTime hashAge = DateTime.Now;
+                    IProgress<double> downloadProgress = new Progress<double>();
+                    string hash = await HashResourcePack(resourcePackUrl, downloadProgress);
+                    if (!string.IsNullOrEmpty(hash))
+                    {
+                        viewModel.Server.ServerSettings.ResourcePackSha1 = hash;
+                        viewModel.Server.ResourcePackHashAge = hashAge;
+                        EntitySerializer.Instance.StoreEntities(Entities);
+                        viewModel.SaveProperties();
+                        ConsoleWriter.Write(new ConsoleMessage("Successfully updated Resource Pack hash to: "+hash, 
+                            ConsoleMessage.MessageLevel.SUCCESS), viewModel);
+                        ConsoleWriter.Write(new ConsoleMessage("Starting the server...", 
+                            ConsoleMessage.MessageLevel.INFO), viewModel);
+                    }
+                    else
+                    {
+                        ConsoleWriter.Write(new ConsoleMessage("Error updating the Resource Pack hash! Continuing with no hash...", 
+                            ConsoleMessage.MessageLevel.ERROR), viewModel);
+                    }
+                }
+            }
+
             Process process = new Process();
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
@@ -772,45 +805,44 @@ namespace Fork.Logic.Manager
                 RedirectStandardOutput = true,
                 FileName = viewModel.Server.JavaSettings.JavaPath,
                 WorkingDirectory = directoryInfo.FullName,
-                Arguments = "-Xmx" + viewModel.Server.JavaSettings.MaxRam + "m -Xms" +
-                            viewModel.Server.JavaSettings.MinRam + "m -jar server.jar nogui",
+                Arguments = "-Xmx" + viewModel.Server.JavaSettings.MaxRam + "m "+ viewModel.Server.JavaSettings.StartupParameters+" -jar server.jar nogui",
                 WindowStyle = ProcessWindowStyle.Hidden,
                 CreateNoWindow = true
             };
             process.StartInfo = startInfo;
             process.Start();
-            new Thread(() =>
+            Task.Run(() =>
             {
                 viewModel.TrackPerformance(process);
-            }){IsBackground = true}.Start();
+            });
             viewModel.CurrentStatus = ServerStatus.STARTING;
             ConsoleWriter.RegisterApplication(viewModel, process.StandardOutput, process.StandardError);
             ConsoleReader consoleReader = new ConsoleReader(process.StandardInput);
             double nextRestart = AutoRestartManager.Instance.RegisterRestart(viewModel);
 
             viewModel.SetRestartTime(nextRestart);
-            new Thread(() =>
+            Task.Run(() =>
             {
                 process.WaitForExit();
                 ApplicationManager.Instance.ActiveEntities.Remove(viewModel.Server);
                 viewModel.CurrentStatus = ServerStatus.STOPPED;
                 AutoRestartManager.Instance.DisposeRestart(viewModel);
                 viewModel.SetRestartTime(-1d);
-            }).Start();
+            });
             viewModel.ConsoleReader = consoleReader;
             ApplicationManager.Instance.ActiveEntities[viewModel.Server] = process;
-            new Thread(() => { new QueryStatsWorker(viewModel); }){IsBackground = true}.Start();
+            Task.Run(() => { new QueryStatsWorker(viewModel); });
             Console.WriteLine("Started server "+ viewModel.Server);
             
             //Register new world if created
-            new Thread(() =>
+            Task.Run(() =>
             {
                 while (!viewModel.ServerRunning)
                 {
                     Thread.Sleep(500);
                 }
                 viewModel.InitializeWorldsList();
-            }){IsBackground = true}.Start();
+            });
             return true;
         }
 
@@ -846,6 +878,69 @@ namespace Fork.Logic.Manager
                 return false;
             }
             return true;
+        }
+
+        private async Task<bool> IsHashUpToDate(DateTime hashDate, string fileSourceUrl)
+        {
+            if (string.IsNullOrEmpty(fileSourceUrl))
+            {
+                return false;
+            }
+
+            HttpWebRequest request = WebRequest.CreateHttp(fileSourceUrl);
+            request.Method = WebRequestMethods.Http.Head;
+            HttpWebResponse webResponse = await request.GetResponseAsync() as HttpWebResponse;
+            DateTime? lastModified =  webResponse?.LastModified;
+
+            if (lastModified  != null && lastModified.Value.CompareTo(hashDate) < 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private async Task<string> HashResourcePack(string url, IProgress<double> downloadProgress)
+        {
+            string result = "";
+            if (string.IsNullOrEmpty(url))
+            {
+                return result;
+            }
+            
+            //ensure tmp directory
+            new DirectoryInfo(Path.Combine(App.ApplicationPath, "tmp")).Create();
+            FileInfo resourcePackFile = new FileInfo(
+                Path.Combine(App.ApplicationPath, "tmp", Guid.NewGuid().ToString()
+                    .Replace("-", "")+".zip"));
+            
+            //Download the resource pack
+            HttpWebRequest request = WebRequest.CreateHttp(url);
+            request.Method = WebRequestMethods.Http.Head;
+            HttpWebResponse webResponse = await request.GetResponseAsync() as HttpWebResponse;
+            if (webResponse != null && webResponse.ContentType != "application/zip")
+            {
+                return result;
+            }
+            await Downloader.DownloadFileAsync(url, resourcePackFile.FullName, downloadProgress);
+
+            //Calculate sha-1
+            await using (FileStream fs = resourcePackFile.OpenRead())
+            {
+                await using BufferedStream bs = new BufferedStream(fs);
+                using (SHA1Managed sha1 = new SHA1Managed())
+                {
+                    byte[] hash = sha1.ComputeHash(bs);
+                    StringBuilder formatted = new StringBuilder(2 * hash.Length);
+                    foreach (byte b in hash)
+                    {
+                        formatted.AppendFormat("{0:X2}", b);
+                    }
+                    result = formatted.ToString();
+                }
+            }
+            resourcePackFile.Delete();
+            return result;
         }
     }
 }

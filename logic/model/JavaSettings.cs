@@ -10,7 +10,6 @@ namespace Fork.Logic.Model
     public class JavaSettings : INotifyPropertyChanged
     {
         public int MaxRam { get; set; } = 2048;
-        public int MinRam { get; set; } = 512;
         public string JavaPath { get; set; } = AppSettingsSerializer.Instance.AppSettings.DefaultJavaPath;
         public string StartupParameters { get; set; } = "";
         
@@ -19,7 +18,6 @@ namespace Fork.Logic.Model
         public JavaSettings(JavaSettings javaSettings)
         {
             MaxRam = javaSettings.MaxRam;
-            MinRam = javaSettings.MinRam;
             JavaPath = javaSettings.JavaPath;
             StartupParameters = javaSettings.StartupParameters;
         }

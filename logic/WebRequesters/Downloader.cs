@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Navigation;
 using Fork.ViewModel;
 
 namespace Fork.Logic.WebRequesters
@@ -20,6 +22,14 @@ namespace Fork.Logic.WebRequesters
                     Path.Combine(directoryInfo.FullName, "server.jar"));
             }){IsBackground = true};
             thread.Start();
+        }
+
+        public static async Task DownloadFileAsync(string url, string targetPath, IProgress<double> progress)
+        {
+            WebClient webClient = new WebClient();
+            webClient.DownloadProgressChanged += (sender, args) =>
+                    progress?.Report((double)args.BytesReceived / args.TotalBytesToReceive * 100d);
+            await webClient.DownloadFileTaskAsync(new Uri(url), targetPath);
         }
     }
 }

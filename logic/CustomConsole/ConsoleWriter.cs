@@ -97,5 +97,10 @@ namespace Fork.Logic.CustomConsole
         {
             target.AddToConsole(new ConsoleMessage(line));
         }
+
+        public static void Write(ConsoleMessage message, EntityViewModel target)
+        {
+            target.AddToConsole(message);
+        }
     }
 }
