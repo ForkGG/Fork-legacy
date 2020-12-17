@@ -11,6 +11,7 @@ namespace Fork.Logic.Model
         ServerVersion Version { get; set; }
         string Name { get; set; }
         bool StartWithFork { get; set; }
+        int ServerIconId { get; set; }
 
         string ToString();
     }

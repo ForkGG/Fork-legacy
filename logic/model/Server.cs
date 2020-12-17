@@ -21,6 +21,7 @@ namespace Fork.Logic.Model
         public bool Initialized { get; set; } = false;
         public bool StartWithFork { get; set; } = false;
         public bool AutoSetSha1 { get; set; } = true;
+        public int ServerIconId { get; set; }
         public DateTime ResourcePackHashAge { get; set; } = DateTime.MinValue;
         public ServerRestart Restart1 { get; set; }
         public ServerRestart Restart2 { get; set; }

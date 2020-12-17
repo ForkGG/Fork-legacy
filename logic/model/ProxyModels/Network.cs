@@ -22,6 +22,7 @@ namespace Fork.Logic.Model.ProxyModels
 
         public bool Initialized { get; set; } = false;
         public bool StartWithFork { get; set; } = false;
+        public int ServerIconId { get; set; }
         
         public ServerVersion Version { get; set; }
         [JsonIgnore] public BungeeSettings Config { get; set; }

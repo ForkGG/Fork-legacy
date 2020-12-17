@@ -208,7 +208,7 @@
 
                             <CheckBox Content="Set SHA-1 automatically (recommended)" IsChecked="{Binding Server.AutoSetSha1}"
                                   Style="{DynamicResource TextCheckBox}" FontSize="20" Grid.Row="3" Grid.Column="1"
-                                  Margin="10 15 0 0" />
+                                  Margin="10 5 0 0" />
                             <StackPanel Visibility="{Binding Server.AutoSetSha1, Converter={StaticResource InverseBoolToVisiblityConverter}}">
                                 <TextBlock Grid.Row="3" Text="Server Resource Pack SHA-1"
                                    Style="{DynamicResource CreateServerTextBlock}" Margin="40 10 10 0" />
@@ -236,6 +236,15 @@
                                              Height="40" />
                                 </Border>
                             </StackPanel>
+
+                            <StackPanel HorizontalAlignment="Left" Margin="0 25 0 0">
+                                <TextBlock Text="Server Icon" Style="{DynamicResource CreateServerTextBlock}"
+                                           Margin="0 0 20 10" />                               
+                                <ListBox ItemsSource="{Binding ServerIcons}" Style="{DynamicResource ServerIconListBox}" 
+                                         ItemContainerStyle="{DynamicResource ServerIconListBoxItem}" SelectedItem="{Binding SelectedServerIcon}"/>
+                            </StackPanel>
+
+                            
                             
                         </StackPanel>
                     </StackPanel>

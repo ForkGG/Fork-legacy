@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -15,6 +16,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Resources;
 using System.Windows.Threading;
 using Fork.Annotations;
 using Fork.Logic.BackgroundWorker.Performance;
@@ -29,6 +31,9 @@ using Fork.Logic.Model.ServerConsole;
 using Fork.Logic.Model.Settings;
 using Fork.Logic.Persistence;
 using Fork.Logic.Utils;
+using Brush = System.Windows.Media.Brush;
+using Brushes = System.Windows.Media.Brushes;
+using Image = System.Drawing.Image;
 using Server = Fork.Logic.Model.Server;
 
 namespace Fork.ViewModel
@@ -212,6 +217,10 @@ namespace Fork.ViewModel
             }
         }
 
+        public ObservableCollection<ImageSource> ServerIcons { get; set; }
+
+        public ImageSource SelectedServerIcon { get; set; }
+
         public double DownloadProgress { get; set; }
         public bool DownloadCompleted { get; set; }
         public double CopyProgress { get; set; }
@@ -235,8 +244,8 @@ namespace Fork.ViewModel
                     Thread.Sleep(1000);
                     consoleMessagesLastSecond = 0;
                 }
-            }){IsBackground = true}.Start();
-            
+            }) {IsBackground = true}.Start();
+
             Entity = entity;
 
             //Error weird crash (should not happen unless entities.json is corrupted)
@@ -250,6 +259,58 @@ namespace Fork.ViewModel
             CurrentStatus = ServerStatus.STOPPED;
             consoleOutListNoQuery = new List<ConsoleMessage>();
             ConsoleOutList = new ObservableCollection<ConsoleMessage>();
+            ServerIcons = new ObservableCollection<ImageSource>();
+
+            FileInfo customIcon = new FileInfo(Path.Combine(App.ServerPath, Entity.Name, "custom-icon.png"));
+            if (!customIcon.Exists)
+            {
+                PngBitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(
+                    new Uri("pack://application:,,,/View/Resources/images/Server-Icons/default.png")));
+                using (FileStream fileStream = new FileStream(customIcon.FullName, FileMode.Create))
+                {
+                    encoder.Save(fileStream);
+                }
+            }
+
+            List<string> iconUris = new List<string>
+            {
+                "pack://application:,,,/View/Resources/images/Server-Icons/default.png",
+                "pack://application:,,,/View/Resources/images/Server-Icons/default.png",
+                "pack://application:,,,/View/Resources/images/Server-Icons/default.png",
+                "pack://application:,,,/View/Resources/images/Server-Icons/default.png",
+                customIcon.FullName
+            };
+            foreach (string iconUri in iconUris)
+            {
+                Image image;
+                if (iconUri.StartsWith("pack://application:,,,/"))
+                {
+                    StreamResourceInfo info = Application.GetResourceStream(new Uri(iconUri));
+                    image = Image.FromStream(info?.Stream);
+                }
+                else
+                {
+                    image = Image.FromFile(iconUri);
+                }
+                
+                Bitmap bitmap = ImageUtils.ResizeImage(image, 64, 64);
+                ImageSource img = ImageUtils.BitmapToImageSource(bitmap);
+                img.Freeze();
+                Application.Current.Dispatcher?.Invoke(() => ServerIcons.Add(img));
+            }
+            if (Entity.ServerIconId >= 0 && Entity.ServerIconId < ServerIcons.Count)
+            {
+                SelectedServerIcon = ServerIcons[Entity.ServerIconId];
+            }
+            else
+            {
+                SelectedServerIcon = ServerIcons[0];
+                Entity.ServerIconId = 0;
+            }
+            WriteServerIcon();
+
+
             ConsoleOutList.CollectionChanged += ConsoleOutChanged;
 
             UpdateAddressInfo();
@@ -276,10 +337,38 @@ namespace Fork.ViewModel
             }
         }
 
+        public void UpdateCustomImage(string filePath)
+        {
+            try
+            {
+                ImageSource toRemove = ServerIcons.Last();
+                var newIsSelected = SelectedServerIcon == toRemove;
+                Application.Current.Dispatcher?.Invoke(() => ServerIcons.Remove(toRemove));
+                Bitmap bitmap;
+                using (Image image = Image.FromFile(filePath))
+                {
+                    bitmap = ImageUtils.ResizeImage(image, 64, 64);
+                }
+                ImageSource img = ImageUtils.BitmapToImageSource(bitmap);
+                img.Freeze();
+                Application.Current.Dispatcher?.Invoke(() => ServerIcons.Add(img));
+                if (newIsSelected)
+                {
+                    SelectedServerIcon = img;
+                }
+                bitmap.Save(Path.Combine(App.ServerPath,Entity.Name,"custom-icon.png"));
+            }
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
+            }
+        }
+
         public void SaveSettings()
         {
             new Thread(() =>
             {
+                WriteServerIcon();
                 UpdateAddressInfo();
                 SettingsViewModel.SaveChanges();
                 EntitySerializer.Instance.StoreEntities(ServerManager.Instance.Entities);
@@ -293,29 +382,33 @@ namespace Fork.ViewModel
                 if (CurrentStatus == ServerStatus.RUNNING && message.Level == ConsoleMessage.MessageLevel.INFO)
                 {
                     int dist = StringUtils.DamerauLevenshteinDistance(
-                        lastConsoleMessage.Content, message.Content, 
-                        (int)Math.Round(Math.Min(lastConsoleMessage.Content.Length, message.Content.Length) * 0.10));
+                        lastConsoleMessage.Content, message.Content,
+                        (int) Math.Round(Math.Min(lastConsoleMessage.Content.Length, message.Content.Length) * 0.10));
                     if (dist < int.MaxValue)
                     {
                         lastConsoleMessage.SubContents++;
                         return;
                     }
+
                     if (consoleMessagesLastSecond > AppSettings.MaxConsoleLinesPerSecond)
                     {
                         return;
                     }
                 }
+
                 try
                 {
                     if (CurrentStatus == ServerStatus.RUNNING)
                     {
                         consoleMessagesLastSecond++;
                     }
+
                     lastConsoleMessage = message;
                     consoleOutListNoQuery.Add(message);
                     if (message.Content.Contains(currentQuery))
                     {
-                        Application.Current?.Dispatcher?.Invoke(() => ConsoleOutList.Add(message), DispatcherPriority.ApplicationIdle);
+                        Application.Current?.Dispatcher?.Invoke(() => ConsoleOutList.Add(message),
+                            DispatcherPriority.ApplicationIdle);
                     }
 
                     while (consoleOutListNoQuery.Count > AppSettings.MaxConsoleLines)
@@ -323,7 +416,8 @@ namespace Fork.ViewModel
                         ConsoleMessage messageToDelete = consoleOutListNoQuery[0];
                         if (ConsoleOutList.Contains(messageToDelete))
                         {
-                            Application.Current?.Dispatcher?.Invoke(() => ConsoleOutList.RemoveAt(0), DispatcherPriority.ApplicationIdle);
+                            Application.Current?.Dispatcher?.Invoke(() => ConsoleOutList.RemoveAt(0),
+                                DispatcherPriority.ApplicationIdle);
                         }
 
                         consoleOutListNoQuery.RemoveAt(0);
@@ -504,6 +598,19 @@ namespace Fork.ViewModel
         {
             SettingsReader settingsReader = new SettingsReader(this);
             ApplicationManager.Instance.SettingsReaders.Add(settingsReader);
+        }
+        
+        
+        private void WriteServerIcon()
+        {
+            Entity.ServerIconId = ServerIcons.IndexOf(SelectedServerIcon);
+            FileInfo customIcon = new FileInfo(Path.Combine(App.ServerPath, Entity.Name, "server-icon.png"));
+            PngBitmapEncoder encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create((BitmapSource) SelectedServerIcon));
+            using (FileStream fileStream = new FileStream(customIcon.FullName, FileMode.Create))
+            {
+                encoder.Save(fileStream);
+            }
         }
 
         private void UpdateAddressInfo()

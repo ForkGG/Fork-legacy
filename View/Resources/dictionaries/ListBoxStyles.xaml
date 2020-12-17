@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    x:Class="Fork.View.Resources.dictionaries.ListBoxStyles"
                     xmlns:local="clr-namespace:Fork.View.Resources.dictionaries">
     <Style x:Key="ConsoleListBox" TargetType="ListBox">
         <Setter Property="SelectionMode" Value="Extended"/>
@@ -53,6 +54,46 @@
                         <DataTrigger Binding="{Binding SubContents}" Value="0">
                             <Setter TargetName="suppressedText" Property="Visibility" Value="Collapsed"/>
                         </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ServerIconListBox" TargetType="ListBox">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBox">
+                    <WrapPanel>
+                        <WrapPanel IsItemsHost="True" />
+                        <Button Margin="10 0 0 0" Content="Custom" Style="{DynamicResource RoundedTextButton}" Click="RemoveFromNetwork_Click"/>
+                    </WrapPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ServerIconListBoxItem" TargetType="ListBoxItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border x:Name="border" Margin="10 5" BorderThickness="2" BorderBrush="Transparent" CornerRadius="8">
+                        <Grid>
+                            <Border Visibility="Hidden">
+                                <Border Name="Mask" Background="White" BorderBrush="Transparent" CornerRadius="8"/>
+                            </Border>
+                            <Border>
+                                <Image Source="{Binding}" Width="64" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                <Border.OpacityMask>
+                                    <VisualBrush Visual="{Binding ElementName=Mask}"/>
+                                </Border.OpacityMask>
+                            </Border>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource tabSelected}"/>
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

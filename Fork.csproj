@@ -10,7 +10,7 @@
     <StartupObject>Fork.App</StartupObject>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageProjectUrl>https://Fork.gg</PackageProjectUrl>
+    <PackageProjectUrl>https://fork.gg</PackageProjectUrl>
     <PackageIcon>icon.ico</PackageIcon>
     <RepositoryUrl>https://github.com/ForkGG/fork</RepositoryUrl>
   </PropertyGroup>
@@ -89,6 +89,7 @@
     <None Remove="View\Resources\images\maximize2.png" />
     <None Remove="View\Resources\images\minimize.png" />
     <None Remove="View\Resources\images\paperSymbol.png" />
+    <None Remove="View\Resources\images\Server-Icons\Default.png" />
     <None Remove="View\Resources\images\spigotSymbol.png" />
     <None Remove="View\Resources\images\Splash.png" />
     <None Remove="View\Resources\images\title.png" />
@@ -194,6 +195,7 @@
     <Resource Include="View\Resources\images\maximize1.png" />
     <Resource Include="View\Resources\images\maximize2.png" />
     <Resource Include="View\Resources\images\minimize.png" />
+    <Resource Include="View\Resources\images\Server-Icons\Default.png" />
     <Resource Include="View\Resources\SyntaxHighlighting\Python.xshd" />
     <Resource Include="View\Resources\SyntaxHighlighting\YAML.xshd" />
   </ItemGroup>

@@ -126,8 +126,7 @@ namespace Fork.Logic.Controller
                 RedirectStandardOutput = true,
                 FileName = viewModel.Network.JavaSettings.JavaPath,
                 WorkingDirectory = directoryInfo.FullName,
-                Arguments = "-Xmx" + viewModel.Network.JavaSettings.MaxRam + "m -Xms" +
-                            viewModel.Network.JavaSettings.MinRam + "m -jar server.jar nogui",
+                Arguments = "-Xmx" + viewModel.Network.JavaSettings.MaxRam + "m "+ viewModel.Network.JavaSettings.StartupParameters+" -jar server.jar nogui",
                 WindowStyle = ProcessWindowStyle.Hidden,
                 CreateNoWindow = true
             };
