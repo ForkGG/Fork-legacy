@@ -1,8 +1,11 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Timers;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Fork.Annotations;
 using Fork.Logic.Controller;
 using Fork.Logic.Manager;
@@ -32,6 +35,8 @@ namespace Fork.ViewModel
         public JavaVersion InstalledJavaVersion { get; private set; }
         public bool ShowJavaWarning { get; private set; }
         public string JavaWarningMessage { get; private set; }
+        public ImageSource Boi { get; private set; }
+        public ImageSource BoiHover { get; private set; }
         
         
         public CreatePage CreatePage { get; } = new CreatePage();
@@ -57,6 +62,16 @@ namespace Fork.ViewModel
             {
                 SelectedEntity = Entities[0];
                 HasServers = true;
+            }
+            
+            Boi = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/BoiTransparent.png"));
+            BoiHover = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/BoiTransparentHover.png"));
+
+            DateTime now = DateTime.Now;
+            if (now.Month == 12 && now.Day<27)
+            {
+                Boi = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/XMasBoiTransparent.png"));
+                BoiHover = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/XMasBoiTransparentHover.png"));
             }
         }
 

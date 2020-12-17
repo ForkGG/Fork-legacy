@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Fork;
 using Fork.Logic.ImportLogic;
+using Fork.Logic.Logging;
 using Fork.Logic.Manager;
 using Fork.ViewModel;
 using Application = System.Windows.Application;
@@ -35,8 +36,36 @@ namespace Fork.View.Xaml2.Pages
 
         private async void ApplyNewServerDir_Click(object sender, RoutedEventArgs e)
         {
-            bool result = await ServerManager.Instance.MoveEntitiesAsync(ForkServerPath.Text);
+            bool result;
+            try
+            {
+                result = await ServerManager.Instance.MoveEntitiesAsync(ForkServerPath.Text);
+            }
+            catch (Exception ex)
+            {
+                ServerDirChangeErrorGrid.Visibility = Visibility.Visible;
+                if (ex is UnauthorizedAccessException)
+                {
+                    ErrorMsgBox.Text = "Fork can't access \"" + ForkServerPath.Text +
+                                       "\"! Please try to use another directory.";
+                }
+                else
+                {
+                    ErrorMsgBox.Text = ex.Message;
+                }
+                ErrorLogger.Append(ex);
+                return;
+            }
+            if (!result)
+            {
+                ServerDirChangeErrorGrid.Visibility = Visibility.Visible;
+                ErrorMsgBox.Text =
+                    "Unknown error, this should not happen, please report to a Fork developer. Sadly this might have broken the functionality of Fork.";
+                return;
+            }
+            ServerDirChangeErrorGrid.Visibility = Visibility.Collapsed;
             ServerDirChangedGrid.Visibility = Visibility.Collapsed;
+            ResetServerDirButton.Visibility = Visibility.Collapsed;
             serverPathBgr.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
         }
 
@@ -51,11 +80,13 @@ namespace Fork.View.Xaml2.Pages
                 if (!ForkServerPath.Text.Equals(viewModel.AppSettings.ServerPath))
                 {
                     ServerDirChangedGrid.Visibility = Visibility.Visible;
+                    ResetServerDirButton.Visibility = Visibility.Visible;
                     serverPathBgr.Background = (Brush) Application.Current.FindResource("tabSelected");
                 }
                 else
                 {
                     ServerDirChangedGrid.Visibility = Visibility.Collapsed;
+                    ResetServerDirButton.Visibility = Visibility.Collapsed;
                     serverPathBgr.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
                 }
                 
@@ -84,6 +115,15 @@ namespace Fork.View.Xaml2.Pages
         private void DefaultJavaDirReset_Click(object sender, RoutedEventArgs e)
         {
             ForkDefaultJavaPath.Text = "java.exe";
+        }
+        
+        private void ResetServerDir_Click(object sender, RoutedEventArgs e)
+        {
+            ForkServerPath.Text = viewModel.AppSettings.ServerPath;
+            ServerDirChangeErrorGrid.Visibility = Visibility.Collapsed;
+            ServerDirChangedGrid.Visibility = Visibility.Collapsed;
+            ResetServerDirButton.Visibility = Visibility.Collapsed;
+            serverPathBgr.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
         }
 
         private void BecomePatron_Click(object sender, RoutedEventArgs e)

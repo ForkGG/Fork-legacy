@@ -331,6 +331,10 @@ namespace Fork.Logic.Manager
                 return false;
             }
 
+            DirectoryInfo test = new DirectoryInfo(Path.Combine(newDir.FullName, "test"));
+            test.Create();
+            test.Delete();
+
             foreach (EntityViewModel entityViewModel in Entities)
             {
                 string currEntityPath = Path.Combine(App.ServerPath, entityViewModel.Entity.Name);

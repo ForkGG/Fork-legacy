@@ -30,12 +30,10 @@
                         <Image Margin="20" RenderOptions.BitmapScalingMode="HighQuality">
                             <Image.Style>
                                 <Style TargetType="Image">
-                                    <Setter Property="Source"
-                                            Value="pack://application:,,,/View/Resources/images/Icons/DudeTransparent.png" />
+                                    <Setter Property="Source" Value="{Binding Boi}" />
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Source"
-                                                    Value="pack://application:,,,/View/Resources/images/Icons/DudeTransparentHover.png" />
+                                            <Setter Property="Source" Value="{Binding BoiHover}" />
                                         </Trigger>
                                         <DataTrigger Binding="{Binding HasServers}" Value="False">
                                             <Setter Property="Visibility" Value="Hidden" />
@@ -299,12 +297,10 @@
                             <Image RenderOptions.BitmapScalingMode="HighQuality" Width="200" Margin="-700 -50 0 -50">
                                 <Image.Style>
                                     <Style TargetType="Image">
-                                        <Setter Property="Source"
-                                                Value="pack://application:,,,/View/Resources/images/Icons/Dude.png" />
+                                        <Setter Property="Source" Value="{Binding Boi}" />
                                         <Style.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Source"
-                                                        Value="pack://application:,,,/View/Resources/images/Icons/DudeHover.png" />
+                                                <Setter Property="Source" Value="{Binding BoiHover}" />
                                             </Trigger>
                                         </Style.Triggers>
                                     </Style>
@@ -558,7 +554,7 @@
                 </StackPanel>
             </StackPanel>
         </Grid>
-        <Grid Panel.ZIndex="1" Visibility="{Binding ShowJavaWarning, Converter={StaticResource BoolToVisibilityConverter}}">
+        <Grid Panel.ZIndex="1" Visibility="{Binding ShowJavaWarning, Converter={StaticResource BoolToVisibilityConverter}}" d:Visibility="Hidden">
             <Rectangle Fill="#1F2234" Opacity="0.95" Margin="-5 0 0 0"/>
             <StackPanel Panel.ZIndex="1" VerticalAlignment="Center">
                 <TextBlock Text="Java Version Warning" FontSize="28" FontFamily="{DynamicResource Montserrat-Bold}"

@@ -83,7 +83,7 @@
                                 <Border Name="Mask" Background="White" BorderBrush="Transparent" CornerRadius="8"/>
                             </Border>
                             <Border>
-                                <Image Source="{Binding}" Width="64" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                <Image Source="{Binding}" Width="64" RenderOptions.BitmapScalingMode="NearestNeighbor" Cursor="Hand"/>
                                 <Border.OpacityMask>
                                     <VisualBrush Visual="{Binding ElementName=Mask}"/>
                                 </Border.OpacityMask>
