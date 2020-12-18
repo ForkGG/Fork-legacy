@@ -56,6 +56,8 @@ namespace Fork.ViewModel
         private DiskTracker diskTracker;
         private List<double> diskList;
         private double diskValue;
+        
+        private Stopwatch timeSinceLastConsoleMessage = new Stopwatch();
 
         public class EntityPathChangedEventArgs
         {
@@ -379,12 +381,12 @@ namespace Fork.ViewModel
         {
             lock (this)
             {
-                if (CurrentStatus == ServerStatus.RUNNING && message.Level == ConsoleMessage.MessageLevel.INFO)
+                if (message.Level == ConsoleMessage.MessageLevel.INFO)
                 {
-                    int dist = StringUtils.DamerauLevenshteinDistance(
-                        lastConsoleMessage.Content, message.Content,
-                        (int) Math.Round(Math.Min(lastConsoleMessage.Content.Length, message.Content.Length) * 0.10));
-                    if (dist < int.MaxValue)
+                    int threshold = (int) Math.Round(Math.Min(lastConsoleMessage.Content.Length, message.Content.Length) * 0.10);
+                    int dist = StringUtils.DamerauLevenshteinDistance(lastConsoleMessage.Content, 
+                        message.Content, threshold);
+                    if (dist < (threshold*5)/Math.Max(timeSinceLastConsoleMessage.Elapsed.TotalSeconds,1))
                     {
                         lastConsoleMessage.SubContents++;
                         return;
@@ -394,7 +396,7 @@ namespace Fork.ViewModel
                     {
                         return;
                     }
-                }
+                } 
 
                 try
                 {
@@ -409,6 +411,7 @@ namespace Fork.ViewModel
                     {
                         Application.Current?.Dispatcher?.Invoke(() => ConsoleOutList.Add(message),
                             DispatcherPriority.ApplicationIdle);
+                        timeSinceLastConsoleMessage.Restart();
                     }
 
                     while (consoleOutListNoQuery.Count > AppSettings.MaxConsoleLines)
