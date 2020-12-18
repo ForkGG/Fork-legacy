@@ -156,13 +156,13 @@
                             <Border CornerRadius="0 10 10 0" Height="55" Margin="0 3 -5 3"
                                     Background="{DynamicResource buttonBgrBlue}"
                                     Visibility="{Binding NewerVersionExists, Converter={StaticResource BoolToVisibilityConverter}}">
-                                <Button>
+                                <Button IsEnabled="False">
                                     <Button.Style>
                                         <Style TargetType="Button">
                                             <Setter Property="Template">
                                                 <Setter.Value>
                                                     <ControlTemplate TargetType="Button">
-                                                        <Border CornerRadius="0 10 10 0" Padding="30 0" Background="Transparent" Cursor="Hand" PreviewMouseLeftButtonDown="NewVersion_PreviewMouseLeftButtonDown">
+                                                        <Border CornerRadius="0 10 10 0" Padding="20 0 20 0" Background="Transparent" Cursor="Hand" PreviewMouseLeftButtonDown="NewVersion_PreviewMouseLeftButtonDown">
                                                             <Grid>
                                                                 <DockPanel>
                                                                     <Image x:Name="icon"
@@ -203,10 +203,15 @@
                                                                                        FontFamily="{DynamicResource Montserrat-Bold}"
                                                                                        FontSize="17"
                                                                                        Foreground="{DynamicResource backgroundDarker}" />
+                                                                            <TextBlock x:Name="ver7"
+                                                                                       Text=" is out"
+                                                                                       FontFamily="{DynamicResource Montserrat-Bold}"
+                                                                                       FontSize="17"
+                                                                                       Foreground="{DynamicResource backgroundDarker}" />
                                                                         </StackPanel>
                                                                         <StackPanel Grid.Row="1">
-                                                                            <TextBlock x:Name="ver7"
-                                                                                       Text="is now available"
+                                                                            <TextBlock x:Name="ver8"
+                                                                                       Text="Restart Fork to Update"
                                                                                        Foreground="{DynamicResource backgroundDarker}" />
                                                                         </StackPanel>
                                                                     </Grid>
@@ -230,6 +235,8 @@
                                                                 <Setter TargetName="ver6" Property="Foreground"
                                                                         Value="White" />
                                                                 <Setter TargetName="ver7" Property="Foreground"
+                                                                        Value="White" />
+                                                                <Setter TargetName="ver8" Property="Foreground"
                                                                         Value="White" />
                                                             </Trigger>
                                                         </ControlTemplate.Triggers>
