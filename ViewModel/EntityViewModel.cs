@@ -606,13 +606,21 @@ namespace Fork.ViewModel
         
         private void WriteServerIcon()
         {
-            Entity.ServerIconId = ServerIcons.IndexOf(SelectedServerIcon);
-            FileInfo customIcon = new FileInfo(Path.Combine(App.ServerPath, Entity.Name, "server-icon.png"));
-            PngBitmapEncoder encoder = new PngBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create((BitmapSource) SelectedServerIcon));
-            using (FileStream fileStream = new FileStream(customIcon.FullName, FileMode.Create))
+            try
             {
-                encoder.Save(fileStream);
+                Entity.ServerIconId = ServerIcons.IndexOf(SelectedServerIcon);
+                FileInfo customIcon = new FileInfo(Path.Combine(App.ServerPath, Entity.Name, "server-icon.png"));
+                PngBitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create((BitmapSource) SelectedServerIcon));
+                using (FileStream fileStream = new FileStream(customIcon.FullName, FileMode.Create))
+                {
+                    encoder.Save(fileStream);
+                }
+            }
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
+                Console.WriteLine("Saving server icon failed! See error log");
             }
         }
 

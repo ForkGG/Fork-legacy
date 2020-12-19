@@ -381,6 +381,9 @@ namespace Fork.Logic.Manager
 
             Server server = new Server(serverName, version, settings, new JavaSettings());
             serverNames.Add(serverName);
+
+            //Create server directory
+            DirectoryInfo serverDirectory = Directory.CreateDirectory(serverPath);
             
             //Add server to Fork
             ServerViewModel viewModel = new ServerViewModel(server);
@@ -388,8 +391,6 @@ namespace Fork.Logic.Manager
             Application.Current.Dispatcher.Invoke(() => Entities.Add(viewModel));
             ApplicationManager.Instance.MainViewModel.SelectedEntity = viewModel;
             
-            //Create server directory
-            DirectoryInfo serverDirectory = Directory.CreateDirectory(serverPath);
             
             //Import server files
             Thread copyThread = new Thread(() =>
