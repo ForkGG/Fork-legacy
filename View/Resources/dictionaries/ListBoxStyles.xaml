@@ -77,7 +77,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
-                    <Border x:Name="border" Margin="10 5" BorderThickness="2" BorderBrush="Transparent" CornerRadius="8">
+                    <Border x:Name="border" Margin="10 5" BorderThickness="3" BorderBrush="Transparent" CornerRadius="8">
                         <Grid>
                             <Border Visibility="Hidden">
                                 <Border Name="Mask" Background="White" BorderBrush="Transparent" CornerRadius="8"/>
