@@ -53,9 +53,9 @@
                 <controls:IconRadioButton Margin="10" GroupName="MenuTabs" Click="SelectSettings"
                                           IconSource="pack://application:,,,/View/Resources/images/Icons/Settings.png"
                                           HoverIconSource="pack://application:,,,/View/Resources/images/Icons/SettingsW.png"/>
-                <controls:IconRadioButton Margin="10" GroupName="MenuTabs" Click="SelectPlugins"
+                <!--controls:IconRadioButton Margin="10" GroupName="MenuTabs" Click="SelectPlugins"
                                           IconSource="pack://application:,,,/View/Resources/images/Icons/Plugins.png"
-                                          HoverIconSource="pack://application:,,,/View/Resources/images/Icons/PluginsW.png"/>
+                                          HoverIconSource="pack://application:,,,/View/Resources/images/Icons/PluginsW.png"/-->
             </StackPanel>
 
             <!-- Title -->

@@ -9,6 +9,7 @@ using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Fork.Logic.Controller;
 using Fork.Logic.Logging;
 using Fork.logic.model.PluginModels;
 using Fork.Logic.Model.PluginModels;
@@ -89,13 +90,18 @@ namespace Fork.Logic.Manager
                 return false;
             }
             
-            HttpClient httpClient = new HttpClient(new HttpClientHandler{AllowAutoRedirect = true});
+            APIController apiController = new APIController();
+            var result = await apiController.DownloadPluginAsync(plugin,
+                Path.Combine(App.ServerPath, viewModel.Entity.Name, "plugins",
+                    StringUtils.PluginNameToJarName(plugin.Name) + ".jar"));
+            
+            /*HttpClient httpClient = new HttpClient(new HttpClientHandler{AllowAutoRedirect = true});
             Uri uri = new Uri(new PluginWebRequester().BuildDownloadURL(plugin));
             HttpResponseMessage response = await httpClient.GetAsync(uri);
             await using (var fileStream = new FileStream(Path.Combine(App.ServerPath, viewModel.Entity.Name, "plugins", StringUtils.PluginNameToJarName(plugin.Name)+ ".jar"), FileMode.Create))
             {
                 await response.Content.CopyToAsync(fileStream);
-            }
+            }*/
             
             plugin.IsDownloaded = true;
             return true;

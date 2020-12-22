@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Cache;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using Fork.Logic.Logging;
 using Fork.Logic.Manager;
 using Fork.Logic.Model.APIModels;
+using Fork.logic.model.PluginModels;
 using Newtonsoft.Json;
 
 namespace Fork.Logic.Controller
@@ -67,6 +70,34 @@ namespace Fork.Logic.Controller
                 ErrorLogger.Append(e);
                 return new List<string>();
             }
+        }
+
+        public async Task<FileInfo> DownloadPluginAsync(InstalledPlugin plugin, string targetPath)
+        {
+            if (!IsAPIAvailable())
+            {
+                ErrorLogger.Append(new WebException("api.Fork.gg is not online or operational"));
+                return null;
+            }
+
+            try
+            {
+                string pluginUrl = WebUtility.UrlEncode(plugin.Plugin.file.url);
+                WebClient webClient = new WebClient();
+                webClient.Headers.Add("user-agent",ApplicationManager.UserAgent);
+                await webClient.DownloadFileTaskAsync(new Uri(apiBaseURL+"plugins/download?url="+pluginUrl), targetPath);
+                
+                FileInfo pluginFile = new FileInfo(targetPath);
+                if (pluginFile.Exists)
+                {
+                    return pluginFile;
+                }
+            }
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
+            }
+            return null;
         }
         
         private bool IsAPIAvailable()

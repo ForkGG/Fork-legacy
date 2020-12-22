@@ -92,6 +92,9 @@
     <None Remove="View\Resources\images\minimize.png" />
     <None Remove="View\Resources\images\paperSymbol.png" />
     <None Remove="View\Resources\images\Server-Icons\Default.png" />
+    <None Remove="View\Resources\images\Server-Icons\forkBoi.png" />
+    <None Remove="View\Resources\images\Server-Icons\forkChristmas.png" />
+    <None Remove="View\Resources\images\Server-Icons\Icon1.png" />
     <None Remove="View\Resources\images\spigotSymbol.png" />
     <None Remove="View\Resources\images\Splash.png" />
     <None Remove="View\Resources\images\title.png" />
@@ -197,6 +200,9 @@
     <Resource Include="View\Resources\images\maximize2.png" />
     <Resource Include="View\Resources\images\minimize.png" />
     <Resource Include="View\Resources\images\Server-Icons\Default.png" />
+    <Resource Include="View\Resources\images\Server-Icons\forkBoi.png" />
+    <Resource Include="View\Resources\images\Server-Icons\forkChristmas.png" />
+    <Resource Include="View\Resources\images\Server-Icons\Icon1.png" />
     <Resource Include="View\Resources\SyntaxHighlighting\Python.xshd" />
     <Resource Include="View\Resources\SyntaxHighlighting\YAML.xshd" />
   </ItemGroup>

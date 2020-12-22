@@ -278,9 +278,9 @@ namespace Fork.ViewModel
             List<string> iconUris = new List<string>
             {
                 "pack://application:,,,/View/Resources/images/Server-Icons/default.png",
-                "pack://application:,,,/View/Resources/images/Server-Icons/default.png",
-                "pack://application:,,,/View/Resources/images/Server-Icons/default.png",
-                "pack://application:,,,/View/Resources/images/Server-Icons/default.png",
+                "pack://application:,,,/View/Resources/images/Server-Icons/forkboi.png",
+                "pack://application:,,,/View/Resources/images/Server-Icons/forkchristmas.png",
+                "pack://application:,,,/View/Resources/images/Server-Icons/icon1.png",
                 customIcon.FullName
             };
             foreach (string iconUri in iconUris)

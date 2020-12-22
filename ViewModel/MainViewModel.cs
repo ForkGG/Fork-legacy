@@ -97,7 +97,9 @@ namespace Fork.ViewModel
                 return;
             }
 
-            if (InstalledJavaVersion.VersionComputed < 11)
+            
+            //TODO enable this at a latest point when new java versions don't cause issues anymore
+            /*if (InstalledJavaVersion.VersionComputed < 11)
             {
                 ShowJavaWarning = !ignoreWarnings;
                 JavaWarningMessage = 
@@ -105,7 +107,7 @@ namespace Fork.ViewModel
                     "\nOlder Java versions will cause problems in the near future" +
                     "\nWe recommend installing Java version 11 or higher for full support";
                 return;
-            }
+            }*/
 
             ShowJavaWarning = false;
             JavaWarningMessage = "";
