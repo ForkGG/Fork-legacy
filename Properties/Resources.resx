@@ -137,7 +137,7 @@
     <value>7</value>
   </data>
   <data name="VersionPatch" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="YAML" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\view\resources\syntaxhighlighting\yaml.xshd;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

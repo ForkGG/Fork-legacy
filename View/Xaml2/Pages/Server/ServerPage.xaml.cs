@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Fork.Logic.Manager;
@@ -46,12 +47,12 @@ namespace Fork.View.Xaml2.Pages.Server
 
             else if (viewModel.CurrentStatus == ServerStatus.STARTING)
             {
-                ServerManager.Instance.KillEntity(viewModel);
+                await Task.Run(() => ServerManager.Instance.KillEntity(viewModel));
             }
 
             else if (viewModel.CurrentStatus == ServerStatus.RUNNING)
             {
-                ServerManager.Instance.StopServer(viewModel);
+                await Task.Run(() => ServerManager.Instance.StopServer(viewModel));
             }
             StartStopButton.IsEnabled = true;
         }
@@ -103,7 +104,7 @@ namespace Fork.View.Xaml2.Pages.Server
             //Save settings, if settings is closed
             if (settingsPage.Visibility == Visibility.Visible)
             {
-                viewModel.UpdateSettings();
+                viewModel.SaveSettings();
             }
             
             foreach (Frame frame in subPages)

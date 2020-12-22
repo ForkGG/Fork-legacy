@@ -10,7 +10,7 @@
     <StartupObject>Fork.App</StartupObject>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageProjectUrl>https://Fork.gg</PackageProjectUrl>
+    <PackageProjectUrl>https://fork.gg</PackageProjectUrl>
     <PackageIcon>icon.ico</PackageIcon>
     <RepositoryUrl>https://github.com/ForkGG/fork</RepositoryUrl>
   </PropertyGroup>
@@ -26,6 +26,10 @@
     <None Remove="View\Resources\images\Icons\AddW.png" />
     <None Remove="View\Resources\images\Icons\Banned.png" />
     <None Remove="View\Resources\images\Icons\BannedW.png" />
+    <None Remove="View\Resources\images\Icons\Boi.png" />
+    <None Remove="View\Resources\images\Icons\BoiHover.png" />
+    <None Remove="View\Resources\images\Icons\BoiTransparent.png" />
+    <None Remove="View\Resources\images\Icons\BoiTransparentHover.png" />
     <None Remove="View\Resources\images\Icons\Bukkit.png" />
     <None Remove="View\Resources\images\Icons\BukkitD.png" />
     <None Remove="View\Resources\images\Icons\BukkitW.png" />
@@ -42,13 +46,9 @@
     <None Remove="View\Resources\images\Icons\DiscordW.png" />
     <None Remove="View\Resources\images\Icons\Download.png" />
     <None Remove="View\Resources\images\Icons\DownloadW.png" />
-    <None Remove="View\Resources\images\Icons\dude.png" />
-    <None Remove="View\Resources\images\Icons\DudeHover.png" />
     <None Remove="View\Resources\images\Icons\DudeSelected.png" />
     <None Remove="View\Resources\images\Icons\DudeSelectedHover.png" />
     <None Remove="View\Resources\images\Icons\dudeSmall.png" />
-    <None Remove="View\Resources\images\Icons\DudeTransparent.png" />
-    <None Remove="View\Resources\images\Icons\DudeTransparentHover.png" />
     <None Remove="View\Resources\images\Icons\FolderD.png" />
     <None Remove="View\Resources\images\Icons\FolderW.png" />
     <None Remove="View\Resources\images\Icons\Import.png" />
@@ -84,11 +84,17 @@
     <None Remove="View\Resources\images\Icons\WhiteListW.png" />
     <None Remove="View\Resources\images\Icons\World.png" />
     <None Remove="View\Resources\images\Icons\WorldW.png" />
+    <None Remove="View\Resources\images\Icons\XMasBoiTransparent.png" />
+    <None Remove="View\Resources\images\Icons\XMasBoiTransparentHover.png" />
     <None Remove="View\Resources\images\ImportServer.png" />
     <None Remove="View\Resources\images\maximize1.png" />
     <None Remove="View\Resources\images\maximize2.png" />
     <None Remove="View\Resources\images\minimize.png" />
     <None Remove="View\Resources\images\paperSymbol.png" />
+    <None Remove="View\Resources\images\Server-Icons\Default.png" />
+    <None Remove="View\Resources\images\Server-Icons\forkBoi.png" />
+    <None Remove="View\Resources\images\Server-Icons\forkChristmas.png" />
+    <None Remove="View\Resources\images\Server-Icons\Icon1.png" />
     <None Remove="View\Resources\images\spigotSymbol.png" />
     <None Remove="View\Resources\images\Splash.png" />
     <None Remove="View\Resources\images\title.png" />
@@ -149,13 +155,10 @@
     <Resource Include="View\Resources\images\Icons\DiscordW.png" />
     <Resource Include="View\Resources\images\Icons\Download.png" />
     <Resource Include="View\Resources\images\Icons\DownloadW.png" />
-    <Resource Include="View\Resources\images\Icons\dude.png" />
-    <Resource Include="View\Resources\images\Icons\DudeHover.png" />
-    <Resource Include="View\Resources\images\Icons\DudeSelected.png" />
-    <Resource Include="View\Resources\images\Icons\DudeSelectedHover.png" />
-    <Resource Include="View\Resources\images\Icons\dudeSmall.png" />
-    <Resource Include="View\Resources\images\Icons\DudeTransparent.png" />
-    <Resource Include="View\Resources\images\Icons\DudeTransparentHover.png" />
+    <Resource Include="View\Resources\images\Icons\BoiTransparent.png" />
+    <Resource Include="View\Resources\images\Icons\BoiTransparentHover.png" />
+    <Resource Include="View\Resources\images\Icons\Boi.png" />
+    <Resource Include="View\Resources\images\Icons\BoiHover.png" />
     <Resource Include="View\Resources\images\Icons\FolderD.png" />
     <Resource Include="View\Resources\images\Icons\FolderW.png" />
     <Resource Include="View\Resources\images\Icons\Import.png" />
@@ -191,9 +194,15 @@
     <Resource Include="View\Resources\images\Icons\WhiteListW.png" />
     <Resource Include="View\Resources\images\Icons\World.png" />
     <Resource Include="View\Resources\images\Icons\WorldW.png" />
+    <Resource Include="View\Resources\images\Icons\XMasBoiTransparent.png" />
+    <Resource Include="View\Resources\images\Icons\XMasBoiTransparentHover.png" />
     <Resource Include="View\Resources\images\maximize1.png" />
     <Resource Include="View\Resources\images\maximize2.png" />
     <Resource Include="View\Resources\images\minimize.png" />
+    <Resource Include="View\Resources\images\Server-Icons\Default.png" />
+    <Resource Include="View\Resources\images\Server-Icons\forkBoi.png" />
+    <Resource Include="View\Resources\images\Server-Icons\forkChristmas.png" />
+    <Resource Include="View\Resources\images\Server-Icons\Icon1.png" />
     <Resource Include="View\Resources\SyntaxHighlighting\Python.xshd" />
     <Resource Include="View\Resources\SyntaxHighlighting\YAML.xshd" />
   </ItemGroup>

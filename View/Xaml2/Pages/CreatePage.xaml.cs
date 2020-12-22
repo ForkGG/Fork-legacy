@@ -106,7 +106,7 @@ namespace Fork.View.Xaml2.Pages
                     minRam = 512;
                 }
                 
-                JavaSettings javaSettings = new JavaSettings{MinRam = minRam, MaxRam = maxRam};
+                JavaSettings javaSettings = new JavaSettings{MaxRam = maxRam};
                 bool createNetworkSuccess = await ServerManager.Instance.CreateNetworkAsync(networkName,proxyType, javaSettings);
             }
             else

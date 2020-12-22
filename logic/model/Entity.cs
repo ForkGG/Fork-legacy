@@ -10,6 +10,8 @@ namespace Fork.Logic.Model
         JavaSettings JavaSettings { get; set; }
         ServerVersion Version { get; set; }
         string Name { get; set; }
+        bool StartWithFork { get; set; }
+        int ServerIconId { get; set; }
 
         string ToString();
     }

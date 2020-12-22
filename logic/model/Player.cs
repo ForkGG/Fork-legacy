@@ -33,13 +33,10 @@ namespace Fork.Logic.Model
         {
             Name = name;
             RetrieveUid();
-            if (offlineChar)
+            Head = SetOfflineHead();
+            if (!offlineChar)
             {
-                Head = SetOfflineHead();
-            }
-            else
-            {
-                RetrieveHead();
+                new Thread(RetrieveHead){IsBackground = true}.Start();
             }
             LastUpdated = DateTime.Now;
         }

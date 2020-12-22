@@ -1,0 +1,102 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    x:Class="Fork.View.Resources.dictionaries.ListBoxStyles"
+                    xmlns:local="clr-namespace:Fork.View.Resources.dictionaries">
+    <Style x:Key="ConsoleListBox" TargetType="ListBox">
+        <Setter Property="SelectionMode" Value="Extended"/>
+        <Setter Property="Background" Value="{DynamicResource backgroundDefault}"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
+        
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBox">
+                    <StackPanel IsItemsHost="True"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ConsoleListBoxItem" TargetType="ListBoxItem">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>
+        <Setter Property="Margin" Value="0 0.5"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <StackPanel>
+                        <TextBox Text="{Binding Content, Mode=OneWay}" FontFamily="Consolas" TextWrapping="Wrap"  Foreground="{DynamicResource textTerminal}" 
+                                Background="{x:Null}" x:Name="text" Style="{DynamicResource SelectOnly}"/>
+                        <StackPanel Orientation="Horizontal" x:Name="suppressedText">
+                            <TextBlock Text=" + " Foreground="{DynamicResource foregroundDisabled}" FontFamily="Consolas"/>
+                            <TextBlock Text="{Binding SubContents}" Foreground="{DynamicResource foregroundDisabled}" FontFamily="Consolas"/>
+                            <TextBlock Text=" suppressed messages" Foreground="{DynamicResource foregroundDisabled}" FontFamily="Consolas"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Level}" Value="INFO">
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource textTerminal}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Level}" Value="WARN">
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource textTerminalYellow}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Level}" Value="ERROR">
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource textTerminalRed}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Level}" Value="SUCCESS">
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource textTerminalGreen}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SubContents}" Value="0">
+                            <Setter TargetName="suppressedText" Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ServerIconListBox" TargetType="ListBox">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBox">
+                    <WrapPanel>
+                        <WrapPanel IsItemsHost="True" />
+                        <Button Margin="10 0 0 0" Content="Custom" Style="{DynamicResource RoundedTextButton}" Click="RemoveFromNetwork_Click"/>
+                    </WrapPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ServerIconListBoxItem" TargetType="ListBoxItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border x:Name="border" Margin="10 5" BorderThickness="3" BorderBrush="Transparent" CornerRadius="8">
+                        <Grid>
+                            <Border Visibility="Hidden">
+                                <Border Name="Mask" Background="White" BorderBrush="Transparent" CornerRadius="8"/>
+                            </Border>
+                            <Border>
+                                <Image Source="{Binding}" Width="64" RenderOptions.BitmapScalingMode="NearestNeighbor" Cursor="Hand"/>
+                                <Border.OpacityMask>
+                                    <VisualBrush Visual="{Binding ElementName=Mask}"/>
+                                </Border.OpacityMask>
+                            </Border>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource tabSelected}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using Fork.Logic.ImportLogic;
+using Fork.Logic.Logging;
 using Fork.Logic.Manager;
 using Fork.Logic.Model;
 using Fork.ViewModel;
@@ -80,8 +81,16 @@ namespace Fork.View.Xaml2.Pages
             {
                 serverFolderPathText.Text = fbd.SelectedPath;
                 lastPath = fbd.SelectedPath;
-                ServerValidationInfo valInfo = DirectoryValidator.ValidateServerDirectory(new DirectoryInfo(fbd.SelectedPath));
-                if (!valInfo.IsValid)
+                ServerValidationInfo valInfo = null;
+                try
+                {
+                    valInfo = DirectoryValidator.ValidateServerDirectory(new DirectoryInfo(fbd.SelectedPath));
+                }
+                catch(Exception ex)
+                {
+                    ErrorLogger.Append(ex);
+                }
+                if (valInfo == null || !valInfo.IsValid)
                 {
                     serverPathBgr.Background = (Brush) Application.Current.FindResource("buttonBgrRed");
                     ImportConfirmButton.IsEnabled = false;

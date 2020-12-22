@@ -31,7 +31,7 @@
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/PaperW.png"
                                                  Header="Paper" GroupName="serverTypes" Margin="10 10"
                                                 Click="ServerTypePaper_Click"/>
-                <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/SpigotD.png" 
+                <!--controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/SpigotD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/SpigotW.png"
                                                  Header="Spigot" GroupName="serverTypes" Margin="10 10" IsEnabled="False"
                                                 Click="ServerTypeSpigot_Click"/>
@@ -43,7 +43,7 @@
                                                  Header="BungeeCord" GroupName="serverTypes" Margin="10 10" IsEnabled="False"/>
                 <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/WaterfallD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/WaterfallW.png"
-                                                 Header="Waterfall" GroupName="serverTypes" Margin="10 10" IsEnabled="False"/>
+                                                 Header="Waterfall" GroupName="serverTypes" Margin="10 10" IsEnabled="False"/-->
             </WrapPanel>
         </StackPanel>
                 <Border.Style>

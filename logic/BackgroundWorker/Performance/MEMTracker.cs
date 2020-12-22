@@ -16,29 +16,22 @@ namespace Fork.Logic.BackgroundWorker.Performance
 
         public void TrackP(Process p, EntityViewModel viewModel)
         {
-            string instanceName = GetProcessInstanceName(p.Id);
-            PerformanceCounter memCounter = new PerformanceCounter
-            {
-                CategoryName = "Process",
-                CounterName = "Working Set - Private",
-                InstanceName = instanceName
-            };
+            //TODO this is not working with Java 15 bc of subprocess spawned
             Thread t = new Thread(() =>
             {
                 while (!interrupted && !p.HasExited)
                 {
                     try
                     {
-                        viewModel.MemValueUpdate(memCounter.NextValue()/(1024*1024));
+                        p.Refresh();
+                        viewModel.MemValueUpdate(p.WorkingSet64/(1024d*1024d));
                     }
-                    catch(Exception e){ break; }
-                    Thread.Sleep(500);
+                    catch { break; }
                 }
                 viewModel.MemValueUpdate(0.0);
                 viewModel.MemValueUpdate(0.0);
                 viewModel.MemValueUpdate(0.0);
-            });
-            t.IsBackground = true;
+            }){IsBackground = true};
             t.Start();
             threads.Add(t);
         }

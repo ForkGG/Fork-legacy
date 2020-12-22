@@ -178,14 +178,7 @@ namespace Fork.ViewModel
             }).Start();
         }
 
-        public void SaveSettings()
-        {
-            new Thread(() =>
-            {
-                SettingsViewModel.SaveChanges();
-                EntitySerializer.Instance.StoreEntities(ServerManager.Instance.Entities);
-            }).Start();
-        }
+        
 
         public void SaveConfig()
         {

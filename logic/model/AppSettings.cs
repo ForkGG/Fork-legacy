@@ -4,6 +4,8 @@ namespace Fork.Logic.Model
     {
         public string ServerPath { get; set; } = App.ApplicationPath;
         public int MaxConsoleLines { get; set; } = 1000;
-        public bool SendTelemetry { get; set; } = true;
+        public int MaxConsoleLinesPerSecond { get; set; } = 10;
+        public string DefaultJavaPath { get; set; } = "java.exe";
+        public bool SendTelemetry { get; set; } = false;
     }
 }

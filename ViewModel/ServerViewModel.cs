@@ -71,7 +71,6 @@ namespace Fork.ViewModel
                 }
             }){IsBackground = true}.Start();
 
-            UpdateAddressInfo();
             Application.Current.Dispatcher.Invoke(new Action(() => EntityPage = new ServerPage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => ConsolePage = new ConsolePage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => WorldsPage = new WorldsPage(this)));
@@ -157,37 +156,72 @@ namespace Fork.ViewModel
                     if (timeSpan.Hours == 0 && timeSpan.Minutes == 30 && timeSpan.Seconds == 0)
                     {
                         ApplicationManager.Instance.ActiveEntities[Server].StandardInput
-                            .WriteLineAsync("/say Next server restart in 30 minutes!");
+                            .WriteLineAsync("say Next server restart in 30 minutes!");
                     }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 5 && timeSpan.Seconds == 0)
                     {
                         ApplicationManager.Instance.ActiveEntities[Server].StandardInput
-                            .WriteLineAsync("/say Next server restart in 5 minutes!");
+                            .WriteLineAsync("say Next server restart in 5 minutes!");
                     }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 1 && timeSpan.Seconds == 0)
                     {
                         ApplicationManager.Instance.ActiveEntities[Server].StandardInput
-                            .WriteLineAsync("/say Next server restart in 1 minute!");
+                            .WriteLineAsync("say Next server restart in 1 minute!");
+                    }
+                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 10)
+                    {
+                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
+                            .WriteLineAsync("say Next server restart in 10 seconds!");
+                    }
+                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 9)
+                    {
+                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
+                            .WriteLineAsync("say Next server restart in 9 seconds!");
+                    }
+                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 8)
+                    {
+                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
+                            .WriteLineAsync("say Next server restart in 8 seconds!");
+                    }
+                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 7)
+                    {
+                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
+                            .WriteLineAsync("say Next server restart in 7 seconds!");
+                    }
+                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 6)
+                    {
+                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
+                            .WriteLineAsync("say Next server restart in 6 seconds!");
+                    }
+                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 5)
+                    {
+                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
+                            .WriteLineAsync("say Next server restart in 5 seconds!");
+                    }
+                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 4)
+                    {
+                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
+                            .WriteLineAsync("say Next server restart in 4 seconds!");
+                    }
+                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 3)
+                    {
+                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
+                            .WriteLineAsync("say Next server restart in 3 seconds!");
+                    }
+                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 2)
+                    {
+                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
+                            .WriteLineAsync("say Next server restart in 2 seconds!");
+                    }
+                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 1)
+                    {
+                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
+                            .WriteLineAsync("say Next server restart in 1 seconds!");
                     }
                 };
                 restartTimer.AutoReset = true;
                 restartTimer.Enabled = true;
             }){IsBackground = true}.Start();
-        }
-
-        private void UpdateAddressInfo()
-        {
-            AddressInfo = new APIController().GetExternalIPAddress() + ":" + Server.ServerSettings.ServerPort;
-        }
-
-        public void UpdateSettings()
-        {
-            new Thread(() =>
-            {
-                UpdateAddressInfo();
-                SettingsViewModel.SaveChanges();
-                EntitySerializer.Instance.StoreEntities(ServerManager.Instance.Entities);
-            }).Start();
         }
 
         public void SaveProperties()
@@ -202,7 +236,7 @@ namespace Fork.ViewModel
         public void UpdateActiveWorld(World world)
         {
             Server.ServerSettings.LevelName = world.Name;
-            UpdateSettings();
+            SaveSettings();
         }
 
         public void ServerNameChanged()

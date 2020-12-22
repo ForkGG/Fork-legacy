@@ -1,12 +1,17 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Timers;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Fork.Annotations;
 using Fork.Logic.Controller;
 using Fork.Logic.Manager;
+using Fork.Logic.Model;
 using Fork.Logic.Model.APIModels;
+using Fork.Logic.Utils;
 using Fork.View.Xaml2.Pages;
 using Timer = System.Timers.Timer;
 
@@ -27,6 +32,12 @@ namespace Fork.ViewModel
         public bool IsBetaVersion => CurrentForkVersion.Beta != 0;
         public ForkVersion CurrentForkVersion { get; set; }
         public ForkVersion LatestForkVersion { get; set; }
+        public JavaVersion InstalledJavaVersion { get; private set; }
+        public bool ShowJavaWarning { get; private set; }
+        public string JavaWarningMessage { get; private set; }
+        public ImageSource Boi { get; private set; }
+        public ImageSource BoiHover { get; private set; }
+        
         
         public CreatePage CreatePage { get; } = new CreatePage();
         public ImportPage ImportPage { get; } = new ImportPage();
@@ -44,6 +55,7 @@ namespace Fork.ViewModel
             }
             //ImportViewModel = new ImportViewModel();
             AppSettingsViewModel = new AppSettingsViewModel(this);
+            UpdateInstalledJavaVersion();
             Entities = ServerManager.Instance.Entities;
             Entities.CollectionChanged += ServerListChanged;
             if (Entities.Count != 0)
@@ -51,6 +63,54 @@ namespace Fork.ViewModel
                 SelectedEntity = Entities[0];
                 HasServers = true;
             }
+            
+            Boi = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/BoiTransparent.png"));
+            BoiHover = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/BoiTransparentHover.png"));
+
+            DateTime now = DateTime.Now;
+            if (now.Month == 12 && now.Day<27)
+            {
+                Boi = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/XMasBoiTransparent.png"));
+                BoiHover = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/XMasBoiTransparentHover.png"));
+            }
+        }
+
+        public void UpdateInstalledJavaVersion(bool ignoreWarnings = false)
+        {
+            
+            InstalledJavaVersion = JavaVersionUtils.GetInstalledJavaVersion();
+            if (InstalledJavaVersion == null)
+            {
+                ShowJavaWarning = !ignoreWarnings;
+                JavaWarningMessage = 
+                    "No Java installation detected!" +
+                    "\nMinecraft Servers require Java to be installed on your system";
+                return;
+            }
+
+            if (!InstalledJavaVersion.Is64Bit)
+            {
+                ShowJavaWarning = !ignoreWarnings;
+                JavaWarningMessage =
+                    "32-Bit Java installation detected!" +
+                    "\nThis will cause issues if you want to use more than 1GB of RAM";
+                return;
+            }
+
+            
+            //TODO enable this at a latest point when new java versions don't cause issues anymore
+            /*if (InstalledJavaVersion.VersionComputed < 11)
+            {
+                ShowJavaWarning = !ignoreWarnings;
+                JavaWarningMessage = 
+                    "Old Java installation detected (Version "+InstalledJavaVersion.VersionComputed+")!" +
+                    "\nOlder Java versions will cause problems in the near future" +
+                    "\nWe recommend installing Java version 11 or higher for full support";
+                return;
+            }*/
+
+            ShowJavaWarning = false;
+            JavaWarningMessage = "";
         }
 
         public void SetServerList(ref ObservableCollection<EntityViewModel> entities)
@@ -68,7 +128,6 @@ namespace Fork.ViewModel
         private void SetupVersionChecking()
         {
             CurrentForkVersion = ApplicationManager.Instance.CurrentForkVersion;
-            LatestForkVersion = new APIController().GetLatestForkVersion();
             NewerVersionExists = false;
             CheckForkVersion();
             Timer timer = new Timer {Interval = 1000 * 60 * 60 * 12, AutoReset = true, Enabled = true};

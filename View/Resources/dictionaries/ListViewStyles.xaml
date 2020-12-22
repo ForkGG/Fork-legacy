@@ -32,39 +32,6 @@
         </Setter>
     </Style>
 
-    <Style x:Key="GridViewColumnHeaderGripper" TargetType="Thumb">
-        <Setter Property="Width" Value="18"/>
-        <Setter Property="Background" Value="{StaticResource CustomBackground}"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border Padding="{TemplateBinding Padding}" Background="Transparent">
-                        <Rectangle HorizontalAlignment="Center" Width="1" Fill="{TemplateBinding Background}"/>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="{x:Type GridViewColumnHeader}" TargetType="GridViewColumnHeader">
-        <Setter Property="HorizontalContentAlignment" Value="Left"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>
-        <Setter Property="FontSize" Value="15"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="GridViewColumnHeader">
-                    <Grid>
-                        <Border Name="HeaderBorder" BorderThickness="0,0,0,0" BorderBrush="{StaticResource foregroundDefault}" Background="{StaticResource backgroundDefault}" Padding="0,0,0,4">
-                            <ContentPresenter Name="HeaderContent" Margin="4,0,0,0" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                        </Border>
-                        <!-- <Thumb x:Name="PART_HeaderGripper" HorizontalAlignment="Right" Margin="0,0,-9,0" Style="{StaticResource GridViewColumnHeaderGripper}"/> -->
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <!-- ListView template -->
     <Style x:Key="ServerListView" TargetType="{x:Type ListView}">
         <Setter Property="Background" Value="{DynamicResource backgroundDefault}"/>
@@ -665,7 +632,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="ConsolerListItem" TargetType="{x:Type ListViewItem}">
+    <Style x:Key="ConsoleListViewItem" TargetType="{x:Type ListViewItem}">
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>

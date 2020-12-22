@@ -38,8 +38,6 @@ namespace Fork.View.Xaml2
             Closing += OnMainWindowClose;
             viewModel = ApplicationManager.Instance.MainViewModel;
             DataContext = viewModel;
-
-            viewModel.AppSettingsViewModel.AppSettingsCloseEvent += CloseAppSettings;
         }
 
         private void OpenAppSettings_Click(object sender, RoutedEventArgs e)
@@ -259,7 +257,7 @@ namespace Fork.View.Xaml2
             
             
             //TODO make loading icon or smth
-            viewModel.AppSettingsViewModel.ReadAppSettingsAsync();
+            viewModel.AppSettingsViewModel.OpenAppSettingsPage();
             
             //Open importServer Frame
             ServerPage.Visibility = Visibility.Hidden;
@@ -277,7 +275,8 @@ namespace Fork.View.Xaml2
             AppSettingsPage.Visibility = Visibility.Hidden;
             
             //Save settings:
-            viewModel.AppSettingsViewModel.SaveAppSettingsAsync();
+            viewModel.AppSettingsViewModel.CloseAppSettingsPage();
+            viewModel.UpdateInstalledJavaVersion();
             
             if (ServerList.SelectedItems.Count == 0)
             {
@@ -289,13 +288,12 @@ namespace Fork.View.Xaml2
             AppSettingsButton.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
         }
 
-        private void CloseAppSettings(object sender)
-        {
-            CloseAppSettings();
-        }
-
         private void ServerList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (e.RemovedItems.Count > 0 && e.RemovedItems[0] is EntityViewModel entityViewModel)
+            {
+                entityViewModel.SaveSettings();
+            }
             CloseNonEntityPages();
         }
 
@@ -485,6 +483,26 @@ namespace Fork.View.Xaml2
             
             DeleteServerOverlay.Visibility = Visibility.Collapsed;
             DeleteNetworkOverlay.Visibility = Visibility.Collapsed;
+        }
+
+        private void Ignore_Click(object sender, RoutedEventArgs e)
+        {
+            viewModel.UpdateInstalledJavaVersion(true);
+        }
+        
+        private void CheckAgain_Click(object sender, RoutedEventArgs e)
+        {
+            viewModel.UpdateInstalledJavaVersion();
+        }
+
+        private void TextBlock_Link_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is TextBlock textBlock)
+            {
+                string url = textBlock.Text;
+                //hack for windows only https://github.com/dotnet/corefx/issues/10361
+                Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+            }
         }
 
         private void EntityMouseUp(object sender, MouseButtonEventArgs e)

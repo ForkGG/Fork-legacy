@@ -18,8 +18,6 @@ namespace Fork.View.Xaml2.Pages.Network
             InitializeComponent();
             this.viewModel = viewModel;
             DataContext = this.viewModel;
-
-            viewModel.ConsoleOutList.CollectionChanged += UpdateConsoleOut;
         }
         
 
@@ -57,42 +55,6 @@ namespace Fork.View.Xaml2.Pages.Network
             }
         }
         #endregion autoscrolling
-
-        private void UpdateConsoleOut(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null)
-            {
-                foreach (var newItem in e.NewItems)
-                {
-                    if (newItem is ConsoleMessage newConsoleMessage)
-                    {
-                        if (e.NewStartingIndex*2 < ConsoleParagraph.Inlines.Count)
-                        {
-                            var elementAfter = ConsoleParagraph.Inlines.ElementAt(e.NewStartingIndex*2);
-                            ConsoleParagraph.Inlines.InsertBefore(elementAfter,
-                                new Run{Text = newConsoleMessage.Content, Foreground = newConsoleMessage.Level.Color()});
-                            ConsoleParagraph.Inlines.InsertBefore(elementAfter, new LineBreak());
-                        }
-                        else
-                        {
-                            ConsoleParagraph.Inlines.Add(
-                                new Run{Text = newConsoleMessage.Content, Foreground = newConsoleMessage.Level.Color()});
-                            ConsoleParagraph.Inlines.Add(new LineBreak());
-                        }
-                    }
-                } 
-            }
-            
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null)
-            {
-                int amountToRemove = e.OldItems.Count * 2;
-                int index = e.OldStartingIndex * 2;
-                for (int i = 0; i < amountToRemove; i++)
-                {
-                    ConsoleParagraph.Inlines.Remove(ConsoleParagraph.Inlines.ElementAt(index));
-                }
-            }
-        }
 
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {

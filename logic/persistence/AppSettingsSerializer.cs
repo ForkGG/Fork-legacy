@@ -1,29 +1,40 @@
 using System;
+using System.ComponentModel;
 using System.IO;
+using System.Runtime.CompilerServices;
+using Fork.Annotations;
 using Fork.Logic.Logging;
 using Fork.Logic.Model;
 using Newtonsoft.Json;
 
 namespace Fork.Logic.Persistence
 {
-    public class AppSettingsSerializer
+    public class AppSettingsSerializer : INotifyPropertyChanged
     {
-        private static AppSettings appSettings;
-        public static AppSettings AppSettings => appSettings ??= ReadAppSettings();
+        #region Singleton
+
+        private static AppSettingsSerializer instance;
+        public static AppSettingsSerializer Instance => instance ??= new AppSettingsSerializer();
+
+        #endregion
+        
+        private AppSettings appSettings;
+        public AppSettings AppSettings => appSettings ??= ReadAppSettings();
 
         private AppSettingsSerializer(){}
 
-        public static void SaveSettings()
+        public void SaveSettings()
         {
+            OnPropertyChanged(nameof(AppSettings));
             WriteAppSettings(AppSettings);
         }
 
-        public static void ReadSettings()
+        public void ReadSettings()
         {
             appSettings = ReadAppSettings();
         }
 
-        private static AppSettings ReadAppSettings()
+        private AppSettings ReadAppSettings()
         {
             FileInfo settingsFile = new FileInfo(Path.Combine(App.ApplicationPath,"persistence","settings.json"));
             if (!settingsFile.Exists)
@@ -43,7 +54,7 @@ namespace Fork.Logic.Persistence
             }
         }
 
-        private static void WriteAppSettings(AppSettings appSettings)
+        private void WriteAppSettings(AppSettings appSettings)
         {
             DirectoryInfo persistenceDir = new DirectoryInfo(Path.Combine(App.ApplicationPath, "persistence"));
             if (!persistenceDir.Exists)
@@ -69,11 +80,19 @@ namespace Fork.Logic.Persistence
             }
         }
 
-        private static AppSettings WriteDefaultAppSettings()
+        private AppSettings WriteDefaultAppSettings()
         {
             AppSettings defaultAppSettings = new AppSettings();
             WriteAppSettings(defaultAppSettings);
             return defaultAppSettings;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(nameof(AppSettingsSerializer), new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -324,7 +324,8 @@ namespace Fork.Logic.WebRequesters
                 throw new ArgumentException("Download links for external plugins can not be built");
             }
 
-            string url = baseURL + "resources/" + plugin.SpigetId + "/download";
+            //string url = baseURL + "resources/" + plugin.SpigetId + "/download";
+            string url = "https://www.spigetmc.org/" + plugin.Plugin.file.url;
 
             return url;
         }
