@@ -371,7 +371,7 @@
                                  IsEnabled="{Binding Data.ServerRunning, Source={StaticResource ServerRunningBinding}}" CaretBrush="{DynamicResource textTerminal}"
                                  BorderThickness="0" Foreground="{DynamicResource textTerminal}">
                             <TextBox.InputBindings>
-                                <KeyBinding Key="Enter" Command="{Binding ReadConsoleIn}"></KeyBinding>
+                                <KeyBinding Key="Enter" Command="{Binding ReadConsoleIn}"/>
                             </TextBox.InputBindings>
                         </TextBox>
                     </DockPanel>

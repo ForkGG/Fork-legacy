@@ -20,7 +20,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="240"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- Adress Info -->
