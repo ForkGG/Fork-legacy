@@ -165,7 +165,10 @@ namespace Fork.Logic.RoleManagement
                 foreach (string name in names)
                 {
                     Player p = PlayerManager.Instance.GetPlayer(name).Result;
-                    viewDisp.Invoke(() => playerList.Add(p), DispatcherPriority.Background);
+                    if (p != null)
+                    {
+                        viewDisp.Invoke(() => playerList.Add(p), DispatcherPriority.Background);
+                    }
                 } 
             }
         }

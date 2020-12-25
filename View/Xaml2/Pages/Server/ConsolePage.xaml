@@ -34,7 +34,7 @@
     <DockPanel Margin="0 10 0 0">
         
         <!-- Right Part -->
-        <TabControl DockPanel.Dock="Right" Margin="5" Width="190">
+        <TabControl DockPanel.Dock="Right" Margin="5" Width="220">
             <!-- Playerlist -->
             <TabItem BorderBrush="{x:Null}">
                 <TabItem.Header>
