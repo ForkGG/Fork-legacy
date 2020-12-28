@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Fork.Logic.Model;
+using Fork.Logic.Model.ServerConsole;
 using Fork.ViewModel;
 
 namespace Fork.Logic.Manager
@@ -127,14 +129,18 @@ namespace Fork.Logic.Manager
 
         public async Task<Player> GetPlayer(string name)
         {
-            foreach (var player in PlayerSet)
+            if (!CheckPlayerName(name))
             {
-                if (player.Name.Equals(name))
-                {
-                    return player;
-                }
+                Console.WriteLine("Tried to retrieve invalid player ("+name+") from database. Skipping...");
+                return null;
             }
-            Player p = Task.Run(()=>CreatePlayer(name)).Result;
+            
+            var existingPlayers = PlayerSet.Where(player => player.Name.Equals(name)).ToArray();
+            if (existingPlayers.Any())
+            {
+                return existingPlayers.First();
+            }
+            Player p = await Task.Run(()=>CreatePlayer(name));
             PlayerSet.Add(p);
             SafePlayersToFile();
             return p;
@@ -154,8 +160,11 @@ namespace Fork.Logic.Manager
                         {
                             foreach (string fileName in Directory.GetFiles(playerData.FullName, "*.dat", SearchOption.TopDirectoryOnly))
                             {
-                                string uuid = new FileInfo(fileName).Name;
-                                playerIDsToAdd.Add(uuid.Replace("-", "").Replace(".dat", ""));
+                                string uuid = new FileInfo(fileName).Name.Replace("-", "").Replace(".dat", "");
+                                if (ValidateUuid(uuid))
+                                {
+                                    playerIDsToAdd.Add(uuid);
+                                }
                             }
                         }
                     }
@@ -183,13 +192,12 @@ namespace Fork.Logic.Manager
         
         private Player GetPlayerFromUUID(string uuid)
         {
-            foreach (var player in PlayerSet)
+            var existingPlayers = PlayerSet.Where(player => player.Uid.Equals(uuid)).ToArray();
+            if (existingPlayers.Any())
             {
-                if (player.Uid.Equals(uuid))
-                {
-                    return player;
-                }
+                return existingPlayers.First();
             }
+            
             Player p = CreatePlayerFromUUID(uuid);
             if (p != null)
             {
@@ -209,7 +217,7 @@ namespace Fork.Logic.Manager
         private Player CreatePlayerFromUUID(string uuid)
         {
             Player p = new Player(uuid, true);
-            return CheckPlayerName(p) ? p : null;
+            return CheckPlayerName(p.Name) ? p : null;
         }
 
         private void SafePlayersToFile()
@@ -234,12 +242,29 @@ namespace Fork.Logic.Manager
         /// Check if a given Player has a valid name
         /// This is used to remove players with UUID name (This happens if UUID is not in mojang database)
         /// </summary>
-        /// <param name="player">The Player to check</param>
+        /// <param name="playerName">The player name to check</param>
         /// <returns>Validity of Player.Name</returns>
-        private bool CheckPlayerName(Player player)
+        private bool CheckPlayerName(string playerName)
         {
             Regex regex = new Regex(@"^[A-Za-z0-9_]{3,16}$");
-            return regex.Matches(player.Name).Count != 0;
+            return regex.Matches(playerName).Count != 0;
+        }
+
+        private bool ValidateUuid(string uuid)
+        {
+            try
+            {
+                byte[] ba = Enumerable.Range(0, uuid.Length)
+                    .Where(x => x % 2 == 0)
+                    .Select(x => Convert.ToByte(uuid.Substring(x, 2), 16))
+                    .ToArray();
+                
+                return ba.Length == 16;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

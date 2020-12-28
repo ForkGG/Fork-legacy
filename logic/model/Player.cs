@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using Fork.Properties;
@@ -112,10 +113,10 @@ namespace Fork.Logic.Model
                 response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
             }
 
-            //Exception for user not found: Response 204
-            if (response.StatusCode == HttpStatusCode.NoContent)
+            //Exception for user not found: Response 204 or 403, 404 etc.
+            if (response.StatusCode != HttpStatusCode.OK)
             {
-                Uid = Name;
+                Uid = CalculateOfflineUuid(Name);
                 offlineChar = true;
                 return;
             }
@@ -275,6 +276,18 @@ namespace Fork.Logic.Model
              b.Dispose();
             
              return path;
+        }
+
+        private string CalculateOfflineUuid(string playerName)
+        {
+            byte[] input = Encoding.UTF8.GetBytes("OfflinePlayer:"+playerName);
+            MD5 md5 = MD5.Create();
+            byte[] hash = md5.ComputeHash(input);
+            hash[6] &= 0x0f;
+            hash[6] |= 0x30;
+            hash[8] &= 0x3f;
+            hash[8] |= 0x80;
+            return BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
         }
 
 

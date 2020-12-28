@@ -55,8 +55,12 @@ namespace Fork.Logic.Utils
             {
                 JavaVersion result = new JavaVersion{Version = versionMatch.Groups[1].Value};
                 int computedVersion;
-                if (TryParseJavaVersion(result.Version, out computedVersion))
+                if (TryParseJavaVersion(result.Version.Split(".")[0], out computedVersion))
                 {
+                    if (computedVersion == 1)
+                    {
+                        TryParseJavaVersion(result.Version.Split(".")[1], out computedVersion);
+                    }
                     result.VersionComputed = computedVersion;
                 }
                 if (output.Contains(bitPattern))

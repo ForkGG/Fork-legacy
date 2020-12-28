@@ -49,7 +49,7 @@ namespace Fork.ViewModel
         private List<double> cpuList;
         private double cpuValue;
 
-        private MEMTracker memTracker;
+        private MemTracker memTracker;
         private List<double> memList;
         private double memValue;
 
@@ -487,7 +487,7 @@ namespace Fork.ViewModel
             memTracker?.StopThreads();
 
             memList = new List<double>();
-            memTracker = new MEMTracker();
+            memTracker = new MemTracker();
             memTracker.TrackP(p, this);
 
 
