@@ -120,7 +120,7 @@ namespace Fork.ViewModel
                 {
                     List<Plugin> newPlugins = RequestPlugins();
 
-                    //TODO in .NET 5 this can be changed to AddRange()
+                    //TODO in .NET 6.0 this can be changed to AddRange() (watch: https://github.com/dotnet/runtime/issues/18087)
                     foreach (Plugin newPlugin in newPlugins)
                     {
                         Application.Current.Dispatcher?.Invoke(() => Plugins.Add(newPlugin));
