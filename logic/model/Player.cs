@@ -1,5 +1,3 @@
-
-
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -9,6 +7,7 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Fork.Properties;
 using Newtonsoft.Json;
 
@@ -21,37 +20,34 @@ namespace Fork.Logic.Model
         public string Uid { get; set; }
         public string Head { get; set; }
         public DateTime LastUpdated { get; set; } = DateTime.MinValue;
-        
-        [JsonIgnore]
-        public Player Self => this;
+
+        [JsonIgnore] public Player Self => this;
 
         public Player()
-        {
-            
-        }
+        { }
 
-        public Player(string name)
+        public async Task InitWithName(string name)
         {
             Name = name;
-            RetrieveUid();
             Head = SetOfflineHead();
+            await RetrieveUid();
             if (!offlineChar)
             {
-                new Thread(RetrieveHead){IsBackground = true}.Start();
+                Task.Run(RetrieveHead);
             }
             LastUpdated = DateTime.Now;
         }
 
-        public Player(string uid, bool useUid)
+        public async Task InitWithUid(string uid)
         {
             Uid = uid;
-            RetrieveNameAndHead();
+            await RetrieveNameAndHead();
             LastUpdated = DateTime.Now;
         }
 
-        public void Update()
+        public async Task Update()
         {
-            RetrieveNameAndHead();
+            await RetrieveNameAndHead();
             LastUpdated = DateTime.Now;
         }
 
@@ -60,57 +56,55 @@ namespace Fork.Logic.Model
             return Name;
         }
 
-        private void RetrieveNameAndHead()
+        private async Task RetrieveNameAndHead()
         {
             string cachedName = NameFromCache(Uid);
-            if (cachedName!=null)
+            if (cachedName != null)
             {
                 Name = cachedName;
                 return;
             }
+
             var client = new HttpClient();
-            var uri = new Uri("https://sessionserver.mojang.com/session/minecraft/profile/"+Uid);
-            var response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
+            var uri = new Uri("https://sessionserver.mojang.com/session/minecraft/profile/" + Uid);
+            var response = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
             while (response.StatusCode == (HttpStatusCode) 429)
             {
-                Thread.Sleep(5000);
-                response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
+                await Task.Delay(5000);
+                response = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
             }
-            
+
             //Exception for user not found: Response 204 and 404
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                Console.WriteLine("Error while retrieving Mojang data for UUID: "+Uid);
+                Console.WriteLine("Error while retrieving Mojang data for UUID: " + Uid);
                 Name = Uid;
                 offlineChar = true;
                 Head = SetOfflineHead();
                 return;
             }
-            
-            Stream respStream = response.Content.ReadAsStreamAsync().Result;
-            string fullProfileString = new StreamReader(respStream).ReadToEnd();
+
+            Stream respStream = await response.Content.ReadAsStreamAsync();
+            string fullProfileString = await new StreamReader(respStream).ReadToEndAsync();
             FullProfile fullProfile = JsonConvert.DeserializeObject<FullProfile>(fullProfileString);
             CacheProfileJson(fullProfile);
             Name = fullProfile.name;
-            if (fullProfile.properties.Count == 0)
+            Head = SetOfflineHead();
+            if (fullProfile.properties.Count != 0)
             {
-                Head = SetOfflineHead();
-            }
-            else
-            {
-                Head = RetrieveImageFromBase64(fullProfile.properties[0].value);
+                Task.Run( () => Head = RetrieveImageFromBase64(fullProfile.properties[0].value).Result);
             }
         }
 
-        private void RetrieveUid()
+        private async Task RetrieveUid()
         {
             var client = new HttpClient();
             var uri = new Uri("https://api.mojang.com/users/profiles/minecraft/" + Name);
-            var response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
+            var response = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
             while (response.StatusCode == (HttpStatusCode) 429)
             {
-                Thread.Sleep(5000);
-                response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
+                await Task.Delay(5000);
+                response = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
             }
 
             //Exception for user not found: Response 204 or 403, 404 etc.
@@ -121,18 +115,18 @@ namespace Fork.Logic.Model
                 return;
             }
 
-            Stream respStream = response.Content.ReadAsStreamAsync().Result;
-            string nameUidString = new StreamReader(respStream).ReadToEnd();
+            Stream respStream = await response.Content.ReadAsStreamAsync();
+            string nameUidString = await new StreamReader(respStream).ReadToEndAsync();
             NameUid nameUid = JsonConvert.DeserializeObject<NameUid>(nameUidString);
-            
+
             Uid = nameUid.id;
         }
 
         private void CacheProfileJson(FullProfile profile)
         {
-            DirectoryInfo dirInfo= Directory.CreateDirectory(Path.Combine(App.ApplicationPath,"players",profile.id));
+            DirectoryInfo dirInfo = Directory.CreateDirectory(Path.Combine(App.ApplicationPath, "players", profile.id));
             string json = JsonConvert.SerializeObject(profile, Formatting.Indented);
-            using (FileStream fs =File.Create(Path.Combine(dirInfo.FullName,"profile.json")))
+            using (FileStream fs = File.Create(Path.Combine(dirInfo.FullName, "profile.json")))
             using (StreamWriter sw = new StreamWriter(fs))
             {
                 sw.WriteLine(json);
@@ -141,13 +135,13 @@ namespace Fork.Logic.Model
 
         private string NameFromCache(string uid)
         {
-            string path = Path.Combine(App.ApplicationPath,"players", uid, "profile.json");
+            string path = Path.Combine(App.ApplicationPath, "players", uid, "profile.json");
             if (!File.Exists(path))
             {
                 return null;
             }
 
-            if (File.GetCreationTime(path).AddDays(2)<DateTime.Now)
+            if (File.GetCreationTime(path).AddDays(2) < DateTime.Now)
             {
                 return null;
             }
@@ -158,13 +152,13 @@ namespace Fork.Logic.Model
 
         private string HeadFromCache(string uid)
         {
-            string path = Path.Combine(App.ApplicationPath,"players", uid, "head.jpg");
+            string path = Path.Combine(App.ApplicationPath, "players", uid, "head.jpg");
             if (!File.Exists(path))
             {
                 return null;
             }
 
-            if (File.GetCreationTime(path).AddDays(2)<DateTime.Now)
+            if (File.GetCreationTime(path).AddDays(2) < DateTime.Now)
             {
                 return null;
             }
@@ -172,34 +166,37 @@ namespace Fork.Logic.Model
             return Path.GetFullPath(path);
         }
 
-        private void RetrieveHead()
+        private async Task RetrieveHead()
         {
             string cachedHead = HeadFromCache(Uid);
-            if (cachedHead!=null)
+            if (cachedHead != null)
             {
                 Head = cachedHead;
                 return;
             }
+
             var client = new HttpClient();
             var uri = new Uri("https://sessionserver.mojang.com/session/minecraft/profile/" + Uid);
-            var response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
+            var response = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
             while (response.StatusCode == (HttpStatusCode) 429)
             {
-                Thread.Sleep(5000);
+                await Task.Delay(5000);
                 try
                 {
-                    response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
-                } catch(Exception e)
+                    response = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
+                }
+                catch (Exception e)
                 {
-                    Console.WriteLine("Error while retrieving Player Head for " + Name+": "+e.Message+".  Aborting...");
+                    Console.WriteLine("Error while retrieving Player Head for " + Name + ": " + e.Message +
+                                      ".  Aborting...");
                     return;
                 }
             }
 
             response.EnsureSuccessStatusCode();
 
-            Stream respStream = response.Content.ReadAsStreamAsync().Result;
-            string fullProfileString = new StreamReader(respStream).ReadToEnd();
+            Stream respStream = await response.Content.ReadAsStreamAsync();
+            string fullProfileString = await new StreamReader(respStream).ReadToEndAsync();
             FullProfile fullProfile = JsonConvert.DeserializeObject<FullProfile>(fullProfileString);
             CacheProfileJson(fullProfile);
             if (fullProfile.properties.Count == 0)
@@ -208,11 +205,11 @@ namespace Fork.Logic.Model
             }
             else
             {
-                Head = RetrieveImageFromBase64(fullProfile.properties[0].value);
+                Head = await RetrieveImageFromBase64(fullProfile.properties[0].value);
             }
         }
 
-        private string RetrieveImageFromBase64(string base64String)
+        private async Task<string> RetrieveImageFromBase64(string base64String)
         {
             var profileJson = Convert.FromBase64String(base64String);
             string profileJsonString = Encoding.UTF8.GetString(profileJson);
@@ -228,59 +225,60 @@ namespace Fork.Logic.Model
             {
                 var client = new HttpClient();
                 var uri = new Uri(profile.textures.SKIN.url);
-                var response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
+                var response = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
                 while (response.StatusCode == (HttpStatusCode) 429)
                 {
-                    Thread.Sleep(5000);
-                    response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
+                    await Task.Delay(5000);
+                    response = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
                 }
 
                 response.EnsureSuccessStatusCode();
 
-                Stream respStream = response.Content.ReadAsStreamAsync().Result;
+                Stream respStream = await response.Content.ReadAsStreamAsync();
                 Image image = Image.FromStream(respStream);
 
                 Bitmap skinBmp = new Bitmap(image);
                 Bitmap headBmp = skinBmp.Clone(new Rectangle(8, 8, 8, 8), skinBmp.PixelFormat);
                 Bitmap overlayHead = skinBmp.Clone(new Rectangle(40, 8, 8, 8), skinBmp.PixelFormat);
-            
+
                 //Remove Transparency
-                b = new Bitmap(8,8);
+                b = new Bitmap(8, 8);
                 Graphics g = Graphics.FromImage(b);
                 g.Clear(Color.Black);
-                g.DrawImage(headBmp,0,0);
-                g.DrawImage(overlayHead,0,0);
-                
+                g.DrawImage(headBmp, 0, 0);
+                g.DrawImage(overlayHead, 0, 0);
+
                 //Dispose
                 headBmp.Dispose();
                 skinBmp.Dispose();
             }
+
             //Write .jpg file
-            Directory.CreateDirectory(Path.Combine(App.ApplicationPath,"players",profile.profileId));
-            string path = Path.Combine(App.ApplicationPath,"players",profile.profileId,"head.jpg");
+            Directory.CreateDirectory(Path.Combine(App.ApplicationPath, "players", profile.profileId));
+            string path = Path.Combine(App.ApplicationPath, "players", profile.profileId, "head.jpg");
             path = new DirectoryInfo(path).FullName;
             b.Save(path);
             b.Dispose();
-            
+
             return path;
         }
 
         private string SetOfflineHead()
         {
-             Image defaultHead = Resources.DeafultHead;
-             Bitmap b = new Bitmap(defaultHead);
-             Directory.CreateDirectory(Path.Combine(App.ApplicationPath,"players",Name));
-             string path = Path.Combine(App.ApplicationPath,"players",Name,"head.jpg");
-             path = new DirectoryInfo(path).FullName;
-             b.Save(path);
-             b.Dispose();
-            
-             return path;
+            Image defaultHead = Resources.DeafultHead;
+            Bitmap b = new Bitmap(defaultHead);
+            Directory.CreateDirectory(Path.Combine(App.ApplicationPath, "players", Name));
+            string path = Path.Combine(App.ApplicationPath, "players", Name, "head.jpg");
+            path = new DirectoryInfo(path).FullName;
+            b.Save(path);
+            b.Dispose();
+
+            return path;
         }
 
         private string CalculateOfflineUuid(string playerName)
         {
-            byte[] input = Encoding.UTF8.GetBytes("OfflinePlayer:"+playerName);
+            byte[] input = Encoding.UTF8.GetBytes("OfflinePlayer:" + playerName);
             MD5 md5 = MD5.Create();
             byte[] hash = md5.ComputeHash(input);
             hash[6] &= 0x0f;
@@ -289,7 +287,6 @@ namespace Fork.Logic.Model
             hash[8] |= 0x80;
             return BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
         }
-
 
 
         private class NameUid

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Fork.Logic.Controller;
@@ -104,22 +105,26 @@ namespace Fork.ViewModel
 
         public void InitializeLists(Server server)
         {
-            new Thread(() =>
+            Task.Run(async () =>
             {
                 InitializeWorldsList();
                 RoleUpdater.InitializeList(RoleType.WHITELIST, WhiteList, Server);
                 RoleUpdater.InitializeList(RoleType.BAN_LIST, BanList, Server);
                 RoleUpdater.InitializeList(RoleType.OP_LIST, OPList, Server);
                 Console.WriteLine("Finished reading Role-lists for " + server);
-                PlayerList = new ObservableCollection<ServerPlayer>(PlayerManager.Instance.GetInitialPlayerList(this));
-                RefreshPlayerList();
+                PlayerList = new ObservableCollection<ServerPlayer>();
+                await foreach (ServerPlayer player in PlayerManager.Instance.GetInitialPlayerList(this))
+                {
+                    Application.Current.Dispatcher?.Invoke(() => PlayerList.Add(player));
+                }
+                
                 Console.WriteLine("Initialized PlayerList for server " + server);
 
                 whitelistUpdater = new RoleUpdater(RoleType.WHITELIST, WhiteList, Server.Version);
                 banlistUpdater = new RoleUpdater(RoleType.BAN_LIST, BanList, Server.Version);
                 oplistUpdater = new RoleUpdater(RoleType.OP_LIST, OPList, Server.Version);
                 Initialized = true;
-            }){IsBackground = true}.Start();
+            });
         }
 
         public void RoleInputHandler(string line)
@@ -276,9 +281,9 @@ namespace Fork.ViewModel
             PlayerList = new ObservableCollection<ServerPlayer>(players);
             PlayerList.CollectionChanged += PlayerListChanged;
 
-            //TODO this is bad WPF (use INotifyPropertyChanged in ServerPlayer instead)
+            //TODO this is bad MVVM (use INotifyPropertyChanged in ServerPlayer instead)
             var c = ConsolePage as ConsolePage;
-            Application.Current.Dispatcher?.Invoke(() => c.Playerlist.Items.Refresh());
+            Application.Current.Dispatcher?.Invoke(() => c?.Playerlist.Items.Refresh());
         }
 
 

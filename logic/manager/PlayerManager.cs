@@ -55,6 +55,7 @@ namespace Fork.Logic.Manager
         #endregion
 
         private HashSet<Player> PlayerSet;
+        private Dictionary<string, Task<Player>> playerGenerators = new Dictionary<string, Task<Player>>();
         private string PlayerJsonPath;
         
         public void WhitelistPlayer(ServerViewModel viewModel, string name)
@@ -146,9 +147,8 @@ namespace Fork.Logic.Manager
             return p;
         }
 
-        public List<ServerPlayer> GetInitialPlayerList(ServerViewModel viewModel)
+        public async IAsyncEnumerable<ServerPlayer> GetInitialPlayerList(ServerViewModel viewModel)
         {
-            lock (Instance)
             {
                 HashSet<string> playerIDsToAdd = new HashSet<string>();
                 foreach (World world in viewModel.Worlds)
@@ -170,27 +170,34 @@ namespace Fork.Logic.Manager
                     }
                 }
 
-                List<ServerPlayer> result = new List<ServerPlayer>();
                 foreach (string uuid in playerIDsToAdd)
                 {
-                    Player p = GetPlayerFromUUID(uuid);
+                    Player p;
+                    lock (Instance)
+                    {
+                        if (!playerGenerators.ContainsKey(uuid))
+                        {
+                            playerGenerators.Add(uuid, GetPlayerFromUuid(uuid));
+                        }
+                    }
+                    p = await playerGenerators[uuid];
                     if (p != null)
                     {
                         ServerPlayer player = new ServerPlayer(p,viewModel,viewModel.OPList.Contains(p), false);
-                        result.Add(player);
+                        yield return player;
                     }
                 }
-
-                return result;
             }
         }
 
-        private Player CreatePlayer(string name)
+        private async Task<Player> CreatePlayer(string name)
         {
-            return new Player(name);
+            Player player = new Player();
+            await player.InitWithName(name);
+            return player;
         }
         
-        private Player GetPlayerFromUUID(string uuid)
+        private async Task<Player> GetPlayerFromUuid(string uuid)
         {
             var existingPlayers = PlayerSet.Where(player => player.Uid.Equals(uuid)).ToArray();
             if (existingPlayers.Any())
@@ -198,7 +205,7 @@ namespace Fork.Logic.Manager
                 return existingPlayers.First();
             }
             
-            Player p = CreatePlayerFromUUID(uuid);
+            Player p = await CreatePlayerFromUuid(uuid);
             if (p != null)
             {
                 PlayerSet.Add(p);
@@ -214,9 +221,11 @@ namespace Fork.Logic.Manager
             }
             return p;
         }
-        private Player CreatePlayerFromUUID(string uuid)
+        private async Task<Player> CreatePlayerFromUuid(string uuid)
         {
-            Player p = new Player(uuid, true);
+            Player p = new Player();
+            await p.InitWithUid(uuid);
+
             return CheckPlayerName(p.Name) ? p : null;
         }
 
