@@ -37,22 +37,8 @@
                                      FontSize="17" Height="20" />
                                     </Border>
                                     <TextBlock Text=" MB" Style="{DynamicResource CreateServerTextBlock}" />
-                                    
                                 </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Min Ram " TextAlignment="Right"
-                                        Style="{DynamicResource CreateServerTextBlock}" Margin="0 5 10 5" />
-                                    <Border Grid.Column="1" CornerRadius="4" Width="100" Height="26"
-                                        Background="{DynamicResource textBackground}" Margin="0 5 0 5">
-                                        <TextBox Margin="5 0" Text="{Binding Network.JavaSettings.MinRam}"
-                                            Background="{DynamicResource textBackground}" BorderThickness="0"
-                                            Foreground="{DynamicResource backgroundDark}"
-                                            FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                            FontSize="17" Height="20" />
-                                    </Border>
-                                    <TextBlock Text=" MB" Style="{DynamicResource CreateServerTextBlock}" />
-                                </StackPanel>
-                                
+
                                 <StackPanel Margin="0 20 0 0">
                                     <TextBlock Text="Custom Java Executable Path"
                                         Style="{DynamicResource CreateServerTextBlock}"

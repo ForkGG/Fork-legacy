@@ -28,6 +28,13 @@ namespace Fork.View.Xaml2.Pages.Settings
             DataContext = networkViewModel;
         }
 
+        public void Reload()
+        {
+            var oldDataContext = DataContext;
+            DataContext = null;
+            DataContext = oldDataContext;
+        }
+
         public void SaveSettings()
         {
             networkViewModel.SaveConfig();

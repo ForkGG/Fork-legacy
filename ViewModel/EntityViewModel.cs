@@ -332,7 +332,7 @@ namespace Fork.ViewModel
                             await ServerManager.Instance.StartServerAsync(serverViewModel);
                             break;
                         case NetworkViewModel networkViewModel:
-                            await ServerManager.Instance.StartNetworkAsync(networkViewModel);
+                            await ServerManager.Instance.StartNetworkAsync(networkViewModel, networkViewModel.Network.SyncServers);
                             break;
                     }
                 });
@@ -373,6 +373,26 @@ namespace Fork.ViewModel
                 WriteServerIcon();
                 UpdateAddressInfo();
                 SettingsViewModel.SaveChanges();
+                //Update Network page if one exists where this server is in
+                if (this is ServerViewModel serverViewModel)
+                {
+                    foreach (EntityViewModel entityViewModel in ServerManager.Instance.Entities)
+                    {
+                        if (entityViewModel is NetworkViewModel networkViewModel)
+                        {
+                            foreach (NetworkServer networkServer in networkViewModel.Servers)
+                            {
+                                if (networkServer is NetworkForkServer networkForkServer)
+                                {
+                                    if (networkForkServer.ServerViewModel == this)
+                                    {
+                                        networkViewModel.UpdateServer(networkServer, serverViewModel);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 EntitySerializer.Instance.StoreEntities(ServerManager.Instance.Entities);
             }).Start();
         }
@@ -554,7 +574,6 @@ namespace Fork.ViewModel
             double bytesIn = double.Parse(e.BytesReceived.ToString());
             double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
             DownloadProgress = bytesIn / totalBytes * 100;
-            //DownloadProgressReadable = Math.Round(DownloadProgress, 0) + "%";
         }
 
         public void DownloadCompletedHandler(object sender, AsyncCompletedEventArgs e)

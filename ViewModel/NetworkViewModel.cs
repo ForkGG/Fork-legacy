@@ -18,6 +18,7 @@ using Fork.Logic.Model.Settings;
 using Fork.Logic.Persistence;
 using Fork.View.Xaml2.Pages.Network;
 using Fork.View.Xaml2.Pages.Server;
+using Fork.View.Xaml2.Pages.Settings;
 using GongSolutions.Wpf.DragDrop;
 using ConsolePage = Fork.View.Xaml2.Pages.Network.ConsolePage;
 using Server = Fork.Logic.Model.Server;
@@ -177,9 +178,7 @@ namespace Fork.ViewModel
                 LoadServersFromConfig(Network.Config);
             }).Start();
         }
-
         
-
         public void SaveConfig()
         {
             new Thread(() =>
@@ -190,6 +189,27 @@ namespace Fork.ViewModel
                 Network.WriteSettings();
                 UpdateAddressInfo();
             }).Start();
+        }
+
+        public void UpdateServer(NetworkServer networkServer, ServerViewModel serverViewModel)
+        {
+            if (Servers.Contains(networkServer) 
+                && networkServer is NetworkForkServer networkForkServer 
+                && networkForkServer.ServerViewModel == serverViewModel)
+            {
+                networkServer.Address = "0.0.0.0:" + serverViewModel.Server.ServerSettings.ServerPort;
+                networkServer.Motd = serverViewModel.Server.ServerSettings.Motd;
+                SaveConfig();
+                //Update UI
+                foreach (ISettingsPage page in SettingsViewModel.SettingsPages)
+                {
+                    if (page is ProxySettingsPage settingsPage)
+                    {
+                        Application.Current.Dispatcher?.Invoke(() => settingsPage.Reload());
+                    }
+                }
+            }
+            
         }
 
         private void UpdateAddressInfo()
