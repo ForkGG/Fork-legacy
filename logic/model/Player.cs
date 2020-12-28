@@ -113,8 +113,8 @@ namespace Fork.Logic.Model
                 response = client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).Result;
             }
 
-            //Exception for user not found: Response 204
-            if (response.StatusCode == HttpStatusCode.NoContent)
+            //Exception for user not found: Response 204 or 403, 404 etc.
+            if (response.StatusCode != HttpStatusCode.OK)
             {
                 Uid = CalculateOfflineUuid(Name);
                 offlineChar = true;

@@ -25,6 +25,7 @@ namespace Fork.Logic.BackgroundWorker.Performance
                     {
                         p.Refresh();
                         viewModel.MemValueUpdate(p.WorkingSet64/(1024d*1024d));
+                        Thread.Sleep(500);
                     }
                     catch { break; }
                 }
