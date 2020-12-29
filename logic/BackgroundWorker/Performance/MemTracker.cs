@@ -34,11 +34,6 @@ namespace Fork.Logic.BackgroundWorker.Performance
                 viewModel.MemValueUpdate(0.0);
                 viewModel.MemValueUpdate(0.0);
             });
-            Thread t = new Thread(() =>
-            {
-                
-            }){IsBackground = true};
-            t.Start();
         }
 
         public void StopThreads()
