@@ -66,7 +66,7 @@ namespace Fork.View.Xaml2.Pages.Settings
             settingsFile.TextReadUpdateEvent += HandleTextReadUpdate;
         }
 
-        public void SaveSettings()
+        public async Task SaveSettings()
         {
             string newText = "";
             if (SettingsFile.Text == null)
@@ -78,7 +78,7 @@ namespace Fork.View.Xaml2.Pages.Settings
             if (!SettingsFile.Text.Equals(newText))
             {
                 SettingsFile.Text = newText;
-                SettingsFile.SaveText();
+                await SettingsFile.SaveText();
             }
         }
 

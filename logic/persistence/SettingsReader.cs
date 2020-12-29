@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using Fork.Logic.Logging;
 using Fork.Logic.Manager;
@@ -19,16 +20,16 @@ namespace Fork.Logic.Persistence
 
         public SettingsReader(EntityViewModel viewModel)
         {
-            viewModel.UpdateSettingsFiles(GetSettingsFiles(viewModel), true);
-            WatchFileChanges(new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Name)));
+            viewModel.InitializeSettingsFiles(GetSettingsFiles(viewModel));
+            SetupFileWatcher(new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Name)));
             viewModel.EntityPathChangedEvent += HandleEntityPathChangedEvent;
         }
 
         private void HandleEntityPathChangedEvent(object sender, EntityViewModel.EntityPathChangedEventArgs e)
         {
-            viewModel.UpdateSettingsFiles(GetSettingsFiles(viewModel), true);
+            viewModel.InitializeSettingsFiles(GetSettingsFiles(viewModel));
             fileWatcher.Dispose();
-            WatchFileChanges(new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Name)));
+            SetupFileWatcher(new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Name)));
         }
 
         public void Dispose()
@@ -83,8 +84,12 @@ namespace Fork.Logic.Persistence
             return settingsFiles;
         }
 
-        private void WatchFileChanges(DirectoryInfo directoryInfo)
+        private async Task SetupFileWatcher(DirectoryInfo directoryInfo)
         {
+            while (!viewModel.ReadyToUse)
+            {
+                await Task.Delay(500);
+            }
             fileWatcher = new FileSystemWatcher();
             fileWatcher.Path = directoryInfo.FullName;
             fileWatcher.NotifyFilter = NotifyFilters.LastWrite;
@@ -96,8 +101,7 @@ namespace Fork.Logic.Persistence
 
         private void OnFilesChanged(object source, FileSystemEventArgs e)
         {
-            List<SettingsFile> settings = new List<SettingsFile>{new SettingsFile(new FileInfo(e.FullPath))};
-            viewModel.UpdateSettingsFiles(settings);
+            viewModel.UpdateSettingsFiles(new List<string>{e.FullPath});
         }
     }
 }

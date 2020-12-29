@@ -13,6 +13,7 @@
     <PackageProjectUrl>https://fork.gg</PackageProjectUrl>
     <PackageIcon>icon.ico</PackageIcon>
     <RepositoryUrl>https://github.com/ForkGG/fork</RepositoryUrl>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
   </PropertyGroup>
 
   <ItemGroup>

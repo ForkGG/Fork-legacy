@@ -43,7 +43,7 @@ namespace Fork.View.Xaml2.Pages.Settings
         public SettingsFile SettingsFile { get; set; }
         public string FileName => "Settings";
         public string FileExtension => "";
-        public void SaveSettings()
+        public async Task SaveSettings()
         {
             //networkViewModel.SaveSettings();
         }

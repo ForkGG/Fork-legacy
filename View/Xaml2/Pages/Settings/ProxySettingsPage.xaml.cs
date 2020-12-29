@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -35,7 +36,7 @@ namespace Fork.View.Xaml2.Pages.Settings
             DataContext = oldDataContext;
         }
 
-        public void SaveSettings()
+        public async Task SaveSettings()
         {
             networkViewModel.SaveConfig();
         }

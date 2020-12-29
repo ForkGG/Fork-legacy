@@ -236,6 +236,8 @@ namespace Fork.ViewModel
 
         public SettingsViewModel SettingsViewModel { get; set; }
 
+        public Task SettingsSavingTask = Task.CompletedTask;
+
 
         protected EntityViewModel(Entity entity)
         {
@@ -368,11 +370,12 @@ namespace Fork.ViewModel
 
         public void SaveSettings()
         {
+            SettingsSavingTask = SettingsViewModel.SaveChanges();
+            Task.Run(() => SettingsSavingTask);
             new Thread(() =>
             {
                 WriteServerIcon();
                 UpdateAddressInfo();
-                SettingsViewModel.SaveChanges();
                 //Update Network page if one exists where this server is in
                 if (this is ServerViewModel serverViewModel)
                 {
@@ -481,16 +484,14 @@ namespace Fork.ViewModel
             }
         }
 
-        public void UpdateSettingsFiles(List<SettingsFile> files, bool initial = false)
+        public void InitializeSettingsFiles(List<SettingsFile> files)
         {
-            if (initial)
-            {
-                SettingsViewModel.InitializeSettings(files);
-            }
-            else
-            {
-                SettingsViewModel.UpdateSettings(files);
-            }
+            SettingsViewModel.InitializeSettings(files);
+        }
+        
+        public async Task UpdateSettingsFiles(List<string> fileNames)
+        {
+            await SettingsViewModel.UpdateSettings(fileNames);
         }
 
         public void TrackPerformance(Process p)

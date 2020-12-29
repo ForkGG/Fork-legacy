@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using Fork.Logic.CustomConsole;
 using Fork.Logic.ImportLogic;
@@ -51,7 +52,7 @@ namespace Fork.Logic.Controller
             return true;
         }
 
-        public bool StartNetwork(NetworkViewModel viewModel, bool startServers)
+        public async Task<bool> StartNetworkAsync(NetworkViewModel viewModel, bool startServers)
         {
             ConsoleWriter.Write("\n Starting network "+viewModel.Entity.Name, viewModel);
             Console.WriteLine("Starting network "+viewModel.Entity.Name);
@@ -94,6 +95,13 @@ namespace Fork.Logic.Controller
                 ConsoleWriter.Write("Make sure that at least one server configured in the settings is running, else Players won't be able to join this network.", viewModel);
             }
             
+            ConsoleWriter.Write("\n", viewModel);
+            if (!viewModel.SettingsSavingTask.IsCompleted)
+            {
+                ConsoleWriter.Write("Saving settings files before starting proxy server...", viewModel);
+                await viewModel.SettingsSavingTask;
+            }
+            
             //Start proxy server
             ConsoleWriter.Write("Starting proxy server...", viewModel);
             DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Network.Name));
@@ -132,20 +140,20 @@ namespace Fork.Logic.Controller
             };
             process.StartInfo = startInfo;
             process.Start();
-            new Thread(() =>
+            Task.Run(() =>
             {
                 viewModel.TrackPerformance(process);
-            }){IsBackground = true}.Start();
+            });
             viewModel.CurrentStatus = ServerStatus.STARTING;
             ConsoleWriter.RegisterApplication(viewModel, process.StandardOutput, process.StandardError);
             ConsoleReader consoleReader = new ConsoleReader(process.StandardInput);
             viewModel.ConsoleReader = consoleReader;
-            new Thread(() =>
+            Task.Run(async () =>
             {
-                process.WaitForExit();
+                await process.WaitForExitAsync();
                 ApplicationManager.Instance.ActiveEntities.Remove(viewModel.Entity);
                 viewModel.CurrentStatus = ServerStatus.STOPPED;
-            }).Start();
+            });
             ApplicationManager.Instance.ActiveEntities[viewModel.Network] = process;
             Console.WriteLine("Started network "+ viewModel.Network);
 

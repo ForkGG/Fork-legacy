@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms.VisualStyles;
@@ -88,17 +90,21 @@ namespace Fork.ViewModel
             }
         }
 
-        public void UpdateSettings(List<SettingsFile> settingsFiles)
+        public async Task UpdateSettings(List<string> settingsFileNames)
         {
-            foreach (SettingsFile settingsFile in settingsFiles)
+            foreach (string settingsFileName in settingsFileNames)
             {
+                if (string.IsNullOrEmpty(settingsFileName))
+                {
+                    continue;
+                }
                 bool add = true;
                 ISettingsPage existingPage = null;
                 foreach (ISettingsPage setting in SettingsPages)
                 {
                     //Edge case for Settings without file
-                    if (settingsFile == null || setting.SettingsFile == null) continue;
-                    if (settingsFile.FileInfo.FullName.Equals(setting.SettingsFile.FileInfo.FullName))
+                    if (setting.SettingsFile == null) continue;
+                    if (settingsFileName.Equals(setting.SettingsFile.FileInfo.FullName))
                     {
                         add = false;
                         existingPage = setting;
@@ -109,6 +115,7 @@ namespace Fork.ViewModel
 
                 if (add)
                 {
+                    SettingsFile settingsFile = new SettingsFile(new FileInfo(settingsFileName));
                     switch (settingsFile.Type)
                     {
                         case SettingsFile.SettingsType.Vanilla:
@@ -136,7 +143,7 @@ namespace Fork.ViewModel
                 {
                     //Edge case for Settings without file
                     if (setting.SettingsFile == null) continue;
-                    if (settingsFile.FileInfo.FullName.Equals(setting.SettingsFile.FileInfo.FullName))
+                    if (settingsFileName.Equals(setting.SettingsFile.FileInfo.FullName))
                     {
                         remove = false;
                         removeIndex = SettingsPages.IndexOf(setting);
@@ -150,7 +157,7 @@ namespace Fork.ViewModel
 
                 if (!add && !remove)
                 {
-                    existingPage.SettingsFile.ReadText();
+                    await existingPage.SettingsFile.ReadText();
                 }
             }
             SortSettingsPages();
@@ -176,12 +183,12 @@ namespace Fork.ViewModel
             }
         }
 
-        public void SaveChanges()
+        public async Task SaveChanges()
         {
             List<ISettingsPage> pages = new List<ISettingsPage>(SettingsPages);
             foreach (ISettingsPage settingsPage in pages)
             {
-                settingsPage.SaveSettings();
+                await settingsPage.SaveSettings();
             }
         }
         

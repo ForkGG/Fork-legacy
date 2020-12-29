@@ -22,9 +22,6 @@ using Brush = System.Windows.Media.Brush;
 
 namespace Fork.View.Xaml2
 {
-    /// <summary>
-    /// Interaktionslogik für MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private MainViewModel viewModel;

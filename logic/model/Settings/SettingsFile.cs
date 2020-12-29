@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+using Fork.Logic.Logging;
 using Fork.Logic.Manager;
 using Fork.Logic.Persistence;
 using Fork.ViewModel;
@@ -28,11 +30,23 @@ namespace Fork.Logic.Model.Settings
         public delegate void HandleTextReadUpdate(object sender, TextReadUpdatedEventArgs eventArgs);
         public event HandleTextReadUpdate TextReadUpdateEvent;
         
-        private static object fileLock = new object();
+        private static SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1,1);
+        private bool textChanged = false;
+        private string text;
         
         public FileInfo FileInfo { get; set; }
         public int NameID { get; }
-        public string Text { get; set; }
+
+        public string Text
+        {
+            get => text;
+            set
+            {
+                textChanged = true;
+                text = value;
+            }
+        }
+
         public SettingsType Type { get; }
         
 
@@ -64,44 +78,73 @@ namespace Fork.Logic.Model.Settings
         }
 
 
-        public void ReadText()
+        public async Task ReadText()
         {
-            new Thread(() =>
+            await Task.Run(async () =>
             {
                 while (!FileReader.IsFileReadable(FileInfo))
                 {
-                    Thread.Sleep(500);
+                    await Task.Delay(500);
                     if (ApplicationManager.Instance.HasExited || !FileInfo.Exists)
                     {
                         return;
                     }
                 }
-                lock (fileLock)
+
+                await semaphoreSlim.WaitAsync();
+                try
                 {
-                    Text = File.ReadAllText(FileInfo.FullName);
+                    await using FileStream fileStream = new FileStream(FileInfo.FullName, FileMode.OpenOrCreate,
+                        FileAccess.Read, FileShare.ReadWrite);
+                    using StreamReader streamReader = new StreamReader(fileStream);
+                    Text = await streamReader.ReadToEndAsync();
                     TextReadUpdateEvent?.Invoke(this, new TextReadUpdatedEventArgs(Text));
                 }
-            }){IsBackground = true}.Start();
+                catch (Exception e)
+                {
+                    ErrorLogger.Append(e);
+                }
+                finally
+                {
+                    semaphoreSlim.Release();
+                }
+            });
         }
 
-        public void SaveText()
+        public async Task SaveText()
         {
-            new Thread(() =>
+            if (textChanged)
             {
-                while (!FileWriter.IsFileWritable(FileInfo))
+                textChanged = false;
+                await Task.Run(async () =>
                 {
-                    Thread.Sleep(500);
-                    if (ApplicationManager.Instance.HasExited)
+                    while (!FileWriter.IsFileWritable(FileInfo))
                     {
-                        return;
+                        await Task.Delay(500);
+                        if (ApplicationManager.Instance.HasExited)
+                        {
+                            return;
+                        }
                     }
-                }
 
-                lock (fileLock)
-                {
-                    File.WriteAllText(FileInfo.FullName,Text);
-                }
-            }).Start();
+                    await semaphoreSlim.WaitAsync();
+                    try
+                    {
+                        await using FileStream fileStream = new FileStream(FileInfo.FullName, FileMode.Create,
+                            FileAccess.Write, FileShare.Read);
+                        await using StreamWriter streamWriter = new StreamWriter(fileStream);
+                        await streamWriter.WriteAsync(Text);
+                    }
+                    catch (Exception e)
+                    {
+                        ErrorLogger.Append(e);
+                    }
+                    finally
+                    {
+                        semaphoreSlim.Release();
+                    }
+                });
+            }
         }
 
         private int GetNameID(string filename)

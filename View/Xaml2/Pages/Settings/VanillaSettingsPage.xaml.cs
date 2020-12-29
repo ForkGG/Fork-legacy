@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -27,7 +28,7 @@ namespace Fork.View.Xaml2.Pages.Settings
             DataContext = serverViewModel;
         }
 
-        public void SaveSettings()
+        public async Task SaveSettings()
         {
             serverViewModel.SaveProperties();
         }

@@ -234,11 +234,7 @@ namespace Fork.Logic.Manager
 
         public async Task<bool> StartNetworkAsync(NetworkViewModel viewModel, bool startServers = false)
         {
-            Task<bool> t = new Task<bool>(() =>
-                networkController.StartNetwork(viewModel, startServers));
-            t.Start();
-            bool r = await t;
-            return r;
+            return await networkController.StartNetworkAsync(viewModel, startServers);
         }
 
         public async Task<bool> StopNetworkAsync(NetworkViewModel viewModel, bool stopServers = false)
@@ -741,7 +737,14 @@ namespace Fork.Logic.Manager
 
         public async Task<bool> StartServerAsync(ServerViewModel viewModel)
         {
-            ConsoleWriter.Write("\nStarting server "+viewModel.Server+" on world: "+ viewModel.Server.ServerSettings.LevelName, viewModel);
+            ConsoleWriter.Write("\n", viewModel);
+            if (!viewModel.SettingsSavingTask.IsCompleted)
+            {
+                ConsoleWriter.Write("Saving settings files before starting server ...", viewModel);
+                await viewModel.SettingsSavingTask;
+            }
+            
+            ConsoleWriter.Write("Starting server "+viewModel.Server+" on world: "+ viewModel.Server.ServerSettings.LevelName, viewModel);
             Console.WriteLine("Starting server "+viewModel.Server.Name+" on world: "+ viewModel.Server.ServerSettings.LevelName);
             DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Server.Name));
             if (!directoryInfo.Exists)
@@ -826,9 +829,9 @@ namespace Fork.Logic.Manager
             double nextRestart = AutoRestartManager.Instance.RegisterRestart(viewModel);
 
             viewModel.SetRestartTime(nextRestart);
-            Task.Run(() =>
+            Task.Run(async () =>
             {
-                process.WaitForExit();
+                await process.WaitForExitAsync();
                 ApplicationManager.Instance.ActiveEntities.Remove(viewModel.Server);
                 viewModel.CurrentStatus = ServerStatus.STOPPED;
                 AutoRestartManager.Instance.DisposeRestart(viewModel);
@@ -840,11 +843,11 @@ namespace Fork.Logic.Manager
             Console.WriteLine("Started server "+ viewModel.Server);
             
             //Register new world if created
-            Task.Run(() =>
+            Task.Run(async () =>
             {
                 while (!viewModel.ServerRunning)
                 {
-                    Thread.Sleep(500);
+                    await Task.Delay(500);
                 }
                 viewModel.InitializeWorldsList();
             });
