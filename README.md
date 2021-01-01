@@ -19,8 +19,8 @@
 
 
 ## Installation
-- Download the [latest version](https://www.Fork.gg/downloads/Fork.exe) 
-- Run Fork.exe
+- Download the [Launcher](https://www.Fork.gg/downloads/launcher/ForkLauncher.exe) 
+- Run the Launcher and enjoy
 
 ## Useful Links:
 - Website: [Fork.gg](https://www.Fork.gg)
@@ -32,11 +32,6 @@
 ## Credits
 This project wouldn't be possible without:
 - [Newt Welch](https://www.reddit.com/user/Newt_Welch/) being a mad lad and deciding to create one of the best UIs ever
-- [anthonymendez](https://github.com/anthonymendez) for helping to find the weirdest bugs
-- [SCPhantom / Jakob](https://github.com/SCPhantom/) for inspiration and coding advice
-
-Mentionable projects:
-- [PaperMC](https://papermc.io/) an amazing minecraft Fork for better performance and a neat download API
-- [MCVersions.net](https://mcversions.net/) for helping me out to find a way to get the latest minecraft server versions
-- [BukkitGUI](https://github.com/Bertware/bukkitgui2) for being the inspiration for this project
+- [The Patrons](https://www.patreon.com/forkgg) who help cover the costs for this project
+- [BukkitGUI](https://github.com/Bertware/bukkitgui2) the inspiration for this project
 
