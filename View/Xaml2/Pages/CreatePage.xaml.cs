@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -14,9 +16,6 @@ using ComboBox = System.Windows.Controls.ComboBox;
 
 namespace Fork.View.Xaml2.Pages
 {
-    /// <summary>
-    /// Interaktionslogik für CreatePage.xaml
-    /// </summary>
     public partial class CreatePage : Page
     {
         private AddServerViewModel viewModel;
@@ -86,28 +85,32 @@ namespace Fork.View.Xaml2.Pages
         private async void BtnApply_Click(object sender, RoutedEventArgs e)
         {
             CreateBtn.IsEnabled = false;
+            char[] illegalDirChars = Path.GetInvalidFileNameChars();
             if (isProxy)
             {
                 string networkName = NetworkName.Text;
-                if (networkName == null || networkName.Equals(""))
+                string refinedNetworkName = networkName;
+                foreach (char c in networkName)
                 {
-                    networkName = "Network";
+                    if (illegalDirChars.Contains(c))
+                    {
+                        refinedNetworkName = refinedNetworkName.Replace(c+"","");
+                    }
+                }
+                if (refinedNetworkName.Equals(""))
+                {
+                    refinedNetworkName = "Network";
                 }
 
                 //TODO replace this with int value verifier
-                int minRam, maxRam;
+                int maxRam;
                 if (!int.TryParse(NetworkMaxRam.Text, out maxRam))
                 {
                     maxRam = 1024;
                 }
-
-                if (!int.TryParse(NetworkMinRam.Text, out minRam))
-                {
-                    minRam = 512;
-                }
                 
                 JavaSettings javaSettings = new JavaSettings{MaxRam = maxRam};
-                bool createNetworkSuccess = await ServerManager.Instance.CreateNetworkAsync(networkName,proxyType, javaSettings);
+                bool createNetworkSuccess = await ServerManager.Instance.CreateNetworkAsync(refinedNetworkName,proxyType, javaSettings);
             }
             else
             {   
@@ -115,9 +118,17 @@ namespace Fork.View.Xaml2.Pages
                 //TODO check if inputs are valid / server not existing
 
                 string serverName = ServerName.Text;
-                if (serverName == null || serverName.Equals(""))
+                string refinedServerName = serverName;
+                foreach (char c in serverName)
                 {
-                    serverName = "Server";
+                    if (illegalDirChars.Contains(c))
+                    {
+                        refinedServerName = refinedServerName.Replace(c+"","");
+                    }
+                }
+                if (refinedServerName.Equals(""))
+                {
+                    refinedServerName = "Server";
                 }
 
                 string worldPath = null;
@@ -129,7 +140,7 @@ namespace Fork.View.Xaml2.Pages
                         worldPath = lastPath;
                     }
                 }
-                bool createServerSuccess = await ServerManager.Instance.CreateServerAsync(serverName,selectedVersion, viewModel.ServerSettings, new JavaSettings(),worldPath);
+                bool createServerSuccess = await ServerManager.Instance.CreateServerAsync(refinedServerName,selectedVersion, viewModel.ServerSettings, new JavaSettings(),worldPath);
             }
             viewModel.GenerateNewSettings();
             CreateBtn.IsEnabled = true;
