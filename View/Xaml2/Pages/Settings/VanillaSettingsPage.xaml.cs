@@ -30,7 +30,7 @@ namespace Fork.View.Xaml2.Pages.Settings
 
         public async Task SaveSettings()
         {
-            serverViewModel.SaveProperties();
+            await serverViewModel.SaveProperties();
         }
         
         private void JavaPath_MouseDown(object sender, MouseButtonEventArgs e)

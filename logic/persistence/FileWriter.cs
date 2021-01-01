@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using Fork.Logic.Model;
 
@@ -30,7 +31,7 @@ namespace Fork.Logic.Persistence
             File.WriteAllLines(Path.Combine(folderPath, "eula.txt"),lines,Encoding.UTF8);
         }
 
-        public void WriteServerSettings(string folderPath, Dictionary<string, string> serverSettings)
+        public async Task WriteServerSettings(string folderPath, Dictionary<string, string> serverSettings)
         {
             if (!new DirectoryInfo(folderPath).Exists)
             {
@@ -46,7 +47,7 @@ namespace Fork.Logic.Persistence
                 lines.Add(setting+"="+serverSettings[setting].Replace("\n","\\n").Replace("\r",""));
             }
 
-            File.WriteAllLines(Path.Combine(folderPath,"server.properties"), lines, Encoding.UTF8);
+            await File.WriteAllLinesAsync(Path.Combine(folderPath,"server.properties"), lines, Encoding.UTF8);
         }
         
         public void AppendToErrorLog(string line)

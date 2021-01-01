@@ -229,13 +229,10 @@ namespace Fork.ViewModel
             }){IsBackground = true}.Start();
         }
 
-        public void SaveProperties()
+        public async Task SaveProperties()
         {
-            new Thread(() =>
-            {
-                new FileWriter().WriteServerSettings(Path.Combine(App.ServerPath, Server.Name),
+            await new FileWriter().WriteServerSettings(Path.Combine(App.ServerPath, Server.Name),
                     Server.ServerSettings.SettingsDictionary);
-            }).Start();
         }
 
         public void UpdateActiveWorld(World world)
