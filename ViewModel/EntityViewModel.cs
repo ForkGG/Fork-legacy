@@ -346,7 +346,7 @@ namespace Fork.ViewModel
             try
             {
                 ImageSource toRemove = ServerIcons.Last();
-                var newIsSelected = SelectedServerIcon == toRemove;
+                bool newIsSelected = SelectedServerIcon == toRemove;
                 Application.Current.Dispatcher?.Invoke(() => ServerIcons.Remove(toRemove));
                 Bitmap bitmap;
                 using (Image image = Image.FromFile(filePath))
@@ -630,6 +630,12 @@ namespace Fork.ViewModel
             {
                 Entity.ServerIconId = ServerIcons.IndexOf(SelectedServerIcon);
                 FileInfo customIcon = new FileInfo(Path.Combine(App.ServerPath, Entity.Name, "server-icon.png"));
+                //Remove the server-icon.png and return if the default icon is selected.
+                if (Entity.ServerIconId == 0 && customIcon.Exists)
+                {
+                    customIcon.Delete();
+                    return;
+                }
                 PngBitmapEncoder encoder = new PngBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create((BitmapSource) SelectedServerIcon));
                 using (FileStream fileStream = new FileStream(customIcon.FullName, FileMode.Create))

@@ -100,19 +100,6 @@
                                               Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 10 0 0"/>
                                 </StackPanel>
                             </Grid>
-                            <StackPanel Margin="110 30 0 0">
-                                <TextBlock Text="MOTD" Style="{DynamicResource CreateServerTextBlock}"
-                                           Margin="0 0 20 10" HorizontalAlignment="Center" />
-                                <Border Margin="5 0" CornerRadius="4" Width="550" DockPanel.Dock="Right" Height="50"
-                                        Background="{DynamicResource textBackground}">
-                                    <TextBox Text="{Binding Network.Config.listeners[0].motdUnescaped}"
-                                             Background="{DynamicResource textBackground}" BorderThickness="0"
-                                             Foreground="{DynamicResource backgroundDark}" MaxLines="2"
-                                             FontFamily="{DynamicResource Montserrat-SemiBold}" Margin="5 0"
-                                             FontSize="17" TextWrapping="NoWrap" AcceptsReturn="True" AcceptsTab="True"
-                                             Height="40" />
-                                </Border>
-                            </StackPanel>
                         </StackPanel>
                         <Border.Style>
                             <Style TargetType="Border">
