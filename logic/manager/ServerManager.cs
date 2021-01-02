@@ -96,15 +96,6 @@ namespace Fork.Logic.Manager
         }
         
         #region Server Managment Methods
-        public async Task<bool> CreateServerAsync(string serverName, ServerVersion serverVersion, ServerSettings serverSettings,
-            JavaSettings javaSettings, string worldPath = null)
-        {
-            Task<bool> t = new Task<bool>(() =>
-                CreateServer(serverName, serverVersion, serverSettings, javaSettings, worldPath));
-            t.Start();
-            bool r = await t;
-            return r;
-        }
         
         public async Task<bool> ImportServerAsync(ServerVersion version, ServerValidationInfo validationInfo,
             string originalServerDirectory, string serverName)
@@ -152,22 +143,6 @@ namespace Fork.Logic.Manager
             t.Start();
             bool r = await t;
             return r;
-        }
-
-        public async Task<bool> DeleteServerAsync(ServerViewModel serverViewModel)
-        {
-            if (serverViewModel.CurrentStatus != ServerStatus.STOPPED)
-            {
-                StopServer(serverViewModel);
-                while (serverViewModel.CurrentStatus != ServerStatus.STOPPED)
-                {
-                    Thread.Sleep(500);
-                }
-            }
-            Task<bool> t = new Task<bool>(() => DeleteServer(serverViewModel));
-            t.Start();
-            bool result = await t;
-            return result;
         }
 
         public async Task<bool> ChangeServerVersionAsync(ServerVersion newVersion, ServerViewModel serverViewModel)
@@ -277,11 +252,7 @@ namespace Fork.Logic.Manager
         
         public async Task<bool> DeleteNetworkAsync(NetworkViewModel viewModel)
         {
-            Task<bool> t = new Task<bool>(() =>
-                networkController.DeleteNetwork(viewModel));
-            t.Start();
-            bool r = await t;
-            return r;
+            return await networkController.DeleteNetworkAsync(viewModel);
         }
 
         public async Task<bool> KillNetworkAsync(NetworkViewModel viewModel, bool killServers = false)
@@ -400,15 +371,7 @@ namespace Fork.Logic.Manager
             copyThread.Start();
             
             //Download server.jar
-            Thread thread = new Thread(() =>
-            {
-                WebClient webClient = new WebClient();
-                webClient.DownloadProgressChanged += viewModel.DownloadProgressChanged;
-                webClient.DownloadFileCompleted += viewModel.DownloadCompletedHandler;
-                webClient.DownloadFileAsync(new Uri(server.Version.JarLink),
-                    Path.Combine(serverDirectory.FullName, "server.jar"));
-            }){IsBackground = true};
-            thread.Start();
+            Downloader.DownloadJarAsync(viewModel, serverDirectory);
             
             if (!validationInfo.EulaTxt)
             {
@@ -485,7 +448,7 @@ namespace Fork.Logic.Manager
             }
         }
 
-        private bool CreateServer(string serverName, ServerVersion serverVersion, ServerSettings serverSettings,
+        public async Task<bool> CreateServerAsync(string serverName, ServerVersion serverVersion, ServerSettings serverSettings,
             JavaSettings javaSettings, string worldPath = null)
         {
             serverName = RefineName(serverName);
@@ -496,6 +459,7 @@ namespace Fork.Logic.Manager
                 serverSettings.LevelName = "world";
             }
             DirectoryInfo directoryInfo = Directory.CreateDirectory(serverPath);
+            serverVersion.Build = await VersionManager.Instance.GetLatestBuild(serverVersion);
             Server server = new Server(serverName, serverVersion, serverSettings, javaSettings);
             ServerViewModel viewModel = new ServerViewModel(server);
             Application.Current.Dispatcher.Invoke(() => Entities.Add(viewModel));
@@ -513,7 +477,7 @@ namespace Fork.Logic.Manager
             
             //Writing necessary files
             new FileWriter().WriteEula(Path.Combine(App.ServerPath, directoryInfo.Name));
-            new FileWriter().WriteServerSettings(Path.Combine(App.ServerPath, directoryInfo.Name),
+            await new FileWriter().WriteServerSettings(Path.Combine(App.ServerPath, directoryInfo.Name),
                 serverSettings.SettingsDictionary);
 
             return true;
@@ -608,7 +572,7 @@ namespace Fork.Logic.Manager
             }
         }
 
-        private bool DeleteServer(ServerViewModel serverViewModel)
+        public async Task<bool> DeleteServerAsync(ServerViewModel serverViewModel)
         {
             try
             {
@@ -617,21 +581,19 @@ namespace Fork.Logic.Manager
                     StopServer(serverViewModel);
                     while (serverViewModel.CurrentStatus != ServerStatus.STOPPED)
                     {
-                        Thread.Sleep(500);
+                        await Task.Delay(500);
                     }
                 }
 
-                DirectoryInfo deletedDirectory =
-                    Directory.CreateDirectory(Path.Combine(App.ServerPath, "backup", "deleted"));
-                if (File.Exists(Path.Combine(deletedDirectory.FullName, serverViewModel.Name + ".zip")))
+                if (!serverViewModel.DownloadCompleted)
                 {
-                    File.Delete(Path.Combine(deletedDirectory.FullName, serverViewModel.Name + ".zip"));
+                    //Cancel download
+                    await Downloader.CancelJarDownloadAsync(serverViewModel);
                 }
 
+                serverViewModel.DeleteEntity();
                 DirectoryInfo serverDirectory =
                     new DirectoryInfo(Path.Combine(App.ServerPath, serverViewModel.Name));
-                ZipFile.CreateFromDirectory(serverDirectory.FullName,
-                    Path.Combine(deletedDirectory.FullName, serverViewModel.Name + ".zip"));
                 serverDirectory.Delete(true);
                 Application.Current.Dispatcher?.Invoke(()=>Entities.Remove(serverViewModel));
                 serverNames.Remove(serverViewModel.Server.Name);
@@ -639,7 +601,7 @@ namespace Fork.Logic.Manager
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                ErrorLogger.Append(e);
                 return false;
             }
         }

@@ -34,8 +34,11 @@ namespace Fork.Logic.Persistence
 
         public void Dispose()
         {
-            fileWatcher.Changed -= OnFilesChanged;
-            fileWatcher.Dispose();
+            if (fileWatcher!=null)
+            {
+                fileWatcher.Changed -= OnFilesChanged;
+                fileWatcher.Dispose();
+            }
         }
 
         private List<SettingsFile> GetSettingsFiles(EntityViewModel viewModel)

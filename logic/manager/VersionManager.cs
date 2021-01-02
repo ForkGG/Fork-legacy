@@ -1,14 +1,12 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Fork.Logic.Model;
 using Fork.Logic.Model.MinecraftVersionModels;
 using Fork.Logic.WebRequesters;
-using Fork.ViewModel;
+using Application = System.Windows.Application;
 
 namespace Fork.Logic.Manager
 {
@@ -18,26 +16,25 @@ namespace Fork.Logic.Manager
 
         private VersionManager()
         {
-            new Task(() =>
-            {
-                WaterfallVersion = new WaterfallWebRequester().RequestLatestWaterfallVersion();
-            }).Start();
-            new Task(() =>
+            Task.Run(() => { WaterfallVersion = new WaterfallWebRequester().RequestLatestWaterfallVersion(); });
+            Task.Run(() =>
             {
                 BungeeCordVersion = new ServerVersion();
                 BungeeCordVersion.Type = ServerVersion.VersionType.BungeeCord;
                 BungeeCordVersion.Version = "";
                 BungeeCordVersion.JarLink =
                     "https://ci.md-5.net/job/BungeeCord/lastSuccessfulBuild/artifact/bootstrap/target/BungeeCord.jar";
-            }).Start();
-            new Task(() =>
+            });
+            Task.Run(() =>
             {
                 List<ServerVersion> versions =
                     WebRequestManager.Instance.GetVanillaVersions(Manifest.VersionType.release);
                 foreach (var version in versions)
                 {
-                    Application.Current?.Dispatcher?.InvokeAsync(() => vanillaVersions.Add(version), DispatcherPriority.Background);
+                    Application.Current?.Dispatcher?.InvokeAsync(() => vanillaVersions.Add(version),
+                        DispatcherPriority.Background);
                 }
+
                 versions = WebRequestManager.Instance.GetPaperVersions();
                 foreach (var version in versions)
                 {
@@ -49,12 +46,12 @@ namespace Fork.Logic.Manager
                 {
                     Application.Current?.Dispatcher?.InvokeAsync(() => spigotVersions.Add(version));
                 }
-            }).Start();
+            });
         }
 
         public static VersionManager Instance
         {
-            get 
+            get
             {
                 if (instance == null)
                     instance = new VersionManager();
@@ -85,5 +82,21 @@ namespace Fork.Logic.Manager
         public ServerVersion WaterfallVersion;
 
         public ServerVersion BungeeCordVersion;
+
+        public async Task<int> GetLatestBuild(ServerVersion version)
+        {
+            if (!version.SupportBuilds)
+            {
+                return 0;
+            }
+
+            switch (version.Type)
+            {
+                case ServerVersion.VersionType.Paper:
+                    return await WebRequestManager.Instance.GetLatestPaperBuild(version.Version);
+                default:
+                    return 0;
+            }
+        }
     }
 }

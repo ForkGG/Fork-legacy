@@ -204,7 +204,7 @@ namespace Fork.Logic.Controller
             return true;
         }
         
-        public bool DeleteNetwork(NetworkViewModel networkViewModel)
+        public async Task<bool> DeleteNetworkAsync(NetworkViewModel networkViewModel)
         {
             try
             {
@@ -216,18 +216,16 @@ namespace Fork.Logic.Controller
                         Thread.Sleep(500);
                     }
                 }
-
-                DirectoryInfo deletedDirectory =
-                    Directory.CreateDirectory(Path.Combine(App.ServerPath, "backup", "deleted"));
-                if (File.Exists(Path.Combine(deletedDirectory.FullName, networkViewModel.Name + ".zip")))
+                
+                if (!networkViewModel.DownloadCompleted)
                 {
-                    File.Delete(Path.Combine(deletedDirectory.FullName, networkViewModel.Name + ".zip"));
+                    //Cancel download
+                    await Downloader.CancelJarDownloadAsync(networkViewModel);
                 }
 
+                networkViewModel.DeleteEntity();
                 DirectoryInfo serverDirectory =
                     new DirectoryInfo(Path.Combine(App.ServerPath, networkViewModel.Name));
-                ZipFile.CreateFromDirectory(serverDirectory.FullName,
-                    Path.Combine(deletedDirectory.FullName, networkViewModel.Name + ".zip"));
                 serverDirectory.Delete(true);
                 Application.Current.Dispatcher?.Invoke(()=>ServerManager.Instance.RemoveEntity(networkViewModel));
                 return true;

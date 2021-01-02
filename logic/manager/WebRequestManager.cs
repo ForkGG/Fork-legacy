@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Fork.Logic.Logging;
 using Newtonsoft.Json;
 using Fork.Logic.Model;
@@ -34,42 +35,6 @@ namespace Fork.Logic.Manager
         public List<ServerVersion> GetVanillaVersions(Manifest.VersionType type)
         {
             return GetVanillaVersionsFromCache(type);
-            
-            /*List<ServerVersion> cachedVersions = GetVanillaVersionsFromCache(type);
-            if (cachedVersions!=null)
-            {
-                return cachedVersions;
-            }
-            
-            Uri uri = new Uri("https://launchermeta.mojang.com/mc/game/version_manifest.json");
-            HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uri);
-            string json;
-            using (var response =  request.GetResponse())
-            using (Stream stream = response.GetResponseStream())
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                json = reader.ReadToEnd();
-            }
-            
-            Manifest manifest = JsonConvert.DeserializeObject<Manifest>(json);
-            List<ServerVersion> result = new List<ServerVersion>();
-            foreach (Manifest.Version version in manifest.versions)
-            {
-                if (version.type == type)
-                {
-                    ServerVersion internalVersion = new ServerVersion();
-                    internalVersion.Type = ServerVersion.VersionType.Vanilla;
-                    internalVersion.Version = version.id;
-                    internalVersion.JarLink = GetJarURL(version.url);
-                    if (internalVersion.JarLink!=null)
-                    {
-                        result.Add(internalVersion);
-                    }
-                }
-            }
-            vanillaDict[type] = result;
-            vanillaCacheAge[type] = DateTime.Now;
-            return result;*/
         }
 
         public List<ServerVersion> GetPaperVersions()
@@ -93,6 +58,11 @@ namespace Fork.Logic.Manager
             }
 
             return versions;
+        }
+
+        public async Task<int> GetLatestPaperBuild(string version)
+        {
+            return await new PaperWebRequester().RequestLatestBuildId(version);
         }
 
         public List<ServerVersion> GetSpigotVersions()
@@ -138,7 +108,7 @@ namespace Fork.Logic.Manager
             VanillaVersionCache versionCache = new VanillaVersionCache(cacheAge, versionType, versions);
 
             //File cache
-            string json = System.Text.Json.JsonSerializer.Serialize(versionCache);
+            string json = JsonSerializer.Serialize(versionCache);
             try
             {
                 string path = Path.Combine(App.ApplicationPath,"persistence");

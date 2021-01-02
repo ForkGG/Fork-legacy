@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,6 +30,7 @@ using Fork.Logic.Model.ServerConsole;
 using Fork.Logic.Model.Settings;
 using Fork.Logic.Persistence;
 using Fork.Logic.Utils;
+using Fork.Logic.WebRequesters;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using Image = System.Drawing.Image;
@@ -58,6 +58,7 @@ namespace Fork.ViewModel
         private double diskValue;
         
         private Stopwatch timeSinceLastConsoleMessage = new Stopwatch();
+        private bool isDeleted = false;
 
         public class EntityPathChangedEventArgs
         {
@@ -343,6 +344,10 @@ namespace Fork.ViewModel
 
         public void UpdateCustomImage(string filePath)
         {
+            if (isDeleted)
+            {
+                return;
+            }
             try
             {
                 ImageSource toRemove = ServerIcons.Last();
@@ -370,6 +375,10 @@ namespace Fork.ViewModel
 
         public void SaveSettings()
         {
+            if (isDeleted)
+            {
+                return;
+            }
             SettingsSavingTask = SettingsViewModel.SaveChanges();
             Task.Run(() => SettingsSavingTask);
             new Thread(() =>
@@ -494,6 +503,11 @@ namespace Fork.ViewModel
             await SettingsViewModel.UpdateSettings(fileNames);
         }
 
+        public void DeleteEntity()
+        {
+            isDeleted = true;
+        }
+
         public void TrackPerformance(Process p)
         {
             // Track CPU usage
@@ -570,7 +584,7 @@ namespace Fork.ViewModel
             raisePropertyChanged(nameof(ReadyToUse));
         }
 
-        public void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        public void DownloadProgressChanged(object sender, Downloader.DownloadProgressChangedEventArgs e)
         {
             double bytesIn = double.Parse(e.BytesReceived.ToString());
             double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
