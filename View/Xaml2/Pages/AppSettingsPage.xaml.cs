@@ -87,7 +87,7 @@ namespace Fork.View.Xaml2.Pages
                 {
                     ServerDirChangedGrid.Visibility = Visibility.Collapsed;
                     ResetServerDirButton.Visibility = Visibility.Collapsed;
-                    serverPathBgr.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
+                    serverPathBgr.Background = (Brush) Application.Current.FindResource("textBackground");
                 }
                 
             }
