@@ -29,11 +29,14 @@ namespace Fork.Logic.Model
         public async Task InitWithName(string name)
         {
             Name = name;
-            Head = SetOfflineHead();
             await RetrieveUid();
             if (!OfflineChar)
             {
-                Task.Run(RetrieveHead);
+                await Task.Run(RetrieveHead);
+            }
+            else
+            {
+                Head = SetOfflineHead();
             }
             LastUpdated = DateTime.Now;
         }
@@ -92,7 +95,7 @@ namespace Fork.Logic.Model
             Head = SetOfflineHead();
             if (fullProfile.properties.Count != 0)
             {
-                Task.Run( () => Head = RetrieveImageFromBase64(fullProfile.properties[0].value).Result);
+                await Task.Run(async() => Head = await RetrieveImageFromBase64(fullProfile.properties[0].value));
             }
         }
 
@@ -267,8 +270,8 @@ namespace Fork.Logic.Model
         {
             Image defaultHead = Resources.DeafultHead;
             Bitmap b = new Bitmap(defaultHead);
-            Directory.CreateDirectory(Path.Combine(App.ApplicationPath, "players", Name));
-            string path = Path.Combine(App.ApplicationPath, "players", Name, "head.jpg");
+            Directory.CreateDirectory(Path.Combine(App.ApplicationPath, "players", Uid));
+            string path = Path.Combine(App.ApplicationPath, "players", Uid, "head.jpg");
             path = new DirectoryInfo(path).FullName;
             b.Save(path);
             b.Dispose();
