@@ -15,7 +15,7 @@ namespace Fork.Logic.Model
 {
     public class Player
     {
-        public bool offlineChar = false;
+        public bool OfflineChar { get; set; } = false;
         public string Name { get; set; }
         public string Uid { get; set; }
         public string Head { get; set; }
@@ -31,7 +31,7 @@ namespace Fork.Logic.Model
             Name = name;
             Head = SetOfflineHead();
             await RetrieveUid();
-            if (!offlineChar)
+            if (!OfflineChar)
             {
                 Task.Run(RetrieveHead);
             }
@@ -79,7 +79,7 @@ namespace Fork.Logic.Model
             {
                 Console.WriteLine("Error while retrieving Mojang data for UUID: " + Uid);
                 Name = Uid;
-                offlineChar = true;
+                OfflineChar = true;
                 Head = SetOfflineHead();
                 return;
             }
@@ -111,7 +111,7 @@ namespace Fork.Logic.Model
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 Uid = CalculateOfflineUuid(Name);
-                offlineChar = true;
+                OfflineChar = true;
                 return;
             }
 

@@ -38,19 +38,22 @@ namespace Fork.Logic.Manager
         private PlayerManager()
         {
             PlayerSet = InitializePlayerSet();
-            
-            //Check for old player data and update
-            bool anyUpdate = false;
-            foreach (var player in PlayerSet.Where(player => !player.offlineChar && (DateTime.Now - player.LastUpdated).TotalDays > 7d))
+
+            Task.Run(async () =>
             {
-                player.Update();
-                Console.WriteLine("Updated data for player "+player);
-                anyUpdate = true;
-            }
-            if (anyUpdate)
-            {
-                SafePlayersToFile();
-            }
+                //Check for old player data and update
+                bool anyUpdate = false;
+                foreach (var player in PlayerSet.Where(player => !player.OfflineChar && (DateTime.Now - player.LastUpdated).TotalDays > 7d))
+                {
+                    await player.Update();
+                    Console.WriteLine("Updated data for player "+player);
+                    anyUpdate = true;
+                }
+                if (anyUpdate)
+                {
+                    SafePlayersToFile();
+                }
+            });
         }
         #endregion
 
