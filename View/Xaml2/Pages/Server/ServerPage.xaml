@@ -35,7 +35,7 @@
                 </StackPanel>
 
                 <!-- Restart Timer -->
-                <Grid Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 0 15" Visibility="{Binding RestartEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Grid Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 0 15" Visibility="{Binding AutomationEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
@@ -53,17 +53,20 @@
                     <TextBlock Text="Minutes" FontSize="10" Grid.Column="3" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
                     <TextBlock Text="Seconds" FontSize="10" Grid.Column="5" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
 
-                    <TextBlock Text="Restart in " FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="18" Grid.Row="1" VerticalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding NextAutomationName}" FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="18"/>
+                        <TextBlock Text=" in " FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="18"/>
+                    </StackPanel>
                     <Border Width="32" Height="32" Grid.Row="1" Grid.Column="1" Background="{DynamicResource backgroundDark}">
-                        <TextBlock Text="{Binding NextRestartHours}" FontSize="18" TextAlignment="Center"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding NextAutomationHours}" FontSize="18" TextAlignment="Center"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <TextBlock Text="  : " FontSize="18" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
                     <Border Width="32" Height="32" Grid.Row="1" Grid.Column="3" Background="{DynamicResource backgroundDark}">
-                        <TextBlock Text="{Binding NextRestartMinutes}" FontSize="18" TextAlignment="Center"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding NextAutomationMinutes}" FontSize="18" TextAlignment="Center"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <TextBlock Text=" : " FontSize="18" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
                     <Border Width="32" Height="32" Grid.Row="1" Grid.Column="5" Background="{DynamicResource backgroundDark}">
-                        <TextBlock Text="{Binding NextRestartSeconds}" FontSize="18" TextAlignment="Center"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding NextAutomationSeconds}" FontSize="18" TextAlignment="Center"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                 </Grid>
 

@@ -89,10 +89,6 @@ namespace Fork.Logic.Persistence
 
         private async Task SetupFileWatcher(DirectoryInfo directoryInfo)
         {
-            while (!viewModel.ReadyToUse)
-            {
-                await Task.Delay(500);
-            }
             fileWatcher = new FileSystemWatcher();
             fileWatcher.Path = directoryInfo.FullName;
             fileWatcher.NotifyFilter = NotifyFilters.LastWrite;

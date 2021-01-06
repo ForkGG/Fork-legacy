@@ -752,7 +752,7 @@ namespace Fork.Logic.Manager
                         viewModel.Server.ServerSettings.ResourcePackSha1 = hash;
                         viewModel.Server.ResourcePackHashAge = hashAge;
                         EntitySerializer.Instance.StoreEntities(Entities);
-                        viewModel.SaveProperties();
+                        await viewModel.SaveProperties();
                         ConsoleWriter.Write(new ConsoleMessage("Successfully updated Resource Pack hash to: "+hash, 
                             ConsoleMessage.MessageLevel.SUCCESS), viewModel);
                         ConsoleWriter.Write(new ConsoleMessage("Starting the server...", 
@@ -788,16 +788,14 @@ namespace Fork.Logic.Manager
             viewModel.CurrentStatus = ServerStatus.STARTING;
             ConsoleWriter.RegisterApplication(viewModel, process.StandardOutput, process.StandardError);
             ConsoleReader consoleReader = new ConsoleReader(process.StandardInput);
-            double nextRestart = AutoRestartManager.Instance.RegisterRestart(viewModel);
-
-            viewModel.SetRestartTime(nextRestart);
+            ServerAutomationManager.Instance.UpdateAutomation(viewModel);
+            
             Task.Run(async () =>
             {
                 await process.WaitForExitAsync();
                 ApplicationManager.Instance.ActiveEntities.Remove(viewModel.Server);
                 viewModel.CurrentStatus = ServerStatus.STOPPED;
-                AutoRestartManager.Instance.DisposeRestart(viewModel);
-                viewModel.SetRestartTime(-1d);
+                ServerAutomationManager.Instance.UpdateAutomation(viewModel);
             });
             viewModel.ConsoleReader = consoleReader;
             ApplicationManager.Instance.ActiveEntities[viewModel.Server] = process;

@@ -381,7 +381,11 @@ namespace Fork.ViewModel
             }
             SettingsSavingTask = SettingsViewModel.SaveChanges();
             Task.Run(() => SettingsSavingTask);
-            new Thread(() =>
+            if (this is ServerViewModel serverViewModel)
+            {
+                ServerAutomationManager.Instance.UpdateAutomation(serverViewModel);
+            }
+            Task.Run(() =>
             {
                 WriteServerIcon();
                 UpdateAddressInfo();
@@ -406,7 +410,7 @@ namespace Fork.ViewModel
                     }
                 }
                 EntitySerializer.Instance.StoreEntities(ServerManager.Instance.Entities);
-            }).Start();
+            });
         }
 
         public void AddToConsole(ConsoleMessage message)

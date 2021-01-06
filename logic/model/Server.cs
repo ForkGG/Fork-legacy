@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Windows.Forms.VisualStyles;
 using System.Xml.Serialization;
+using Fork.Logic.Model.Automation;
 using Fork.Logic.Persistence;
 using Newtonsoft.Json;
 
@@ -23,10 +25,15 @@ namespace Fork.Logic.Model
         public bool AutoSetSha1 { get; set; } = true;
         public int ServerIconId { get; set; }
         public DateTime ResourcePackHashAge { get; set; } = DateTime.MinValue;
-        public ServerRestart Restart1 { get; set; }
-        public ServerRestart Restart2 { get; set; }
-        public ServerRestart Restart3 { get; set; }
-        public ServerRestart Restart4 { get; set; }
+        public RestartTime Restart1 { get; set; }
+        public RestartTime Restart2 { get; set; }
+        public RestartTime Restart3 { get; set; }
+        public RestartTime Restart4 { get; set; }
+        public StopTime AutoStop1 { get; set; } = new(false,new SimpleTime(0,0));
+        public StopTime AutoStop2 { get; set; } = new(false,new SimpleTime(12,0));
+        public StartTime AutoStart1 { get; set; } = new(false,new SimpleTime(0,0));
+        public StartTime AutoStart2 { get; set; } = new(false,new SimpleTime(12,0));
+        
         [JsonIgnore]
         public ServerSettings ServerSettings {
             get
@@ -49,10 +56,14 @@ namespace Fork.Logic.Model
             Version = version;
             JavaSettings = javaSettings;
             ServerSettings = serverSettings;
-            Restart1 = new ServerRestart(false,new SimpleTime(0,0));
-            Restart2 = new ServerRestart(false,new SimpleTime(6,0));
-            Restart3 = new ServerRestart(false,new SimpleTime(12,0));
-            Restart4 = new ServerRestart(false,new SimpleTime(18,0));
+            Restart1 = new(false,new SimpleTime(0,0));
+            Restart2 = new(false,new SimpleTime(6,0));
+            Restart3 = new(false,new SimpleTime(12,0));
+            Restart4 = new(false,new SimpleTime(18,0));
+            AutoStop1 = new(false,new SimpleTime(0,0));
+            AutoStop2 = new(false,new SimpleTime(12,0));
+            AutoStart1 = new(false,new SimpleTime(0,0));
+            AutoStart2 = new(false,new SimpleTime(12,0));
             UID = Guid.NewGuid().ToString("D");
         }
 

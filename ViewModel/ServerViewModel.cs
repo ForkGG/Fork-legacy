@@ -11,6 +11,7 @@ using Fork.Logic.Controller;
 using Fork.Logic.ImportLogic;
 using Fork.Logic.Manager;
 using Fork.Logic.Model;
+using Fork.Logic.Model.Automation;
 using Fork.Logic.Persistence;
 using Fork.Logic.RoleManagement;
 using Fork.View.Xaml2.Pages.Server;
@@ -43,10 +44,12 @@ namespace Fork.ViewModel
         }
 
         public bool Initialized { get; set; } = false;
-        public bool RestartEnabled { get; set; }
-        public string NextRestartHours { get; set; }
-        public string NextRestartMinutes { get; set; }
-        public string NextRestartSeconds { get; set; }
+        
+        public string NextAutomationName { get; set; }
+        public bool AutomationEnabled { get; set; }
+        public string NextAutomationHours { get; set; }
+        public string NextAutomationMinutes { get; set; }
+        public string NextAutomationSeconds { get; set; }
 
         public string ServerTitle => Name + " - " + Server.Version.Type + " " + Server.Version.Version;
 
@@ -137,91 +140,93 @@ namespace Fork.ViewModel
             }){IsBackground = true}.Start();
         }
 
-        public void SetRestartTime(double time)
+        public void SetAutomationTime(AutomationTime automationTime)
         {
-            if (time < 0)
+            restartTimer?.Dispose();
+            AutomationEnabled = false;
+            if (automationTime == null)
             {
-                restartTimer?.Dispose();
-                RestartEnabled = false;
                 return;
             }
 
-            TimeSpan timeSpan = TimeSpan.FromMilliseconds(time);
+            if (automationTime is RestartTime)
+            {
+                NextAutomationName = "Restart";
+            } else if (automationTime is StopTime)
+            {
+                NextAutomationName = "Shutdown";
+            }
+            else if (automationTime is StartTime)
+            {
+                NextAutomationName = "Starting";
+            }
+            TimeSpan timeSpan = TimeSpan.FromMilliseconds(ServerAutomationManager.Instance.CalculateTime(automationTime));
+            AutomationEnabled = true;
+            NextAutomationHours = timeSpan.Hours.ToString();
+            NextAutomationMinutes = timeSpan.Minutes.ToString();
+            NextAutomationSeconds = timeSpan.Seconds.ToString();
+            
             new Thread(() =>
             {
-                restartTimer = new System.Timers.Timer();
-                restartTimer.Interval = 1000;
+                restartTimer = new Timer {Interval = 1000};
                 restartTimer.Elapsed += (sender, args) =>
                 {
                     timeSpan = timeSpan.Subtract(TimeSpan.FromMilliseconds(1000));
-                    RestartEnabled = true;
-                    NextRestartHours = timeSpan.Hours.ToString();
-                    NextRestartMinutes = timeSpan.Minutes.ToString();
-                    NextRestartSeconds = timeSpan.Seconds.ToString();
+                    AutomationEnabled = true;
+                    NextAutomationHours = timeSpan.Hours.ToString();
+                    NextAutomationMinutes = timeSpan.Minutes.ToString();
+                    NextAutomationSeconds = timeSpan.Seconds.ToString();
                     if (timeSpan.Hours == 0 && timeSpan.Minutes == 30 && timeSpan.Seconds == 0)
                     {
-                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
-                            .WriteLineAsync("say Next server restart in 30 minutes!");
+                        WriteAutomationInfo(automationTime, "30 minutes");
                     }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 5 && timeSpan.Seconds == 0)
                     {
-                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
-                            .WriteLineAsync("say Next server restart in 5 minutes!");
+                        WriteAutomationInfo(automationTime, "5 minutes");
                     }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 1 && timeSpan.Seconds == 0)
                     {
-                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
-                            .WriteLineAsync("say Next server restart in 1 minute!");
+                        WriteAutomationInfo(automationTime, "1 minute");
                     }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 10)
                     {
-                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
-                            .WriteLineAsync("say Next server restart in 10 seconds!");
+                        WriteAutomationInfo(automationTime, "10 seconds");
                     }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 9)
                     {
-                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
-                            .WriteLineAsync("say Next server restart in 9 seconds!");
+                        WriteAutomationInfo(automationTime, "9 seconds");
                     }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 8)
                     {
-                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
-                            .WriteLineAsync("say Next server restart in 8 seconds!");
+                        WriteAutomationInfo(automationTime, "8 seconds");
                     }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 7)
                     {
-                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
-                            .WriteLineAsync("say Next server restart in 7 seconds!");
+                        WriteAutomationInfo(automationTime, "7 seconds");
                     }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 6)
                     {
-                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
-                            .WriteLineAsync("say Next server restart in 6 seconds!");
+                        WriteAutomationInfo(automationTime, "6 seconds");
                     }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 5)
                     {
-                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
-                            .WriteLineAsync("say Next server restart in 5 seconds!");
+                        WriteAutomationInfo(automationTime, "5 seconds");
                     }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 4)
                     {
-                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
-                            .WriteLineAsync("say Next server restart in 4 seconds!");
+                        WriteAutomationInfo(automationTime, "4 seconds");
                     }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 3)
                     {
-                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
-                            .WriteLineAsync("say Next server restart in 3 seconds!");
+                        WriteAutomationInfo(automationTime, "3 seconds");
                     }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 2)
                     {
-                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
-                            .WriteLineAsync("say Next server restart in 2 seconds!");
+                        WriteAutomationInfo(automationTime, "2 seconds");
                     }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 1)
                     {
-                        ApplicationManager.Instance.ActiveEntities[Server].StandardInput
-                            .WriteLineAsync("say Next server restart in 1 seconds!");
+                        WriteAutomationInfo(automationTime, "1 seconds");
                     }
                 };
                 restartTimer.AutoReset = true;
@@ -283,6 +288,18 @@ namespace Fork.ViewModel
             Application.Current.Dispatcher?.Invoke(() => c?.Playerlist.Items.Refresh());
         }
 
+        private void WriteAutomationInfo(AutomationTime automationTime, string time)
+        {
+            if (automationTime is RestartTime)
+            {
+                ApplicationManager.Instance.ActiveEntities[Server].StandardInput
+                    .WriteLineAsync("say Next server restart in "+time+"!");
+            } else if (automationTime is StopTime)
+            {
+                ApplicationManager.Instance.ActiveEntities[Server].StandardInput
+                    .WriteLineAsync("say Server shutdown in "+time+"!");
+            }
+        }
 
         private void PlayerListChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
