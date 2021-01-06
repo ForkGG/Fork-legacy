@@ -63,9 +63,6 @@
                                 Width="80" Style="{DynamicResource RoundedTextButton}" Click="VersionChange_Click"/>
                                 </StackPanel>
                                 <TextBlock Text="WARNING: Switching to older Minecraft Versions prevents starting your current Worlds" Margin="0 10 0 0"/>
-                                
-                                <CheckBox Content="Start Server with Fork" IsChecked="{Binding Server.StartWithFork}"
-                                  Style="{DynamicResource TextCheckBox}" FontSize="20" Margin="10 20 0 0" />
                             </StackPanel>
                             
                         </StackPanel>
@@ -183,6 +180,8 @@
                                     </CheckBox>
                                 </Grid>
                                 <TextBlock Text="Automatic Server Starting" FontSize="20" Margin="0 20 0 10"/>
+                                <CheckBox Content="Start Server when Fork launches" IsChecked="{Binding Server.StartWithFork}"
+                                  Style="{DynamicResource TextCheckBox}" FontSize="20" Margin="20 5 0 10" />
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
