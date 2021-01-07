@@ -130,7 +130,7 @@
                                 <CheckBox Content="Spawn NPCs" IsChecked="{Binding Server.ServerSettings.SpawnNpcs}"
                                   Style="{DynamicResource TextCheckBox}" FontSize="20" Grid.Row="2" Grid.Column="1"
                                   Margin="20 0 0 0" />
-                                <CheckBox Content="Online Mode" IsChecked="{Binding Server.ServerSettings.OnlineMode}"
+                                <CheckBox Content="Online M ode" IsChecked="{Binding Server.ServerSettings.OnlineMode}"
                                   Style="{DynamicResource TextCheckBox}" FontSize="20" Grid.Row="3" Grid.Column="1"
                                   Margin="20 0 0 0" />
                                 <CheckBox Content="Enable Query" IsChecked="{Binding Server.ServerSettings.EnableQuery}"
@@ -189,7 +189,7 @@
                                            Style="{DynamicResource CreateServerTextBlock}" />
                                     </Grid>
 
-                                    
+
                                 </StackPanel>
                             </Grid>
                         </StackPanel>
@@ -237,7 +237,7 @@
                                      FontSize="17" Height="20" />
                                 </Border>
                             </StackPanel>
-                            
+
 
                             <StackPanel HorizontalAlignment="Left" Margin="0 25 0 0">
                                 <TextBlock Text="MOTD" Style="{DynamicResource CreateServerTextBlock}"
@@ -255,13 +255,13 @@
 
                             <StackPanel HorizontalAlignment="Left" Margin="0 25 0 0">
                                 <TextBlock Text="Server Icon" Style="{DynamicResource CreateServerTextBlock}"
-                                           Margin="0 0 20 10" />                               
+                                           Margin="0 0 20 10" />
                                 <ListBox ItemsSource="{Binding ServerIcons}" Style="{DynamicResource ServerIconListBox}" 
                                          ItemContainerStyle="{DynamicResource ServerIconListBoxItem}" SelectedItem="{Binding SelectedServerIcon}"/>
                             </StackPanel>
 
-                            
-                            
+
+
                         </StackPanel>
                     </StackPanel>
                     <Border.Style>
