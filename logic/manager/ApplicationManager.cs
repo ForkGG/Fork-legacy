@@ -11,6 +11,7 @@ using Fork.Logic.Model;
 using Fork.Logic.Model.APIModels;
 using Fork.Logic.Model.EventArgs;
 using Fork.Logic.Persistence;
+using Fork.Logic.Utils;
 using Fork.Logic.WebRequesters;
 using Fork.Properties;
 using Fork.ViewModel;
@@ -75,6 +76,7 @@ namespace Fork.Logic.Manager
                 Patch = int.Parse(rm.GetString("VersionPatch")),
                 Beta = int.Parse(rm.GetString("VersionBeta"))
             };
+            DiscordRichPresenceUtils.SetupRichPresence();
         }
 
         public static void StartDiscordWebSocket()
