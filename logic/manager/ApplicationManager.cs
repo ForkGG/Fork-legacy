@@ -4,10 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Resources;
 using System.Threading;
+using System.Threading.Tasks;
 using Fork.Logic.ApplicationConsole;
 using Fork.Logic.Controller;
 using Fork.Logic.Model;
 using Fork.Logic.Model.APIModels;
+using Fork.Logic.Model.EventArgs;
 using Fork.Logic.Persistence;
 using Fork.Logic.WebRequesters;
 using Fork.Properties;
@@ -35,6 +37,7 @@ namespace Fork.Logic.Manager
 
         public static ConsoleWriter ConsoleWriter;
         private static ApplicationManager instance = null;
+        private static WebSocketHandler webSocketHandler;
         public static bool Initialized { get; private set; } = false;
         public delegate void OnApplicationInitialized();
         public static event OnApplicationInitialized ApplicationInitialized;
@@ -74,9 +77,19 @@ namespace Fork.Logic.Manager
             };
         }
 
-        private AppSettings appSettings;
-        
-        
+        public static void StartDiscordWebSocket()
+        {
+            webSocketHandler?.Dispose();
+            webSocketHandler = new WebSocketHandler();
+            Task.Run(() => webSocketHandler.SetupDiscordWebSocket());
+        }
+
+        public static void StopDiscordWebSocket()
+        {
+            webSocketHandler?.Dispose();
+            webSocketHandler = null;
+        }
+
         public MainViewModel MainViewModel { get; } = 
             new MainViewModel();
         public ConsoleViewModel ConsoleViewModel { get; } = 
@@ -86,8 +99,17 @@ namespace Fork.Logic.Manager
         public bool HasExited { get; set; } = false;
         public ForkVersion CurrentForkVersion { get; }
 
+        public delegate void PlayerEventHandler(object sender, PlayerEventArgs e);
+        public event PlayerEventHandler PlayerEvent;
+
+        public void TriggerPlayerEvent(object sender, PlayerEventArgs e)
+        {
+            PlayerEvent?.Invoke(sender, e);
+        }
+
         public void ExitApplication()
         {
+            StopDiscordWebSocket();
             List<Process> serversToEnd = new List<Process>(ActiveEntities.Values);
             foreach (Process process in serversToEnd)
             {

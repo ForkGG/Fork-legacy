@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using Fork.Logic.Controller;
 using Fork.Logic.Logging;
@@ -9,20 +10,51 @@ using Fork.Logic.Manager;
 using Fork.Logic.Model;
 using Fork.Logic.Persistence;
 using Fork.View.Xaml2.Pages;
+using Websocket.Client;
 
 namespace Fork.ViewModel
 {
     public class AppSettingsViewModel : BaseViewModel
     {
         private string oldDefaultJavaPath;
+        private Timer retryTimer = new Timer {Interval = 1000, AutoReset = true, Enabled = false};
         
         public AppSettings AppSettings => AppSettingsSerializer.Instance.AppSettings;
+
+        public string DiscordSocketStateMessage
+        {
+            get
+            {
+                if (!IsDiscordBotConnected)
+                {
+                    return "Disconnected";
+                }
+                return !IsDiscordLinked ? "Waiting for token" : "Connected";
+            }
+        }
+
+        public bool IsDiscordBotConnected { get; set; } = false;
+        public bool IsDiscordLinked { get; set; } = false;
+        public int RetrySeconds { get; set; } = 30;
         public AppSettingsPage AppSettingsPage { get; }
         public MainViewModel MainViewModel { get; }
         public ObservableCollection<string> Patrons { get; set; }
 
         public AppSettingsViewModel(MainViewModel mainViewModel)
         {
+            retryTimer.Elapsed += (sender, e) =>
+            {
+                if (RetrySeconds > 0)
+                {
+                    RetrySeconds--;
+                }
+            };
+
+            if (AppSettings.EnableDiscordBot)
+            {
+                ApplicationManager.StartDiscordWebSocket();
+            }
+            
             MainViewModel = mainViewModel;
             AppSettingsPage = new AppSettingsPage(this);
             Patrons = new ObservableCollection<string>(new APIController().GetPatrons());
@@ -45,6 +77,27 @@ namespace Fork.ViewModel
                 EntitySerializer.Instance.StoreEntities(ServerManager.Instance.Entities);
             }
             await WriteAppSettingsAsync();
+        }
+
+        public void UpdateDiscordWebSocketState(ReconnectionType type)
+        {
+            IsDiscordBotConnected = true;
+            retryTimer.Stop();
+            RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(DiscordSocketStateMessage)));
+        }
+        
+        public void UpdateDiscordWebSocketState(DisconnectionType type)
+        {
+            IsDiscordBotConnected = false;
+            RetrySeconds = 30;
+            retryTimer.Start();
+            RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(DiscordSocketStateMessage)));
+        }
+
+        public void DiscordLinkStatusUpdate(string status)
+        {
+            IsDiscordLinked = status.ToLower().Equals("linked");
+            RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(DiscordSocketStateMessage)));
         }
 
         private async Task<bool> WriteAppSettingsAsync()

@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using Fork;
-using Fork.Logic.ImportLogic;
 using Fork.Logic.Logging;
 using Fork.Logic.Manager;
+using Fork.Logic.Persistence;
 using Fork.ViewModel;
 using Application = System.Windows.Application;
+using CheckBox = System.Windows.Controls.CheckBox;
+using Clipboard = System.Windows.Clipboard;
 
 namespace Fork.View.Xaml2.Pages
 {
@@ -131,6 +132,39 @@ namespace Fork.View.Xaml2.Pages
             string url = "https://www.patreon.com/forkgg";
             //hack for windows only https://github.com/dotnet/corefx/issues/10361
             Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+        }
+        
+        private void InviteDiscordBot_Click(object sender, MouseButtonEventArgs e)
+        {
+            string url = "https://bot.fork.gg";
+            //hack for windows only https://github.com/dotnet/corefx/issues/10361
+            Process.Start(new ProcessStartInfo("cmd", $"/c start \"{url}\"") { CreateNoWindow = true });
+        }
+
+        private async void CopyDiscordToken_Click(object sender, MouseButtonEventArgs e)
+        {
+            Clipboard.SetText(AppSettingsSerializer.Instance.AppSettings.DiscordBotToken);
+            CopiedIndicator.Visibility = Visibility.Visible;
+            await Task.Delay(1000);
+            CopiedIndicator.Visibility = Visibility.Collapsed;
+        }
+
+        private void EnableDisableDiscordBot_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is CheckBox checkBox)
+            {
+                if (checkBox.IsChecked != null)
+                {
+                    if ((bool) checkBox.IsChecked)
+                    {
+                        ApplicationManager.StopDiscordWebSocket();
+                    }
+                    else
+                    {
+                        ApplicationManager.StartDiscordWebSocket();
+                    }
+                }
+            }
         }
     }
 }

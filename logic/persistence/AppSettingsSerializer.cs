@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using Fork.Annotations;
 using Fork.Logic.Logging;
 using Fork.Logic.Model;
+using Fork.Logic.Utils;
 using Newtonsoft.Json;
 
 namespace Fork.Logic.Persistence
@@ -32,6 +33,11 @@ namespace Fork.Logic.Persistence
         public void ReadSettings()
         {
             appSettings = ReadAppSettings();
+            if (string.IsNullOrEmpty(appSettings.DiscordBotToken))
+            {
+                appSettings.DiscordBotToken = TokenUtils.GenerateDiscordToken();
+                WriteAppSettings(appSettings);
+            }
         }
 
         private AppSettings ReadAppSettings()
