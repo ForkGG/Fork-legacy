@@ -254,7 +254,7 @@ namespace Fork.Logic.WebRequesters
                 
                 //Wait at least 2 seconds, to ensure the right order of messages
                 await Task.WhenAll(tasks);
-                Task.Run(() => SendMessageAsync(BuildResponseString(splitted, 21)));
+                await Task.Run(() => SendMessageAsync(BuildResponseString(splitted, 21)));
             });
 
             return 20;
