@@ -130,7 +130,7 @@
                                 <CheckBox Content="Spawn NPCs" IsChecked="{Binding Server.ServerSettings.SpawnNpcs}"
                                   Style="{DynamicResource TextCheckBox}" FontSize="20" Grid.Row="2" Grid.Column="1"
                                   Margin="20 0 0 0" />
-                                <CheckBox Content="Online M ode" IsChecked="{Binding Server.ServerSettings.OnlineMode}"
+                                <CheckBox Content="Online Mode" IsChecked="{Binding Server.ServerSettings.OnlineMode}"
                                   Style="{DynamicResource TextCheckBox}" FontSize="20" Grid.Row="3" Grid.Column="1"
                                   Margin="20 0 0 0" />
                                 <CheckBox Content="Enable Query" IsChecked="{Binding Server.ServerSettings.EnableQuery}"
