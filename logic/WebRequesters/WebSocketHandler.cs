@@ -268,7 +268,7 @@ namespace Fork.Logic.WebRequesters
                     SubscribeToPlayerEvent();
                     break;
                 default:
-                    SendMessageAsync($"43|{eventName}");
+                    Task.Run(() => SendMessageAsync($"43|{eventName}"));
                     break;
             }
         }
@@ -282,7 +282,7 @@ namespace Fork.Logic.WebRequesters
         {
             string type = e.EventType == PlayerEventArgs.PlayerEventType.Join ? "playerJoin" : "playerLeave";
 
-            SendMessageAsync($"event|{e.Server.Name}|{type}|{e.PlayerName}");
+            Task.Run(() => SendMessageAsync($"event|{e.Server.Name}|{type}|{e.PlayerName}"));
         }
 
         private void SendServerList()
@@ -313,7 +313,7 @@ namespace Fork.Logic.WebRequesters
                 }
             }
 
-            SendMessageAsync(string.Join('|', resultList));
+            Task.Run(() => SendMessageAsync(string.Join('|', resultList)));
         }
 
         private void SendPlayerList(string serverName)
@@ -332,7 +332,7 @@ namespace Fork.Logic.WebRequesters
                 }
             }
 
-            SendMessageAsync(string.Join('|', resultList));
+            Task.Run(() => SendMessageAsync(string.Join('|', resultList)));
         }
 
         public void Dispose()
