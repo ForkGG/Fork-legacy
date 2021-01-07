@@ -315,6 +315,8 @@ namespace Fork.Logic.WebRequesters
                     resultList.Add("0");
                 }
             }
+
+            SendMessageAsync(string.Join('|', resultList));
         }
 
         public void Dispose()
