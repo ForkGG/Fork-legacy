@@ -54,7 +54,7 @@ namespace Fork.Logic.Utils
                 State = state,
                 Assets = new Assets
                 {
-                    LargeImageKey = "", //TODO
+                    LargeImageKey = "fork_large", //TODO
                     LargeImageText = "fork.gg"
                 }
             });
