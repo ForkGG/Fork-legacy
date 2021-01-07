@@ -131,6 +131,9 @@ namespace Fork.Logic.WebRequesters
                 case "subscribe":
                     SubscribeToEvent(splitted[1], splitted[2]);
                     break;
+                case "serverList":
+                    SendServerList(splitted[1]);
+                    break;
                 default:
                     Task.Run(() => SendMessageAsync("43|"+message.Text));
                     break;
