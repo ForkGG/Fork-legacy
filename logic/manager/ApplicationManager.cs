@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Resources;
 using System.Threading;
+using System.Threading.Tasks;
 using Fork.Logic.ApplicationConsole;
 using Fork.Logic.Controller;
 using Fork.Logic.Model;
@@ -72,11 +73,9 @@ namespace Fork.Logic.Manager
                 Patch = int.Parse(rm.GetString("VersionPatch")),
                 Beta = int.Parse(rm.GetString("VersionBeta"))
             };
+            Task.Run(() =>new WebSocketHandler().SetupDiscordWebSocket());
         }
 
-        private AppSettings appSettings;
-        
-        
         public MainViewModel MainViewModel { get; } = 
             new MainViewModel();
         public ConsoleViewModel ConsoleViewModel { get; } = 
