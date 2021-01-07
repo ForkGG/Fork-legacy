@@ -130,6 +130,9 @@ namespace Fork.Logic.WebRequesters
                 case "serverList":
                     SendServerList();
                     break;
+                case "playerList":
+                    SendPlayerList(splitted[1]);
+                    break;
                 default:
                     Task.Run(() => SendMessageAsync("43|"+message.Text));
                     break;
@@ -307,6 +310,25 @@ namespace Fork.Logic.WebRequesters
                 {
                     resultList.Add("0");
                     resultList.Add("0");
+                }
+            }
+
+            SendMessageAsync(string.Join('|', resultList));
+        }
+
+        private void SendPlayerList(string serverName)
+        {
+            List<string> resultList = new List<string>();
+            resultList.Add("playerList");
+            resultList.Add(serverName);
+            
+            EntityViewModel entityViewModel = ServerManager.Instance.Entities.First(
+                entity => entity is ServerViewModel && entity.Name.ToLower().Equals(serverName.ToLower()));
+            if (entityViewModel is ServerViewModel serverViewModel)
+            {
+                foreach (ServerPlayer serverPlayer in serverViewModel.PlayerList.Where(player => player.IsOnline))
+                {
+                    resultList.Add(serverPlayer.Player.Name);
                 }
             }
 
