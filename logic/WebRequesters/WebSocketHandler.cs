@@ -281,7 +281,7 @@ namespace Fork.Logic.WebRequesters
         {
             string type = e.EventType == PlayerEventArgs.PlayerEventType.Join ? "playerJoin" : "playerLeave";
 
-            SendMessageAsync($"event|{e.Server.Name}|{type}|{e.PlayerName}");
+            SendMessageAsync($"event|{guildId}|{e.Server.Name}|{type}|{e.PlayerName}");
         }
 
         private void SendServerList(string guildId)
