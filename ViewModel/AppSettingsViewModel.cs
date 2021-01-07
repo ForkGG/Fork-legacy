@@ -20,8 +20,21 @@ namespace Fork.ViewModel
         private Timer retryTimer = new Timer {Interval = 1000, AutoReset = true, Enabled = false};
         
         public AppSettings AppSettings => AppSettingsSerializer.Instance.AppSettings;
-        public string DiscordSocketStateMessage { get; set; } = "Not connected";
+
+        public string DiscordSocketStateMessage
+        {
+            get
+            {
+                if (!IsDiscordBotConnected)
+                {
+                    return "Disconnected";
+                }
+                return !IsDiscordLinked ? "Waiting for token" : "Connected";
+            }
+        }
+
         public bool IsDiscordBotConnected { get; set; } = false;
+        public bool IsDiscordLinked { get; set; } = false;
         public int RetrySeconds { get; set; } = 30;
         public AppSettingsPage AppSettingsPage { get; }
         public MainViewModel MainViewModel { get; }
@@ -36,6 +49,11 @@ namespace Fork.ViewModel
                     RetrySeconds--;
                 }
             };
+
+            if (AppSettings.EnableDiscordBot)
+            {
+                ApplicationManager.StartDiscordWebSocket();
+            }
             
             MainViewModel = mainViewModel;
             AppSettingsPage = new AppSettingsPage(this);
@@ -63,17 +81,23 @@ namespace Fork.ViewModel
 
         public void UpdateDiscordWebSocketState(ReconnectionType type)
         {
-            DiscordSocketStateMessage = "Your Fork instance is connected to the Discord Bot";
             IsDiscordBotConnected = true;
             retryTimer.Stop();
+            RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(DiscordSocketStateMessage)));
         }
         
         public void UpdateDiscordWebSocketState(DisconnectionType type)
         {
-            DiscordSocketStateMessage = "Your Fork instance is not connected to the Discord Bot";
             IsDiscordBotConnected = false;
             RetrySeconds = 30;
             retryTimer.Start();
+            RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(DiscordSocketStateMessage)));
+        }
+
+        public void DiscordLinkStatusUpdate(string status)
+        {
+            IsDiscordLinked = status.ToLower().Equals("linked");
+            RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(DiscordSocketStateMessage)));
         }
 
         private async Task<bool> WriteAppSettingsAsync()

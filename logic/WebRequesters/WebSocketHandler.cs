@@ -8,17 +8,17 @@ using Fork.Logic.CustomConsole;
 using Fork.Logic.Logging;
 using Fork.Logic.Manager;
 using Fork.Logic.Model;
+using Fork.Logic.Model.EventArgs;
 using Fork.Logic.Model.ServerConsole;
 using Fork.Logic.Persistence;
 using Fork.ViewModel;
-using Microsoft.VisualBasic;
 using Websocket.Client;
-using Websocket.Client.Logging;
 using Websocket.Client.Models;
+using Timer = System.Timers.Timer;
 
 namespace Fork.Logic.WebRequesters
 {
-    public class WebSocketHandler
+    public class WebSocketHandler : IDisposable
     {
 #if DEBUG
         private readonly string discordUrl = "ws://localhost:8181";
@@ -28,6 +28,7 @@ namespace Fork.Logic.WebRequesters
 #endif
         private WebsocketClient discordWebSocket;
         private ManualResetEvent exitEvent = new ManualResetEvent(false);
+        private string guildId;
 
 
         public WebSocketState DiscordWebSocketState { get; private set; }
@@ -112,20 +113,26 @@ namespace Fork.Logic.WebRequesters
         {
             if (message.MessageType != WebSocketMessageType.Text)
             {
-                Task.Run(() => SendMessageAsync("400"));
+                Task.Run(() => SendMessageAsync("40"));
             }
 
             string[] splitted = message.Text.Split('|');
             switch (splitted[0])
             {
+                case "status":
+                    ApplicationManager.Instance.MainViewModel.AppSettingsViewModel.DiscordLinkStatusUpdate(splitted[1]);
+                    break;
                 case "stop":
                     Task.Run(() => SendMessageAsync(BuildResponseString(splitted, StopServer(splitted))));
                     break;
                 case "start":
                     Task.Run(() => SendMessageAsync(BuildResponseString(splitted, StartServerAsync(splitted))));
                     break;
+                case "subscribe":
+                    SubscribeToEvent(splitted[1], splitted[2]);
+                    break;
                 default:
-                    Task.Run(() => SendMessageAsync("403|"+message.Text));
+                    Task.Run(() => SendMessageAsync("43|"+message.Text));
                     break;
             }
         }
@@ -174,7 +181,7 @@ namespace Fork.Logic.WebRequesters
                 
                 //Default case should not happen
                 default:
-                    return "403|" + string.Join('|', splittedMessage);
+                    return "43|" + string.Join('|', splittedMessage);
             }
 
             return string.Join('|', resultSplitted);
@@ -218,32 +225,100 @@ namespace Fork.Logic.WebRequesters
                 .Where(entity => entity.Name.ToLower().Equals(serverName.ToLower())).ToList();
             if (targets.Count < 1)
             {
-                return 404;
+                return 44;
             }
 
             if (targets[0].CurrentStatus != ServerStatus.STOPPED)
             {
-                return 400;
+                return 40;
             }
 
             ConsoleWriter.Write(new ConsoleMessage($"Discord user {splitted[2]} started server remotely",ConsoleMessage.MessageLevel.WARN), targets[0]);
             Task.Run(async () =>
             {
+                List<Task> tasks = new List<Task>();
+                tasks.Add(Task.Delay(2000));
                 if (targets[0] is ServerViewModel serverViewModel)
                 {
-                    await ServerManager.Instance.StartServerAsync(serverViewModel);
+                    tasks.Add(ServerManager.Instance.StartServerAsync(serverViewModel));
                 } else if (targets[0] is NetworkViewModel networkViewModel)
                 {
-                    await ServerManager.Instance.StartNetworkAsync(networkViewModel);
+                    tasks.Add(ServerManager.Instance.StartNetworkAsync(networkViewModel));
                 }
                 else
                 {
                     throw new NotImplementedException();
                 }
-                Task.Run(() => SendMessageAsync(BuildResponseString(splitted, 201)));
+                
+                //Wait at least 2 seconds, to ensure the right order of messages
+                await Task.WhenAll(tasks);
+                Task.Run(() => SendMessageAsync(BuildResponseString(splitted, 21)));
             });
 
-            return 200;
+            return 20;
+        }
+
+        private void SubscribeToEvent(string eventName, string guildId)
+        {
+            switch (eventName)
+            {
+                case "playerEvent":
+                    SubscribeToPlayerEvent(guildId);
+                    break;
+                default:
+                    SendMessageAsync($"43|{eventName}|{guildId}");
+                    break;
+            }
+        }
+
+        private void SubscribeToPlayerEvent(string guildId)
+        {
+            this.guildId = guildId;
+            ApplicationManager.Instance.PlayerEvent += HandlePlayerEvent;
+        }
+
+        private void HandlePlayerEvent(object sender, PlayerEventArgs e)
+        {
+            string type = e.EventType == PlayerEventArgs.PlayerEventType.Join ? "playerJoin" : "playerLeave";
+
+            SendMessageAsync($"event|{e.Server.Name}|{type}|{e.PlayerName}");
+        }
+
+        private void SendServerList(string guildId)
+        {
+            List<EntityViewModel> viewModels = new List<EntityViewModel>(ServerManager.Instance.Entities);
+            List<string> resultList = new List<string>(2 + viewModels.Capacity * 6);
+            resultList.Add("serverList");
+            resultList.Add(guildId);
+            foreach (EntityViewModel viewModel in viewModels)
+            {
+                resultList.Add(viewModel.Name);
+                resultList.Add(viewModel.Entity.Version.Type.ToString());
+                resultList.Add(viewModel.Entity.Version.Version);
+                resultList.Add(viewModel.CurrentStatus.ToString());
+                if (viewModel is ServerViewModel serverViewModel)
+                {
+                    resultList.Add(serverViewModel.PlayerList.Count(player => player.IsOnline).ToString());
+                    resultList.Add(serverViewModel.Server.ServerSettings.MaxPlayers.ToString());
+                }
+                else if (viewModel is NetworkViewModel networkViewModel)
+                {
+                    //TODO add a way to check how many players are connected to network
+                    resultList.Add("0");
+                    resultList.Add(networkViewModel.Network.Config.player_limit.ToString());
+                }else
+                {
+                    resultList.Add("0");
+                    resultList.Add("0");
+                }
+            }
+        }
+
+        public void Dispose()
+        {
+            ApplicationManager.Instance.PlayerEvent -= HandlePlayerEvent;
+            discordWebSocket?.Dispose();
+            exitEvent?.Dispose();
         }
     }
 }
