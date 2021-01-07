@@ -37,6 +37,7 @@ namespace Fork.Logic.Model
         public int QueryPort
         {
             get => int.Parse(SettingsDictionary["query.port"]);
+            set => SettingsDictionary["query.port"] = value.ToString();
         }
 
         public string GeneratorSettings
@@ -175,10 +176,7 @@ namespace Fork.Logic.Model
         public int ServerPort
         {
             get => int.Parse(SettingsDictionary["server-port"]);
-            set {
-                SettingsDictionary["server-port"] = value.ToString();
-                SettingsDictionary["query.port"] = value.ToString();
-            }
+            set => SettingsDictionary["server-port"] = value.ToString();
         }
 
         public string ServerIp

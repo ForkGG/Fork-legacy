@@ -36,6 +36,7 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition />
                                     <RowDefinition />
+                                    <RowDefinition />
                                 </Grid.RowDefinitions>
                                 <DockPanel Height="40" Margin="0 0 20 0">
                                     <ComboBox DockPanel.Dock="Right" SelectedIndex="0" Width="150" HorizontalAlignment="Left"
@@ -81,6 +82,18 @@
                                     <TextBlock Text="Server Port" TextAlignment="Right"
                                        Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
                                 </DockPanel>
+                                <DockPanel Height="40" Grid.Column="1" Grid.Row="2" Margin="20 0 0 0">
+                                    <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
+                                    Background="{DynamicResource textBackground}">
+                                        <TextBox Margin="5 0" Text="{Binding Server.ServerSettings.QueryPort}"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
+                                         Foreground="{DynamicResource backgroundDark}"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="17" Height="20" />
+                                    </Border>
+                                    <TextBlock Text="Query Port" TextAlignment="Right"
+                                       Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
+                                </DockPanel>
                             </Grid>
                             <Grid Margin="0 10">
                                 <Grid.ColumnDefinitions>
@@ -117,8 +130,11 @@
                                 <CheckBox Content="Spawn NPCs" IsChecked="{Binding Server.ServerSettings.SpawnNpcs}"
                                   Style="{DynamicResource TextCheckBox}" FontSize="20" Grid.Row="2" Grid.Column="1"
                                   Margin="20 0 0 0" />
-                                <CheckBox Content="Online mode" IsChecked="{Binding Server.ServerSettings.OnlineMode}"
+                                <CheckBox Content="Online Mode" IsChecked="{Binding Server.ServerSettings.OnlineMode}"
                                   Style="{DynamicResource TextCheckBox}" FontSize="20" Grid.Row="3" Grid.Column="1"
+                                  Margin="20 0 0 0" />
+                                <CheckBox Content="Enable Query" IsChecked="{Binding Server.ServerSettings.EnableQuery}"
+                                  Style="{DynamicResource TextCheckBox}" FontSize="20" Grid.Row="4" Grid.Column="1"
                                   Margin="20 0 0 0" />
                             </Grid>
                             <Grid Margin="0 10">
