@@ -28,8 +28,6 @@ namespace Fork.Logic.WebRequesters
 #endif
         private WebsocketClient discordWebSocket;
         private ManualResetEvent exitEvent = new ManualResetEvent(false);
-        private string guildId;
-
 
         public WebSocketState DiscordWebSocketState { get; private set; }
 
@@ -56,8 +54,6 @@ namespace Fork.Logic.WebRequesters
                 discordWebSocket.DisconnectionHappened.Subscribe(HandleDiscordWebSocketDisconnection);
                 discordWebSocket.Start();
                 exitEvent.WaitOne();
-                //await Task.Delay(20000);
-                //await discordWebSocket.Stop(WebSocketCloseStatus.NormalClosure, "Fork shutting down");
             }
         }
 
@@ -129,10 +125,10 @@ namespace Fork.Logic.WebRequesters
                     Task.Run(() => SendMessageAsync(BuildResponseString(splitted, StartServerAsync(splitted))));
                     break;
                 case "subscribe":
-                    SubscribeToEvent(splitted[1], splitted[2]);
+                    SubscribeToEvent(splitted[1]);
                     break;
                 case "serverList":
-                    SendServerList(splitted[1]);
+                    SendServerList();
                     break;
                 default:
                     Task.Run(() => SendMessageAsync("43|"+message.Text));
@@ -261,22 +257,21 @@ namespace Fork.Logic.WebRequesters
             return 20;
         }
 
-        private void SubscribeToEvent(string eventName, string guildId)
+        private void SubscribeToEvent(string eventName)
         {
             switch (eventName)
             {
                 case "playerEvent":
-                    SubscribeToPlayerEvent(guildId);
+                    SubscribeToPlayerEvent();
                     break;
                 default:
-                    SendMessageAsync($"43|{eventName}|{guildId}");
+                    SendMessageAsync($"43|{eventName}");
                     break;
             }
         }
 
-        private void SubscribeToPlayerEvent(string guildId)
+        private void SubscribeToPlayerEvent()
         {
-            this.guildId = guildId;
             ApplicationManager.Instance.PlayerEvent += HandlePlayerEvent;
         }
 
@@ -284,15 +279,14 @@ namespace Fork.Logic.WebRequesters
         {
             string type = e.EventType == PlayerEventArgs.PlayerEventType.Join ? "playerJoin" : "playerLeave";
 
-            SendMessageAsync($"event|{guildId}|{e.Server.Name}|{type}|{e.PlayerName}");
+            SendMessageAsync($"event|{e.Server.Name}|{type}|{e.PlayerName}");
         }
 
-        private void SendServerList(string guildId)
+        private void SendServerList()
         {
             List<EntityViewModel> viewModels = new List<EntityViewModel>(ServerManager.Instance.Entities);
             List<string> resultList = new List<string>(2 + viewModels.Capacity * 6);
             resultList.Add("serverList");
-            resultList.Add(guildId);
             foreach (EntityViewModel viewModel in viewModels)
             {
                 resultList.Add(viewModel.Name);
