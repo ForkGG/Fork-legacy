@@ -139,6 +139,11 @@ namespace Fork.Logic.WebRequesters
             }
         }
 
+        /// <summary>
+        /// Sends a message to the server
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
         private async Task SendMessageAsync(string message)
         {
             int retries = 0;
@@ -156,6 +161,12 @@ namespace Fork.Logic.WebRequesters
             discordWebSocket.Send(message);
         }
 
+        /// <summary>
+        /// Build a response for the server depending on a status code of a request
+        /// </summary>
+        /// <param name="splittedMessage"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
         private string BuildResponseString(string[] splittedMessage, int status)
         {
             List<string> resultSplitted = new();
@@ -189,6 +200,12 @@ namespace Fork.Logic.WebRequesters
             return string.Join('|', resultSplitted);
         }
         
+        /// <summary>
+        /// Stop a server after the according request was received
+        /// </summary>
+        /// <param name="splitted">Request message split</param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         private int StopServer(string[] splitted)
         {
             string serverName = splitted[1];
@@ -220,6 +237,12 @@ namespace Fork.Logic.WebRequesters
             return 200;
         }
 
+        /// <summary>
+        /// Start a server after the according request was received
+        /// </summary>
+        /// <param name="splitted">Request message split</param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         private int StartServerAsync(string[] splitted)
         {
             string serverName = splitted[1];
@@ -260,6 +283,10 @@ namespace Fork.Logic.WebRequesters
             return 20;
         }
 
+        /// <summary>
+        /// Subscribe to the requested Event. This will start sending messages of the according event to the server
+        /// </summary>
+        /// <param name="eventName"></param>
         private void SubscribeToEvent(string eventName)
         {
             switch (eventName)
@@ -275,6 +302,7 @@ namespace Fork.Logic.WebRequesters
 
         private void SubscribeToPlayerEvent()
         {
+            ApplicationManager.Instance.PlayerEvent -= HandlePlayerEvent;
             ApplicationManager.Instance.PlayerEvent += HandlePlayerEvent;
         }
 
@@ -285,6 +313,9 @@ namespace Fork.Logic.WebRequesters
             Task.Run(() => SendMessageAsync($"event|{e.Server.Name}|{type}|{e.PlayerName}"));
         }
 
+        /// <summary>
+        /// Send a list of all servers to the WebSocket server
+        /// </summary>
         private void SendServerList()
         {
             List<EntityViewModel> viewModels = new List<EntityViewModel>(ServerManager.Instance.Entities);
@@ -316,6 +347,10 @@ namespace Fork.Logic.WebRequesters
             Task.Run(() => SendMessageAsync(string.Join('|', resultList)));
         }
 
+        /// <summary>
+        /// Send a list of all players of a given server to the WebSocket server
+        /// </summary>
+        /// <param name="serverName"></param>
         private void SendPlayerList(string serverName)
         {
             List<string> resultList = new List<string>();
