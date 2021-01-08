@@ -308,9 +308,9 @@ namespace Fork.Logic.WebRequesters
 
         private void HandlePlayerEvent(object sender, PlayerEventArgs e)
         {
-            string type = e.EventType == PlayerEventArgs.PlayerEventType.Join ? "playerJoin" : "playerLeave";
+            string type = e.EventType == PlayerEventArgs.PlayerEventType.Join ? "pjoin" : "pleave";
 
-            Task.Run(() => SendMessageAsync($"event|{e.Server.Name}|{type}|{e.PlayerName}"));
+            Task.Run(() => SendMessageAsync($"event|{type}|{e.Server.Name}|{e.PlayerName}"));
         }
 
         /// <summary>
