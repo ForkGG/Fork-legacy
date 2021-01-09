@@ -14,6 +14,7 @@ using Fork.Logic.Model.EventArgs;
 using Fork.Logic.Model.ServerConsole;
 using Fork.Logic.Persistence;
 using Fork.ViewModel;
+using Microsoft.Win32.SafeHandles;
 using Websocket.Client;
 using Websocket.Client.Models;
 using Timer = System.Timers.Timer;
@@ -24,30 +25,96 @@ namespace Fork.Logic.WebRequesters
     public class WebSocketHandler : IDisposable
     {
 #if DEBUG
-        public static void CreateConsole()
+        static public void Initialize(bool alwaysCreateNewConsole = true)
         {
-            AllocConsole();
+            bool consoleAttached = true;
+            if (alwaysCreateNewConsole
+                || (AttachConsole(ATTACH_PARRENT) == 0
+                && Marshal.GetLastWin32Error() != ERROR_ACCESS_DENIED))
+            {
+                consoleAttached = AllocConsole() != 0;
+            }
 
-       
-            IntPtr defaultStdout = new IntPtr(7);
-            IntPtr currentStdout = GetStdHandle(StdOutputHandle);
-
-            if (currentStdout != defaultStdout)
-              
-                SetStdHandle(StdOutputHandle, defaultStdout);
-
-           
-            TextWriter writer = new StreamWriter(Console.OpenStandardOutput())
-            { AutoFlush = true };
-            Console.SetOut(writer);
+            if (consoleAttached)
+            {
+                InitializeOutStream();
+                InitializeInStream();
+            }
         }
-        private const UInt32 StdOutputHandle = 0xFFFFFFF5;
-        [DllImport("kernel32.dll")]
-        private static extern IntPtr GetStdHandle(UInt32 nStdHandle);
-        [DllImport("kernel32.dll")]
-        private static extern void SetStdHandle(UInt32 nStdHandle, IntPtr handle);
-        [DllImport("kernel32")]
-        static extern bool AllocConsole();
+
+        private static void InitializeOutStream()
+        {
+            var fs = CreateFileStream("CONOUT$", GENERIC_WRITE, FILE_SHARE_WRITE, FileAccess.Write);
+            if (fs != null)
+            {
+                var writer = new StreamWriter(fs) { AutoFlush = true };
+                Console.SetOut(writer);
+                Console.SetError(writer);
+            }
+        }
+
+        private static void InitializeInStream()
+        {
+            var fs = CreateFileStream("CONIN$", GENERIC_READ, FILE_SHARE_READ, FileAccess.Read);
+            if (fs != null)
+            {
+                Console.SetIn(new StreamReader(fs));
+            }
+        }
+
+        private static FileStream CreateFileStream(string name, uint win32DesiredAccess, uint win32ShareMode,
+                                FileAccess dotNetFileAccess)
+        {
+            var file = new SafeFileHandle(CreateFileW(name, win32DesiredAccess, win32ShareMode, IntPtr.Zero, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, IntPtr.Zero), true);
+            if (!file.IsInvalid)
+            {
+                var fs = new FileStream(file, dotNetFileAccess);
+                return fs;
+            }
+            return null;
+        }
+
+        #region Win API Functions and Constants
+        [DllImport("kernel32.dll",
+            EntryPoint = "AllocConsole",
+            SetLastError = true,
+            CharSet = CharSet.Auto,
+            CallingConvention = CallingConvention.StdCall)]
+        private static extern int AllocConsole();
+
+        [DllImport("kernel32.dll",
+            EntryPoint = "AttachConsole",
+            SetLastError = true,
+            CharSet = CharSet.Auto,
+            CallingConvention = CallingConvention.StdCall)]
+        private static extern UInt32 AttachConsole(UInt32 dwProcessId);
+
+        [DllImport("kernel32.dll",
+            EntryPoint = "CreateFileW",
+            SetLastError = true,
+            CharSet = CharSet.Auto,
+            CallingConvention = CallingConvention.StdCall)]
+        private static extern IntPtr CreateFileW(
+              string lpFileName,
+              UInt32 dwDesiredAccess,
+              UInt32 dwShareMode,
+              IntPtr lpSecurityAttributes,
+              UInt32 dwCreationDisposition,
+              UInt32 dwFlagsAndAttributes,
+              IntPtr hTemplateFile
+            );
+
+        private const UInt32 GENERIC_WRITE = 0x40000000;
+        private const UInt32 GENERIC_READ = 0x80000000;
+        private const UInt32 FILE_SHARE_READ = 0x00000001;
+        private const UInt32 FILE_SHARE_WRITE = 0x00000002;
+        private const UInt32 OPEN_EXISTING = 0x00000003;
+        private const UInt32 FILE_ATTRIBUTE_NORMAL = 0x80;
+        private const UInt32 ERROR_ACCESS_DENIED = 5;
+
+        private const UInt32 ATTACH_PARRENT = 0xFFFFFFFF;
+
+        #endregion
         private readonly string discordUrl = "ws://localhost:8181";
 #else
         //TODO change this to actual ip
@@ -81,7 +148,7 @@ namespace Fork.Logic.WebRequesters
                 discordWebSocket.DisconnectionHappened.Subscribe(HandleDiscordWebSocketDisconnection);
              await discordWebSocket.Start();
 #if DEBUG
-                CreateConsole();
+                Initialize();
 #endif
                 exitEvent.WaitOne();
             }
