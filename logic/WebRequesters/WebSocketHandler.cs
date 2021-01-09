@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Runtime.InteropServices;
@@ -23,6 +24,23 @@ namespace Fork.Logic.WebRequesters
     public class WebSocketHandler : IDisposable
     {
 #if DEBUG
+        public static void CreateConsole()
+        {
+            AllocConsole();
+
+       
+            IntPtr defaultStdout = new IntPtr(7);
+            IntPtr currentStdout = GetStdHandle(StdOutputHandle);
+
+            if (currentStdout != defaultStdout)
+              
+                SetStdHandle(StdOutputHandle, defaultStdout);
+
+           
+            TextWriter writer = new StreamWriter(Console.OpenStandardOutput())
+            { AutoFlush = true };
+            Console.SetOut(writer);
+        }
         private const UInt32 StdOutputHandle = 0xFFFFFFF5;
         [DllImport("kernel32.dll")]
         private static extern IntPtr GetStdHandle(UInt32 nStdHandle);
@@ -63,7 +81,7 @@ namespace Fork.Logic.WebRequesters
                 discordWebSocket.DisconnectionHappened.Subscribe(HandleDiscordWebSocketDisconnection);
              await discordWebSocket.Start();
 #if DEBUG
-                AllocConsole();
+                CreateConsole();
 #endif
                 exitEvent.WaitOne();
             }
