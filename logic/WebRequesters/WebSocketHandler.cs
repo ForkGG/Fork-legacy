@@ -149,6 +149,7 @@ namespace Fork.Logic.WebRequesters
              await discordWebSocket.Start();
 #if DEBUG
                 Initialize();
+                Console.WriteLine("Logging...");
 #endif
                 exitEvent.WaitOne();
             }
