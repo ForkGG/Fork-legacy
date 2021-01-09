@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Fork.Logic.CustomConsole;
@@ -18,9 +19,17 @@ using Timer = System.Timers.Timer;
 
 namespace Fork.Logic.WebRequesters
 {
+   
     public class WebSocketHandler : IDisposable
     {
 #if DEBUG
+        private const UInt32 StdOutputHandle = 0xFFFFFFF5;
+        [DllImport("kernel32.dll")]
+        private static extern IntPtr GetStdHandle(UInt32 nStdHandle);
+        [DllImport("kernel32.dll")]
+        private static extern void SetStdHandle(UInt32 nStdHandle, IntPtr handle);
+        [DllImport("kernel32")]
+        static extern bool AllocConsole();
         private readonly string discordUrl = "ws://localhost:8181";
 #else
         //TODO change this to actual ip
@@ -52,7 +61,10 @@ namespace Fork.Logic.WebRequesters
                 discordWebSocket.MessageReceived.Subscribe(HandleDiscordWebSocketMessage);
                 discordWebSocket.ReconnectionHappened.Subscribe(HandleDiscordWebSocketReconnection);
                 discordWebSocket.DisconnectionHappened.Subscribe(HandleDiscordWebSocketDisconnection);
-                discordWebSocket.Start();
+             await discordWebSocket.Start();
+#if DEBUG
+                AllocConsole();
+#endif
                 exitEvent.WaitOne();
             }
         }
@@ -63,6 +75,9 @@ namespace Fork.Logic.WebRequesters
             {
                 try
                 {
+#if DEBUG
+                    Console.WriteLine("Message");
+#endif
                     HandleDiscordSocketMessageAsync(message);
                 }
                 catch (Exception e)
