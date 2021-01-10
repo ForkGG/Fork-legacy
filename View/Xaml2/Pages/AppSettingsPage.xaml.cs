@@ -138,7 +138,7 @@ namespace Fork.View.Xaml2.Pages
         {
             string url = "https://bot.fork.gg";
             //hack for windows only https://github.com/dotnet/corefx/issues/10361
-            Process.Start(new ProcessStartInfo("cmd", $"/c start \"{url}\"") { CreateNoWindow = true });
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
         }
 
         private async void CopyDiscordToken_Click(object sender, MouseButtonEventArgs e)
