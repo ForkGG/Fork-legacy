@@ -340,6 +340,14 @@ namespace Fork.ViewModel
                     }
                 });
             }
+
+            PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName != null && e.PropertyName.Equals(nameof(CurrentStatus)))
+                {
+                    ApplicationManager.Instance.TriggerServerListEvent(sender, e);
+                }
+            };
         }
 
         public void UpdateCustomImage(string filePath)

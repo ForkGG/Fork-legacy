@@ -76,7 +76,6 @@ namespace Fork.Logic.BackgroundWorker
             if (joinMatch.Success)
             {
                 string playerName = joinMatch.Groups[2].Value;
-                ApplicationManager.Instance.TriggerPlayerEvent(this, new PlayerEventArgs(PlayerEventArgs.PlayerEventType.Join, playerName, viewModel));
                 try
                 {
                     bool found = false;
@@ -96,6 +95,7 @@ namespace Fork.Logic.BackgroundWorker
                         Application.Current.Dispatcher?.Invoke(() => viewModel.PlayerList.Add(player));
                     }
                     
+                    ApplicationManager.Instance.TriggerPlayerEvent(this, new PlayerEventArgs(PlayerEventArgs.PlayerEventType.Join, playerName, viewModel));
                     viewModel.RefreshPlayerList();
                 }
                 catch (Exception e)
@@ -111,7 +111,6 @@ namespace Fork.Logic.BackgroundWorker
             if (leaveMatch.Success)
             {
                 string playerName = leaveMatch.Groups[2].Value;
-                ApplicationManager.Instance.TriggerPlayerEvent(this, new PlayerEventArgs(PlayerEventArgs.PlayerEventType.Leave, playerName, viewModel));
 
                 foreach (ServerPlayer serverPlayer in viewModel.PlayerList)
                 {
@@ -120,7 +119,8 @@ namespace Fork.Logic.BackgroundWorker
                         serverPlayer.IsOnline = false;
                     }
                 }
-                
+                ApplicationManager.Instance.TriggerPlayerEvent(this, new PlayerEventArgs(PlayerEventArgs.PlayerEventType.Leave, playerName, viewModel));
+
                 viewModel.RefreshPlayerList();
             }
         }
