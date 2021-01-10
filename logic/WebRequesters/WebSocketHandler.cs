@@ -376,6 +376,7 @@ namespace Fork.Logic.WebRequesters
         {
             List<EntityViewModel> viewModels = new List<EntityViewModel>(ServerManager.Instance.Entities);
             List<string> resultList = new List<string>(2 + viewModels.Capacity * 6);
+            resultList.Add("event");
             resultList.Add("serverList");
             foreach (EntityViewModel viewModel in viewModels)
             {
