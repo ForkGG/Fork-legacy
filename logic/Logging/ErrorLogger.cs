@@ -19,7 +19,11 @@ namespace Fork.Logic.Logging
             AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
             {
                 Exception e = eventArgs.ExceptionObject as Exception;
-                fileWriter.AppendToErrorLog("["+DateTime.Now+"] [UnhandledException] "+e?.GetType()+"\n"+e?.Message+"\n" +e?.StackTrace+"\n");
+                string errorMessage = e?.GetType() + "\n" + e?.Message + "\n" + e?.StackTrace;
+#if DEBUG
+                Console.WriteLine(errorMessage);
+#endif
+                fileWriter.AppendToErrorLog("["+DateTime.Now+"] [UnhandledException] "+errorMessage+"\n");
             };
         }
 
