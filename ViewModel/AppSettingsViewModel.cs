@@ -36,6 +36,7 @@ namespace Fork.ViewModel
         public bool IsDiscordBotConnected { get; set; } = false;
         public bool IsDiscordLinked { get; set; } = false;
         public int RetrySeconds { get; set; } = 30;
+        public string DiscordGuildName { get; set; } = "";
         public AppSettingsPage AppSettingsPage { get; }
         public MainViewModel MainViewModel { get; }
         public ObservableCollection<string> Patrons { get; set; }
@@ -94,9 +95,10 @@ namespace Fork.ViewModel
             RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(DiscordSocketStateMessage)));
         }
 
-        public void DiscordLinkStatusUpdate(string status)
+        public void DiscordLinkStatusUpdate(string status, string guildName = "")
         {
             IsDiscordLinked = status.ToLower().Equals("linked");
+            DiscordGuildName = guildName;
             RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(DiscordSocketStateMessage)));
         }
 

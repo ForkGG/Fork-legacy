@@ -140,6 +140,12 @@
                                                 </Style>
                                             </TextBlock.Style>
                                         </TextBlock>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5 0 0 0" 
+                                                    Visibility="{Binding IsDiscordBotConnected, Converter={StaticResource BoolToVisibilityConverter}}">
+                                            <TextBlock Text="(Discord: " FontSize="14" Foreground="{DynamicResource foregroundDisabled}"/>
+                                            <TextBlock Text="{Binding DiscordGuildName}" FontSize="14" Foreground="{DynamicResource foregroundDisabled}"/>
+                                            <TextBlock Text=")" FontSize="14" Foreground="{DynamicResource foregroundDisabled}"/>
+                                        </StackPanel>
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 2 0 0" Visibility="{Binding IsDiscordBotConnected, Converter={StaticResource InverseBoolToVisiblityConverter}}">
                                             <TextBlock Text="  (Retrying in " FontSize="14" Foreground="{DynamicResource foregroundDisabled}"/>
                                             <TextBlock Text="{Binding RetrySeconds}" FontSize="14" Foreground="{DynamicResource foregroundDisabled}"/>

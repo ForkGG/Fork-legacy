@@ -118,7 +118,14 @@ namespace Fork.Logic.WebRequesters
             switch (splitted[0])
             {
                 case "status":
-                    ApplicationManager.Instance.MainViewModel.AppSettingsViewModel.DiscordLinkStatusUpdate(splitted[1]);
+                    if (splitted.Length > 2)
+                    {
+                        ApplicationManager.Instance.MainViewModel.AppSettingsViewModel.DiscordLinkStatusUpdate(splitted[1], splitted[2]);
+                    }
+                    else
+                    {
+                        ApplicationManager.Instance.MainViewModel.AppSettingsViewModel.DiscordLinkStatusUpdate(splitted[1]);
+                    }
                     break;
                 case "stop":
                     Task.Run(() => SendMessageAsync(BuildResponseString(splitted, StopServer(splitted))));
