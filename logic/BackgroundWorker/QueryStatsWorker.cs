@@ -62,7 +62,7 @@ namespace Fork.Logic.BackgroundWorker
                         break;
                     case ServerVersion.VersionType.Paper:
                         HandlePlayerJoinLeave(line, viewModel, playerJoinPaper, playerLeavePaper);
-                        HandlePlayerJoinLeave(line,viewModel, playerJoinPaper2, playerLeavePaper);
+                        //HandlePlayerJoinLeave(line,viewModel, playerJoinPaper2, playerLeavePaper);
                         break;
                     default:
                         throw new Exception("Handle Player join/leave function does not implement "+viewModel.Server.Version.Type);
