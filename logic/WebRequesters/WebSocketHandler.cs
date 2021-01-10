@@ -355,6 +355,7 @@ namespace Fork.Logic.WebRequesters
         private void UnsubscribeFromServerListEvent()
         {
             ApplicationManager.Instance.ServerListEvent -= HandleServerListEvent;
+            ApplicationManager.Instance.PlayerEvent -= HandleServerListEvent;
         }
 
         private void HandlePlayerEvent(object sender, PlayerEventArgs e)
@@ -431,6 +432,7 @@ namespace Fork.Logic.WebRequesters
         {
             ApplicationManager.Instance.PlayerEvent -= HandlePlayerEvent;            
             ApplicationManager.Instance.ServerListEvent -= HandleServerListEvent;
+            ApplicationManager.Instance.PlayerEvent -= HandleServerListEvent;
             discordWebSocket?.Dispose();
             exitEvent?.Dispose();
         }
