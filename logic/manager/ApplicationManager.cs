@@ -104,9 +104,17 @@ namespace Fork.Logic.Manager
         public delegate void PlayerEventHandler(object sender, PlayerEventArgs e);
         public event PlayerEventHandler PlayerEvent;
 
+        public delegate void ServerListEventHandler(object sender, EventArgs e);
+        public event ServerListEventHandler ServerListEvent;
+
         public void TriggerPlayerEvent(object sender, PlayerEventArgs e)
         {
             PlayerEvent?.Invoke(sender, e);
+        }
+
+        public void TriggerServerListEvent(object sender, EventArgs e)
+        {
+            ServerListEvent?.Invoke(sender, e);
         }
 
         public void ExitApplication()

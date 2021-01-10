@@ -317,6 +317,7 @@ namespace Fork.Logic.Controller
                 directoryInfo.MoveTo(Path.Combine(App.ServerPath, newName));
 
                 viewModel.Name = newName;
+                ApplicationManager.Instance.TriggerServerListEvent(this, new EventArgs());
                 return true;
             }
             catch (Exception e)

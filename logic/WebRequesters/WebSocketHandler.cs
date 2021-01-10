@@ -129,8 +129,8 @@ namespace Fork.Logic.WebRequesters
                 case "subscribe":
                     SubscribeToEvent(splitted[1]);
                     break;
-                case "serverList":
-                    SendServerList();
+                case "unsub":
+                    UnsubscribeFromEvent(splitted[1]);
                     break;
                 case "playerList":
                     SendPlayerList(splitted[1]);
@@ -297,6 +297,29 @@ namespace Fork.Logic.WebRequesters
                 case "playerEvent":
                     SubscribeToPlayerEvent();
                     break;
+                case "serverListEvent":
+                    SubscribeToServerListEvent();
+                    break;
+                default:
+                    Task.Run(() => SendMessageAsync($"43|{eventName}"));
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Unsubscribes from an Event. This will stop sending messages about the Event to the WebSocket server
+        /// </summary>
+        /// <param name="eventName"></param>
+        private void UnsubscribeFromEvent(string eventName)
+        {
+            switch (eventName)
+            {
+                case "playerEvent":
+                    UnsubscribeFromPlayerEvent();
+                    break;
+                case "serverListEvent":
+                    UnsubscribeFromServerListEvent();
+                    break;
                 default:
                     Task.Run(() => SendMessageAsync($"43|{eventName}"));
                     break;
@@ -309,11 +332,34 @@ namespace Fork.Logic.WebRequesters
             ApplicationManager.Instance.PlayerEvent += HandlePlayerEvent;
         }
 
+        private void UnsubscribeFromPlayerEvent()
+        {
+            ApplicationManager.Instance.PlayerEvent -= HandlePlayerEvent;
+        }
+
+        private void SubscribeToServerListEvent()
+        {
+            ApplicationManager.Instance.ServerListEvent -= HandleServerListEvent;
+            ApplicationManager.Instance.ServerListEvent += HandleServerListEvent;
+            ApplicationManager.Instance.PlayerEvent -= HandleServerListEvent;
+            ApplicationManager.Instance.PlayerEvent += HandleServerListEvent;
+        }
+        
+        private void UnsubscribeFromServerListEvent()
+        {
+            ApplicationManager.Instance.ServerListEvent -= HandleServerListEvent;
+        }
+
         private void HandlePlayerEvent(object sender, PlayerEventArgs e)
         {
             string type = e.EventType == PlayerEventArgs.PlayerEventType.Join ? "pjoin" : "pleave";
 
             Task.Run(() => SendMessageAsync($"event|{type}|{e.Server.Name}|{e.PlayerName}"));
+        }
+
+        private void HandleServerListEvent(object sender, EventArgs e)
+        {
+            SendServerList();
         }
 
         /// <summary>
@@ -375,7 +421,8 @@ namespace Fork.Logic.WebRequesters
 
         public void Dispose()
         {
-            ApplicationManager.Instance.PlayerEvent -= HandlePlayerEvent;
+            ApplicationManager.Instance.PlayerEvent -= HandlePlayerEvent;            
+            ApplicationManager.Instance.ServerListEvent -= HandleServerListEvent;
             discordWebSocket?.Dispose();
             exitEvent?.Dispose();
         }

@@ -286,6 +286,7 @@ namespace Fork.Logic.Manager
         private void ServerListChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             EntitySerializer.Instance.StoreEntities(Entities);
+            ApplicationManager.Instance.TriggerServerListEvent(this, new EventArgs());
             ApplicationManager.Instance.MainViewModel.SetServerList(ref entities);
         }
 
@@ -506,6 +507,7 @@ namespace Fork.Logic.Manager
                 directoryInfo.MoveTo(Path.Combine(App.ServerPath, newName));
 
                 viewModel.Name = newName;
+                ApplicationManager.Instance.TriggerServerListEvent(this, new EventArgs());
                 return true;
             }
             catch (Exception e)
@@ -630,6 +632,7 @@ namespace Fork.Logic.Manager
                 Downloader.DownloadJarAsync(serverViewModel, directoryInfo);
 
                 serverViewModel.Server.Version = newVersion;
+                ApplicationManager.Instance.TriggerServerListEvent(this, new EventArgs());
                 //Update Name in UI
                 serverViewModel.ServerNameChanged();
                 //Update stored name
