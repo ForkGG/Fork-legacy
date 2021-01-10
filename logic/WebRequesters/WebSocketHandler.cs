@@ -53,6 +53,7 @@ namespace Fork.Logic.WebRequesters
                 discordWebSocket.ReconnectionHappened.Subscribe(HandleDiscordWebSocketReconnection);
                 discordWebSocket.DisconnectionHappened.Subscribe(HandleDiscordWebSocketDisconnection);
                 discordWebSocket.Start();
+                Console.WriteLine("Started WebSocket Client for Discord bot");
                 exitEvent.WaitOne();
             }
         }
@@ -112,6 +113,7 @@ namespace Fork.Logic.WebRequesters
                 Task.Run(() => SendMessageAsync("40"));
             }
 
+            Console.WriteLine("Received message via the Discord WebSocket: "+message.Text);
             string[] splitted = message.Text.Split('|');
             switch (splitted[0])
             {
@@ -146,6 +148,7 @@ namespace Fork.Logic.WebRequesters
         /// <returns></returns>
         private async Task SendMessageAsync(string message)
         {
+            Console.WriteLine("Sending message to Discord bot via WebSocket: "+message);
             int retries = 0;
             while (!discordWebSocket.IsRunning && retries < 10)
             {
