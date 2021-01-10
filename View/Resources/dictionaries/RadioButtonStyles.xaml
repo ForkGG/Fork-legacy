@@ -44,41 +44,6 @@
         </Setter>
     </Style>
 
-    <Style TargetType="controls:ExtendedRadioButton" BasedOn="{StaticResource {x:Type RadioButton}}">
-        <Setter Property="Background" Value="Transparent" />
-        
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Border Padding="{TemplateBinding Padding}">
-                        <Border Name="Border" Background="{TemplateBinding Background}" Padding="5">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="80"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Image Grid.Column="0" Source="{Binding IconSource, RelativeSource={RelativeSource TemplatedParent}}" Height="80" Width="80" Stretch="Fill"/>
-                                <StackPanel Grid.Column="1" Margin="5,0,0,0">
-                                    <TextBlock Foreground="{TemplateBinding Foreground}" Text="{TemplateBinding RadioButton.Content}" FontSize="20"/>
-                                    <TextBlock Foreground="{TemplateBinding Foreground}" Text="{Binding Description, RelativeSource={RelativeSource TemplatedParent}}" TextWrapping="Wrap"/>
-                                </StackPanel>
-                            </Grid>
-                        </Border>
-                    </Border>
-
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource buttonHover}" />
-                        </Trigger>
-                        <Trigger Property="ToggleButton.IsChecked" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource accentDefault}" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <Style TargetType="controls2:ServerTypeRadioButton" BasedOn="{StaticResource {x:Type RadioButton}}">
         <Setter Property="Template">
             <Setter.Value>
