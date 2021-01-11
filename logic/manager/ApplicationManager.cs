@@ -119,7 +119,6 @@ namespace Fork.Logic.Manager
 
         public void ExitApplication()
         {
-            StopDiscordWebSocket();
             List<Process> serversToEnd = new List<Process>(ActiveEntities.Values);
             foreach (Process process in serversToEnd)
             {
@@ -138,6 +137,11 @@ namespace Fork.Logic.Manager
                     }
                 }
             }
+            //if(serversToEnd.Count > 0)
+            //{
+            //   TriggerServerListEvent(this, EventArgs.Empty);
+            //}
+            StopDiscordWebSocket();
 
             foreach (SettingsReader settingsReader in SettingsReaders)
             {

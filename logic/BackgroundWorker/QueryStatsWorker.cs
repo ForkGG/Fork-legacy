@@ -13,8 +13,10 @@ using Fork.ViewModel;
 
 namespace Fork.Logic.BackgroundWorker
 {
-    public class QueryStatsWorker
+    public class QueryStatsWorker : IDisposable
     {
+        private ServerViewModel _viewModel;
+    
         public QueryStatsWorker(ServerViewModel viewModel)
         {
             //Wait for se server to start (max 60 sec)
@@ -33,9 +35,15 @@ namespace Fork.Logic.BackgroundWorker
 
             if (viewModel.CurrentStatus == ServerStatus.RUNNING)
             {
+                _viewModel = viewModel;
                 Console.WriteLine("Registering Join/Leave handler for server " + viewModel.Server);
                 ConsoleWriter.ConsoleWriteLine += HandleConsoleWrite;
             }
+        }
+
+        public void Dispose()
+        {
+            ConsoleWriter.ConsoleWriteLine -= HandleConsoleWrite;
         }
 
 
@@ -53,7 +61,7 @@ namespace Fork.Logic.BackgroundWorker
 
         private async void HandleConsoleWrite(string line, EntityViewModel entityViewModel)
         {
-            if (entityViewModel is ServerViewModel viewModel)
+            if (entityViewModel is ServerViewModel viewModel && viewModel == _viewModel)
             {
                 switch (viewModel.Server.Version.Type)
                 {

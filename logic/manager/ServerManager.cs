@@ -802,7 +802,12 @@ namespace Fork.Logic.Manager
             });
             viewModel.ConsoleReader = consoleReader;
             ApplicationManager.Instance.ActiveEntities[viewModel.Server] = process;
-            Task.Run(() => { new QueryStatsWorker(viewModel); });
+            Task.Run(async () =>
+            {
+                var worker = new QueryStatsWorker(viewModel);
+                await process.WaitForExitAsync();
+                worker.Dispose();
+            });
             Console.WriteLine("Started server "+ viewModel.Server);
             
             //Register new world if created
