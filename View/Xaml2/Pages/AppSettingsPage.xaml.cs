@@ -143,10 +143,17 @@ namespace Fork.View.Xaml2.Pages
 
         private async void CopyDiscordToken_Click(object sender, MouseButtonEventArgs e)
         {
-            Clipboard.SetText(AppSettingsSerializer.Instance.AppSettings.DiscordBotToken);
-            CopiedIndicator.Visibility = Visibility.Visible;
-            await Task.Delay(1000);
-            CopiedIndicator.Visibility = Visibility.Collapsed;
+            try
+            {
+                Clipboard.SetText(AppSettingsSerializer.Instance.AppSettings.DiscordBotToken);
+                CopiedIndicator.Visibility = Visibility.Visible;
+                await Task.Delay(1000);
+                CopiedIndicator.Visibility = Visibility.Collapsed;
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.Append(ex);
+            }
         }
 
         private void EnableDisableDiscordBot_Click(object sender, MouseButtonEventArgs e)

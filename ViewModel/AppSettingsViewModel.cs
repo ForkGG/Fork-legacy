@@ -90,6 +90,7 @@ namespace Fork.ViewModel
         public void UpdateDiscordWebSocketState(DisconnectionType type)
         {
             IsDiscordBotConnected = false;
+            IsDiscordLinked = false;
             RetrySeconds = 30;
             retryTimer.Start();
             RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(DiscordSocketStateMessage)));

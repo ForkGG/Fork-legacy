@@ -20,7 +20,18 @@ namespace Fork.Logic.Persistence
         #endregion
         
         private AppSettings appSettings;
-        public AppSettings AppSettings => appSettings ??= ReadAppSettings();
+
+        public AppSettings AppSettings
+        {
+            get
+            {
+                if (appSettings == null)
+                {
+                    ReadSettings();
+                }
+                return appSettings;
+            }
+        }
 
         private AppSettingsSerializer(){}
 

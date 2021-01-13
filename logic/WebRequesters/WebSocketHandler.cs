@@ -11,6 +11,7 @@ using Fork.Logic.Model;
 using Fork.Logic.Model.EventArgs;
 using Fork.Logic.Model.ServerConsole;
 using Fork.Logic.Persistence;
+using Fork.Logic.Utils;
 using Fork.ViewModel;
 using Websocket.Client;
 using Websocket.Client.Models;
@@ -127,6 +128,9 @@ namespace Fork.Logic.WebRequesters
                         ApplicationManager.Instance.MainViewModel.AppSettingsViewModel.DiscordLinkStatusUpdate(splitted[1]);
                     }
                     break;
+                case "rec":
+                    RecreateToken();
+                    break;
                 case "stop":
                     Task.Run(() => SendMessageAsync(BuildResponseString(splitted, StopServer(splitted))));
                     break;
@@ -146,6 +150,13 @@ namespace Fork.Logic.WebRequesters
                     Task.Run(() => SendMessageAsync("43|"+message.Text));
                     break;
             }
+        }
+
+        private void RecreateToken()
+        {
+            AppSettingsSerializer.Instance.AppSettings.DiscordBotToken = TokenUtils.GenerateDiscordToken();
+            AppSettingsSerializer.Instance.SaveSettings();
+            DiscordBotLogin();
         }
 
         /// <summary>
