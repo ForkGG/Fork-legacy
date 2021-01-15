@@ -56,6 +56,7 @@ namespace Fork.Logic.Persistence.YMLReaders
 
             lock (fileLock)
             {
+                //TODO this can cause crash if file is somehow locked
                 using (StreamWriter streamWriter = new StreamWriter(ConfigYML.Create()))
                 {
                     Serializer serializer = new Serializer();
