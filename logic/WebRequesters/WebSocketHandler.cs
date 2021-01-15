@@ -171,7 +171,7 @@ namespace Fork.Logic.WebRequesters
             while (!discordWebSocket.IsRunning && retries < 10)
             {
                 retries++;
-                await Task.Delay(30_000);
+                await Task.Delay(3_000);
             }
 
             if (!discordWebSocket.IsRunning)
@@ -361,6 +361,7 @@ namespace Fork.Logic.WebRequesters
             ApplicationManager.Instance.ServerListEvent += HandleServerListEvent;
             ApplicationManager.Instance.PlayerEvent -= HandleServerListEvent;
             ApplicationManager.Instance.PlayerEvent += HandleServerListEvent;
+            SendServerList();
         }
         
         private void UnsubscribeFromServerListEvent()
