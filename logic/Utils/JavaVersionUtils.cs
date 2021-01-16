@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
@@ -10,7 +11,7 @@ namespace Fork.Logic.Utils
     public class JavaVersionUtils
     {
         private static Regex versionRegex = new Regex(".* version \"([0-9._]*)\"");
-        private static string bitPattern = "64-Bit Server VM";
+        private static string bitPattern = "64-Bit";
 
         public static JavaVersion GetInstalledJavaVersion(string javaPath = "")
         {
