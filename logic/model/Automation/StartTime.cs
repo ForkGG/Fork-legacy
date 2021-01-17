@@ -2,8 +2,9 @@
 {
     public class StartTime : AutomationTime
     {
+        public int Id { get; set; }
         public bool Enabled { get; set; }
-        public SimpleTime Time { get; set; }
+        public virtual SimpleTime Time { get; set; }
         
         public StartTime(bool enabled, SimpleTime time)
         {

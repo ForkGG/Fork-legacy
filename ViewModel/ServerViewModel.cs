@@ -54,11 +54,17 @@ namespace Fork.ViewModel
         public string ServerTitle => Name + " - " + Server.Version.Type + " " + Server.Version.Version;
 
         public Page WorldsPage { get; set; }
-
-        public ServerViewModel(Server server) : base(server)
+        
+        public ServerViewModel(string serverUid) : base(serverUid)
         {
+            Server = Entity as Server;
+            if (Server == null)
+            {
+                throw new Exception();
+            }
+            
             DateTime start = DateTime.Now;
-            Console.WriteLine("Starting initialization of ViewModel for Server " + server.Name);
+            Console.WriteLine("Starting initialization of ViewModel for Server " + Server.Name);
             new Thread(() =>
             {
                 if (Server.Version.Type == ServerVersion.VersionType.Vanilla)
@@ -89,7 +95,7 @@ namespace Fork.ViewModel
             Worlds = new ObservableCollection<World>();
             Worlds.CollectionChanged += WorldsChanged;
 
-            InitializeLists(server);
+            InitializeLists(Server);
 
             if (!ApplicationManager.Initialized)
             {
@@ -102,7 +108,7 @@ namespace Fork.ViewModel
             }
 
             TimeSpan t = DateTime.Now - start;
-            Console.WriteLine("Server ViewModel for " + server.Name + " initialized in " + t.Seconds + "." +
+            Console.WriteLine("Server ViewModel for " + Server.Name + " initialized in " + t.Seconds + "." +
                               t.Milliseconds + "s");
         }
 
@@ -238,6 +244,7 @@ namespace Fork.ViewModel
         {
             await new FileWriter().WriteServerSettings(Path.Combine(App.ServerPath, Server.Name),
                     Server.ServerSettings.SettingsDictionary);
+            Persistence.Instance.SaveChanges();
         }
 
         public void UpdateActiveWorld(World world)
@@ -248,6 +255,7 @@ namespace Fork.ViewModel
 
         public void ServerNameChanged()
         {
+            Persistence.Instance.SaveChanges();
             raisePropertyChanged(nameof(ServerTitle));
         }
 

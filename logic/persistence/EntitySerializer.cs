@@ -30,73 +30,17 @@ namespace Fork.Logic.Persistence
                 return instance;
             }
         }
-        
-        public void StoreEntities(ObservableCollection<EntityViewModel> entityViewModels)
+
+        public ObservableCollection<Entity> LoadEntities()
         {
-            EntityLists entities = new EntityLists();
-            foreach (EntityViewModel viewModel in entityViewModels)
-            {
-                switch (viewModel.Entity)
-                {
-                    case Server server:
-                        entities.ServerList.Add(server);
-                        break;
-                    case Network network:
-                        entities.NetworkList.Add(network);
-                        break;
-                }
-            }
-
-            string json = JsonConvert.SerializeObject(entities, Formatting.Indented);
-            DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ApplicationPath, "persistence"));
-            if (!directoryInfo.Exists)
-            {
-                directoryInfo.Create();
-            }
-            FileInfo entitiesFile = new FileInfo(Path.Combine(App.ApplicationPath, "persistence", "entities.json"));
-            lock (writeLock)
-            {
-                using (FileStream fs = entitiesFile.Create())
-                using (StreamWriter sw = new StreamWriter(fs))
-                {
-                    sw.WriteLine(json);
-                }
-            }
-        }
-
-        public ObservableCollection<EntityViewModel> LoadEntities()
-        {
-            ObservableCollection<EntityViewModel> entityViewModels = new ObservableCollection<EntityViewModel>();
-            
-            // Legacy stuff to support older Fork versions
-            FileInfo serversFile = new FileInfo(Path.Combine(App.ApplicationPath,"persistence","servers.xml"));
-            if (serversFile.Exists)
-            {
-                List<Server> servers = DeSerializeObject <List<Server>>(serversFile.FullName);
-                if (servers!=null)
-                {
-                    foreach (Server server in servers)
-                    {
-                        entityViewModels.Add(new ServerViewModel(server));
-                    }
-                }
-
-                try
-                {
-                    serversFile.Delete();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Error while deleting servers.xml");
-                    ErrorLogger.Append(e);
-                }
-            }
-            
             FileInfo entitiesFile = new FileInfo(Path.Combine(App.ApplicationPath, "persistence", "entities.json"));
             if (!entitiesFile.Exists)
             {
-                return entityViewModels;
+                return null;
             }
+            
+            // Legacy stuff to support older Fork versions
+            ObservableCollection<Entity> entityViewModels = new();
             EntityLists entities = JsonConvert.DeserializeObject<EntityLists>(File.ReadAllText(entitiesFile.FullName));
             if (entities != null)
             {
@@ -109,10 +53,9 @@ namespace Fork.Logic.Persistence
                             new Exception("Could not find server "+server.Name+" that was listed in entities.json . Removing it..."));
                         continue;
                     }
-                    ServerViewModel serverViewModel = new ServerViewModel(server);
-                    if (!entityViewModels.Contains(serverViewModel))
+                    if (!entityViewModels.Contains(server))
                     {
-                        entityViewModels.Add(serverViewModel);
+                        entityViewModels.Add(server);
                     }
                 }
 
@@ -125,88 +68,14 @@ namespace Fork.Logic.Persistence
                             new Exception("Could not find network "+network.Name+" that was listed in entities.json . Removing it..."));
                         continue;
                     }
-                    entityViewModels.Add(new NetworkViewModel(network));
+                    entityViewModels.Add(network);
                 }
             }
 
-            //Overwrite json if any changes appeared while deserializing (Unset value set etc.)
-            StoreEntities(entityViewModels);
+            //entitiesFile.Delete();
             return entityViewModels;
         }
 
-        /// <summary>
-        /// Serializes an object.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="serializableObject"></param>
-        /// <param name="fileName"></param>
-        private void SerializeObject<T>(T serializableObject, string fileName)
-        {
-            if (serializableObject == null) { return; }
-
-            fileName.Trim();
-            string folder = fileName.Substring(0, fileName.LastIndexOf("\\"));
-            if (!new DirectoryInfo(folder).Exists)
-            {
-                Directory.CreateDirectory(folder);
-            }
-
-            try
-            {
-                XmlDocument xmlDocument = new XmlDocument();
-                XmlSerializer serializer = new XmlSerializer(serializableObject.GetType());
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    serializer.Serialize(stream, serializableObject);
-                    stream.Position = 0;
-                    xmlDocument.Load(stream);
-                    xmlDocument.Save(fileName);
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Console.Error.WriteLine(ex.StackTrace);
-            }
-        }
-
-
-        /// <summary>
-        /// Deserializes an xml file into an object list
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
-        private T DeSerializeObject<T>(string fileName)
-        {
-            if (string.IsNullOrEmpty(fileName)) { return default(T); }
-
-            T objectOut = default(T);
-
-            try
-            {
-                XmlDocument xmlDocument = new XmlDocument();
-                xmlDocument.Load(fileName);
-                string xmlString = xmlDocument.OuterXml;
-
-                using (StringReader read = new StringReader(xmlString))
-                {
-                    Type outType = typeof(T);
-
-                    XmlSerializer serializer = new XmlSerializer(outType);
-                    using (XmlReader reader = new XmlTextReader(read))
-                    {
-                        objectOut = (T)serializer.Deserialize(reader);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Console.Error.WriteLine(ex.StackTrace);
-            }
-
-            return objectOut;
-        }
-        
         private class EntityLists
         {
             public List<Server> ServerList = new List<Server>();

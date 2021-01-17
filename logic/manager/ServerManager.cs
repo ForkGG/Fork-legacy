@@ -22,11 +22,13 @@ using Fork.Logic.ImportLogic;
 using Fork.Logic.Logging;
 using Fork.Logic.Model;
 using Fork.logic.model.PluginModels;
+using Fork.Logic.Model.ProxyModels;
 using Fork.Logic.Model.ServerConsole;
 using Fork.Logic.Persistence;
 using Fork.Logic.Utils;
 using Fork.Logic.WebRequesters;
 using Fork.ViewModel;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace Fork.Logic.Manager
@@ -37,21 +39,18 @@ namespace Fork.Logic.Manager
 
         private ServerManager()
         {
-            if (new DirectoryInfo(Path.Combine(App.ApplicationPath, "persistence")).Exists)
-            {
-                entities = EntitySerializer.Instance.LoadEntities();
-            }
+            entities = new ObservableCollection<EntityViewModel>();
 
-            if (entities == null)
-            {
-                entities = new ObservableCollection<EntityViewModel>();
-            }
+            //This could be made async to reduce loading times (but prolly needs a loading screen or something like that)
+            //Task.Run(LoadEntityList);
+            LoadEntityList().Wait();
 
             foreach (EntityViewModel viewModel in Entities)
             {
                 if (!viewModel.Entity.Initialized)
                 {
-                    Downloader.DownloadJarAsync(viewModel, new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Name)));
+                    Downloader.DownloadJarAsync(viewModel,
+                        new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Name)));
                 }
             }
 
@@ -62,6 +61,7 @@ namespace Fork.Logic.Manager
             {
                 serverNames.Add(server.Entity.Name);
             }
+
             initialized = true;
         }
 
@@ -84,8 +84,7 @@ namespace Fork.Logic.Manager
 
         private ObservableCollection<EntityViewModel> entities;
 
-        public ObservableCollection<EntityViewModel> Entities => 
-            entities ??= new ObservableCollection<EntityViewModel>();
+        public ObservableCollection<EntityViewModel> Entities => entities;
 
         public async Task<bool> MoveEntitiesAsync(string newPath)
         {
@@ -94,9 +93,9 @@ namespace Fork.Logic.Manager
             bool r = await t;
             return r;
         }
-        
+
         #region Server Managment Methods
-        
+
         public async Task<bool> ImportServerAsync(ServerVersion version, ServerValidationInfo validationInfo,
             string originalServerDirectory, string serverName)
         {
@@ -105,7 +104,7 @@ namespace Fork.Logic.Manager
             t.Start();
             return await t;
         }
-        
+
         public void StopServer(ServerViewModel serverViewModel)
         {
             if (!ApplicationManager.Instance.ActiveEntities.ContainsKey(serverViewModel.Server))
@@ -113,14 +112,16 @@ namespace Fork.Logic.Manager
                 Console.WriteLine("Can't stop server that has no active process");
                 return;
             }
+
             ApplicationManager.Instance.ActiveEntities[serverViewModel.Server].StandardInput.WriteLine("stop");
             foreach (ServerPlayer serverPlayer in serverViewModel.PlayerList)
             {
                 serverPlayer.IsOnline = false;
             }
+
             serverViewModel.RefreshPlayerList();
         }
-        
+
         public async Task<bool> RestartServerAsync(ServerViewModel serverViewModel)
         {
             Task<bool> t = new Task<bool>(() => RestartServer(serverViewModel));
@@ -128,7 +129,7 @@ namespace Fork.Logic.Manager
             bool result = await t;
             return result;
         }
-        
+
         public async Task<bool> RenameServerAsync(ServerViewModel viewModel, string newName)
         {
             Task<bool> t = new Task<bool>(() => RenameServer(viewModel, newName));
@@ -152,7 +153,7 @@ namespace Fork.Logic.Manager
             bool result = await t;
             return result;
         }
-        
+
         public bool RestartServer(ServerViewModel serverViewModel)
         {
             StopServer(serverViewModel);
@@ -172,20 +173,20 @@ namespace Fork.Logic.Manager
 
         public async Task<bool> ImportWorldAsync(ServerViewModel viewModel, string worldSource)
         {
-            Task<bool> t = new Task<bool>(()=>
+            Task<bool> t = new Task<bool>(() =>
                 ImportWorld(viewModel, worldSource));
             t.Start();
             return await t;
         }
-        
+
         public async Task<bool> CreateWorldAsync(string name, ServerViewModel viewModel)
         {
-            Task<bool> t = new Task<bool>(()=>
+            Task<bool> t = new Task<bool>(() =>
                 CreateWorld(name, viewModel));
             t.Start();
             return await t;
         }
-        
+
         public async Task<bool> DeleteDimensionAsync(MinecraftDimension dimension, Server server)
         {
             Task<bool> t = new Task<bool>(() => DeleteDimension(dimension, server));
@@ -198,10 +199,11 @@ namespace Fork.Logic.Manager
 
         #region Network Managment Methods
 
-        public async Task<bool> CreateNetworkAsync(string networkName, ServerVersion.VersionType networkType, JavaSettings javaSettings)
+        public async Task<bool> CreateNetworkAsync(string networkName, ServerVersion.VersionType networkType,
+            JavaSettings javaSettings)
         {
             Task<bool> t = new Task<bool>(() =>
-                networkController.CreateNetwork(networkName,networkType, javaSettings, serverNames));
+                networkController.CreateNetwork(networkName, networkType, javaSettings, serverNames));
             t.Start();
             bool r = await t;
             return r;
@@ -228,6 +230,7 @@ namespace Fork.Logic.Manager
             {
                 return false;
             }
+
             bool startSuccess = await StartNetworkAsync(viewModel, restartServers);
             return startSuccess;
         }
@@ -240,7 +243,7 @@ namespace Fork.Logic.Manager
             bool r = await t;
             return r;
         }
-        
+
         public async Task<bool> CloneNetworkAsync(NetworkViewModel viewModel)
         {
             Task<bool> t = new Task<bool>(() =>
@@ -249,7 +252,7 @@ namespace Fork.Logic.Manager
             bool r = await t;
             return r;
         }
-        
+
         public async Task<bool> DeleteNetworkAsync(NetworkViewModel viewModel)
         {
             return await networkController.DeleteNetworkAsync(viewModel);
@@ -285,7 +288,7 @@ namespace Fork.Logic.Manager
 
         private void ServerListChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            EntitySerializer.Instance.StoreEntities(Entities);
+            //EntitySerializer.Instance.StoreEntities(Entities);
             ApplicationManager.Instance.TriggerServerListEvent(this, new EventArgs());
             ApplicationManager.Instance.MainViewModel.SetServerList(ref entities);
         }
@@ -295,7 +298,7 @@ namespace Fork.Logic.Manager
             DirectoryInfo newDir = new DirectoryInfo(newPath);
             if (!newDir.Exists)
             {
-                ErrorLogger.Append(new Exception("Can't move Servers/Networks to not existing dir: "+newPath));
+                ErrorLogger.Append(new Exception("Can't move Servers/Networks to not existing dir: " + newPath));
                 return false;
             }
 
@@ -307,7 +310,7 @@ namespace Fork.Logic.Manager
             {
                 string currEntityPath = Path.Combine(App.ServerPath, entityViewModel.Entity.Name);
                 string newEntityPath = Path.Combine(newPath, entityViewModel.Entity.Name);
-                
+
                 entityViewModel.StartImport();
                 new Thread(() =>
                 {
@@ -315,7 +318,7 @@ namespace Fork.Logic.Manager
                     FileImporter fileImporter = new FileImporter();
                     fileImporter.CopyProgressChanged += entityViewModel.CopyProgressChanged;
                     fileImporter.DirectoryMove(currEntityPath, newEntityPath, true);
-                    Console.WriteLine("Finished moving entity files for entity "+entityViewModel.Name);
+                    Console.WriteLine("Finished moving entity files for entity " + entityViewModel.Name);
                     entityViewModel.FinishedCopying();
                 }).Start();
             }
@@ -334,7 +337,7 @@ namespace Fork.Logic.Manager
                 serverPath += "-Copy";
                 serverName += "-Copy";
             }
-            
+
             ServerSettings settings;
             if (new FileInfo(Path.Combine(originalServerDirectory, "server.properties")).Exists)
             {
@@ -352,35 +355,36 @@ namespace Fork.Logic.Manager
 
             //Create server directory
             DirectoryInfo serverDirectory = Directory.CreateDirectory(serverPath);
-            
+
             //Add server to Fork
-            ServerViewModel viewModel = new ServerViewModel(server);
+            Persistence.Persistence.Instance.AddEntity(server);
+            ServerViewModel viewModel = new ServerViewModel(server.UID);
             viewModel.StartImport();
             Application.Current.Dispatcher.Invoke(() => Entities.Add(viewModel));
             ApplicationManager.Instance.MainViewModel.SelectedEntity = viewModel;
-            
-            
+
+
             //Import server files
             Thread copyThread = new Thread(() =>
             {
                 FileImporter fileImporter = new FileImporter();
                 fileImporter.CopyProgressChanged += viewModel.CopyProgressChanged;
-                fileImporter.DirectoryCopy(originalServerDirectory, serverPath, true, new List<string>{"server.jar"});
-                Console.WriteLine("Finished copying server files for server "+serverName);
+                fileImporter.DirectoryCopy(originalServerDirectory, serverPath, true, new List<string> {"server.jar"});
+                Console.WriteLine("Finished copying server files for server " + serverName);
                 viewModel.FinishedCopying();
             });
             copyThread.Start();
-            
+
             //Download server.jar
             Downloader.DownloadJarAsync(viewModel, serverDirectory);
-            
+
             if (!validationInfo.EulaTxt)
             {
                 //Write Eula
                 new FileWriter().WriteEula(serverPath);
             }
-            
-            
+
+
             return new DirectoryInfo(serverPath).Exists;
         }
 
@@ -388,7 +392,7 @@ namespace Fork.Logic.Manager
         {
             try
             {
-                DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ServerPath,viewModel.Server.Name));
+                DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Server.Name));
                 DirectoryInfo importWorldDir = new DirectoryInfo(worldSource);
                 string worldName = importWorldDir.Name;
                 List<string> worlds = new List<string>();
@@ -396,15 +400,18 @@ namespace Fork.Logic.Manager
                 {
                     worlds.Add(world.Name);
                 }
+
                 while (worlds.Contains(worldName))
                 {
                     worldName += "1";
                 }
-                if (!serverDir.Exists||!importWorldDir.Exists)
+
+                if (!serverDir.Exists || !importWorldDir.Exists)
                 {
                     Console.WriteLine("Error during world import! Server or World directory don't exist");
                     return false;
                 }
+
                 new FileImporter().DirectoryCopy(importWorldDir.FullName,
                     Path.Combine(serverDir.FullName, worldName), true);
                 viewModel.InitializeWorldsList();
@@ -421,21 +428,24 @@ namespace Fork.Logic.Manager
         {
             try
             {
-                DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ServerPath,viewModel.Server.Name));
+                DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Server.Name));
                 List<string> worlds = new List<string>();
                 foreach (World world in viewModel.Worlds)
                 {
                     worlds.Add(world.Name);
                 }
+
                 while (worlds.Contains(worldName))
                 {
                     worldName += "1";
                 }
+
                 if (!serverDir.Exists)
                 {
                     Console.WriteLine("Error during world import! Server or World directory don't exist");
                     return false;
                 }
+
                 DirectoryInfo worldDir = Directory.CreateDirectory(Path.Combine(serverDir.FullName, worldName));
                 Directory.CreateDirectory(Path.Combine(worldDir.FullName, "region"));
                 Directory.CreateDirectory(Path.Combine(worldDir.FullName, "data"));
@@ -449,7 +459,8 @@ namespace Fork.Logic.Manager
             }
         }
 
-        public async Task<bool> CreateServerAsync(string serverName, ServerVersion serverVersion, ServerSettings serverSettings,
+        public async Task<bool> CreateServerAsync(string serverName, ServerVersion serverVersion,
+            ServerSettings serverSettings,
             JavaSettings javaSettings, string worldPath = null)
         {
             serverName = RefineName(serverName);
@@ -459,23 +470,26 @@ namespace Fork.Logic.Manager
             {
                 serverSettings.LevelName = "world";
             }
+
             DirectoryInfo directoryInfo = Directory.CreateDirectory(serverPath);
             serverVersion.Build = await VersionManager.Instance.GetLatestBuild(serverVersion);
             Server server = new Server(serverName, serverVersion, serverSettings, javaSettings);
-            ServerViewModel viewModel = new ServerViewModel(server);
+            Persistence.Persistence.Instance.AddEntity(server);
+            ServerViewModel viewModel = new ServerViewModel(server.UID);
             Application.Current.Dispatcher.Invoke(() => Entities.Add(viewModel));
             //Select Server
             ApplicationManager.Instance.MainViewModel.SelectedEntity = viewModel;
-            
+
             //Download server.jar
-            Downloader.DownloadJarAsync(viewModel,directoryInfo);
-            
+            Downloader.DownloadJarAsync(viewModel, directoryInfo);
+
             //Move World Files
             if (worldPath != null)
             {
-                new FileImporter().DirectoryCopy(worldPath, Path.Combine(directoryInfo.FullName,server.ServerSettings.LevelName), true);
+                new FileImporter().DirectoryCopy(worldPath,
+                    Path.Combine(directoryInfo.FullName, server.ServerSettings.LevelName), true);
             }
-            
+
             //Writing necessary files
             new FileWriter().WriteEula(Path.Combine(App.ServerPath, directoryInfo.Name));
             await new FileWriter().WriteServerSettings(Path.Combine(App.ServerPath, directoryInfo.Name),
@@ -483,7 +497,7 @@ namespace Fork.Logic.Manager
 
             return true;
         }
-        
+
         private bool RenameServer(ServerViewModel viewModel, string newName)
         {
             if (viewModel.CurrentStatus != ServerStatus.STOPPED)
@@ -494,6 +508,7 @@ namespace Fork.Logic.Manager
                     Thread.Sleep(500);
                 }
             }
+
             try
             {
                 DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Name));
@@ -527,6 +542,7 @@ namespace Fork.Logic.Manager
                     Thread.Sleep(500);
                 }
             }
+
             try
             {
                 DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Name));
@@ -536,35 +552,38 @@ namespace Fork.Logic.Manager
                         new DirectoryNotFoundException("Could not find Directory " + directoryInfo.FullName));
                     return false;
                 }
-                string newName = RefineName(viewModel.Name+"-Clone");
-                
+
+                string newName = RefineName(viewModel.Name + "-Clone");
+
                 //Better to use a object copy function
                 string oldServerJson = JsonConvert.SerializeObject(viewModel.Server);
                 Server newServer = JsonConvert.DeserializeObject<Server>(oldServerJson);
-                
+
                 newServer.Name = newName;
                 newServer.UID = Guid.NewGuid().ToString();
-                ServerViewModel newServerViewModel = new ServerViewModel(newServer);
+                Persistence.Persistence.Instance.AddEntity(newServer);
+                ServerViewModel newServerViewModel = new ServerViewModel(newServer.UID);
 
                 string newServerPath = Path.Combine(App.ServerPath, newName);
                 newServerViewModel.StartImport();
                 Application.Current.Dispatcher?.Invoke(() => Entities.Add(newServerViewModel));
                 ApplicationManager.Instance.MainViewModel.SelectedEntity = newServerViewModel;
-            
+
                 //Create server directory
                 Directory.CreateDirectory(newServerPath);
-            
+
                 //Import server files
                 Thread copyThread = new Thread(() =>
                 {
                     FileImporter fileImporter = new FileImporter();
                     fileImporter.CopyProgressChanged += newServerViewModel.CopyProgressChanged;
-                    fileImporter.DirectoryCopy(directoryInfo.FullName, newServerPath, true, new List<string>{"server.jar"});
-                    Console.WriteLine("Finished copying server files for server "+newServerPath);
+                    fileImporter.DirectoryCopy(directoryInfo.FullName, newServerPath, true,
+                        new List<string> {"server.jar"});
+                    Console.WriteLine("Finished copying server files for server " + newServerPath);
                     newServerViewModel.FinishedCopying();
                 });
                 copyThread.Start();
-                
+
                 return true;
             }
             catch (Exception e)
@@ -597,7 +616,7 @@ namespace Fork.Logic.Manager
                 DirectoryInfo serverDirectory =
                     new DirectoryInfo(Path.Combine(App.ServerPath, serverViewModel.Name));
                 serverDirectory.Delete(true);
-                Application.Current.Dispatcher?.Invoke(()=>Entities.Remove(serverViewModel));
+                Application.Current.Dispatcher?.Invoke(() => Entities.Remove(serverViewModel));
                 serverNames.Remove(serverViewModel.Server.Name);
                 return true;
             }
@@ -633,10 +652,8 @@ namespace Fork.Logic.Manager
 
                 serverViewModel.Server.Version = newVersion;
                 ApplicationManager.Instance.TriggerServerListEvent(this, new EventArgs());
-                //Update Name in UI
+                //Update Name in UI and Database
                 serverViewModel.ServerNameChanged();
-                //Update stored name
-                EntitySerializer.Instance.StoreEntities(Entities);
 
                 return true;
             }
@@ -689,7 +706,7 @@ namespace Fork.Logic.Manager
                         case MinecraftDimension.Nether:
                             return new DirectoryInfo(worldFolder + "_nether");
                         case MinecraftDimension.End:
-                            return new DirectoryInfo(worldFolder+ "_the_end");
+                            return new DirectoryInfo(worldFolder + "_the_end");
                         default:
                             throw new ArgumentException("No implementation for deletion of dimension " + dimension +
                                                         " on Paper servers");
@@ -708,9 +725,12 @@ namespace Fork.Logic.Manager
                 ConsoleWriter.Write("Saving settings files before starting server ...", viewModel);
                 await viewModel.SettingsSavingTask;
             }
-            
-            ConsoleWriter.Write("Starting server "+viewModel.Server+" on world: "+ viewModel.Server.ServerSettings.LevelName, viewModel);
-            Console.WriteLine("Starting server "+viewModel.Server.Name+" on world: "+ viewModel.Server.ServerSettings.LevelName);
+
+            ConsoleWriter.Write(
+                "Starting server " + viewModel.Server + " on world: " + viewModel.Server.ServerSettings.LevelName,
+                viewModel);
+            Console.WriteLine("Starting server " + viewModel.Server.Name + " on world: " +
+                              viewModel.Server.ServerSettings.LevelName);
             DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Server.Name));
             if (!directoryInfo.Exists)
             {
@@ -722,30 +742,36 @@ namespace Fork.Logic.Manager
             {
                 ConsoleWriter.Write("ERROR: Java is not installed! Minecraft servers require Java!", viewModel);
                 return false;
-            } 
+            }
+
             if (!javaVersion.Is64Bit)
             {
-                ConsoleWriter.Write("WARN: The Java installation selected for this server is a 32-bit version, which can cause errors.", viewModel);
+                ConsoleWriter.Write(
+                    "WARN: The Java installation selected for this server is a 32-bit version, which can cause errors.",
+                    viewModel);
             }
+
             if (javaVersion.VersionComputed < 11)
             {
-                ConsoleWriter.Write("WARN: The Java installation selected for this server is outdated. Please update Java to version 11 or higher.", viewModel);
+                ConsoleWriter.Write(
+                    "WARN: The Java installation selected for this server is outdated. Please update Java to version 11 or higher.",
+                    viewModel);
             }
 
             if (!viewModel.Server.ServerSettings.ResourcePack.Equals("") && viewModel.Server.AutoSetSha1)
             {
-                ConsoleWriter.Write(new ConsoleMessage("Generating Resource Pack hash...", 
+                ConsoleWriter.Write(new ConsoleMessage("Generating Resource Pack hash...",
                     ConsoleMessage.MessageLevel.INFO), viewModel);
                 string resourcePackUrl = viewModel.Server.ServerSettings.ResourcePack.Replace("\\", "");
                 bool isHashUpToDate = await IsHashUpToDate(viewModel.Server.ResourcePackHashAge, resourcePackUrl);
                 if (!string.IsNullOrEmpty(viewModel.Server.ServerSettings.ResourcePackSha1) && isHashUpToDate)
                 {
-                    ConsoleWriter.Write(new ConsoleMessage("Resource Pack hash is still up to date. Staring server...", 
+                    ConsoleWriter.Write(new ConsoleMessage("Resource Pack hash is still up to date. Staring server...",
                         ConsoleMessage.MessageLevel.SUCCESS), viewModel);
                 }
                 else
                 {
-                    ConsoleWriter.Write(new ConsoleMessage("Resource Pack hash is outdated. Updating it...", 
+                    ConsoleWriter.Write(new ConsoleMessage("Resource Pack hash is outdated. Updating it...",
                         ConsoleMessage.MessageLevel.WARN), viewModel);
                     DateTime hashAge = DateTime.Now;
                     IProgress<double> downloadProgress = new Progress<double>();
@@ -754,16 +780,16 @@ namespace Fork.Logic.Manager
                     {
                         viewModel.Server.ServerSettings.ResourcePackSha1 = hash;
                         viewModel.Server.ResourcePackHashAge = hashAge;
-                        EntitySerializer.Instance.StoreEntities(Entities);
                         await viewModel.SaveProperties();
-                        ConsoleWriter.Write(new ConsoleMessage("Successfully updated Resource Pack hash to: "+hash, 
+                        ConsoleWriter.Write(new ConsoleMessage("Successfully updated Resource Pack hash to: " + hash,
                             ConsoleMessage.MessageLevel.SUCCESS), viewModel);
-                        ConsoleWriter.Write(new ConsoleMessage("Starting the server...", 
+                        ConsoleWriter.Write(new ConsoleMessage("Starting the server...",
                             ConsoleMessage.MessageLevel.INFO), viewModel);
                     }
                     else
                     {
-                        ConsoleWriter.Write(new ConsoleMessage("Error updating the Resource Pack hash! Continuing with no hash...", 
+                        ConsoleWriter.Write(new ConsoleMessage(
+                            "Error updating the Resource Pack hash! Continuing with no hash...",
                             ConsoleMessage.MessageLevel.ERROR), viewModel);
                     }
                 }
@@ -778,21 +804,19 @@ namespace Fork.Logic.Manager
                 RedirectStandardOutput = true,
                 FileName = viewModel.Server.JavaSettings.JavaPath,
                 WorkingDirectory = directoryInfo.FullName,
-                Arguments = "-Xmx" + viewModel.Server.JavaSettings.MaxRam + "m "+ viewModel.Server.JavaSettings.StartupParameters+" -jar server.jar nogui",
+                Arguments = "-Xmx" + viewModel.Server.JavaSettings.MaxRam + "m " +
+                            viewModel.Server.JavaSettings.StartupParameters + " -jar server.jar nogui",
                 WindowStyle = ProcessWindowStyle.Hidden,
                 CreateNoWindow = true
             };
             process.StartInfo = startInfo;
             process.Start();
-            Task.Run(() =>
-            {
-                viewModel.TrackPerformance(process);
-            });
+            Task.Run(() => { viewModel.TrackPerformance(process); });
             viewModel.CurrentStatus = ServerStatus.STARTING;
             ConsoleWriter.RegisterApplication(viewModel, process.StandardOutput, process.StandardError);
             ConsoleReader consoleReader = new ConsoleReader(process.StandardInput);
             ServerAutomationManager.Instance.UpdateAutomation(viewModel);
-            
+
             Task.Run(async () =>
             {
                 await process.WaitForExitAsync();
@@ -808,8 +832,8 @@ namespace Fork.Logic.Manager
                 await process.WaitForExitAsync();
                 worker.Dispose();
             });
-            Console.WriteLine("Started server "+ viewModel.Server);
-            
+            Console.WriteLine("Started server " + viewModel.Server);
+
             //Register new world if created
             Task.Run(async () =>
             {
@@ -817,6 +841,7 @@ namespace Fork.Logic.Manager
                 {
                     await Task.Delay(500);
                 }
+
                 viewModel.InitializeWorldsList();
             });
             return true;
@@ -845,14 +870,15 @@ namespace Fork.Logic.Manager
             try
             {
                 process.Kill(true);
-                ConsoleWriter.Write("Killed server "+entityViewModel.Entity, entityViewModel);
-                Console.WriteLine("Killed server "+entityViewModel.Entity);
+                ConsoleWriter.Write("Killed server " + entityViewModel.Entity, entityViewModel);
+                Console.WriteLine("Killed server " + entityViewModel.Entity);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);
                 return false;
             }
+
             return true;
         }
 
@@ -866,9 +892,9 @@ namespace Fork.Logic.Manager
             HttpWebRequest request = WebRequest.CreateHttp(fileSourceUrl);
             request.Method = WebRequestMethods.Http.Head;
             HttpWebResponse webResponse = await request.GetResponseAsync() as HttpWebResponse;
-            DateTime? lastModified =  webResponse?.LastModified;
+            DateTime? lastModified = webResponse?.LastModified;
 
-            if (lastModified  != null && lastModified.Value.CompareTo(hashDate) < 0)
+            if (lastModified != null && lastModified.Value.CompareTo(hashDate) < 0)
             {
                 return true;
             }
@@ -883,13 +909,13 @@ namespace Fork.Logic.Manager
             {
                 return result;
             }
-            
+
             //ensure tmp directory
             new DirectoryInfo(Path.Combine(App.ApplicationPath, "tmp")).Create();
             FileInfo resourcePackFile = new FileInfo(
                 Path.Combine(App.ApplicationPath, "tmp", Guid.NewGuid().ToString()
-                    .Replace("-", "")+".zip"));
-            
+                    .Replace("-", "") + ".zip"));
+
             //Download the resource pack
             HttpWebRequest request = WebRequest.CreateHttp(url);
             request.Method = WebRequestMethods.Http.Head;
@@ -898,6 +924,7 @@ namespace Fork.Logic.Manager
             {
                 return result;
             }
+
             await Downloader.DownloadFileAsync(url, resourcePackFile.FullName, downloadProgress);
 
             //Calculate sha-1
@@ -912,11 +939,36 @@ namespace Fork.Logic.Manager
                     {
                         formatted.AppendFormat("{0:X2}", b);
                     }
+
                     result = formatted.ToString();
                 }
             }
+
             resourcePackFile.Delete();
             return result;
+        }
+
+        private async Task LoadEntityList()
+        {
+            if (new DirectoryInfo(Path.Combine(App.ApplicationPath, "persistence")).Exists)
+            {
+                var entitiesFromJson = EntitySerializer.Instance.LoadEntities();
+                if (entitiesFromJson != null)
+                {
+                    await Persistence.Persistence.Instance.SaveEntities(entitiesFromJson);
+                }
+            }
+            foreach (Server server in Persistence.Persistence.Instance.RequestServerList())
+            {
+                var viewModel = new ServerViewModel(server.UID);
+                Application.Current.Dispatcher?.Invoke(() => entities.Add(viewModel));
+            }
+
+            foreach (Network network in Persistence.Persistence.Instance.RequestNetworkList())
+            {
+                var viewModel = new NetworkViewModel(network.UID);
+                Application.Current.Dispatcher?.Invoke(() => entities.Add(viewModel));
+            }
         }
     }
 }

@@ -41,11 +41,16 @@ namespace Fork.ViewModel
 
         public ServerDropHandler DropHandler { get; }
 
-        public NetworkViewModel(Network network) : base(network)
+        public NetworkViewModel(string networkUid) : base(networkUid)
         {
+            Network = Entity as Network;
+            if (Network == null)
+            {
+                throw new Exception();
+            }
+            
             DateTime start = DateTime.Now;
-            Console.WriteLine("Starting initialization of ViewModel for Network " + network.Name);
-            Network = network;
+            Console.WriteLine("Starting initialization of ViewModel for Network " + Network.Name);
             TimeSpan t = DateTime.Now - start;
             ReadSettings();
             UpdateAddressInfo();
@@ -66,7 +71,7 @@ namespace Fork.ViewModel
                 Application.Current.Dispatcher?.Invoke(StartSettingsReader);
             }
 
-            Console.WriteLine("Server ViewModel for " + network.Name + " initialized in " + t.Seconds + "." +
+            Console.WriteLine("Server ViewModel for " + Network.Name + " initialized in " + t.Seconds + "." +
                               t.Milliseconds + "s");
         }
 

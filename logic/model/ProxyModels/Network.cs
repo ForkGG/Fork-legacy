@@ -1,10 +1,11 @@
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using Fork.Logic.Model.Settings;
 using Fork.Logic.Persistence.YMLReaders;
-using Fork.Logic.WebRequesters;
 using Newtonsoft.Json;
 
 namespace Fork.Logic.Model.ProxyModels
@@ -14,20 +15,21 @@ namespace Fork.Logic.Model.ProxyModels
     {
         private BungeeSettingsSerializer configSerializer;
 
+        [Key]
         public string UID { get; set; }
         public string Name { get; set; }
         public ServerVersion.VersionType ProxyType { get; set; }
-        public JavaSettings JavaSettings { get; set; }
+        public virtual JavaSettings JavaSettings { get; set; }
         public bool SyncServers { get; set; } = false;
 
         public bool Initialized { get; set; } = false;
         public bool StartWithFork { get; set; } = false;
         public int ServerIconId { get; set; }
         
-        public ServerVersion Version { get; set; }
-        [JsonIgnore] public BungeeSettings Config { get; set; }
+        public virtual ServerVersion Version { get; set; }
+        [JsonIgnore][NotMapped] public BungeeSettings Config { get; set; }
 
-        [JsonIgnore]
+        [JsonIgnore][NotMapped]
         public int Port
         {
             get => int.Parse(Config.listeners[0].host.Split(':').Last());

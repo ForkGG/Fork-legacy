@@ -75,7 +75,6 @@ namespace Fork.ViewModel
                 {
                     entityViewModel.UpdateDefaultJavaPath(oldDefaultJavaPath, AppSettings.DefaultJavaPath);
                 }
-                EntitySerializer.Instance.StoreEntities(ServerManager.Instance.Entities);
             }
             await WriteAppSettingsAsync();
         }

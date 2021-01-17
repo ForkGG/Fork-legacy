@@ -5,6 +5,7 @@ namespace Fork.Logic.Model
     [Serializable]
     public class SimpleTime
     {
+        public int Id { get; set; }
         public int Hours { get; set; }
         public int Minutes { get; set; }
 

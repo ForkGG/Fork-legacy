@@ -19,6 +19,7 @@ namespace Fork.Logic.Model
 
         private Regex nonNumeric = new Regex(@"[^\d.]");
 
+        public int Id { get; set; }
         public VersionType Type { get; set; }
         public string Version { get; set; }
         public int Build { get; set; } = 0;

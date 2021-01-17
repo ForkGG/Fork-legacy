@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -95,7 +96,7 @@ namespace Fork.ViewModel
                         raisePropertyChanged(nameof(n.NetworkTitle));
                     }
 
-                    EntitySerializer.Instance.StoreEntities(ServerManager.Instance.Entities);
+                    Persistence.Instance.SaveChanges();
                 }) {IsBackground = true}.Start();
             }
         }
@@ -240,8 +241,10 @@ namespace Fork.ViewModel
         public Task SettingsSavingTask = Task.CompletedTask;
 
 
-        protected EntityViewModel(Entity entity)
+        protected EntityViewModel(string entityId)
         {
+            Entity = Persistence.Instance.RequestEntity(entityId);
+            
             new Thread(() =>
             {
                 while (true)
@@ -251,7 +254,7 @@ namespace Fork.ViewModel
                 }
             }) {IsBackground = true}.Start();
 
-            Entity = entity;
+            //Entity = Persistence.Instance.PersistenceContext.;
 
             //Error weird crash (should not happen unless entities.json is corrupted)
             //TODO check for json errors in entities.json
@@ -417,7 +420,8 @@ namespace Fork.ViewModel
                         }
                     }
                 }
-                EntitySerializer.Instance.StoreEntities(ServerManager.Instance.Entities);
+
+                Persistence.Instance.SaveChanges();
             });
         }
 
@@ -502,6 +506,7 @@ namespace Fork.ViewModel
             if (Entity.JavaSettings.JavaPath.Equals(oldPath))
             {
                 Entity.JavaSettings.JavaPath = newPath;
+                Persistence.Instance.SaveChanges();
             }
         }
 
@@ -517,6 +522,7 @@ namespace Fork.ViewModel
 
         public void DeleteEntity()
         {
+            Persistence.Instance.RemoveEntity(Entity);
             isDeleted = true;
         }
 
@@ -590,7 +596,7 @@ namespace Fork.ViewModel
         {
             DownloadCompleted = false;
             Entity.Initialized = false;
-            EntitySerializer.Instance.StoreEntities(ServerManager.Instance.Entities);
+            Persistence.Instance.SaveChanges();
             Console.WriteLine("Starting server.jar download for server " + Entity);
             raisePropertyChanged(nameof(Server));
             raisePropertyChanged(nameof(ReadyToUse));
@@ -607,7 +613,7 @@ namespace Fork.ViewModel
         {
             DownloadCompleted = true;
             Entity.Initialized = true;
-            EntitySerializer.Instance.StoreEntities(ServerManager.Instance.Entities);
+            Persistence.Instance.SaveChanges();
             Console.WriteLine("Finished downloading server.jar for server " + Entity);
             raisePropertyChanged(nameof(Server));
             raisePropertyChanged(nameof(ReadyToUse));

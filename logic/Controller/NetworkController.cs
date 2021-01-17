@@ -14,6 +14,7 @@ using Fork.Logic.Model;
 using Fork.Logic.Model.ProxyModels;
 using Fork.Logic.Model.ProxyModels;
 using Fork.Logic.Model.ServerConsole;
+using Fork.Logic.Persistence;
 using Fork.Logic.Utils;
 using Fork.Logic.WebRequesters;
 using Fork.ViewModel;
@@ -37,7 +38,8 @@ namespace Fork.Logic.Controller
             string serverPath = Path.Combine(App.ServerPath, networkName);
             DirectoryInfo directoryInfo = Directory.CreateDirectory(serverPath);
             Network network = new Network(networkName, networkType, javaSettings, VersionManager.Instance.WaterfallVersion);
-            NetworkViewModel viewModel = new NetworkViewModel(network);
+            Persistence.Persistence.Instance.AddEntity(network);
+            NetworkViewModel viewModel = new NetworkViewModel(network.UID);
             ServerManager.Instance.AddEntity(viewModel);
             //Select Server
             ApplicationManager.Instance.MainViewModel.SelectedEntity = viewModel;
@@ -264,7 +266,8 @@ namespace Fork.Logic.Controller
                 
                 newNetwork.Name = newName;
                 newNetwork.UID = Guid.NewGuid().ToString();
-                NetworkViewModel newNetworkViewModel = new NetworkViewModel(newNetwork);
+                Persistence.Persistence.Instance.AddEntity(newNetwork);
+                NetworkViewModel newNetworkViewModel = new NetworkViewModel(newNetwork.UID);
 
                 string newNetworkPath = Path.Combine(App.ServerPath, newName);
                 newNetworkViewModel.StartImport();
