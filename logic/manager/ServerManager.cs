@@ -720,11 +720,11 @@ namespace Fork.Logic.Manager
         public async Task<bool> StartServerAsync(ServerViewModel viewModel)
         {
             ConsoleWriter.Write("\n", viewModel);
-            if (!viewModel.SettingsSavingTask.IsCompleted)
-            {
+            //if (!viewModel.SettingsSavingTask.IsCompleted)
+            //{
                 ConsoleWriter.Write("Saving settings files before starting server ...", viewModel);
                 await viewModel.SettingsSavingTask;
-            }
+            //}
 
             ConsoleWriter.Write(
                 "Starting server " + viewModel.Server + " on world: " + viewModel.Server.ServerSettings.LevelName,

@@ -18,7 +18,6 @@ namespace Fork.Logic.Persistence
             optionsBuilder.UseLazyLoadingProxies();
             optionsBuilder.UseSqlite("foreign keys=true;Data Source=" + Path.Combine(App.ApplicationPath, "persistence", "data.db"));
             optionsBuilder.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
-            optionsBuilder.EnableDetailedErrors(true);
 
             base.OnConfiguring(optionsBuilder);
         }

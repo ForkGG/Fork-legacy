@@ -26,13 +26,6 @@ namespace Fork.Logic.Persistence
         private Persistence()
         {
             persistenceContext = new PersistenceContext();
-            persistenceContext.Database.GetDbConnection().StateChange += (sender, args) =>
-            {
-                if (args.CurrentState == ConnectionState.Open)
-                {
-                    persistenceContext.Database.ExecuteSqlRaw("PRAGMA foreign_keys = ON");
-                }
-            };
             persistenceContext.Database.Migrate();
         }
         #endregion

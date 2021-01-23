@@ -72,6 +72,7 @@ namespace Fork.Logic.Persistence
                 }
             }
 
+            //TODO uncomment this
             //entitiesFile.Delete();
             return entityViewModels;
         }
