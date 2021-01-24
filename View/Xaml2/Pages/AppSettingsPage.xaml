@@ -120,7 +120,8 @@
                             <StackPanel Margin="25 0">
                                 <StackPanel Orientation="Horizontal">
                                     <CheckBox Content="Use Fork Beta Versions" IsChecked="{Binding AppSettings.UseBetaVersions}"
-                                         Style="{DynamicResource TextCheckBox}" FontSize="20" Margin="10 0 0 0" PreviewMouseLeftButtonDown="ChangeBetaUsage_Click"/>
+                                         Style="{DynamicResource TextCheckBox}" FontSize="20" Margin="10 0 0 0" 
+                                         Checked="UseBetaChanged" Unchecked="UseBetaChanged" x:Name="UseBetaBox"/>
                                    
                                 </StackPanel>
                                 <StackPanel Margin="40 0 0 0">

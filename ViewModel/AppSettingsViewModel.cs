@@ -47,7 +47,7 @@ namespace Fork.ViewModel
             await WriteAppSettingsAsync();
         }
 
-        private async Task<bool> WriteAppSettingsAsync()
+        public async Task<bool> WriteAppSettingsAsync()
         {
             Task<bool> t = new Task<bool>(() =>
             {
