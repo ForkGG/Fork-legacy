@@ -10,6 +10,7 @@ namespace Fork.Logic.Model
         public string DefaultJavaPath { get; set; } = "java.exe";
         public bool EnableDiscordBot { get; set; } = false;
         public string DiscordBotToken { get; set; }
+        public bool UseBetaVersions { get; set; } = false;
         public bool SendTelemetry { get; set; } = false;
     }
 }

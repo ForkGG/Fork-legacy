@@ -21,7 +21,7 @@ namespace Fork.View.Xaml2.Pages
     public partial class AppSettingsPage : Page
     {
         private AppSettingsViewModel viewModel;
-        
+
         public AppSettingsPage(AppSettingsViewModel viewModel)
         {
             InitializeComponent();
@@ -54,9 +54,11 @@ namespace Fork.View.Xaml2.Pages
                 {
                     ErrorMsgBox.Text = ex.Message;
                 }
+
                 ErrorLogger.Append(ex);
                 return;
             }
+
             if (!result)
             {
                 ServerDirChangeErrorGrid.Visibility = Visibility.Visible;
@@ -64,6 +66,7 @@ namespace Fork.View.Xaml2.Pages
                     "Unknown error, this should not happen, please report to a Fork developer. Sadly this might have broken the functionality of Fork.";
                 return;
             }
+
             ServerDirChangeErrorGrid.Visibility = Visibility.Collapsed;
             ServerDirChangedGrid.Visibility = Visibility.Collapsed;
             ResetServerDirButton.Visibility = Visibility.Collapsed;
@@ -90,34 +93,35 @@ namespace Fork.View.Xaml2.Pages
                     ResetServerDirButton.Visibility = Visibility.Collapsed;
                     serverPathBgr.Background = (Brush) Application.Current.FindResource("textBackground");
                 }
-                
+
             }
         }
-        
+
         private void JavaPath_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog{Multiselect = false, Filter = "Java executable|java.exe", Title = "Select a java.exe"};
-            if (new DirectoryInfo(ForkDefaultJavaPath.Text.Replace(@"\java.exe","")).Exists)
+            OpenFileDialog ofd = new OpenFileDialog
+                {Multiselect = false, Filter = "Java executable|java.exe", Title = "Select a java.exe"};
+            if (new DirectoryInfo(ForkDefaultJavaPath.Text.Replace(@"\java.exe", "")).Exists)
             {
-                ofd.InitialDirectory = ForkDefaultJavaPath.Text.Replace(@"\java.exe","");
+                ofd.InitialDirectory = ForkDefaultJavaPath.Text.Replace(@"\java.exe", "");
             }
             else
             {
                 ofd.InitialDirectory = @"C:\Program Files";
             }
-                
+
             DialogResult result = ofd.ShowDialog();
             if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(ofd.FileName))
             {
                 ForkDefaultJavaPath.Text = ofd.FileName;
             }
         }
-        
+
         private void DefaultJavaDirReset_Click(object sender, RoutedEventArgs e)
         {
             ForkDefaultJavaPath.Text = "java.exe";
         }
-        
+
         private void ResetServerDir_Click(object sender, RoutedEventArgs e)
         {
             ForkServerPath.Text = viewModel.AppSettings.ServerPath;
@@ -131,14 +135,14 @@ namespace Fork.View.Xaml2.Pages
         {
             string url = "https://www.patreon.com/forkgg";
             //hack for windows only https://github.com/dotnet/corefx/issues/10361
-            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") {CreateNoWindow = true});
         }
-        
+
         private void InviteDiscordBot_Click(object sender, MouseButtonEventArgs e)
         {
             string url = "https://bot.fork.gg";
             //hack for windows only https://github.com/dotnet/corefx/issues/10361
-            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") {CreateNoWindow = true});
         }
 
         private async void CopyDiscordToken_Click(object sender, MouseButtonEventArgs e)
@@ -171,6 +175,18 @@ namespace Fork.View.Xaml2.Pages
                         ApplicationManager.StartDiscordWebSocket();
                     }
                 }
+            }
+        }
+
+        private void ChangeBetaUsage_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (viewModel.MainViewModel.IsBetaVersion == viewModel.AppSettings.UseBetaVersions)
+            {
+                restartNotice.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                restartNotice.Visibility = Visibility.Collapsed;
             }
         }
     }
