@@ -132,5 +132,17 @@ namespace Fork.View.Xaml2.Pages
             //hack for windows only https://github.com/dotnet/corefx/issues/10361
             Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
         }
+
+        private void ChangeBetaUsage_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (viewModel.MainViewModel.IsBetaVersion == viewModel.AppSettings.UseBetaVersions)
+            {
+                restartNotice.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                restartNotice.Visibility = Visibility.Collapsed;
+            }
+        }
     }
 }

@@ -8,6 +8,7 @@ namespace Fork.Logic.Model
         public int MaxConsoleLines { get; set; } = 1000;
         public int MaxConsoleLinesPerSecond { get; set; } = 10;
         public string DefaultJavaPath { get; set; } = "java.exe";
+        public bool UseBetaVersions { get; set; } = false;
         public bool SendTelemetry { get; set; } = false;
     }
 }
