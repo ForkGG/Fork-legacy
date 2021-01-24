@@ -20,18 +20,16 @@ namespace Fork.ViewModel
     public sealed class MainViewModel : INotifyPropertyChanged
     {
         private ImportPage importPage;
-
-        //public MainWindow MainWindow { get; set; }
         
         public ObservableCollection<EntityViewModel> Entities { get; set; }
         public EntityViewModel SelectedEntity { get; set; }
-        //public ImportViewModel ImportViewModel { get; }
         public AppSettingsViewModel AppSettingsViewModel { get; }
         public bool HasServers { get; set; }
         public bool NewerVersionExists { get; set; }
         public bool IsBetaVersion => CurrentForkVersion.Beta != 0;
         public ForkVersion CurrentForkVersion { get; set; }
         public ForkVersion LatestForkVersion { get; set; }
+        public bool IsLatestBeta => LatestForkVersion.Beta != 0;
         public JavaVersion InstalledJavaVersion { get; private set; }
         public bool ShowJavaWarning { get; private set; }
         public string JavaWarningMessage { get; private set; }
@@ -53,7 +51,6 @@ namespace Fork.ViewModel
             {
                 SetupVersionChecking();
             }
-            //ImportViewModel = new ImportViewModel();
             AppSettingsViewModel = new AppSettingsViewModel(this);
             UpdateInstalledJavaVersion();
             Entities = ServerManager.Instance.Entities;
@@ -119,6 +116,20 @@ namespace Fork.ViewModel
             HasServers = Entities.Count!=0;
             Entities.CollectionChanged += ServerListChanged;
         }
+        
+        public void CheckForkVersion()
+        {
+            LatestForkVersion = new APIController().GetLatestForkVersion(AppSettingsViewModel.AppSettings.UseBetaVersions);
+            if (LatestForkVersion.CompareTo(CurrentForkVersion)>0)
+            {
+                NewerVersionExists = true;
+                raisePropertyChanged(nameof(IsLatestBeta));
+            }
+            else
+            {
+                NewerVersionExists = false;
+            }
+        }
 
         private void ServerListChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -137,15 +148,6 @@ namespace Fork.ViewModel
         private void OnVersionTimerElapsed(object source, ElapsedEventArgs e)
         {
             CheckForkVersion();
-        }
-
-        private void CheckForkVersion()
-        {
-            LatestForkVersion = new APIController().GetLatestForkVersion();
-            if (LatestForkVersion.CompareTo(CurrentForkVersion)>0)
-            {
-                NewerVersionExists = true;
-            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

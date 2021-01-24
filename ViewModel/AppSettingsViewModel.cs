@@ -102,7 +102,7 @@ namespace Fork.ViewModel
             RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(DiscordSocketStateMessage)));
         }
 
-        private async Task<bool> WriteAppSettingsAsync()
+        public async Task<bool> WriteAppSettingsAsync()
         {
             Task<bool> t = new Task<bool>(() =>
             {

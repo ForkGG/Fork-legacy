@@ -162,7 +162,7 @@
                                             <Setter Property="Template">
                                                 <Setter.Value>
                                                     <ControlTemplate TargetType="Button">
-                                                        <Border CornerRadius="0 10 10 0" Padding="20 0 20 0" Background="Transparent" Cursor="Hand" PreviewMouseLeftButtonDown="NewVersion_PreviewMouseLeftButtonDown">
+                                                        <Border CornerRadius="0 10 10 0" Padding="20 0 16 0" Background="Transparent" Cursor="Hand" PreviewMouseLeftButtonDown="NewVersion_PreviewMouseLeftButtonDown">
                                                             <Grid>
                                                                 <DockPanel>
                                                                     <Image x:Name="icon"
@@ -203,15 +203,24 @@
                                                                                        FontFamily="{DynamicResource Montserrat-Bold}"
                                                                                        FontSize="17"
                                                                                        Foreground="{DynamicResource backgroundDarker}" />
-                                                                            <TextBlock x:Name="ver7"
+                                                                            <TextBlock x:Name="ver7" Text="."
+                                                                                       FontFamily="{DynamicResource Montserrat-Bold}"
+                                                                                       FontSize="17" Visibility="Collapsed"
+                                                                                       Foreground="{DynamicResource backgroundDarker}" />
+                                                                            <TextBlock x:Name="ver8"
+                                                                                       Text="{Binding LatestForkVersion.Beta}"
+                                                                                       FontFamily="{DynamicResource Montserrat-Bold}"
+                                                                                       FontSize="17" Visibility="Collapsed"
+                                                                                       Foreground="{DynamicResource backgroundDarker}" />
+                                                                            <TextBlock x:Name="ver9"
                                                                                        Text=" is out"
                                                                                        FontFamily="{DynamicResource Montserrat-Bold}"
                                                                                        FontSize="17"
                                                                                        Foreground="{DynamicResource backgroundDarker}" />
                                                                         </StackPanel>
                                                                         <StackPanel Grid.Row="1">
-                                                                            <TextBlock x:Name="ver8"
-                                                                                       Text="Restart Fork to Update"
+                                                                            <TextBlock x:Name="ver10"
+                                                                                       Text="Restart Launcher to Update"
                                                                                        Foreground="{DynamicResource backgroundDarker}" />
                                                                         </StackPanel>
                                                                     </Grid>
@@ -219,26 +228,10 @@
                                                             </Grid>
                                                         </Border>
                                                         <ControlTemplate.Triggers>
-                                                            <Trigger Property="IsMouseOver" Value="True">
-                                                                <Setter TargetName="icon" Property="Source"
-                                                                        Value="pack://application:,,,/View/Resources/images/Icons/DownloadW.png" />
-                                                                <Setter TargetName="ver1" Property="Foreground"
-                                                                        Value="White" />
-                                                                <Setter TargetName="ver2" Property="Foreground"
-                                                                        Value="White" />
-                                                                <Setter TargetName="ver3" Property="Foreground"
-                                                                        Value="White" />
-                                                                <Setter TargetName="ver4" Property="Foreground"
-                                                                        Value="White" />
-                                                                <Setter TargetName="ver5" Property="Foreground"
-                                                                        Value="White" />
-                                                                <Setter TargetName="ver6" Property="Foreground"
-                                                                        Value="White" />
-                                                                <Setter TargetName="ver7" Property="Foreground"
-                                                                        Value="White" />
-                                                                <Setter TargetName="ver8" Property="Foreground"
-                                                                        Value="White" />
-                                                            </Trigger>
+                                                            <DataTrigger Binding="{Binding IsLatestBeta}" Value="true">
+                                                                <Setter TargetName="ver7" Property="Visibility" Value="Visible"/>
+                                                                <Setter TargetName="ver8" Property="Visibility" Value="Visible"/>
+                                                            </DataTrigger>
                                                         </ControlTemplate.Triggers>
                                                     </ControlTemplate>
                                                 </Setter.Value>

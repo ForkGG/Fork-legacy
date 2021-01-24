@@ -32,7 +32,7 @@ namespace Fork.Logic.Controller
             }
         }
 
-        public ForkVersion GetLatestForkVersion()
+        public ForkVersion GetLatestForkVersion(bool useBeta)
         {
             if (!IsAPIAvailable())
             {
@@ -41,7 +41,13 @@ namespace Fork.Logic.Controller
             }
             try
             {
-                var response = RequestRawResponse(apiBaseURL + "versions/fork/latest");
+                Dictionary<string, string> headers = null;
+                if (useBeta)
+                {
+                    headers = new Dictionary<string, string>();
+                    headers.Add("include-beta","true");
+                }
+                var response = RequestRawResponse(apiBaseURL + "versions/fork/latest", headers);
                 string versionJson = RetrieveResponseBody(response);
                 return JsonConvert.DeserializeObject<ForkVersion>(versionJson);
             }
@@ -114,10 +120,17 @@ namespace Fork.Logic.Controller
             }
         }
 
-        private HttpWebResponse RequestRawResponse(string requestUrl)
+        private HttpWebResponse RequestRawResponse(string requestUrl, IDictionary<string, string> headers = null)
         {
             WebRequest request = WebRequest.Create(requestUrl);
             request.Headers.Add("user-agent",ApplicationManager.UserAgent);
+            if (headers != null)
+            {
+                foreach (KeyValuePair<string,string> keyValuePair in headers)
+                {
+                    request.Headers.Add(keyValuePair.Key, keyValuePair.Value);
+                }
+            }
             return (HttpWebResponse) request.GetResponse();
         }
 

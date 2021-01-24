@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
 using System.Windows.Media;
 using Fork.Logic.Logging;
@@ -178,9 +177,10 @@ namespace Fork.View.Xaml2.Pages
             }
         }
 
-        private void ChangeBetaUsage_Click(object sender, MouseButtonEventArgs e)
+        private async void UseBetaChanged(object sender, RoutedEventArgs e)
         {
-            if (viewModel.MainViewModel.IsBetaVersion == viewModel.AppSettings.UseBetaVersions)
+            UseBetaBox.IsEnabled = false;
+            if (viewModel.MainViewModel.IsBetaVersion != viewModel.AppSettings.UseBetaVersions)
             {
                 restartNotice.Visibility = Visibility.Visible;
             }
@@ -188,6 +188,9 @@ namespace Fork.View.Xaml2.Pages
             {
                 restartNotice.Visibility = Visibility.Collapsed;
             }
+            viewModel.MainViewModel.CheckForkVersion();
+            await viewModel.WriteAppSettingsAsync();
+            UseBetaBox.IsEnabled = true;
         }
     }
 }
