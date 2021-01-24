@@ -17,20 +17,22 @@ namespace Fork.Logic.Persistence
         {
             optionsBuilder.UseLazyLoadingProxies();
             optionsBuilder.UseSqlite("foreign keys=true;Data Source=" + Path.Combine(App.ApplicationPath, "persistence", "data.db"));
+#if DEBUG
             optionsBuilder.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
+#endif
 
             base.OnConfiguring(optionsBuilder);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var restrictFks = modelBuilder.Model.GetEntityTypes()
+            /*var restrictFks = modelBuilder.Model.GetEntityTypes()
                 .SelectMany(t => t.GetForeignKeys())
                 .Where(fk => !fk.IsOwnership);
             foreach (var restrictFk in restrictFks)
             {
                 restrictFk.DeleteBehavior = DeleteBehavior.Cascade;
-            }
+            }*/
             
             base.OnModelCreating(modelBuilder);
         }

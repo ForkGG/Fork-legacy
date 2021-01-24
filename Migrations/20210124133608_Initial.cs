@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Fork.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -74,13 +74,13 @@ namespace Fork.Migrations
                         column: x => x.JavaSettingsId,
                         principalTable: "JavaSettings",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Networks_ServerVersion_VersionId",
                         column: x => x.VersionId,
                         principalTable: "ServerVersion",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -100,7 +100,7 @@ namespace Fork.Migrations
                         column: x => x.TimeId,
                         principalTable: "SimpleTime",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -120,7 +120,7 @@ namespace Fork.Migrations
                         column: x => x.TimeId,
                         principalTable: "SimpleTime",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -140,7 +140,7 @@ namespace Fork.Migrations
                         column: x => x.TimeId,
                         principalTable: "SimpleTime",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -173,61 +173,61 @@ namespace Fork.Migrations
                         column: x => x.JavaSettingsId,
                         principalTable: "JavaSettings",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Servers_RestartTime_Restart1Id",
                         column: x => x.Restart1Id,
                         principalTable: "RestartTime",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Servers_RestartTime_Restart2Id",
                         column: x => x.Restart2Id,
                         principalTable: "RestartTime",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Servers_RestartTime_Restart3Id",
                         column: x => x.Restart3Id,
                         principalTable: "RestartTime",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Servers_RestartTime_Restart4Id",
                         column: x => x.Restart4Id,
                         principalTable: "RestartTime",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Servers_ServerVersion_VersionId",
                         column: x => x.VersionId,
                         principalTable: "ServerVersion",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Servers_StartTime_AutoStart1Id",
                         column: x => x.AutoStart1Id,
                         principalTable: "StartTime",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Servers_StartTime_AutoStart2Id",
                         column: x => x.AutoStart2Id,
                         principalTable: "StartTime",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Servers_StopTime_AutoStop1Id",
                         column: x => x.AutoStop1Id,
                         principalTable: "StopTime",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Servers_StopTime_AutoStop2Id",
                         column: x => x.AutoStop2Id,
                         principalTable: "StopTime",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

@@ -253,8 +253,7 @@ namespace Fork.Migrations
                 {
                     b.HasOne("Fork.Logic.Model.SimpleTime", "Time")
                         .WithMany()
-                        .HasForeignKey("TimeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("TimeId");
 
                     b.Navigation("Time");
                 });
@@ -263,8 +262,7 @@ namespace Fork.Migrations
                 {
                     b.HasOne("Fork.Logic.Model.SimpleTime", "Time")
                         .WithMany()
-                        .HasForeignKey("TimeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("TimeId");
 
                     b.Navigation("Time");
                 });
@@ -273,8 +271,7 @@ namespace Fork.Migrations
                 {
                     b.HasOne("Fork.Logic.Model.SimpleTime", "Time")
                         .WithMany()
-                        .HasForeignKey("TimeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("TimeId");
 
                     b.Navigation("Time");
                 });
@@ -283,13 +280,11 @@ namespace Fork.Migrations
                 {
                     b.HasOne("Fork.Logic.Model.JavaSettings", "JavaSettings")
                         .WithMany()
-                        .HasForeignKey("JavaSettingsId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("JavaSettingsId");
 
                     b.HasOne("Fork.Logic.Model.ServerVersion", "Version")
                         .WithMany()
-                        .HasForeignKey("VersionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("VersionId");
 
                     b.Navigation("JavaSettings");
 
@@ -300,53 +295,43 @@ namespace Fork.Migrations
                 {
                     b.HasOne("Fork.Logic.Model.Automation.StartTime", "AutoStart1")
                         .WithMany()
-                        .HasForeignKey("AutoStart1Id")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AutoStart1Id");
 
                     b.HasOne("Fork.Logic.Model.Automation.StartTime", "AutoStart2")
                         .WithMany()
-                        .HasForeignKey("AutoStart2Id")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AutoStart2Id");
 
                     b.HasOne("Fork.Logic.Model.Automation.StopTime", "AutoStop1")
                         .WithMany()
-                        .HasForeignKey("AutoStop1Id")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AutoStop1Id");
 
                     b.HasOne("Fork.Logic.Model.Automation.StopTime", "AutoStop2")
                         .WithMany()
-                        .HasForeignKey("AutoStop2Id")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AutoStop2Id");
 
                     b.HasOne("Fork.Logic.Model.JavaSettings", "JavaSettings")
                         .WithMany()
-                        .HasForeignKey("JavaSettingsId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("JavaSettingsId");
 
                     b.HasOne("Fork.Logic.Model.Automation.RestartTime", "Restart1")
                         .WithMany()
-                        .HasForeignKey("Restart1Id")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("Restart1Id");
 
                     b.HasOne("Fork.Logic.Model.Automation.RestartTime", "Restart2")
                         .WithMany()
-                        .HasForeignKey("Restart2Id")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("Restart2Id");
 
                     b.HasOne("Fork.Logic.Model.Automation.RestartTime", "Restart3")
                         .WithMany()
-                        .HasForeignKey("Restart3Id")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("Restart3Id");
 
                     b.HasOne("Fork.Logic.Model.Automation.RestartTime", "Restart4")
                         .WithMany()
-                        .HasForeignKey("Restart4Id")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("Restart4Id");
 
                     b.HasOne("Fork.Logic.Model.ServerVersion", "Version")
                         .WithMany()
-                        .HasForeignKey("VersionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("VersionId");
 
                     b.Navigation("AutoStart1");
 
