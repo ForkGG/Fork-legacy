@@ -950,14 +950,18 @@ namespace Fork.Logic.Manager
 
         private async Task LoadEntityList()
         {
-            if (new DirectoryInfo(Path.Combine(App.ApplicationPath, "persistence")).Exists)
+            if (!new FileInfo(Path.Combine(App.ApplicationPath,"persistence","data.db")).Exists)
             {
-                var entitiesFromJson = EntitySerializer.Instance.LoadEntities();
-                if (entitiesFromJson != null)
+                if (new DirectoryInfo(Path.Combine(App.ApplicationPath, "persistence")).Exists)
                 {
-                    await Persistence.Persistence.Instance.SaveEntities(entitiesFromJson);
+                    var entitiesFromJson = EntitySerializer.Instance.LoadEntities();
+                    if (entitiesFromJson != null)
+                    {
+                        await Persistence.Persistence.Instance.SaveEntities(entitiesFromJson);
+                    }
                 }
             }
+            
             foreach (Server server in Persistence.Persistence.Instance.RequestServerList())
             {
                 var viewModel = new ServerViewModel(server.UID);
