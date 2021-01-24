@@ -95,7 +95,7 @@
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Height="40">
-                                    <TextBlock Text="Console lines" Style="{DynamicResource CreateServerTextBlock}"/>
+                                    <TextBlock Text="Max Console Lines" Style="{DynamicResource CreateServerTextBlock}"/>
                                     <Slider Minimum="50" Maximum="5000" Width="200" VerticalAlignment="Center" Margin="10 0" Value="{Binding AppSettings.MaxConsoleLines}"
                                              TickFrequency="50" IsSnapToTickEnabled="True"/>
                                     <TextBlock Text="{Binding AppSettings.MaxConsoleLines}" VerticalAlignment="Center"/>                                    
@@ -128,7 +128,7 @@
                                                Text="Warning! While beta versions contain the latest features, there is also a high chance for bugs and crashes." 
                                                FontSize="14" Margin="0 5 0 0" Foreground="{DynamicResource buttonBgrRed}"/>
                                     <TextBlock x:Name="restartNotice" Visibility="Collapsed" Text="Restart the Fork Launcher to apply this change" 
-                                               FontSize="14" Margin="0 5 0 0" Foreground="{DynamicResource buttonBgrGreen}"/>
+                                               FontSize="14" Margin="0 5 0 0"/>
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
