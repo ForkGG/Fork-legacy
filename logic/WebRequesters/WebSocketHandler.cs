@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,8 +25,7 @@ namespace Fork.Logic.WebRequesters
 #if DEBUG
         private readonly string discordUrl = "ws://localhost:8181";
 #else
-        //TODO change this to actual ip
-        private readonly string discordUrl = "ws://fork.gg:8181";
+        private readonly string discordUrl = "wss://fork.gg:8181";
 #endif
         private WebsocketClient discordWebSocket;
         private ManualResetEvent exitEvent = new ManualResetEvent(false);
@@ -42,7 +42,9 @@ namespace Fork.Logic.WebRequesters
             {
                 Options =
                 {
-                    KeepAliveInterval = TimeSpan.FromSeconds(120)
+                    KeepAliveInterval = TimeSpan.FromSeconds(120),
+                    Credentials = CredentialCache.DefaultNetworkCredentials,
+                    UseDefaultCredentials = true
                 }
             };
             using (discordWebSocket = new WebsocketClient(new Uri(discordUrl), factory))
