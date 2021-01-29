@@ -1,12 +1,17 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
+using System.Windows;
 using System.Windows.Media;
+using Fork.Logic.Logging;
 using Fork.Logic.Model;
 using Fork.Logic.Model.PluginModels;
 using Fork.Logic.Model.ServerConsole;
 using Fork.Logic.RoleManagement;
+using Fork.Logic.Utils;
 
 namespace Fork.Logic
 {
@@ -69,5 +74,33 @@ namespace Fork.Logic
                 _ => throw new ArgumentException("Undefined enum entry in ConsoleMessage.MessageLevel.Color()")
             };
         }
+        
+        public static void Sort<T>(this ObservableCollection<T> collection)
+            where T : IComparable<T>, IEquatable<T>
+        {
+            List<T> sorted = collection.OrderBy(x => x).ToList();
+
+            int ptr = 0;
+            while (ptr < sorted.Count - 1)
+            {
+                if (!collection[ptr].Equals(sorted[ptr]))
+                {
+                    try
+                    {
+                        int idx = CollectionUtils.Search(collection, ptr + 1, sorted[ptr]);
+                        var ptr1 = ptr;
+                        Application.Current.Dispatcher?.Invoke(() => collection.Move(idx, ptr1));
+                    }
+                    catch (Exception e)
+                    {
+                        ErrorLogger.Append(new AggregateException("Error while sorting ObservableCollection. See inner Exception",e));
+                    }
+                }
+            
+                ptr++;
+            }
+        }
+
+        
     }
 }

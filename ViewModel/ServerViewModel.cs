@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
@@ -7,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using Fork.Logic;
 using Fork.Logic.Controller;
 using Fork.Logic.ImportLogic;
 using Fork.Logic.Manager;
@@ -125,8 +127,9 @@ namespace Fork.ViewModel
                 await foreach (ServerPlayer player in PlayerManager.Instance.GetInitialPlayerList(this))
                 {
                     Application.Current.Dispatcher?.Invoke(() => PlayerList.Add(player));
+                    RefreshPlayerList();
                 }
-                
+
                 Console.WriteLine("Initialized PlayerList for server " + server);
 
                 whitelistUpdater = new RoleUpdater(RoleType.WHITELIST, WhiteList, Server.Version);
@@ -244,6 +247,7 @@ namespace Fork.ViewModel
         {
             await new FileWriter().WriteServerSettings(Path.Combine(App.ServerPath, Server.Name),
                     Server.ServerSettings.SettingsDictionary);
+            await Context.SaveChangesAsync();
             Persistence.Instance.SaveChanges();
         }
 
@@ -255,6 +259,7 @@ namespace Fork.ViewModel
 
         public void ServerNameChanged()
         {
+            Context.SaveChanges();
             Persistence.Instance.SaveChanges();
             raisePropertyChanged(nameof(ServerTitle));
         }

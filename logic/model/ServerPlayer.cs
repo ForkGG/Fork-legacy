@@ -4,7 +4,7 @@ using Fork.ViewModel;
 
 namespace Fork.Logic.Model
 {
-    public class ServerPlayer : IComparable<ServerPlayer>
+    public class ServerPlayer : IComparable<ServerPlayer>, IEquatable<ServerPlayer>
     {
         public Player Player { get; set; }
         public ServerViewModel ServerViewModel { get; set; }
@@ -35,6 +35,26 @@ namespace Fork.Logic.Model
             }
 
             return string.Compare(Player.Name, other.Player.Name, StringComparison.Ordinal);
+        }
+
+        public bool Equals(ServerPlayer other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Equals(Player, other.Player) && Equals(ServerViewModel, other.ServerViewModel) && IsOP == other.IsOP && IsOnline == other.IsOnline;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((ServerPlayer) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Player, ServerViewModel, IsOP, IsOnline);
         }
     }
 }
