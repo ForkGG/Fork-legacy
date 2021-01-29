@@ -61,6 +61,8 @@ namespace Fork.ViewModel
         private Stopwatch timeSinceLastConsoleMessage = new Stopwatch();
         private bool isDeleted = false;
 
+        protected readonly PersistenceContext Context;
+
         public class EntityPathChangedEventArgs
         {
             public string NewPath { get; }
@@ -96,6 +98,7 @@ namespace Fork.ViewModel
                         raisePropertyChanged(nameof(n.NetworkTitle));
                     }
 
+                    Context.SaveChanges();
                     Persistence.Instance.SaveChanges();
                 }) {IsBackground = true}.Start();
             }
@@ -243,7 +246,10 @@ namespace Fork.ViewModel
 
         protected EntityViewModel(string entityId)
         {
-            Entity = Persistence.Instance.RequestEntity(entityId);
+            Context = new PersistenceContext();
+            Entity = Context.Servers.FirstOrDefault(server => server.UID == entityId)
+                     ?? (Entity) Context.Networks.FirstOrDefault(network => network.UID == entityId)
+                     ?? throw new Exception("Database did not contain Entity with UID:" + entityId);
             
             new Thread(() =>
             {
@@ -396,7 +402,7 @@ namespace Fork.ViewModel
             {
                 ServerAutomationManager.Instance.UpdateAutomation(serverViewModel);
             }
-            Task.Run(() =>
+            Task.Run(async () =>
             {
                 WriteServerIcon();
                 UpdateAddressInfo();
@@ -420,7 +426,7 @@ namespace Fork.ViewModel
                         }
                     }
                 }
-
+                await Context.SaveChangesAsync();
                 Persistence.Instance.SaveChanges();
             });
         }
@@ -506,6 +512,7 @@ namespace Fork.ViewModel
             if (Entity.JavaSettings.JavaPath.Equals(oldPath))
             {
                 Entity.JavaSettings.JavaPath = newPath;
+                Context.SaveChanges();
                 Persistence.Instance.SaveChanges();
             }
         }
@@ -615,6 +622,7 @@ namespace Fork.ViewModel
         {
             DownloadCompleted = false;
             Entity.Initialized = false;
+            Context.SaveChanges();
             Persistence.Instance.SaveChanges();
             Console.WriteLine("Starting server.jar download for server " + Entity);
             raisePropertyChanged(nameof(Server));
@@ -632,6 +640,7 @@ namespace Fork.ViewModel
         {
             DownloadCompleted = true;
             Entity.Initialized = true;
+            Context.SaveChanges();
             Persistence.Instance.SaveChanges();
             Console.WriteLine("Finished downloading server.jar for server " + Entity);
             raisePropertyChanged(nameof(Server));

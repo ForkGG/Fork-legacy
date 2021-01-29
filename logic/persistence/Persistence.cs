@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
+using Fork.Logic.Manager;
 using Fork.Logic.Model;
 using Fork.Logic.Model.Automation;
 using Fork.Logic.Model.ProxyModels;
@@ -44,31 +45,6 @@ namespace Fork.Logic.Persistence
         public IEnumerable<Network> RequestNetworkList()
         {
             return persistenceContext.Networks;
-        }
-
-        /// <summary>
-        /// Get an entity with a specified UID from the database
-        /// </summary>
-        /// <param name="entityId"></param>
-        /// <returns></returns>
-        /// <exception cref="DataException"></exception>
-        public Entity RequestEntity(string entityId)
-        {
-            lock (persistenceContext)
-            {
-                if (persistenceContext.Servers.Any(server => server.UID == entityId))
-                {
-                    return persistenceContext.Servers.Find(entityId);
-                } 
-                else if (persistenceContext.Networks.Any(network => network.UID == entityId))
-                {
-                    return persistenceContext.Networks.Find(entityId);
-                }
-                else
-                {
-                    throw new DataException("Database did not contain requested entity");
-                }
-            }
         }
 
         /// <summary>

@@ -291,14 +291,7 @@ namespace Fork.ViewModel
 
         public void RefreshPlayerList()
         {
-            List<ServerPlayer> players = new List<ServerPlayer>(PlayerList);
-            players.Sort();
-            PlayerList = new ObservableCollection<ServerPlayer>(players);
-            PlayerList.CollectionChanged += PlayerListChanged;
-
-            //TODO this is bad MVVM (use INotifyPropertyChanged in ServerPlayer instead)
-            var c = ConsolePage as ConsolePage;
-            Application.Current.Dispatcher?.Invoke(() => c?.Playerlist.Items.Refresh());
+            PlayerList.Sort();
         }
 
         private void WriteAutomationInfo(AutomationTime automationTime, string time)
