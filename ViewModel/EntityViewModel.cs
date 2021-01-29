@@ -561,7 +561,14 @@ namespace Fork.ViewModel
                 cpuList.RemoveAt(0);
             }
 
-            cpuValue = cpuList.Average();
+            try
+            {
+                cpuValue = cpuList.Average();
+            }
+            catch
+            {
+                //ignore, only errors rarely if collection was modified
+            }
             raisePropertyChanged(nameof(CPUValue));
             raisePropertyChanged(nameof(CPUValueRaw));
         }
@@ -574,7 +581,14 @@ namespace Fork.ViewModel
                 memList.RemoveAt(0);
             }
 
-            memValue = memList.Average();
+            try
+            {
+                memValue = memList.Average();
+            }
+            catch
+            {
+                //ignore, only errors rarely if collection was modified
+            }
             raisePropertyChanged(nameof(MemValue));
             raisePropertyChanged(nameof(MemValueRaw));
         }
@@ -587,7 +601,12 @@ namespace Fork.ViewModel
                 diskList.RemoveAt(0);
             }
 
-            diskValue = diskList.Average();
+            try
+            {
+                diskValue = diskList.Average();
+            } catch{
+                //ignore, only errors rarely if collection was modified
+            }
             raisePropertyChanged(nameof(DiskValue));
             raisePropertyChanged(nameof(DiskValueRaw));
         }
