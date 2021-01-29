@@ -21,7 +21,7 @@ namespace Fork.Logic.Controller
         {
             if (IsAPIAvailable())
             {
-                return new WebClient().DownloadString(apiBaseURL + "ip").Trim();
+                return RetrieveResponseBody(RequestRawResponse(apiBaseURL + "ip")).Trim();
             }
             //Fallback in case of API outage
             else
