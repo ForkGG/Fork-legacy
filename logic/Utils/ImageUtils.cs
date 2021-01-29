@@ -1,9 +1,13 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using PixelFormat = System.Windows.Media.PixelFormat;
 
 namespace Fork.Logic.Utils
 {
@@ -19,7 +23,7 @@ namespace Fork.Logic.Utils
         public static Bitmap ResizeImage(Image image, int width, int height)
         {
             var destRect = new Rectangle(0, 0, width, height);
-            var destImage = new Bitmap(width, height);
+            var destImage = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
             destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
 
@@ -43,6 +47,8 @@ namespace Fork.Logic.Utils
         
         public static ImageSource BitmapToImageSource(Bitmap src)
         {
+            return Imaging.CreateBitmapSourceFromHIcon(src.GetHicon(), Int32Rect.Empty,
+                BitmapSizeOptions.FromEmptyOptions());
             MemoryStream ms = new MemoryStream();
             src.Save(ms, ImageFormat.Bmp);
             BitmapImage image = new BitmapImage();

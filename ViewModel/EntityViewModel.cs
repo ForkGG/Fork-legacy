@@ -668,6 +668,10 @@ namespace Fork.ViewModel
                     customIcon.Delete();
                     return;
                 }
+                if (Entity.ServerIconId == 0)
+                {
+                    return;
+                }
                 PngBitmapEncoder encoder = new PngBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create((BitmapSource) SelectedServerIcon));
                 using (FileStream fileStream = new FileStream(customIcon.FullName, FileMode.Create))
