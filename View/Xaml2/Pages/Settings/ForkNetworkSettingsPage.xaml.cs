@@ -19,6 +19,7 @@ using Fork;
 using Fork.Logic.Manager;
 using Fork.Logic.Model;
 using Fork.Logic.Model.Settings;
+using Fork.Logic.Persistence;
 using Fork.View.Xaml2.Pages.Server;
 using Fork.ViewModel;
 using Path = System.IO.Path;
@@ -69,7 +70,7 @@ namespace Fork.View.Xaml2.Pages.Settings
         
         private void DefaultJavaDirReset_Click(object sender, RoutedEventArgs e)
         {
-            ServerJavaPath.Text = "java.exe";
+            ServerJavaPath.Text = AppSettingsSerializer.Instance.AppSettings.DefaultJavaPath;
         }
     }
 }
