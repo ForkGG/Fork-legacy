@@ -126,8 +126,11 @@ namespace Fork.ViewModel
                 PlayerList = new ObservableCollection<ServerPlayer>();
                 await foreach (ServerPlayer player in PlayerManager.Instance.GetInitialPlayerList(this))
                 {
-                    Application.Current.Dispatcher?.Invoke(() => PlayerList.Add(player));
-                    RefreshPlayerList();
+                    Application.Current.Dispatcher?.Invoke(() =>
+                    {
+                        PlayerList.Add(player);
+                        Task.Run(RefreshPlayerList);
+                    });
                 }
 
                 Console.WriteLine("Initialized PlayerList for server " + server);
