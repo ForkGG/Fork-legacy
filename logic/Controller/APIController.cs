@@ -4,12 +4,7 @@ using System.IO;
 using System.Net;
 using System.Net.Cache;
 using System.Net.Http.Headers;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.Unicode;
 using System.Threading.Tasks;
-using System.Timers;
-using System.Windows.Forms.VisualStyles;
 using Fork.Logic.Logging;
 using Fork.Logic.Manager;
 using Fork.Logic.Model.APIModels;
@@ -20,25 +15,21 @@ namespace Fork.Logic.Controller
 {
     public class APIController
     {
-        public static Dictionary<string, CachedAPIResponse> ResponseCache = new();
-        
-        
         private string apiBaseURL = "https://api.Fork.gg/";
 
-        /// <summary>
-        /// Get public IP address of this current machine. This is cached for 24 hours by default
-        /// </summary>
-        /// <returns></returns>
         public string GetExternalIPAddress()
         {
             if (IsAPIAvailable())
             {
-                return RetrieveResponseBody(RequestResponseWithCache(apiBaseURL + "ip", null, TimeSpan.FromHours(24))).Trim();
+                return RetrieveResponseBody(RequestRawResponse(apiBaseURL + "ip")).Trim();
             }
             //Fallback in case of API outage
-            ErrorLogger.Append(new WebException("api.Fork.gg is not online or operational"));
-            Console.WriteLine("api.Fork.gg is not online or operational");
-            return RetrieveResponseBody(RequestResponseWithCache("http://icanhazip.com", null, TimeSpan.FromHours(24))).Trim();
+            else
+            {
+                ErrorLogger.Append(new WebException("api.Fork.gg is not online or operational"));
+                Console.WriteLine("api.Fork.gg is not online or operational");
+                return new WebClient().DownloadString("http://icanhazip.com").Trim();
+            }
         }
 
         public ForkVersion GetLatestForkVersion(bool useBeta)
@@ -129,47 +120,6 @@ namespace Fork.Logic.Controller
             }
         }
 
-        private HttpWebResponse RequestResponseWithCache(string requestUrl, IDictionary<string, string> headers = null,
-            TimeSpan? maxCacheAge = null)
-        {
-            if (maxCacheAge != null)
-            {
-                HttpWebResponse cachedResponse = ResponseFromCache(requestUrl, headers);
-                if (cachedResponse != null)
-                {
-                    return cachedResponse;
-                }
-            }
-
-            HttpWebResponse response = RequestRawResponse(requestUrl, headers);
-            if (maxCacheAge != null)
-            {
-                CacheResponse(HashRequest(requestUrl,headers), response, maxCacheAge.Value);
-            }
-            return response;
-        }
-
-
-        private void CacheResponse(string requestHash, HttpWebResponse response, TimeSpan maxCacheAge)
-        {
-            //This should never happen
-            if (ResponseCache.ContainsKey(requestHash))
-            {
-                return;
-            }
-            ResponseCache.Add(requestHash, new CachedAPIResponse(requestHash, response, maxCacheAge));
-        }
-        
-        private HttpWebResponse ResponseFromCache(string requestUrl, IDictionary<string, string> headers = null)
-        {
-            string requestHash = HashRequest(requestUrl, headers);
-            if (ResponseCache.ContainsKey(requestHash))
-            {
-                return ResponseCache[requestHash].WebResponse;
-            }
-            return null;
-        }
-
         private HttpWebResponse RequestRawResponse(string requestUrl, IDictionary<string, string> headers = null)
         {
             WebRequest request = WebRequest.Create(requestUrl);
@@ -198,40 +148,5 @@ namespace Fork.Logic.Controller
                 }
             }
         }
-        
-        private string HashRequest(string requestUrl, IDictionary<string, string> headers = null)
-        {
-            string stringToHash;
-            if (headers == null)
-            {
-                stringToHash = requestUrl;
-            }
-            else
-            {
-                stringToHash = requestUrl + HeaderDictToString(headers);
-            }
-
-            byte[] hashArray = MD5.HashData(Encoding.UTF8.GetBytes(stringToHash));
-
-            StringBuilder result = new();
-            foreach (byte b in hashArray)
-            {
-                result.Append(b.ToString("X2"));
-            }
-            return result.ToString();
-        }
-
-        private string HeaderDictToString(IDictionary<string, string> headers)
-        {
-            List<string> headerStrings = new();
-            foreach (KeyValuePair<string,string> header in headers)
-            {
-                headerStrings.Add(header.Key+header.Value);
-            }
-            headerStrings.Sort();
-            return string.Join("",headerStrings);
-        }
-
-        
     }
 }
