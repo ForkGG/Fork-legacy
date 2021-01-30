@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 
 namespace Fork.Logic.Model
 {
-    public class Player
+    public class Player : IEquatable<Player>
     {
         public bool OfflineChar { get; set; } = false;
         public string Name { get; set; }
@@ -332,6 +332,26 @@ namespace Fork.Logic.Model
         private class Cape
         {
             public string Url { get; set; }
+        }
+
+        public bool Equals(Player other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return OfflineChar == other.OfflineChar && Name == other.Name && Uid == other.Uid;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Player) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(OfflineChar, Name, Uid);
         }
     }
 }

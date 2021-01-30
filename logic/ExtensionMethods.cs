@@ -80,27 +80,29 @@ namespace Fork.Logic
         {
             List<T> sorted = collection.OrderBy(x => x).ToList();
 
-            int ptr = 0;
-            while (ptr < sorted.Count - 1)
+            Application.Current.Dispatcher?.Invoke(() =>
             {
-                if (!collection[ptr].Equals(sorted[ptr]))
+                int ptr = 0;
+                while (ptr < sorted.Count - 1)
                 {
-                    try
+                    if (!collection[ptr].Equals(sorted[ptr]))
                     {
-                        int idx = CollectionUtils.Search(collection, ptr + 1, sorted[ptr]);
-                        var ptr1 = ptr;
-                        Application.Current.Dispatcher?.Invoke(() => collection.Move(idx, ptr1));
+                        try
+                        {
+                            int idx = CollectionUtils.Search(collection, ptr + 1, sorted[ptr]);
+                            collection.Move(idx, ptr);
+                        }
+                        catch (Exception e)
+                        {
+                            ErrorLogger.Append(
+                                new AggregateException("Error while sorting ObservableCollection. See inner Exception",
+                                    e));
+                        }
                     }
-                    catch (Exception e)
-                    {
-                        ErrorLogger.Append(new AggregateException("Error while sorting ObservableCollection. See inner Exception",e));
-                    }
-                }
-            
-                ptr++;
-            }
-        }
 
-        
+                    ptr++;
+                }
+            });
+        }
     }
 }
