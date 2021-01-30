@@ -10,7 +10,7 @@
             Waterfall,
             BungeeCord
         }
-
+        
         public JarVersionType VersionType { get; set; }
         public string Version { get; set; }
         public int Build { get; set; } = 0;

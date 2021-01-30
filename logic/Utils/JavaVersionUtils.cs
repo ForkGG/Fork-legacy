@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Fork.Logic.Model;
@@ -8,15 +10,18 @@ namespace Fork.Logic.Utils
 {
     public class JavaVersionUtils
     {
-        private static readonly Regex versionRegex = new(".* version \"([0-9._]*)\"");
-        private static readonly string bitPattern = "64-Bit";
+        private static Regex versionRegex = new Regex(".* version \"([0-9._]*)\"");
+        private static string bitPattern = "64-Bit";
 
         public static JavaVersion GetInstalledJavaVersion(string javaPath = "")
         {
-            if (javaPath.Equals("")) javaPath = AppSettingsSerializer.Instance.AppSettings.DefaultJavaPath;
+            if (javaPath.Equals(""))
+            {
+                javaPath = AppSettingsSerializer.Instance.AppSettings.DefaultJavaPath;
+            }
             return CheckForPathJava(javaPath);
         }
-
+        
         private static JavaVersion CheckForPathJava(string javaPath)
         {
             try
@@ -31,6 +36,7 @@ namespace Fork.Logic.Utils
                 Process proc = new Process {StartInfo = procStartInfo};
                 proc.Start();
                 return InterpretJavaVersionOutput(proc.StandardError.ReadToEnd());
+
             }
             catch (Exception)
             {
@@ -40,23 +46,30 @@ namespace Fork.Logic.Utils
 
         private static JavaVersion InterpretJavaVersionOutput(string output)
         {
-            if (output == null) return null;
+            if (output == null)
+            {
+                return null;
+            }
 
             Match versionMatch = versionRegex.Match(output);
             if (versionMatch.Success)
             {
-                JavaVersion result = new JavaVersion {Version = versionMatch.Groups[1].Value};
+                JavaVersion result = new JavaVersion{Version = versionMatch.Groups[1].Value};
                 int computedVersion;
                 if (TryParseJavaVersion(result.Version.Split(".")[0], out computedVersion))
                 {
-                    if (computedVersion == 1) TryParseJavaVersion(result.Version.Split(".")[1], out computedVersion);
+                    if (computedVersion == 1)
+                    {
+                        TryParseJavaVersion(result.Version.Split(".")[1], out computedVersion);
+                    }
                     result.VersionComputed = computedVersion;
                 }
-
-                if (output.Contains(bitPattern)) result.Is64Bit = true;
+                if (output.Contains(bitPattern))
+                {
+                    result.Is64Bit = true;
+                }
                 return result;
             }
-
             return null;
         }
 

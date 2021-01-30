@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Fork.Logic.Logging;
 using Fork.Logic.Manager;
+using Fork.Logic.Model;
 using Fork.logic.model.PluginModels;
 using Fork.Logic.Model.PluginModels;
 using Fork.Logic.Persistence;
@@ -18,21 +19,39 @@ namespace Fork.ViewModel
 {
     public class PluginViewModel : BaseViewModel
     {
-        private bool fullyLoaded;
+        private PluginWebRequester pluginWebRequester;
         private int lastPage = 1;
-        private readonly PluginWebRequester pluginWebRequester;
+        private bool fullyLoaded = false;
+        
+        public ObservableCollection<Plugin> Plugins { get; private set; }
+        
+        public ObservableCollection<InstalledPlugin> InstalledPlugins { get; }
+        
+        public List<PluginEnums.Sorting> Sortings { get; } = 
+            new List<PluginEnums.Sorting>(Enum.GetValues(typeof(PluginEnums.Sorting)).Cast<PluginEnums.Sorting>());
+        public PluginEnums.Sorting Sorting { get; set; }
+        public List<PluginCategory> Categories { get; private set; }
+        public PluginCategory SelectedCategory { get; set; }
+        public string SearchQuery { get; set; } = "";
+        public bool FullyLoaded => fullyLoaded;
+        
+        public EntityViewModel EntityViewModel { get; }
 
         public PluginViewModel(EntityViewModel entityViewModel)
         {
             InstalledPlugins = new ObservableCollection<InstalledPlugin>(
                 InstalledPluginSerializer.Instance.LoadInstalledPlugins(entityViewModel));
             foreach (InstalledPlugin plugin in InstalledPlugins)
+            {
                 if (!plugin.IsDownloaded)
+                {
                     PluginManager.Instance.DownloadPluginAsync(plugin, entityViewModel);
+                }
+            }
 
             InstalledPlugins.CollectionChanged += InstalledPluginsChanged;
-
-            Categories = new List<PluginCategory> {new() {id = 0, name = "All Categories"}};
+            
+            Categories = new List<PluginCategory>{new PluginCategory{id=0,name="All Categories"}};
             SelectedCategory = Categories[0];
             EntityViewModel = entityViewModel;
             Sorting = PluginEnums.Sorting.RATING;
@@ -40,27 +59,13 @@ namespace Fork.ViewModel
             new Thread(() =>
             {
                 var plugins = RequestPlugins();
-                Application.Current.Dispatcher?.Invoke(() => Plugins = new ObservableCollection<Plugin>(plugins));
+                Application.Current.Dispatcher?.Invoke(()=> Plugins = new ObservableCollection<Plugin>(plugins));
                 RemoveInstalledPluginsFromList();
                 var categories = pluginWebRequester.RequestCategories();
-                Application.Current.Dispatcher?.Invoke(() => Categories.AddRange(categories));
-            }) {IsBackground = true}.Start();
+                Application.Current.Dispatcher?.Invoke(()=> Categories.AddRange(categories));
+            }){IsBackground = true}.Start();
+            
         }
-
-        public ObservableCollection<Plugin> Plugins { get; private set; }
-
-        public ObservableCollection<InstalledPlugin> InstalledPlugins { get; }
-
-        public List<PluginEnums.Sorting> Sortings { get; } =
-            new(Enum.GetValues(typeof(PluginEnums.Sorting)).Cast<PluginEnums.Sorting>());
-
-        public PluginEnums.Sorting Sorting { get; set; }
-        public List<PluginCategory> Categories { get; }
-        public PluginCategory SelectedCategory { get; set; }
-        public string SearchQuery { get; set; } = "";
-        public bool FullyLoaded => fullyLoaded;
-
-        public EntityViewModel EntityViewModel { get; }
 
         public void DisablePlugin(InstalledPlugin installedPlugin)
         {
@@ -68,7 +73,7 @@ namespace Fork.ViewModel
             RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(installedPlugin.IsEnabled)));
             InstalledPluginSerializer.Instance.StoreInstalledPlugins(InstalledPlugins.ToList(), EntityViewModel);
         }
-
+        
         public void EnablePlugin(InstalledPlugin installedPlugin)
         {
             installedPlugin.IsEnabled = true;
@@ -87,7 +92,7 @@ namespace Fork.ViewModel
                     List<Plugin> newPlugins = RequestPlugins();
 
                     Plugins = new ObservableCollection<Plugin>(newPlugins);
-
+                    
                     RemoveInstalledPluginsFromList();
 
                     return true;
@@ -104,7 +109,10 @@ namespace Fork.ViewModel
 
         public async Task<bool> LoadMore()
         {
-            if (Plugins == null || fullyLoaded) return false;
+            if (Plugins == null || fullyLoaded)
+            {
+                return false;
+            }
             Task<bool> t = new Task<bool>(() =>
             {
                 lastPage++;
@@ -114,8 +122,10 @@ namespace Fork.ViewModel
 
                     //TODO in .NET 6.0 this can be changed to AddRange() (watch: https://github.com/dotnet/runtime/issues/18087)
                     foreach (Plugin newPlugin in newPlugins)
+                    {
                         Application.Current.Dispatcher?.Invoke(() => Plugins.Add(newPlugin));
-
+                    }
+                    
                     RemoveInstalledPluginsFromList();
 
                     return true;
@@ -133,8 +143,12 @@ namespace Fork.ViewModel
         public void CheckForDeletedPlugin(Plugin plugin)
         {
             foreach (Plugin plugin1 in Plugins)
+            {
                 if (plugin1.id == plugin.id)
+                {
                     plugin1.installed = false;
+                }
+            }
         }
 
         private List<Plugin> RequestPlugins()
@@ -150,8 +164,7 @@ namespace Fork.ViewModel
             //Category only
             if (SelectedCategory.id == 0)
             {
-                var result1 =
-                    pluginWebRequester.RequestResourceList(out fullyLoaded, SearchQuery, null, lastPage, Sorting);
+                var result1 = pluginWebRequester.RequestResourceList(out fullyLoaded, SearchQuery, null, lastPage, Sorting);
                 RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(FullyLoaded)));
                 return result1;
             }
@@ -159,8 +172,7 @@ namespace Fork.ViewModel
             //SearchQuery only
             if (!SearchQuery.Equals(""))
             {
-                var result2 = pluginWebRequester.RequestResourceList(out fullyLoaded, SearchQuery, SelectedCategory,
-                    lastPage, Sorting);
+                var result2 = pluginWebRequester.RequestResourceList(out fullyLoaded, SearchQuery, SelectedCategory, lastPage, Sorting);
                 RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(FullyLoaded)));
                 return result2;
             }
@@ -174,18 +186,24 @@ namespace Fork.ViewModel
         private void InstalledPluginsChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             //TODO re-sort
-
+            
             RemoveInstalledPluginsFromList();
-
+            
             InstalledPluginSerializer.Instance.StoreInstalledPlugins(InstalledPlugins.ToList(), EntityViewModel);
         }
 
         private void RemoveInstalledPluginsFromList()
         {
             foreach (Plugin plugin in Plugins)
-            foreach (InstalledPlugin installedPlugin in InstalledPlugins)
-                if (plugin.id == installedPlugin.SpigetId)
-                    plugin.installed = true;
+            {
+                foreach (InstalledPlugin installedPlugin in InstalledPlugins)
+                {
+                    if (plugin.id == installedPlugin.SpigetId)
+                    {
+                        plugin.installed = true;
+                    }
+                }
+            }
         }
     }
 }

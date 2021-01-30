@@ -14,10 +14,14 @@ namespace Fork.Logic.Utils
             List<byte> bytes = new List<byte>();
 
             foreach (byte bInput in input)
+            {
                 if (bInput == 0x00)
                 {
                     string data = string.Empty;
-                    if (bytes.Count > 0) data = Encoding.UTF8.GetString(bytes.ToArray()).Trim();
+                    if (bytes.Count > 0)
+                    {
+                        data = Encoding.UTF8.GetString(bytes.ToArray()).Trim();
+                    }
 
                     output.Add(data);
                     bytes = new List<byte>();
@@ -26,6 +30,7 @@ namespace Fork.Logic.Utils
                 {
                     bytes.Add(bInput);
                 }
+            }
 
             return output;
         }
@@ -61,11 +66,14 @@ namespace Fork.Logic.Utils
         {
             if (lastIndex - startIndex > inputBytes.Length) return inputBytes;
 
-            byte[] outputBytes = new byte[lastIndex - startIndex + 1];
+            byte[] outputBytes = new byte[(lastIndex - startIndex) + 1];
 
-            for (int i = startIndex; i <= lastIndex; i++) outputBytes[i - startIndex] = inputBytes[i];
+            for (int i = startIndex; i <= lastIndex; i++)
+            {
+                outputBytes[i - startIndex] = inputBytes[i];
+            }
 
             return outputBytes;
-        }
+}
     }
 }

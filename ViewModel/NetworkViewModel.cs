@@ -1,28 +1,54 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using Fork.Logic.Controller;
 using Fork.Logic.Logging;
 using Fork.Logic.Manager;
+using Fork.Logic.Model;
+using Fork.Logic.Model.ProxyModels;
 using Fork.Logic.Model.ProxyModels;
 using Fork.Logic.Model.Settings;
+using Fork.Logic.Persistence;
 using Fork.View.Xaml2.Pages.Network;
 using Fork.View.Xaml2.Pages.Server;
 using Fork.View.Xaml2.Pages.Settings;
 using GongSolutions.Wpf.DragDrop;
 using ConsolePage = Fork.View.Xaml2.Pages.Network.ConsolePage;
+using Server = Fork.Logic.Model.Server;
 
 namespace Fork.ViewModel
 {
     public class NetworkViewModel : EntityViewModel
     {
+        public Network Network
+        {
+            get { return Entity as Network; }
+            set { Entity = value; }
+        }
+
+        public ObservableCollection<NetworkServer> Servers { get; set; } = new ObservableCollection<NetworkServer>();
+        public ObservableCollection<Permission> Permissions { get; set; } = new ObservableCollection<Permission>();
+        public ObservableCollection<Group> Groups { get; set; } = new ObservableCollection<Group>();
+
+        public string NetworkTitle => Name + " - " + Network.Version.Type;
+
+        public ServerDropHandler DropHandler { get; }
+
         public NetworkViewModel(string networkUid) : base(networkUid)
         {
             Network = Entity as Network;
-            if (Network == null) throw new Exception();
-
+            if (Network == null)
+            {
+                throw new Exception();
+            }
+            
             DateTime start = DateTime.Now;
             Console.WriteLine("Starting initialization of ViewModel for Network " + Network.Name);
             TimeSpan t = DateTime.Now - start;
@@ -30,35 +56,24 @@ namespace Fork.ViewModel
             UpdateAddressInfo();
             Application.Current.Dispatcher.Invoke(new Action(() => EntityPage = new NetworkPage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => ConsolePage = new ConsolePage(this)));
-            Application.Current.Dispatcher.Invoke(new Action(() =>
-                PluginsPage = new PluginsPage(new PluginViewModel(this))));
+            Application.Current.Dispatcher.Invoke(new Action(() => PluginsPage = new PluginsPage(new PluginViewModel(this))));
             Application.Current.Dispatcher.Invoke(new Action(() => SettingsViewModel = new SettingsViewModel(this)));
 
             DropHandler = new ServerDropHandler(this);
 
             if (!ApplicationManager.Initialized)
+            {
                 ApplicationManager.ApplicationInitialized +=
                     () => Application.Current.Dispatcher?.Invoke(StartSettingsReader);
+            }
             else
+            {
                 Application.Current.Dispatcher?.Invoke(StartSettingsReader);
+            }
 
             Console.WriteLine("Server ViewModel for " + Network.Name + " initialized in " + t.Seconds + "." +
                               t.Milliseconds + "s");
         }
-
-        public Network Network
-        {
-            get => Entity as Network;
-            set => Entity = value;
-        }
-
-        public ObservableCollection<NetworkServer> Servers { get; set; } = new();
-        public ObservableCollection<Permission> Permissions { get; set; } = new();
-        public ObservableCollection<Group> Groups { get; set; } = new();
-
-        public string NetworkTitle => Name + " - " + Network.Version.Type;
-
-        public ServerDropHandler DropHandler { get; }
 
         public void RemoveServer(NetworkServer networkServer)
         {
@@ -72,7 +87,7 @@ namespace Fork.ViewModel
         public void AddServer(ServerViewModel serverViewModel, int index)
         {
             string uid = serverViewModel.Server.UID;
-            Server server = new Server
+            Fork.Logic.Model.Settings.Server server = new Logic.Model.Settings.Server
             {
                 address = "0.0.0.0:" + serverViewModel.Server.ServerSettings.ServerPort,
                 ForkServer = true,
@@ -85,9 +100,15 @@ namespace Fork.ViewModel
 
             bool contains = false;
             foreach (NetworkServer networkServer in Servers)
+            {
                 if (networkServer is NetworkForkServer ForkServer)
+                {
                     if (ForkServer.ServerViewModel.Server.UID.Equals(uid))
+                    {
                         contains = true;
+                    }
+                }
+            }
 
             if (!contains)
             {
@@ -96,7 +117,7 @@ namespace Fork.ViewModel
             }
         }
 
-        public void AddServer(Server server, string name)
+        public void AddServer(Fork.Logic.Model.Settings.Server server, string name)
         {
             NetworkExternalServer networkExternalServer = new NetworkExternalServer(server, name);
             if (!Network.Config.servers.ContainsKey(name))
@@ -118,8 +139,12 @@ namespace Fork.ViewModel
         public void AddPermission(Permission permission)
         {
             foreach (Permission p in Permissions)
+            {
                 if (p.Name.Equals(permission.Name))
+                {
                     return;
+                }
+            }
 
             Application.Current.Dispatcher?.Invoke(() => Permissions.Add(permission));
             SaveSettings();
@@ -137,8 +162,12 @@ namespace Fork.ViewModel
         public void AddGroup(Group group)
         {
             foreach (Group g in Groups)
-                if (g.User.Equals(@group.User))
+            {
+                if (g.User.Equals(group.User))
+                {
                     return;
+                }
+            }
 
             Application.Current.Dispatcher?.Invoke(() => Groups.Add(group));
             SaveSettings();
@@ -154,7 +183,7 @@ namespace Fork.ViewModel
                 LoadServersFromConfig(Network.Config);
             }).Start();
         }
-
+        
         public void SaveConfig()
         {
             new Thread(() =>
@@ -169,8 +198,8 @@ namespace Fork.ViewModel
 
         public void UpdateServer(NetworkServer networkServer, ServerViewModel serverViewModel)
         {
-            if (Servers.Contains(networkServer)
-                && networkServer is NetworkForkServer networkForkServer
+            if (Servers.Contains(networkServer) 
+                && networkServer is NetworkForkServer networkForkServer 
                 && networkForkServer.ServerViewModel == serverViewModel)
             {
                 networkServer.Address = "0.0.0.0:" + serverViewModel.Server.ServerSettings.ServerPort;
@@ -178,9 +207,14 @@ namespace Fork.ViewModel
                 SaveConfig();
                 //Update UI
                 foreach (ISettingsPage page in SettingsViewModel.SettingsPages)
+                {
                     if (page is ProxySettingsPage settingsPage)
+                    {
                         Application.Current.Dispatcher?.Invoke(() => settingsPage.Reload());
+                    }
+                }
             }
+            
         }
 
         private void UpdateAddressInfo()
@@ -190,7 +224,10 @@ namespace Fork.ViewModel
 
         private void LoadServersFromConfig(BungeeSettings settings)
         {
-            while (!ServerManager.Initialized) Thread.Sleep(500);
+            while (!ServerManager.Initialized)
+            {
+                Thread.Sleep(500);
+            }
 
             List<NetworkServer> servers = new List<NetworkServer>();
             if (settings.servers == null)
@@ -232,19 +269,30 @@ namespace Fork.ViewModel
 
         private void StoreServersToConfig(BungeeSettings settings)
         {
-            settings.servers = new Dictionary<string, Server>();
+            settings.servers = new Dictionary<string, Logic.Model.Settings.Server>();
             foreach (NetworkServer networkServer in Servers)
+            {
                 settings.servers.Add(networkServer.Name, networkServer.ProxyServer);
+            }
 
-            if (settings.listeners.Count < 1) settings.listeners.Add(new Listener());
+            if (settings.listeners.Count < 1)
+            {
+                settings.listeners.Add(new Listener());
+            }
 
             settings.listeners[0].priorities = new List<string>();
-            foreach (NetworkServer server in Servers) settings.listeners[0].priorities.Add(server.Name);
+            foreach (NetworkServer server in Servers)
+            {
+                settings.listeners[0].priorities.Add(server.Name);
+            }
         }
 
         private void LoadPermissionsFromConfig(BungeeSettings settings)
         {
-            while (!ServerManager.Initialized) Thread.Sleep(500);
+            while (!ServerManager.Initialized)
+            {
+                Thread.Sleep(500);
+            }
 
             List<Permission> permissions = new List<Permission>();
             if (settings.permissions == null)
@@ -266,12 +314,17 @@ namespace Fork.ViewModel
         {
             settings.permissions = new Dictionary<string, List<string>>();
             foreach (Permission permission in Permissions)
+            {
                 settings.permissions.Add(permission.Name, new List<string>(permission.PermissionList));
+            }
         }
 
         private void LoadGroupsFromConfig(BungeeSettings settings)
         {
-            while (!ServerManager.Initialized) Thread.Sleep(500);
+            while (!ServerManager.Initialized)
+            {
+                Thread.Sleep(500);
+            }
 
             List<Group> groups = new List<Group>();
             if (settings.groups == null)
@@ -292,13 +345,16 @@ namespace Fork.ViewModel
         private void StoreGroupsToConfig(BungeeSettings settings)
         {
             settings.groups = new Dictionary<string, List<string>>();
-            foreach (Group group in Groups) settings.groups.Add(@group.User, new List<string>(@group.Groups));
+            foreach (Group group in Groups)
+            {
+                settings.groups.Add(group.User, new List<string>(group.Groups));
+            }
         }
 
         public class ServerDropHandler : IDropTarget
         {
-            private readonly DefaultDropHandler dropHandler = new();
-            private readonly NetworkViewModel networkViewModel;
+            private NetworkViewModel networkViewModel;
+            private DefaultDropHandler dropHandler = new DefaultDropHandler();
 
             public ServerDropHandler(NetworkViewModel viewModel)
             {
@@ -321,9 +377,14 @@ namespace Fork.ViewModel
             public void Drop(IDropInfo dropInfo)
             {
                 if (dropInfo.Data is ServerViewModel serverViewModel)
+                {
                     networkViewModel.AddServer(serverViewModel, dropInfo.InsertIndex);
+                }
 
-                if (dropInfo.Data is NetworkServer) dropHandler.Drop(dropInfo);
+                if (dropInfo.Data is NetworkServer)
+                {
+                    dropHandler.Drop(dropInfo);
+                }
             }
         }
     }

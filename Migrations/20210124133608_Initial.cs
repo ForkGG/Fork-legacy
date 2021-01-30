@@ -8,320 +8,329 @@ namespace Fork.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                "JavaSettings",
-                table => new
+                name: "JavaSettings",
+                columns: table => new
                 {
-                    Id = table.Column<int>("INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    MaxRam = table.Column<int>("INTEGER", nullable: false),
-                    JavaPath = table.Column<string>("TEXT", nullable: true),
-                    StartupParameters = table.Column<string>("TEXT", nullable: true)
+                    MaxRam = table.Column<int>(type: "INTEGER", nullable: false),
+                    JavaPath = table.Column<string>(type: "TEXT", nullable: true),
+                    StartupParameters = table.Column<string>(type: "TEXT", nullable: true)
                 },
-                constraints: table => { table.PrimaryKey("PK_JavaSettings", x => x.Id); });
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_JavaSettings", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
-                "ServerVersion",
-                table => new
+                name: "ServerVersion",
+                columns: table => new
                 {
-                    Id = table.Column<int>("INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Type = table.Column<int>("INTEGER", nullable: false),
-                    Version = table.Column<string>("TEXT", nullable: true),
-                    Build = table.Column<int>("INTEGER", nullable: false),
-                    JarLink = table.Column<string>("TEXT", nullable: true)
+                    Type = table.Column<int>(type: "INTEGER", nullable: false),
+                    Version = table.Column<string>(type: "TEXT", nullable: true),
+                    Build = table.Column<int>(type: "INTEGER", nullable: false),
+                    JarLink = table.Column<string>(type: "TEXT", nullable: true)
                 },
-                constraints: table => { table.PrimaryKey("PK_ServerVersion", x => x.Id); });
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServerVersion", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
-                "SimpleTime",
-                table => new
+                name: "SimpleTime",
+                columns: table => new
                 {
-                    Id = table.Column<int>("INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Hours = table.Column<int>("INTEGER", nullable: false),
-                    Minutes = table.Column<int>("INTEGER", nullable: false)
+                    Hours = table.Column<int>(type: "INTEGER", nullable: false),
+                    Minutes = table.Column<int>(type: "INTEGER", nullable: false)
                 },
-                constraints: table => { table.PrimaryKey("PK_SimpleTime", x => x.Id); });
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SimpleTime", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
-                "Networks",
-                table => new
+                name: "Networks",
+                columns: table => new
                 {
-                    UID = table.Column<string>("TEXT", nullable: false),
-                    Name = table.Column<string>("TEXT", nullable: true),
-                    ProxyType = table.Column<int>("INTEGER", nullable: false),
-                    JavaSettingsId = table.Column<int>("INTEGER", nullable: true),
-                    SyncServers = table.Column<bool>("INTEGER", nullable: false),
-                    Initialized = table.Column<bool>("INTEGER", nullable: false),
-                    StartWithFork = table.Column<bool>("INTEGER", nullable: false),
-                    ServerIconId = table.Column<int>("INTEGER", nullable: false),
-                    VersionId = table.Column<int>("INTEGER", nullable: true)
+                    UID = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    ProxyType = table.Column<int>(type: "INTEGER", nullable: false),
+                    JavaSettingsId = table.Column<int>(type: "INTEGER", nullable: true),
+                    SyncServers = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Initialized = table.Column<bool>(type: "INTEGER", nullable: false),
+                    StartWithFork = table.Column<bool>(type: "INTEGER", nullable: false),
+                    ServerIconId = table.Column<int>(type: "INTEGER", nullable: false),
+                    VersionId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Networks", x => x.UID);
                     table.ForeignKey(
-                        "FK_Networks_JavaSettings_JavaSettingsId",
-                        x => x.JavaSettingsId,
-                        "JavaSettings",
-                        "Id",
+                        name: "FK_Networks_JavaSettings_JavaSettingsId",
+                        column: x => x.JavaSettingsId,
+                        principalTable: "JavaSettings",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        "FK_Networks_ServerVersion_VersionId",
-                        x => x.VersionId,
-                        "ServerVersion",
-                        "Id",
+                        name: "FK_Networks_ServerVersion_VersionId",
+                        column: x => x.VersionId,
+                        principalTable: "ServerVersion",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                "RestartTime",
-                table => new
+                name: "RestartTime",
+                columns: table => new
                 {
-                    Id = table.Column<int>("INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Enabled = table.Column<bool>("INTEGER", nullable: false),
-                    TimeId = table.Column<int>("INTEGER", nullable: true)
+                    Enabled = table.Column<bool>(type: "INTEGER", nullable: false),
+                    TimeId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RestartTime", x => x.Id);
                     table.ForeignKey(
-                        "FK_RestartTime_SimpleTime_TimeId",
-                        x => x.TimeId,
-                        "SimpleTime",
-                        "Id",
+                        name: "FK_RestartTime_SimpleTime_TimeId",
+                        column: x => x.TimeId,
+                        principalTable: "SimpleTime",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                "StartTime",
-                table => new
+                name: "StartTime",
+                columns: table => new
                 {
-                    Id = table.Column<int>("INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Enabled = table.Column<bool>("INTEGER", nullable: false),
-                    TimeId = table.Column<int>("INTEGER", nullable: true)
+                    Enabled = table.Column<bool>(type: "INTEGER", nullable: false),
+                    TimeId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_StartTime", x => x.Id);
                     table.ForeignKey(
-                        "FK_StartTime_SimpleTime_TimeId",
-                        x => x.TimeId,
-                        "SimpleTime",
-                        "Id",
+                        name: "FK_StartTime_SimpleTime_TimeId",
+                        column: x => x.TimeId,
+                        principalTable: "SimpleTime",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                "StopTime",
-                table => new
+                name: "StopTime",
+                columns: table => new
                 {
-                    Id = table.Column<int>("INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Enabled = table.Column<bool>("INTEGER", nullable: false),
-                    TimeId = table.Column<int>("INTEGER", nullable: true)
+                    Enabled = table.Column<bool>(type: "INTEGER", nullable: false),
+                    TimeId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_StopTime", x => x.Id);
                     table.ForeignKey(
-                        "FK_StopTime_SimpleTime_TimeId",
-                        x => x.TimeId,
-                        "SimpleTime",
-                        "Id",
+                        name: "FK_StopTime_SimpleTime_TimeId",
+                        column: x => x.TimeId,
+                        principalTable: "SimpleTime",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                "Servers",
-                table => new
+                name: "Servers",
+                columns: table => new
                 {
-                    UID = table.Column<string>("TEXT", nullable: false),
-                    Name = table.Column<string>("TEXT", nullable: true),
-                    VersionId = table.Column<int>("INTEGER", nullable: true),
-                    JavaSettingsId = table.Column<int>("INTEGER", nullable: true),
-                    Initialized = table.Column<bool>("INTEGER", nullable: false),
-                    StartWithFork = table.Column<bool>("INTEGER", nullable: false),
-                    AutoSetSha1 = table.Column<bool>("INTEGER", nullable: false),
-                    ServerIconId = table.Column<int>("INTEGER", nullable: false),
-                    ResourcePackHashAge = table.Column<DateTime>("TEXT", nullable: false),
-                    Restart1Id = table.Column<int>("INTEGER", nullable: true),
-                    Restart2Id = table.Column<int>("INTEGER", nullable: true),
-                    Restart3Id = table.Column<int>("INTEGER", nullable: true),
-                    Restart4Id = table.Column<int>("INTEGER", nullable: true),
-                    AutoStop1Id = table.Column<int>("INTEGER", nullable: true),
-                    AutoStop2Id = table.Column<int>("INTEGER", nullable: true),
-                    AutoStart1Id = table.Column<int>("INTEGER", nullable: true),
-                    AutoStart2Id = table.Column<int>("INTEGER", nullable: true)
+                    UID = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    VersionId = table.Column<int>(type: "INTEGER", nullable: true),
+                    JavaSettingsId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Initialized = table.Column<bool>(type: "INTEGER", nullable: false),
+                    StartWithFork = table.Column<bool>(type: "INTEGER", nullable: false),
+                    AutoSetSha1 = table.Column<bool>(type: "INTEGER", nullable: false),
+                    ServerIconId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ResourcePackHashAge = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Restart1Id = table.Column<int>(type: "INTEGER", nullable: true),
+                    Restart2Id = table.Column<int>(type: "INTEGER", nullable: true),
+                    Restart3Id = table.Column<int>(type: "INTEGER", nullable: true),
+                    Restart4Id = table.Column<int>(type: "INTEGER", nullable: true),
+                    AutoStop1Id = table.Column<int>(type: "INTEGER", nullable: true),
+                    AutoStop2Id = table.Column<int>(type: "INTEGER", nullable: true),
+                    AutoStart1Id = table.Column<int>(type: "INTEGER", nullable: true),
+                    AutoStart2Id = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Servers", x => x.UID);
                     table.ForeignKey(
-                        "FK_Servers_JavaSettings_JavaSettingsId",
-                        x => x.JavaSettingsId,
-                        "JavaSettings",
-                        "Id",
+                        name: "FK_Servers_JavaSettings_JavaSettingsId",
+                        column: x => x.JavaSettingsId,
+                        principalTable: "JavaSettings",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        "FK_Servers_RestartTime_Restart1Id",
-                        x => x.Restart1Id,
-                        "RestartTime",
-                        "Id",
+                        name: "FK_Servers_RestartTime_Restart1Id",
+                        column: x => x.Restart1Id,
+                        principalTable: "RestartTime",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        "FK_Servers_RestartTime_Restart2Id",
-                        x => x.Restart2Id,
-                        "RestartTime",
-                        "Id",
+                        name: "FK_Servers_RestartTime_Restart2Id",
+                        column: x => x.Restart2Id,
+                        principalTable: "RestartTime",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        "FK_Servers_RestartTime_Restart3Id",
-                        x => x.Restart3Id,
-                        "RestartTime",
-                        "Id",
+                        name: "FK_Servers_RestartTime_Restart3Id",
+                        column: x => x.Restart3Id,
+                        principalTable: "RestartTime",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        "FK_Servers_RestartTime_Restart4Id",
-                        x => x.Restart4Id,
-                        "RestartTime",
-                        "Id",
+                        name: "FK_Servers_RestartTime_Restart4Id",
+                        column: x => x.Restart4Id,
+                        principalTable: "RestartTime",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        "FK_Servers_ServerVersion_VersionId",
-                        x => x.VersionId,
-                        "ServerVersion",
-                        "Id",
+                        name: "FK_Servers_ServerVersion_VersionId",
+                        column: x => x.VersionId,
+                        principalTable: "ServerVersion",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        "FK_Servers_StartTime_AutoStart1Id",
-                        x => x.AutoStart1Id,
-                        "StartTime",
-                        "Id",
+                        name: "FK_Servers_StartTime_AutoStart1Id",
+                        column: x => x.AutoStart1Id,
+                        principalTable: "StartTime",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        "FK_Servers_StartTime_AutoStart2Id",
-                        x => x.AutoStart2Id,
-                        "StartTime",
-                        "Id",
+                        name: "FK_Servers_StartTime_AutoStart2Id",
+                        column: x => x.AutoStart2Id,
+                        principalTable: "StartTime",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        "FK_Servers_StopTime_AutoStop1Id",
-                        x => x.AutoStop1Id,
-                        "StopTime",
-                        "Id",
+                        name: "FK_Servers_StopTime_AutoStop1Id",
+                        column: x => x.AutoStop1Id,
+                        principalTable: "StopTime",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        "FK_Servers_StopTime_AutoStop2Id",
-                        x => x.AutoStop2Id,
-                        "StopTime",
-                        "Id",
+                        name: "FK_Servers_StopTime_AutoStop2Id",
+                        column: x => x.AutoStop2Id,
+                        principalTable: "StopTime",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                "IX_Networks_JavaSettingsId",
-                "Networks",
-                "JavaSettingsId");
+                name: "IX_Networks_JavaSettingsId",
+                table: "Networks",
+                column: "JavaSettingsId");
 
             migrationBuilder.CreateIndex(
-                "IX_Networks_VersionId",
-                "Networks",
-                "VersionId");
+                name: "IX_Networks_VersionId",
+                table: "Networks",
+                column: "VersionId");
 
             migrationBuilder.CreateIndex(
-                "IX_RestartTime_TimeId",
-                "RestartTime",
-                "TimeId");
+                name: "IX_RestartTime_TimeId",
+                table: "RestartTime",
+                column: "TimeId");
 
             migrationBuilder.CreateIndex(
-                "IX_Servers_AutoStart1Id",
-                "Servers",
-                "AutoStart1Id");
+                name: "IX_Servers_AutoStart1Id",
+                table: "Servers",
+                column: "AutoStart1Id");
 
             migrationBuilder.CreateIndex(
-                "IX_Servers_AutoStart2Id",
-                "Servers",
-                "AutoStart2Id");
+                name: "IX_Servers_AutoStart2Id",
+                table: "Servers",
+                column: "AutoStart2Id");
 
             migrationBuilder.CreateIndex(
-                "IX_Servers_AutoStop1Id",
-                "Servers",
-                "AutoStop1Id");
+                name: "IX_Servers_AutoStop1Id",
+                table: "Servers",
+                column: "AutoStop1Id");
 
             migrationBuilder.CreateIndex(
-                "IX_Servers_AutoStop2Id",
-                "Servers",
-                "AutoStop2Id");
+                name: "IX_Servers_AutoStop2Id",
+                table: "Servers",
+                column: "AutoStop2Id");
 
             migrationBuilder.CreateIndex(
-                "IX_Servers_JavaSettingsId",
-                "Servers",
-                "JavaSettingsId");
+                name: "IX_Servers_JavaSettingsId",
+                table: "Servers",
+                column: "JavaSettingsId");
 
             migrationBuilder.CreateIndex(
-                "IX_Servers_Restart1Id",
-                "Servers",
-                "Restart1Id");
+                name: "IX_Servers_Restart1Id",
+                table: "Servers",
+                column: "Restart1Id");
 
             migrationBuilder.CreateIndex(
-                "IX_Servers_Restart2Id",
-                "Servers",
-                "Restart2Id");
+                name: "IX_Servers_Restart2Id",
+                table: "Servers",
+                column: "Restart2Id");
 
             migrationBuilder.CreateIndex(
-                "IX_Servers_Restart3Id",
-                "Servers",
-                "Restart3Id");
+                name: "IX_Servers_Restart3Id",
+                table: "Servers",
+                column: "Restart3Id");
 
             migrationBuilder.CreateIndex(
-                "IX_Servers_Restart4Id",
-                "Servers",
-                "Restart4Id");
+                name: "IX_Servers_Restart4Id",
+                table: "Servers",
+                column: "Restart4Id");
 
             migrationBuilder.CreateIndex(
-                "IX_Servers_VersionId",
-                "Servers",
-                "VersionId");
+                name: "IX_Servers_VersionId",
+                table: "Servers",
+                column: "VersionId");
 
             migrationBuilder.CreateIndex(
-                "IX_StartTime_TimeId",
-                "StartTime",
-                "TimeId");
+                name: "IX_StartTime_TimeId",
+                table: "StartTime",
+                column: "TimeId");
 
             migrationBuilder.CreateIndex(
-                "IX_StopTime_TimeId",
-                "StopTime",
-                "TimeId");
+                name: "IX_StopTime_TimeId",
+                table: "StopTime",
+                column: "TimeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                "Networks");
+                name: "Networks");
 
             migrationBuilder.DropTable(
-                "Servers");
+                name: "Servers");
 
             migrationBuilder.DropTable(
-                "JavaSettings");
+                name: "JavaSettings");
 
             migrationBuilder.DropTable(
-                "RestartTime");
+                name: "RestartTime");
 
             migrationBuilder.DropTable(
-                "ServerVersion");
+                name: "ServerVersion");
 
             migrationBuilder.DropTable(
-                "StartTime");
+                name: "StartTime");
 
             migrationBuilder.DropTable(
-                "StopTime");
+                name: "StopTime");
 
             migrationBuilder.DropTable(
-                "SimpleTime");
+                name: "SimpleTime");
         }
     }
 }

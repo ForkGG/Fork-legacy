@@ -7,7 +7,10 @@ namespace Fork.Logic.Model.APIModels
 {
     public class CachedAPIResponse
     {
-        private readonly Timer timer;
+        private Timer timer;
+            
+        public HttpWebResponse WebResponse { get; }
+        public TimeSpan MaxCacheAge { get; }
 
         public CachedAPIResponse(string requestHash, HttpWebResponse webResponse, TimeSpan maxCacheAge)
         {
@@ -23,12 +26,11 @@ namespace Fork.Logic.Model.APIModels
             timer.Elapsed += (_, _) =>
             {
                 if (APIController.ResponseCache.ContainsKey(requestHash))
+                {
                     APIController.ResponseCache.Remove(requestHash);
+                }
                 timer.Dispose();
             };
         }
-
-        public HttpWebResponse WebResponse { get; }
-        public TimeSpan MaxCacheAge { get; }
     }
 }

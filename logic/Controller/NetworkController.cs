@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,6 +12,9 @@ using Fork.Logic.Logging;
 using Fork.Logic.Manager;
 using Fork.Logic.Model;
 using Fork.Logic.Model.ProxyModels;
+using Fork.Logic.Model.ProxyModels;
+using Fork.Logic.Model.ServerConsole;
+using Fork.Logic.Persistence;
 using Fork.Logic.Utils;
 using Fork.Logic.WebRequesters;
 using Fork.ViewModel;
@@ -19,28 +23,29 @@ using Newtonsoft.Json;
 namespace Fork.Logic.Controller
 {
     /// <summary>
-    ///     Backend Logic for managing Proxy Networks
-    ///     Starting, Stopping, Creating, Restarting, ...
+    /// Backend Logic for managing Proxy Networks
+    /// Starting, Stopping, Creating, Restarting, ...
     /// </summary>
     public class NetworkController
     {
-        public bool CreateNetwork(string networkName, ServerVersion.VersionType networkType, JavaSettings javaSettings,
-            List<string> usedServerNames)
+        public bool CreateNetwork(string networkName, ServerVersion.VersionType networkType, JavaSettings javaSettings, List<string> usedServerNames)
         {
-            if (networkType != ServerVersion.VersionType.Waterfall) return false;
+            if (networkType != ServerVersion.VersionType.Waterfall)
+            {
+                return false;
+            }
             networkName = RefineName(networkName, usedServerNames);
             string serverPath = Path.Combine(App.ServerPath, networkName);
             DirectoryInfo directoryInfo = Directory.CreateDirectory(serverPath);
-            Network network = new Network(networkName, networkType, javaSettings,
-                VersionManager.Instance.WaterfallVersion);
+            Network network = new Network(networkName, networkType, javaSettings, VersionManager.Instance.WaterfallVersion);
             Persistence.Persistence.Instance.AddEntity(network);
             NetworkViewModel viewModel = new NetworkViewModel(network.UID);
             ServerManager.Instance.AddEntity(viewModel);
             //Select Server
             ApplicationManager.Instance.MainViewModel.SelectedEntity = viewModel;
-
+            
             //Download server.jar
-            Downloader.DownloadJarAsync(viewModel, directoryInfo);
+            Downloader.DownloadJarAsync(viewModel,directoryInfo);
 
             //Writing necessary files
             //TODO write settings
@@ -51,20 +56,19 @@ namespace Fork.Logic.Controller
 
         public async Task<bool> StartNetworkAsync(NetworkViewModel viewModel, bool startServers)
         {
-            ConsoleWriter.Write("\n Starting network " + viewModel.Entity.Name, viewModel);
-            Console.WriteLine("Starting network " + viewModel.Entity.Name);
+            ConsoleWriter.Write("\n Starting network "+viewModel.Entity.Name, viewModel);
+            Console.WriteLine("Starting network "+viewModel.Entity.Name);
             if (startServers)
             {
                 if (viewModel.Servers.Count == 0)
                 {
-                    ConsoleWriter.Write("WARNING: This network contains no Servers. Players will not be able to join.",
-                        viewModel);
+                    ConsoleWriter.Write("WARNING: This network contains no Servers. Players will not be able to join.", viewModel);
                 }
                 else
                 {
-                    ConsoleWriter.Write("Starting all " + viewModel.Servers.Count + " servers of this network...",
-                        viewModel);
+                    ConsoleWriter.Write("Starting all "+viewModel.Servers.Count+" servers of this network...", viewModel);
                     foreach (NetworkServer networkServer in viewModel.Servers)
+                    {
                         if (networkServer is NetworkForkServer networkForkServer)
                         {
                             ServerViewModel serverViewModel = networkForkServer.ServerViewModel;
@@ -73,65 +77,56 @@ namespace Fork.Logic.Controller
                                 ConsoleWriter.Write("\nStarting server " + serverViewModel.Server + " on world: " +
                                                     serverViewModel.Server.ServerSettings.LevelName, viewModel);
                                 ServerManager.Instance.StartServerAsync(serverViewModel);
-                            }
-                            else if (serverViewModel.CurrentStatus == ServerStatus.STARTING)
+                            } else if (serverViewModel.CurrentStatus == ServerStatus.STARTING)
                             {
-                                ConsoleWriter.Write("Server " + serverViewModel.Server + " is already starting.",
-                                    viewModel);
-                            }
-                            else if (serverViewModel.CurrentStatus == ServerStatus.RUNNING)
-                            {
-                                ConsoleWriter.Write("Server " + serverViewModel.Server + " is already running.",
-                                    viewModel);
+                                ConsoleWriter.Write("Server "+serverViewModel.Server+" is already starting.", viewModel);
+                            } else if (serverViewModel.CurrentStatus == ServerStatus.RUNNING)
+                            {                            
+                                ConsoleWriter.Write("Server "+serverViewModel.Server+" is already running.", viewModel);
                             }
                         }
                         else
                         {
-                            ConsoleWriter.Write(
-                                "Server " + networkServer.Name +
-                                " can't be started automatically because it is no Fork server.", viewModel);
+                            ConsoleWriter.Write("Server "+networkServer.Name+" can't be started automatically because it is no Fork server.", viewModel);
                         }
+                    }
                 }
             }
             else
             {
-                ConsoleWriter.Write(
-                    "Make sure that at least one server configured in the settings is running, else Players won't be able to join this network.",
-                    viewModel);
+                ConsoleWriter.Write("Make sure that at least one server configured in the settings is running, else Players won't be able to join this network.", viewModel);
             }
-
+            
             ConsoleWriter.Write("\n", viewModel);
             if (!viewModel.SettingsSavingTask.IsCompleted)
             {
                 ConsoleWriter.Write("Saving settings files before starting proxy server...", viewModel);
                 await viewModel.SettingsSavingTask;
             }
-
+            
             //Start proxy server
             ConsoleWriter.Write("Starting proxy server...", viewModel);
             DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Network.Name));
             if (!directoryInfo.Exists)
             {
-                ConsoleWriter.Write("ERROR: Can't find network directory: " + directoryInfo.FullName, viewModel);
+                ConsoleWriter.Write("ERROR: Can't find network directory: "+directoryInfo.FullName, viewModel);
                 return false;
             }
-
             JavaVersion javaVersion = JavaVersionUtils.GetInstalledJavaVersion(viewModel.Network.JavaSettings.JavaPath);
             if (javaVersion == null)
             {
                 ConsoleWriter.Write("ERROR: Java is not installed! Minecraft networks require Java!", viewModel);
                 return false;
-            }
-
+            } 
             if (!javaVersion.Is64Bit)
-                ConsoleWriter.Write(
-                    "WARN: The Java installation selected for this network is a 32-bit version, which can cause errors.",
-                    viewModel);
+            {
+                ConsoleWriter.Write("WARN: The Java installation selected for this network is a 32-bit version, which can cause errors.", viewModel);
+            }
             if (javaVersion.VersionComputed < 11)
-                ConsoleWriter.Write(
-                    "WARN: The Java installation selected for this network is outdated. Please update Java to version 11 or higher.",
-                    viewModel);
-
+            {
+                ConsoleWriter.Write("WARN: The Java installation selected for this network is outdated. Please update Java to version 11 or higher.", viewModel);
+            }
+            
             Process process = new Process();
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
@@ -141,14 +136,16 @@ namespace Fork.Logic.Controller
                 RedirectStandardOutput = true,
                 FileName = viewModel.Network.JavaSettings.JavaPath,
                 WorkingDirectory = directoryInfo.FullName,
-                Arguments = "-Xmx" + viewModel.Network.JavaSettings.MaxRam + "m " +
-                            viewModel.Network.JavaSettings.StartupParameters + " -jar server.jar nogui",
+                Arguments = "-Xmx" + viewModel.Network.JavaSettings.MaxRam + "m "+ viewModel.Network.JavaSettings.StartupParameters+" -jar server.jar nogui",
                 WindowStyle = ProcessWindowStyle.Hidden,
                 CreateNoWindow = true
             };
             process.StartInfo = startInfo;
             process.Start();
-            Task.Run(() => { viewModel.TrackPerformance(process); });
+            Task.Run(() =>
+            {
+                viewModel.TrackPerformance(process);
+            });
             viewModel.CurrentStatus = ServerStatus.STARTING;
             ConsoleWriter.RegisterApplication(viewModel, process.StandardOutput, process.StandardError);
             ConsoleReader consoleReader = new ConsoleReader(process.StandardInput);
@@ -160,7 +157,7 @@ namespace Fork.Logic.Controller
                 viewModel.CurrentStatus = ServerStatus.STOPPED;
             });
             ApplicationManager.Instance.ActiveEntities[viewModel.Network] = process;
-            Console.WriteLine("Started network " + viewModel.Network);
+            Console.WriteLine("Started network "+ viewModel.Network);
 
             return true;
         }
@@ -168,14 +165,17 @@ namespace Fork.Logic.Controller
         public bool StopNetwork(NetworkViewModel viewModel, bool stopServers)
         {
             Process p = ApplicationManager.Instance.ActiveEntities[viewModel.Network];
-            if (p == null) return false;
+            if (p == null)
+            {
+                return false;
+            }
             p.StandardInput.WriteLine("end");
 
             if (stopServers)
             {
-                ConsoleWriter.Write("Stopping all " + viewModel.Servers.Count + " servers of this network...",
-                    viewModel);
+                ConsoleWriter.Write("Stopping all "+viewModel.Servers.Count+" servers of this network...", viewModel);
                 foreach (NetworkServer networkServer in viewModel.Servers)
+                {
                     if (networkServer is NetworkForkServer networkForkServer)
                     {
                         ServerViewModel serverViewModel = networkForkServer.ServerViewModel;
@@ -183,31 +183,29 @@ namespace Fork.Logic.Controller
                         {
                             ConsoleWriter.Write("Stopping server " + serverViewModel.Server, viewModel);
                             ServerManager.Instance.StopServer(serverViewModel);
-                        }
-                        else if (serverViewModel.CurrentStatus == ServerStatus.STOPPED)
+                        } else if (serverViewModel.CurrentStatus == ServerStatus.STOPPED)
                         {
-                            ConsoleWriter.Write("Server " + serverViewModel.Server + " is already stopped.", viewModel);
-                        }
-                        else if (serverViewModel.CurrentStatus == ServerStatus.STARTING)
-                        {
-                            ConsoleWriter.Write(
-                                "Server " + serverViewModel.Server + " is currently starting (manual stop needed)",
-                                viewModel);
+                            ConsoleWriter.Write("Server "+serverViewModel.Server+" is already stopped.", viewModel);
+                        } else if (serverViewModel.CurrentStatus == ServerStatus.STARTING)
+                        {                            
+                            ConsoleWriter.Write("Server "+serverViewModel.Server+" is currently starting (manual stop needed)", viewModel);
                         }
                     }
                     else
                     {
-                        ConsoleWriter.Write(
-                            "Server " + networkServer.Name +
-                            " can't be stopped automatically because it is no Fork server.", viewModel);
+                        ConsoleWriter.Write("Server "+networkServer.Name+" can't be stopped automatically because it is no Fork server.", viewModel);
                     }
+                }
             }
 
-            while (viewModel.CurrentStatus == ServerStatus.RUNNING) Thread.Sleep(500);
-
+            while (viewModel.CurrentStatus == ServerStatus.RUNNING)
+            {
+                Thread.Sleep(500);
+            }
+            
             return true;
         }
-
+        
         public async Task<bool> DeleteNetworkAsync(NetworkViewModel networkViewModel)
         {
             try
@@ -215,18 +213,23 @@ namespace Fork.Logic.Controller
                 if (networkViewModel.CurrentStatus != ServerStatus.STOPPED)
                 {
                     StopNetwork(networkViewModel, false);
-                    while (networkViewModel.CurrentStatus != ServerStatus.STOPPED) Thread.Sleep(500);
+                    while (networkViewModel.CurrentStatus != ServerStatus.STOPPED)
+                    {
+                        Thread.Sleep(500);
+                    }
                 }
-
+                
                 if (!networkViewModel.DownloadCompleted)
+                {
                     //Cancel download
                     await Downloader.CancelJarDownloadAsync(networkViewModel);
+                }
 
                 networkViewModel.DeleteEntity();
                 DirectoryInfo serverDirectory =
                     new DirectoryInfo(Path.Combine(App.ServerPath, networkViewModel.Name));
                 serverDirectory.Delete(true);
-                Application.Current.Dispatcher?.Invoke(() => ServerManager.Instance.RemoveEntity(networkViewModel));
+                Application.Current.Dispatcher?.Invoke(()=>ServerManager.Instance.RemoveEntity(networkViewModel));
                 return true;
             }
             catch (Exception e)
@@ -241,9 +244,11 @@ namespace Fork.Logic.Controller
             if (viewModel.CurrentStatus != ServerStatus.STOPPED)
             {
                 StopNetwork(viewModel, false);
-                while (viewModel.CurrentStatus != ServerStatus.STOPPED) Thread.Sleep(500);
+                while (viewModel.CurrentStatus != ServerStatus.STOPPED)
+                {
+                    Thread.Sleep(500);
+                }
             }
-
             try
             {
                 DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Name));
@@ -253,13 +258,12 @@ namespace Fork.Logic.Controller
                         new DirectoryNotFoundException("Could not find Directory " + directoryInfo.FullName));
                     return false;
                 }
-
-                string newName = RefineName(viewModel.Name + "-Clone", usedEntityNames);
-
+                string newName = RefineName(viewModel.Name+"-Clone", usedEntityNames);
+                
                 //Better to use a object copy function
                 string oldNetworkJson = JsonConvert.SerializeObject(viewModel.Network);
                 Network newNetwork = JsonConvert.DeserializeObject<Network>(oldNetworkJson);
-
+                
                 newNetwork.Name = newName;
                 newNetwork.UID = Guid.NewGuid().ToString();
                 Persistence.Persistence.Instance.AddEntity(newNetwork);
@@ -269,22 +273,21 @@ namespace Fork.Logic.Controller
                 newNetworkViewModel.StartImport();
                 Application.Current.Dispatcher?.Invoke(() => ServerManager.Instance.Entities.Add(newNetworkViewModel));
                 ApplicationManager.Instance.MainViewModel.SelectedEntity = newNetworkViewModel;
-
+            
                 //Create server directory
                 Directory.CreateDirectory(newNetworkPath);
-
+            
                 //Import server files
                 Thread copyThread = new Thread(() =>
                 {
                     FileImporter fileImporter = new FileImporter();
                     fileImporter.CopyProgressChanged += newNetworkViewModel.CopyProgressChanged;
-                    fileImporter.DirectoryCopy(directoryInfo.FullName, newNetworkPath, true,
-                        new List<string> {"server.jar"});
-                    Console.WriteLine("Finished copying server files for server " + newNetworkPath);
+                    fileImporter.DirectoryCopy(directoryInfo.FullName, newNetworkPath, true, new List<string>{"server.jar"});
+                    Console.WriteLine("Finished copying server files for server "+newNetworkPath);
                     newNetworkViewModel.FinishedCopying();
                 });
                 copyThread.Start();
-
+                
                 return true;
             }
             catch (Exception e)
@@ -299,9 +302,11 @@ namespace Fork.Logic.Controller
             if (viewModel.CurrentStatus != ServerStatus.STOPPED)
             {
                 StopNetwork(viewModel, true);
-                while (viewModel.CurrentStatus != ServerStatus.STOPPED) Thread.Sleep(500);
+                while (viewModel.CurrentStatus != ServerStatus.STOPPED)
+                {
+                    Thread.Sleep(500);
+                }
             }
-
             try
             {
                 DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Name));
@@ -330,22 +335,25 @@ namespace Fork.Logic.Controller
             bool success = ServerManager.Instance.KillEntity(viewModel);
 
             if (killServer && success)
+            {
                 foreach (NetworkServer networkServer in viewModel.Servers)
+                {
                     if (networkServer is NetworkForkServer networkForkServer)
                     {
                         ServerViewModel server = networkForkServer.ServerViewModel;
-                        if (server.CurrentStatus == ServerStatus.RUNNING ||
-                            server.CurrentStatus == ServerStatus.STARTING)
+                        if (server.CurrentStatus == ServerStatus.RUNNING || server.CurrentStatus == ServerStatus.STARTING)
                         {
                             ServerManager.Instance.KillEntity(server);
-                            ConsoleWriter.Write("Killed server " + server.Server, viewModel);
+                            ConsoleWriter.Write("Killed server "+server.Server, viewModel);
                         }
                     }
+                }
+            }
 
             return success;
         }
-
-
+        
+        
         private string RefineName(string rawName, List<string> serverNames)
         {
             string result = rawName.Trim();

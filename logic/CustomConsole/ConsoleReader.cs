@@ -5,8 +5,8 @@ namespace Fork.Logic.CustomConsole
 {
     public class ConsoleReader
     {
-        private readonly StreamWriter stdIn;
-
+        private StreamWriter stdIn;
+        
         public ConsoleReader(StreamWriter stdIn)
         {
             this.stdIn = stdIn;

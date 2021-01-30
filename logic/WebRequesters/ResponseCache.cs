@@ -6,48 +6,52 @@ namespace Fork.Logic.WebRequesters
     public class ResponseCache
     {
         /// <summary>
-        ///     Singleton Header
+        /// Singleton Header
         /// </summary>
         private static ResponseCache instance;
-
-        private readonly Dictionary<string, Tuple<string, DateTime>> cachedResponses = new();
-
-        /// <summary>
-        ///     Attributes
-        /// </summary>
-        private readonly int maxCacheAgeHours = 2;
-
-        private ResponseCache()
-        {
-        }
-
         public static ResponseCache Instance
         {
             get
             {
-                if (instance == null) instance = new ResponseCache();
+                if (instance==null)
+                {
+                    instance = new ResponseCache();
+                }
                 return instance;
             }
         }
+        private ResponseCache(){}
 
         /// <summary>
-        ///     Methods
+        /// Attributes
+        /// </summary>
+        private int maxCacheAgeHours = 2;
+        private Dictionary<string, Tuple<string, DateTime>> cachedResponses = new Dictionary<string, Tuple<string, DateTime>>();
+
+        /// <summary>
+        /// Methods
         /// </summary>
         public void CacheResponse(string URL, string Response)
         {
             lock (cachedResponses)
             {
-                cachedResponses[URL] = new Tuple<string, DateTime>(Response, DateTime.Now);
+                cachedResponses[URL] = new Tuple<string, DateTime>(Response,DateTime.Now);
             }
         }
-
+        
         public string UncacheResponse(string URL)
         {
             lock (cachedResponses)
             {
-                if (!cachedResponses.ContainsKey(URL)) return null;
+                if (!cachedResponses.ContainsKey(URL))
+                {
+                    return null;
+                }
                 var responseTuple = cachedResponses[URL];
-                if (!VerifyCacheAge(responseTuple.Item2)) return null;
+                if (!VerifyCacheAge(responseTuple.Item2))
+                {
+                    return null;
+                }
                 return responseTuple.Item1;
             }
         }
@@ -55,7 +59,10 @@ namespace Fork.Logic.WebRequesters
         private bool VerifyCacheAge(DateTime cacheAge)
         {
             TimeSpan difference = DateTime.Now - cacheAge;
-            if (difference.TotalHours < maxCacheAgeHours) return true;
+            if (difference.TotalHours < maxCacheAgeHours)
+            {
+                return true;
+            }
             return false;
         }
     }

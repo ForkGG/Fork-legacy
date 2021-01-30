@@ -7,119 +7,14 @@ namespace Fork.Logic.Model
 {
     public class ServerSettings
     {
-        public enum Difficulty
-        {
-            Peaceful,
-            Easy,
-            Normal,
-            Hard
-        }
-
-        public enum Gamemode
-        {
-            Survival,
-            Creative,
-            Adventure,
-            Spectator
-        }
-
-        public enum LevelType
-        {
-            Default,
-            Flat,
-            Largebioms,
-            Amplified,
-            Buffet
-        }
-
-        public ServerSettings(string levelname)
-        {
-            SettingsDictionary = new ObservableDictionary<string, string>();
-            SettingsDictionary.CollectionChanged += (_, _) => { HasChanged = true; };
-
-            InitializeValues(levelname);
-        }
-
-        public ServerSettings(Dictionary<string, string> settingsDictionary)
-        {
-            SettingsDictionary = new ObservableDictionary<string, string>();
-
-            if (settingsDictionary != null && settingsDictionary.ContainsKey("LevelName"))
-                InitializeValues(settingsDictionary["LevelName"]);
-            else
-                InitializeValues("world");
-
-            foreach (KeyValuePair<string, string> keyValuePair in settingsDictionary)
-                SettingsDictionary[keyValuePair.Key] = keyValuePair.Value;
-
-            SettingsDictionary.CollectionChanged += (_, _) => { HasChanged = true; };
-        }
-
-        private void InitializeValues(string levelname)
-        {
-            SpawnProtection = 16;
-            OpPermissionLevel = 4;
-            MaxPlayers = 20;
-            NetworkCompressionThreshold = 256;
-            RconPort = 25575;
-            ServerPort = 25565;
-            QueryPort = 25565;
-            ViewDistance = 10;
-            MaxBuildHeight = 256;
-            RateLimit = 0;
-
-            MaxTickTime = 60000L;
-            PlayerIdleTimeout = 0L;
-            MaxWorldSize = 29999984;
-
-            GeneratorSettings = "";
-            ResourcePackSha1 = "";
-            ServerIp = "";
-            LevelName = levelname;
-            ResourcePack = "";
-            RconPassword = "";
-            LevelSeed = "";
-            Motd = @"\u00A7aPowered by Fork" + "\n" + @"\u00A77A Minecraft Server Manager";
-
-            ForceGamemode = false;
-            AllowNether = true;
-            EnforceWhitelist = false;
-            BcastConsoleToOps = true;
-            EnableQuery = true;
-            SpawnMonsters = true;
-            BcastRconToOps = true;
-            Pvp = true;
-            SnooperEnabled = true;
-            Hardcore = false;
-            EnableCommandBlock = false;
-            SpawnNpcs = true;
-            AllowFlight = false;
-            SpawnAnimals = true;
-            Whitelist = false;
-            GenerateStructures = true;
-            OnlineMode = true;
-            UseNativeTransport = true;
-            PreventProxyConnections = false;
-            EnableRcon = false;
-
-            SyncChunkWrites = false;
-            EnableJmxMonitoring = false;
-            EnableStatus = true;
-            RequireResourcePack = false;
-            EntityBroadcastRangePercentage = 100;
-
-            CurrGamemode = Gamemode.Survival;
-            CurrDifficulty = Difficulty.Easy;
-            CurrLevelType = LevelType.Default;
-        }
 
         #region Properties
+        
+        public List<Difficulty> Difficulties { get; } = new List<Difficulty>(Enum.GetValues(typeof(Difficulty)).Cast<Difficulty>());
+        public List<Gamemode> Gamemodes { get; } = new List<Gamemode>(Enum.GetValues(typeof(Gamemode)).Cast<Gamemode>());
+        public List<LevelType> LevelTypes { get; } = new List<LevelType>(Enum.GetValues(typeof(LevelType)).Cast<LevelType>());
 
-        public List<Difficulty> Difficulties { get; } = new(Enum.GetValues(typeof(Difficulty)).Cast<Difficulty>());
-        public List<Gamemode> Gamemodes { get; } = new(Enum.GetValues(typeof(Gamemode)).Cast<Gamemode>());
-        public List<LevelType> LevelTypes { get; } = new(Enum.GetValues(typeof(LevelType)).Cast<LevelType>());
-
-        public ObservableDictionary<string, string> SettingsDictionary { get; }
+        public ObservableDictionary<string, string> SettingsDictionary { get; private set; }
         public bool HasChanged { get; set; }
 
         public int SpawnProtection
@@ -167,9 +62,7 @@ namespace Fork.Logic.Model
 
         public Gamemode CurrGamemode
         {
-            get => (Gamemode) Enum.Parse(typeof(Gamemode),
-                SettingsDictionary["gamemode"].First().ToString().ToUpper() +
-                SettingsDictionary["gamemode"].Substring(1));
+            get => (Gamemode)Enum.Parse(typeof(Gamemode),SettingsDictionary["gamemode"].First().ToString().ToUpper()+SettingsDictionary["gamemode"].Substring(1));
             set => SettingsDictionary["gamemode"] = value.ToString().ToLower();
         }
 
@@ -193,9 +86,7 @@ namespace Fork.Logic.Model
 
         public Difficulty CurrDifficulty
         {
-            get => (Difficulty) Enum.Parse(typeof(Difficulty),
-                SettingsDictionary["difficulty"].First().ToString().ToUpper() +
-                SettingsDictionary["difficulty"].Substring(1));
+            get => (Difficulty)Enum.Parse(typeof(Difficulty),SettingsDictionary["difficulty"].First().ToString().ToUpper()+SettingsDictionary["difficulty"].Substring(1));
             set => SettingsDictionary["difficulty"] = value.ToString().ToLower();
         }
 
@@ -231,9 +122,7 @@ namespace Fork.Logic.Model
 
         public LevelType CurrLevelType
         {
-            get => (LevelType) Enum.Parse(typeof(LevelType),
-                SettingsDictionary["level-type"].First().ToString().ToUpper() +
-                SettingsDictionary["level-type"].Substring(1));
+            get => (LevelType)Enum.Parse(typeof(LevelType),SettingsDictionary["level-type"].First().ToString().ToUpper()+SettingsDictionary["level-type"].Substring(1));
             set => SettingsDictionary["level-type"] = value.ToString().ToLower();
         }
 
@@ -398,19 +287,19 @@ namespace Fork.Logic.Model
             get => bool.Parse(SettingsDictionary["sync-chunk-writes"]);
             set => SettingsDictionary["sync-chunk-writes"] = value.ToString().ToLower();
         }
-
+        
         public bool EnableJmxMonitoring
         {
             get => bool.Parse(SettingsDictionary["enable-jmx-monitoring"]);
             set => SettingsDictionary["enable-jmx-monitoring"] = value.ToString().ToLower();
         }
-
+        
         public bool EnableStatus
         {
             get => bool.Parse(SettingsDictionary["enable-status"]);
             set => SettingsDictionary["enable-status"] = value.ToString().ToLower();
         }
-
+        
         public bool RequireResourcePack
         {
             get => bool.Parse(SettingsDictionary["require-resource-pack"]);
@@ -422,7 +311,124 @@ namespace Fork.Logic.Model
             get => int.Parse(SettingsDictionary["entity-broadcast-range-percentage"]);
             set => SettingsDictionary["entity-broadcast-range-percentage"] = value.ToString();
         }
-
         #endregion
+
+        public ServerSettings(string levelname)
+        {
+            SettingsDictionary = new();
+            SettingsDictionary.CollectionChanged += (_, _) =>
+            {
+                HasChanged = true;
+            };
+            
+            InitializeValues(levelname);
+        }
+
+        public ServerSettings(Dictionary<string, string> settingsDictionary)
+        {
+            SettingsDictionary = new();
+            
+            if (settingsDictionary!=null && settingsDictionary.ContainsKey("LevelName"))
+            {
+                InitializeValues(settingsDictionary["LevelName"]);
+            }
+            else
+            {
+                InitializeValues("world");
+            }
+
+            foreach (KeyValuePair<string,string> keyValuePair in settingsDictionary)
+            {
+                SettingsDictionary[keyValuePair.Key] = keyValuePair.Value;
+            }
+            
+            SettingsDictionary.CollectionChanged += (_, _) =>
+            {
+                HasChanged = true;
+            };
+        }
+
+        private void InitializeValues(string levelname)
+        {
+            SpawnProtection = 16;
+            OpPermissionLevel = 4;
+            MaxPlayers = 20;
+            NetworkCompressionThreshold = 256;
+            RconPort = 25575;
+            ServerPort = 25565;
+            QueryPort = 25565;
+            ViewDistance = 10;
+            MaxBuildHeight = 256;
+            RateLimit = 0;
+
+            MaxTickTime = 60000L;
+            PlayerIdleTimeout = 0L;
+            MaxWorldSize = 29999984;
+
+            GeneratorSettings = "";
+            ResourcePackSha1 = "";
+            ServerIp = "";
+            LevelName = levelname;
+            ResourcePack = "";
+            RconPassword = "";
+            LevelSeed = "";
+            Motd = @"\u00A7aPowered by Fork"+"\n"+@"\u00A77A Minecraft Server Manager";
+
+            ForceGamemode = false;
+            AllowNether = true;
+            EnforceWhitelist = false;
+            BcastConsoleToOps = true;
+            EnableQuery = true;
+            SpawnMonsters = true;
+            BcastRconToOps = true;
+            Pvp = true;
+            SnooperEnabled = true;
+            Hardcore = false;
+            EnableCommandBlock = false;
+            SpawnNpcs = true;
+            AllowFlight = false;
+            SpawnAnimals = true;
+            Whitelist = false;
+            GenerateStructures = true;
+            OnlineMode = true;
+            UseNativeTransport = true;
+            PreventProxyConnections = false;
+            EnableRcon = false;
+
+            SyncChunkWrites = false;
+            EnableJmxMonitoring = false;
+            EnableStatus = true;
+            RequireResourcePack = false;
+            EntityBroadcastRangePercentage = 100;
+
+            CurrGamemode = Gamemode.Survival;
+            CurrDifficulty = Difficulty.Easy;
+            CurrLevelType = LevelType.Default;
+        }
+
+        public enum Gamemode
+        {
+            Survival,
+            Creative,
+            Adventure,
+            Spectator
+        }
+
+        public enum Difficulty
+        {
+            Peaceful,
+            Easy,
+            Normal,
+            Hard
+        }
+
+        public enum LevelType
+        {
+            Default,
+            Flat,
+            Largebioms,
+            Amplified,
+            Buffet
+        }
     }
 }

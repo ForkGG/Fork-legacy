@@ -16,6 +16,7 @@ using Fork.Logic.Utils;
 using Fork.ViewModel;
 using Websocket.Client;
 using Websocket.Client.Models;
+using Timer = System.Timers.Timer;
 
 namespace Fork.Logic.WebRequesters
 {
@@ -27,13 +28,17 @@ namespace Fork.Logic.WebRequesters
         private readonly string discordUrl = "wss://fork.gg:8181";
 #endif
         private WebsocketClient discordWebSocket;
-        private readonly ManualResetEvent exitEvent = new(false);
+        private ManualResetEvent exitEvent = new ManualResetEvent(false);
 
         public WebSocketState DiscordWebSocketState { get; private set; }
 
+        public WebSocketHandler()
+        {
+        }
+
         public async Task SetupDiscordWebSocket()
         {
-            Func<ClientWebSocket> factory = () => new ClientWebSocket
+            Func<ClientWebSocket> factory = () => new ClientWebSocket()
             {
                 Options =
                 {
@@ -89,7 +94,9 @@ namespace Fork.Logic.WebRequesters
             try
             {
                 if (discordWebSocket.IsRunning)
+                {
                     discordWebSocket.Send("login|" + AppSettingsSerializer.Instance.AppSettings.DiscordBotToken);
+                }
             }
             catch (Exception e)
             {
@@ -98,25 +105,30 @@ namespace Fork.Logic.WebRequesters
         }
 
         /// <summary>
-        ///     Handles a received message, by performing actions and returning the answer
+        /// Handles a received message, by performing actions and returning the answer
         /// </summary>
         /// <param name="message">Received message</param>
         /// <returns>Answer to respond to the Server</returns>
         private void HandleDiscordSocketMessageAsync(ResponseMessage message)
         {
-            if (message.MessageType != WebSocketMessageType.Text) Task.Run(() => SendMessageAsync("40"));
+            if (message.MessageType != WebSocketMessageType.Text)
+            {
+                Task.Run(() => SendMessageAsync("40"));
+            }
 
-            Console.WriteLine("Received message via the Discord WebSocket: " + message.Text);
+            Console.WriteLine("Received message via the Discord WebSocket: "+message.Text);
             string[] splitted = message.Text.Split('|');
             switch (splitted[0])
             {
                 case "status":
                     if (splitted.Length > 2)
-                        ApplicationManager.Instance.MainViewModel.AppSettingsViewModel.DiscordLinkStatusUpdate(
-                            splitted[1], splitted[2]);
+                    {
+                        ApplicationManager.Instance.MainViewModel.AppSettingsViewModel.DiscordLinkStatusUpdate(splitted[1], splitted[2]);
+                    }
                     else
-                        ApplicationManager.Instance.MainViewModel.AppSettingsViewModel.DiscordLinkStatusUpdate(
-                            splitted[1]);
+                    {
+                        ApplicationManager.Instance.MainViewModel.AppSettingsViewModel.DiscordLinkStatusUpdate(splitted[1]);
+                    }
                     break;
                 case "rec":
                     RecreateToken();
@@ -137,7 +149,7 @@ namespace Fork.Logic.WebRequesters
                     SendPlayerList(splitted[1]);
                     break;
                 default:
-                    Task.Run(() => SendMessageAsync("43|" + message.Text));
+                    Task.Run(() => SendMessageAsync("43|"+message.Text));
                     break;
             }
         }
@@ -150,13 +162,13 @@ namespace Fork.Logic.WebRequesters
         }
 
         /// <summary>
-        ///     Sends a message to the server
+        /// Sends a message to the server
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
         private async Task SendMessageAsync(string message)
         {
-            Console.WriteLine("Sending message to Discord bot via WebSocket: " + message);
+            Console.WriteLine("Sending message to Discord bot via WebSocket: "+message);
             int retries = 0;
             while (!discordWebSocket.IsRunning && retries < 10)
             {
@@ -164,13 +176,16 @@ namespace Fork.Logic.WebRequesters
                 await Task.Delay(3_000);
             }
 
-            if (!discordWebSocket.IsRunning) return;
+            if (!discordWebSocket.IsRunning)
+            {
+                return;
+            }
 
             discordWebSocket.Send(message);
         }
 
         /// <summary>
-        ///     Build a response for the server depending on a status code of a request
+        /// Build a response for the server depending on a status code of a request
         /// </summary>
         /// <param name="splittedMessage"></param>
         /// <param name="status"></param>
@@ -199,7 +214,7 @@ namespace Fork.Logic.WebRequesters
                     resultSplitted.Add(splittedMessage[0]);
                     resultSplitted.Add(status.ToString());
                     break;
-
+                
                 //Default case should not happen
                 default:
                     return "43|" + string.Join('|', splittedMessage);
@@ -207,9 +222,9 @@ namespace Fork.Logic.WebRequesters
 
             return string.Join('|', resultSplitted);
         }
-
+        
         /// <summary>
-        ///     Stop a server after the according request was received
+        /// Stop a server after the according request was received
         /// </summary>
         /// <param name="splitted">Request message split</param>
         /// <returns></returns>
@@ -219,25 +234,34 @@ namespace Fork.Logic.WebRequesters
             string serverName = splitted[1];
             List<EntityViewModel> targets = ServerManager.Instance.Entities
                 .Where(entity => entity.Name.ToLower().Equals(serverName.ToLower())).ToList();
-            if (targets.Count < 1) return 404;
-
-            if (targets[0].CurrentStatus == ServerStatus.STOPPED) return 400;
-
-            ConsoleWriter.Write(
-                new ConsoleMessage($"Discord user {splitted[2]} stopped server remotely",
-                    ConsoleMessage.MessageLevel.WARN), targets[0]);
+            if (targets.Count < 1)
+            {
+                return 404;
+            }
+            
+            if (targets[0].CurrentStatus == ServerStatus.STOPPED)
+            {
+                return 400;
+            }
+            
+            ConsoleWriter.Write(new ConsoleMessage($"Discord user {splitted[2]} stopped server remotely",ConsoleMessage.MessageLevel.WARN), targets[0]);
             if (targets[0] is ServerViewModel serverViewModel)
+            {
                 ServerManager.Instance.StopServer(serverViewModel);
-            else if (targets[0] is NetworkViewModel networkViewModel)
+            } else if (targets[0] is NetworkViewModel networkViewModel)
+            {
                 Task.Run(() => ServerManager.Instance.StopNetworkAsync(networkViewModel));
+            }
             else
+            {
                 throw new NotImplementedException();
+            }
 
             return 200;
         }
 
         /// <summary>
-        ///     Start a server after the according request was received
+        /// Start a server after the according request was received
         /// </summary>
         /// <param name="splitted">Request message split</param>
         /// <returns></returns>
@@ -247,24 +271,33 @@ namespace Fork.Logic.WebRequesters
             string serverName = splitted[1];
             List<EntityViewModel> targets = ServerManager.Instance.Entities
                 .Where(entity => entity.Name.ToLower().Equals(serverName.ToLower())).ToList();
-            if (targets.Count < 1) return 44;
+            if (targets.Count < 1)
+            {
+                return 44;
+            }
 
-            if (targets[0].CurrentStatus != ServerStatus.STOPPED) return 40;
+            if (targets[0].CurrentStatus != ServerStatus.STOPPED)
+            {
+                return 40;
+            }
 
-            ConsoleWriter.Write(
-                new ConsoleMessage($"Discord user {splitted[2]} started server remotely",
-                    ConsoleMessage.MessageLevel.WARN), targets[0]);
+            ConsoleWriter.Write(new ConsoleMessage($"Discord user {splitted[2]} started server remotely",ConsoleMessage.MessageLevel.WARN), targets[0]);
             Task.Run(async () =>
             {
                 List<Task> tasks = new List<Task>();
                 tasks.Add(Task.Delay(2000));
                 if (targets[0] is ServerViewModel serverViewModel)
+                {
                     tasks.Add(ServerManager.Instance.StartServerAsync(serverViewModel));
-                else if (targets[0] is NetworkViewModel networkViewModel)
+                } else if (targets[0] is NetworkViewModel networkViewModel)
+                {
                     tasks.Add(ServerManager.Instance.StartNetworkAsync(networkViewModel));
+                }
                 else
+                {
                     throw new NotImplementedException();
-
+                }
+                
                 //Wait at least 2 seconds, to ensure the right order of messages
                 await Task.WhenAll(tasks);
                 await Task.Run(() => SendMessageAsync(BuildResponseString(splitted, 21)));
@@ -274,7 +307,7 @@ namespace Fork.Logic.WebRequesters
         }
 
         /// <summary>
-        ///     Subscribe to the requested Event. This will start sending messages of the according event to the server
+        /// Subscribe to the requested Event. This will start sending messages of the according event to the server
         /// </summary>
         /// <param name="eventName"></param>
         private void SubscribeToEvent(string eventName)
@@ -294,7 +327,7 @@ namespace Fork.Logic.WebRequesters
         }
 
         /// <summary>
-        ///     Unsubscribes from an Event. This will stop sending messages about the Event to the WebSocket server
+        /// Unsubscribes from an Event. This will stop sending messages about the Event to the WebSocket server
         /// </summary>
         /// <param name="eventName"></param>
         private void UnsubscribeFromEvent(string eventName)
@@ -332,7 +365,7 @@ namespace Fork.Logic.WebRequesters
             ApplicationManager.Instance.PlayerEvent += HandleServerListEvent;
             SendServerList();
         }
-
+        
         private void UnsubscribeFromServerListEvent()
         {
             ApplicationManager.Instance.ServerListEvent -= HandleServerListEvent;
@@ -352,7 +385,7 @@ namespace Fork.Logic.WebRequesters
         }
 
         /// <summary>
-        ///     Send a list of all servers to the WebSocket server
+        /// Send a list of all servers to the WebSocket server
         /// </summary>
         private void SendServerList()
         {
@@ -376,8 +409,7 @@ namespace Fork.Logic.WebRequesters
                     //TODO add a way to check how many players are connected to network
                     resultList.Add("0");
                     resultList.Add(networkViewModel.Network.Config.player_limit.ToString());
-                }
-                else
+                }else
                 {
                     resultList.Add("0");
                     resultList.Add("0");
@@ -388,7 +420,7 @@ namespace Fork.Logic.WebRequesters
         }
 
         /// <summary>
-        ///     Send a list of all players of a given server to the WebSocket server
+        /// Send a list of all players of a given server to the WebSocket server
         /// </summary>
         /// <param name="serverName"></param>
         private void SendPlayerList(string serverName)
@@ -396,19 +428,23 @@ namespace Fork.Logic.WebRequesters
             List<string> resultList = new List<string>();
             resultList.Add("playerList");
             resultList.Add(serverName);
-
+            
             EntityViewModel entityViewModel = ServerManager.Instance.Entities.First(
                 entity => entity is ServerViewModel && entity.Name.ToLower().Equals(serverName.ToLower()));
             if (entityViewModel is ServerViewModel serverViewModel)
+            {
                 foreach (ServerPlayer serverPlayer in serverViewModel.PlayerList.Where(player => player.IsOnline))
+                {
                     resultList.Add(serverPlayer.Player.Name);
+                }
+            }
 
             Task.Run(() => SendMessageAsync(string.Join('|', resultList)));
         }
 
         public void Dispose()
         {
-            ApplicationManager.Instance.PlayerEvent -= HandlePlayerEvent;
+            ApplicationManager.Instance.PlayerEvent -= HandlePlayerEvent;            
             ApplicationManager.Instance.ServerListEvent -= HandleServerListEvent;
             ApplicationManager.Instance.PlayerEvent -= HandleServerListEvent;
             discordWebSocket?.Dispose();

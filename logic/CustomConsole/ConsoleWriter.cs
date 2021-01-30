@@ -1,6 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows;
 using Fork.Logic.Model;
 using Fork.Logic.Model.ServerConsole;
 using Fork.ViewModel;
@@ -9,12 +12,14 @@ namespace Fork.Logic.CustomConsole
 {
     public class ConsoleWriter
     {
+        private static Regex waterfallStarted = new Regex(@"\[([0-9]+:?)* INFO\]: Listening on /.*$");
+        
         public delegate void ConsoleWriteEventHandler(string line, EntityViewModel source);
-
-        private static readonly Regex waterfallStarted = new(@"\[([0-9]+:?)* INFO\]: Listening on /.*$");
         public static event ConsoleWriteEventHandler ConsoleWriteLine;
-        private static event CustomWriteEventHandler CustomWriteLine;
 
+        private delegate void CustomWriteEventHandler(string line, EntityViewModel target);
+        private static event CustomWriteEventHandler CustomWriteLine;
+        
         public static void RegisterApplication(EntityViewModel viewModel, StreamReader stdOut, StreamReader errOut)
         {
             new Thread(() =>
@@ -24,11 +29,13 @@ namespace Fork.Logic.CustomConsole
                     string line = stdOut.ReadLine();
                     if (line != null)
                     {
-                        ConsoleWriteLine?.Invoke(line, viewModel);
+                        ConsoleWriteLine?.Invoke(line,viewModel);
 
                         if (line.Contains(@"WARN Advanced terminal features are not available in this environment"))
+                        {
                             continue;
-
+                        }
+                        
                         //bool used to generate green success message in console
                         bool isSuccess = false;
                         if (viewModel is ServerViewModel serverViewModel)
@@ -38,23 +45,24 @@ namespace Fork.Logic.CustomConsole
                                 serverViewModel.CurrentStatus = ServerStatus.RUNNING;
                                 isSuccess = true;
                             }
-
                             serverViewModel.RoleInputHandler(line);
                         }
 
                         if (viewModel is NetworkViewModel networkViewModel)
+                        {
                             if (waterfallStarted.Match(line).Success)
                             {
                                 networkViewModel.CurrentStatus = ServerStatus.RUNNING;
                                 isSuccess = true;
                             }
-
+                        }
+                        
                         viewModel.AddToConsole(isSuccess
                             ? new ConsoleMessage(line, ConsoleMessage.MessageLevel.SUCCESS)
                             : new ConsoleMessage(line));
                     }
                 }
-            }) {IsBackground = true}.Start();
+            }){IsBackground = true}.Start();
 
             new Thread(() =>
             {
@@ -71,15 +79,18 @@ namespace Fork.Logic.CustomConsole
                             isSuccess = true;
                         }
 
-                        if (viewModel is ServerViewModel serverViewModel) serverViewModel.RoleInputHandler(line);
-                        ConsoleWriteLine?.Invoke(line, viewModel);
+                        if (viewModel is ServerViewModel serverViewModel)
+                        {
+                            serverViewModel.RoleInputHandler(line);
+                        }
+                        ConsoleWriteLine?.Invoke(line,viewModel);
 
                         viewModel.AddToConsole(isSuccess
                             ? new ConsoleMessage(line, ConsoleMessage.MessageLevel.SUCCESS)
                             : new ConsoleMessage(line));
                     }
                 }
-            }) {IsBackground = true}.Start();
+            }){IsBackground = true}.Start();
         }
 
         public static void Write(string line, EntityViewModel target)
@@ -91,7 +102,5 @@ namespace Fork.Logic.CustomConsole
         {
             target.AddToConsole(message);
         }
-
-        private delegate void CustomWriteEventHandler(string line, EntityViewModel target);
     }
 }

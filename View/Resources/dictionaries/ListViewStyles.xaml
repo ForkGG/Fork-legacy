@@ -5,46 +5,27 @@
                     xmlns:converter="clr-namespace:Fork.View.Xaml.Converter"
                     xmlns:controls="clr-namespace:Fork.View.Xaml2.Controls">
     <Style x:Key="{x:Static GridView.GridViewScrollViewerStyleKey}" TargetType="ScrollViewer">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ScrollViewer">
                     <Grid Background="{TemplateBinding Background}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <DockPanel Margin="{TemplateBinding Padding}">
-                            <ScrollViewer DockPanel.Dock="Top" HorizontalScrollBarVisibility="Hidden"
-                                          VerticalScrollBarVisibility="Hidden" Focusable="False">
-                                <GridViewHeaderRowPresenter Margin="2,0,2,0"
-                                                            Columns="{Binding Path=TemplatedParent.View.Columns, RelativeSource={RelativeSource TemplatedParent}}"
-                                                            ColumnHeaderContainerStyle="{Binding Path=TemplatedParent.View.ColumnHeaderContainerStyle, RelativeSource={RelativeSource TemplatedParent}}"
-                                                            ColumnHeaderTemplate="{Binding Path=TemplatedParent.View.ColumnHeaderTemplate, RelativeSource={RelativeSource TemplatedParent}}"
-                                                            ColumnHeaderTemplateSelector="{Binding Path=TemplatedParent.View.ColumnHeaderTemplateSelector, RelativeSource={RelativeSource TemplatedParent}}"
-                                                            AllowsColumnReorder="{Binding Path=TemplatedParent.View.AllowsColumnReorder, RelativeSource={RelativeSource TemplatedParent}}"
-                                                            ColumnHeaderContextMenu="{Binding Path=TemplatedParent.View.ColumnHeaderContextMenu, RelativeSource={RelativeSource TemplatedParent}}"
-                                                            ColumnHeaderToolTip="{Binding Path=TemplatedParent.View.ColumnHeaderToolTip, RelativeSource={RelativeSource TemplatedParent}}"
-                                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <ScrollViewer DockPanel.Dock="Top" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Focusable="False">
+                                <GridViewHeaderRowPresenter Margin="2,0,2,0" Columns="{Binding Path=TemplatedParent.View.Columns, RelativeSource={RelativeSource TemplatedParent}}" ColumnHeaderContainerStyle="{Binding Path=TemplatedParent.View.ColumnHeaderContainerStyle, RelativeSource={RelativeSource TemplatedParent}}" ColumnHeaderTemplate="{Binding Path=TemplatedParent.View.ColumnHeaderTemplate, RelativeSource={RelativeSource TemplatedParent}}" ColumnHeaderTemplateSelector="{Binding Path=TemplatedParent.View.ColumnHeaderTemplateSelector, RelativeSource={RelativeSource TemplatedParent}}" AllowsColumnReorder="{Binding Path=TemplatedParent.View.AllowsColumnReorder, RelativeSource={RelativeSource TemplatedParent}}" ColumnHeaderContextMenu="{Binding Path=TemplatedParent.View.ColumnHeaderContextMenu, RelativeSource={RelativeSource TemplatedParent}}" ColumnHeaderToolTip="{Binding Path=TemplatedParent.View.ColumnHeaderToolTip, RelativeSource={RelativeSource TemplatedParent}}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                             </ScrollViewer>
-                            <ScrollContentPresenter Name="PART_ScrollContentPresenter"
-                                                    KeyboardNavigation.DirectionalNavigation="Local"
-                                                    CanContentScroll="{TemplateBinding CanContentScroll}" />
+                            <ScrollContentPresenter Name="PART_ScrollContentPresenter" KeyboardNavigation.DirectionalNavigation="Local" CanContentScroll="{TemplateBinding CanContentScroll}"/>
                         </DockPanel>
-                        <ScrollBar Name="PART_HorizontalScrollBar" Orientation="Horizontal" Grid.Row="1"
-                                   Maximum="{TemplateBinding ScrollableWidth}"
-                                   ViewportSize="{TemplateBinding ViewportWidth}"
-                                   Value="{TemplateBinding HorizontalOffset}"
-                                   Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" />
-                        <ScrollBar Name="PART_VerticalScrollBar" Grid.Column="1"
-                                   Maximum="{TemplateBinding ScrollableHeight}"
-                                   ViewportSize="{TemplateBinding ViewportHeight}"
-                                   Value="{TemplateBinding VerticalOffset}"
-                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" />
+                        <ScrollBar Name="PART_HorizontalScrollBar" Orientation="Horizontal" Grid.Row="1" Maximum="{TemplateBinding ScrollableWidth}" ViewportSize="{TemplateBinding ViewportWidth}" Value="{TemplateBinding HorizontalOffset}" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
+                        <ScrollBar Name="PART_VerticalScrollBar" Grid.Column="1" Maximum="{TemplateBinding ScrollableHeight}" ViewportSize="{TemplateBinding ViewportHeight}" Value="{TemplateBinding VerticalOffset}" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -53,25 +34,25 @@
 
     <!-- ListView template -->
     <Style x:Key="ServerListView" TargetType="{x:Type ListView}">
-        <Setter Property="Background" Value="{DynamicResource backgroundDefault}" />
-        <Setter Property="SelectionMode" Value="Single" />
-        <Setter Property="HorizontalAlignment" Value="Left" />
-        <Setter Property="Margin" Value="10,10,10,10" />
-        <Setter Property="VerticalAlignment" Value="Top" />
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="Background" Value="{DynamicResource backgroundDefault}"/>
+        <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="10,10,10,10"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
 
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListView">
                     <Border Name="Border" BorderThickness="0">
                         <ScrollViewer Style="{DynamicResource {x:Static GridView.GridViewScrollViewerStyleKey}}">
-                            <ItemsPresenter />
+                            <ItemsPresenter/>
                         </ScrollViewer>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsGrouping" Value="True">
-                            <Setter Property="ScrollViewer.CanContentScroll" Value="False" />
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -83,77 +64,68 @@
         <Style.Resources>
             <FontFamily x:Key="MaterialIO">pack://application:,,,/View/Resources/Fonts/#Material Icons</FontFamily>
         </Style.Resources>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="Background" Value="{x:Null}" />
-        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}" />
-        <Setter Property="Margin" Value="0 5 0 2" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Background" Value="{x:Null}"/>
+        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>
+        <Setter Property="Margin" Value="0 5 0 2"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListViewItem}">
                     <Border BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}">
                         <StackPanel>
                             <DockPanel LastChildFill="True">
-                                <Border DockPanel.Dock="Left" Width="8" Height="10"
-                                        Background="{StaticResource listViewIndicator}" Margin="-4 0 5 0"
-                                        CornerRadius="4" x:Name="FrontIndicator" />
-                                <TextBlock Text="{Binding Icon}" FontSize="20" FontFamily="{StaticResource MaterialIO}"
-                                           VerticalAlignment="Center" Foreground="{Binding IconColor}"
-                                           DockPanel.Dock="Right" />
-                                <TextBlock x:Name="ServerTitle" Opacity="0.6" MinHeight="35" VerticalAlignment="Center"
-                                           Text="{Binding ServerTitle}" Margin="0 0 7 0" />
+                                <Border DockPanel.Dock="Left" Width="8" Height="10" Background="{StaticResource listViewIndicator}" Margin="-4 0 5 0" CornerRadius="4" x:Name="FrontIndicator"></Border>
+                                <TextBlock Text="{Binding Icon}" FontSize="20" FontFamily="{StaticResource MaterialIO}" VerticalAlignment="Center" Foreground="{Binding IconColor}" DockPanel.Dock="Right"/>
+                                <TextBlock x:Name="ServerTitle" Opacity="0.6" MinHeight="35" VerticalAlignment="Center" Text="{Binding ServerTitle}" Margin="0 0 7 0"></TextBlock>
                                 <DockPanel.ToolTip>
                                     <StackPanel Orientation="Vertical">
-                                        <TextBlock Text="{Binding Server.FullName}" FontWeight="Bold" />
+                                        <TextBlock Text="{Binding Server.FullName}" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="Type: " />
-                                            <TextBlock Text="{Binding Server.Version.Type}" />
+                                            <TextBlock Text="Type: "/>
+                                            <TextBlock Text="{Binding Server.Version.Type}"/>
                                         </StackPanel>
-                                        <StackPanel x:Name="PlayerCount" Orientation="Horizontal"
-                                                    Visibility="Collapsed">
-                                            <TextBlock Text="Players: " />
-                                            <TextBlock Text="{Binding PlayerList.Count}" />
-                                            <TextBlock Text="/" />
-                                            <TextBlock Text="{Binding Server.ServerSettings.MaxPlayers}" />
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="Gamemode: " />
-                                            <TextBlock Text="{Binding Server.ServerSettings.CurrGamemode}" />
+                                        <StackPanel x:Name="PlayerCount" Orientation="Horizontal" Visibility="Collapsed">
+                                            <TextBlock Text="Players: "/>
+                                            <TextBlock Text="{Binding PlayerList.Count}"/>
+                                            <TextBlock Text="/"/>
+                                            <TextBlock Text="{Binding Server.ServerSettings.MaxPlayers}"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="Difficulty: " />
-                                            <TextBlock Text="{Binding Server.ServerSettings.CurrDifficulty}" />
+                                            <TextBlock Text="Gamemode: "/>
+                                            <TextBlock Text="{Binding Server.ServerSettings.CurrGamemode}"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Difficulty: "/>
+                                            <TextBlock Text="{Binding Server.ServerSettings.CurrDifficulty}"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </DockPanel.ToolTip>
                             </DockPanel>
-                            <Rectangle x:Name="Splitter" HorizontalAlignment="Center" Width="80" Height="1"
-                                       Margin="0 5 0 5" Fill="{DynamicResource foregroundDisabled}" Opacity="0.8"
-                                       Visibility="Collapsed" />
+                            <Rectangle x:Name="Splitter" HorizontalAlignment="Center" Width="80" Height="1" Margin="0 5 0 5" Fill="{DynamicResource foregroundDisabled}" Opacity="0.8" Visibility="Collapsed"/>
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="FrontIndicator" Property="Height" Value="25" />
-                            <Setter TargetName="ServerTitle" Property="Opacity" Value="1" />
+                            <Setter TargetName="FrontIndicator" Property="Height" Value="25"/>
+                            <Setter TargetName="ServerTitle" Property="Opacity" Value="1"/>
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="IsMouseOver" Value="True" />
-                                <Condition Property="IsSelected" Value="False" />
+                                <Condition Property="IsMouseOver" Value="True"/>
+                                <Condition Property="IsSelected" Value="False"/>
                             </MultiTrigger.Conditions>
                             <MultiTrigger.Setters>
-                                <Setter TargetName="FrontIndicator" Property="Height" Value="15" />
-                                <Setter TargetName="ServerTitle" Property="Opacity" Value="0.8" />
+                                <Setter TargetName="FrontIndicator" Property="Height" Value="15"/>
+                                <Setter TargetName="ServerTitle" Property="Opacity" Value="0.8"/>
                             </MultiTrigger.Setters>
                         </MultiTrigger>
                         <Trigger SourceName="ServerTitle" Property="TextBlock.Text" Value="Home">
-                            <Setter TargetName="ServerTitle" Property="TextBlock.FontSize" Value="25" />
-                            <Setter TargetName="ServerTitle" Property="VerticalAlignment" Value="Center" />
-                            <Setter TargetName="Splitter" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="ServerTitle" Property="TextBlock.FontSize" Value="25"/>
+                            <Setter TargetName="ServerTitle" Property="VerticalAlignment" Value="Center"/>
+                            <Setter TargetName="Splitter" Property="Visibility" Value="Visible"/>
                         </Trigger>
-                        <DataTrigger Binding="{Binding Path=CurrentStatus}"
-                                     Value="{x:Static status:ServerStatus.RUNNING}">
-                            <Setter TargetName="PlayerCount" Property="Visibility" Value="Visible" />
+                        <DataTrigger Binding="{Binding Path=CurrentStatus}" Value="{x:Static status:ServerStatus.RUNNING}">
+                            <Setter TargetName="PlayerCount" Property="Visibility" Value="Visible"/>
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -163,24 +135,26 @@
 
     <!-- ServerList v2 template -->
     <Style x:Key="ServerListViewV2" TargetType="{x:Type ListView}">
-        <Setter Property="Background" Value="{DynamicResource backgroundDefault}" />
-        <Setter Property="HorizontalAlignment" Value="Left" />
-        <Setter Property="Margin" Value="10,10,10,10" />
-        <Setter Property="SelectionMode" Value="Single" />
-        <Setter Property="VerticalAlignment" Value="Top" />
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
-        <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="Background" Value="{DynamicResource backgroundDefault}"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="10,10,10,10"/>
+        <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
 
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListView">
                     <Border Name="Border" BorderThickness="0">
                         <ScrollViewer Style="{DynamicResource ServerListScrollViewer}">
-                            <ItemsPresenter />
+                            <ItemsPresenter/>
                         </ScrollViewer>
                     </Border>
+                    <ControlTemplate.Triggers>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -190,36 +164,30 @@
         <Style.Resources>
             <FontFamily x:Key="Montserrat-SemiBold">pack://application:,,,/View/Resources/Fonts/Montserrat-SemiBold.ttf#Montserrat SemiBold</FontFamily>
         </Style.Resources>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}" />
-        <Setter Property="Margin" Value="0 5 0 2" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>
+        <Setter Property="Margin" Value="0 5 0 2"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListViewItem}">
                     <Border BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}">
                         <StackPanel>
                             <Grid Width="250" Height="60">
-                                <Border x:Name="background" Background="Transparent" Width="251" CornerRadius="0 8 8 0"
-                                        Margin="-1 0 0 0" />
+                                <Border x:Name="background" Background="Transparent" Width="251" CornerRadius="0 8 8 0" Margin="-1 0 0 0"/>
                                 <DockPanel Panel.ZIndex="1" LastChildFill="True">
-                                    <Ellipse x:Name="dot" Margin="15 0 0 0" Width="15" Height="15" />
+                                    <Ellipse x:Name="dot" Margin="15 0 0 0" Width="15" Height="15"/>
                                     <Border Height="40" Width="40" Background="Transparent" Margin="5 0 10 0">
-                                        <Image x:Name="image" Source="{Binding Icon}" Width="25" Height="25"
-                                               RenderOptions.BitmapScalingMode="Linear" />
+                                        <Image x:Name="image" Source="{Binding Icon}" Width="25" Height="25" RenderOptions.BitmapScalingMode="Linear"/>
                                     </Border>
-                                    <TextBlock x:Name="title" Text="{Binding Server.Name}" VerticalAlignment="Center"
-                                               FontSize="20" FontFamily="{StaticResource Montserrat-SemiBold}"
-                                               Foreground="{DynamicResource textUnselected}" Margin="0 0 15 0" />
+                                    <TextBlock x:Name="title" Text="{Binding Server.Name}" VerticalAlignment="Center" FontSize="20" FontFamily="{StaticResource Montserrat-SemiBold}" 
+                                               Foreground="{DynamicResource textUnselected}" Margin="0 0 15 0"/>
                                 </DockPanel>
                                 <Grid.ContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Header="Rename" Style="{DynamicResource ContextMenuItem}"
-                                                  IsEnabled="False" />
-                                        <MenuItem Header="Clone" Style="{DynamicResource ContextMenuItem}"
-                                                  IsEnabled="False" />
-                                        <MenuItem Header="Delete" Style="{DynamicResource RedContextMenuItem}"
-                                                  IsEnabled="False" />
+                                        <MenuItem Header="Rename" Style="{DynamicResource ContextMenuItem}" IsEnabled="False"/>
+                                        <MenuItem Header="Clone" Style="{DynamicResource ContextMenuItem}" IsEnabled="False"/>
+                                        <MenuItem Header="Delete" Style="{DynamicResource RedContextMenuItem}" IsEnabled="False"/>
                                     </ContextMenu>
                                 </Grid.ContextMenu>
                             </Grid>
@@ -227,17 +195,17 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="background" Property="Background" Value="{DynamicResource tabSelected}" />
-                            <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}" />
-                            <Setter TargetName="image" Property="Source" Value="{Binding IconW}" />
-                            <Setter TargetName="dot" Property="Fill" Value="{Binding IconColorHovered}" />
+                            <Setter TargetName="background" Property="Background" Value="{DynamicResource tabSelected}"/>
+                            <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
+                            <Setter TargetName="image" Property="Source" Value="{Binding IconW}"/>
+                            <Setter TargetName="dot" Property="Fill" Value="{Binding IconColorHovered}"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="False">
-                            <Setter TargetName="dot" Property="Fill" Value="{Binding IconColorHovered}" />
+                            <Setter TargetName="dot" Property="Fill" Value="{Binding IconColorHovered}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}" />
-                            <Setter TargetName="image" Property="Source" Value="{Binding IconW}" />
+                            <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
+                            <Setter TargetName="image" Property="Source" Value="{Binding IconW}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -247,22 +215,24 @@
 
     <!-- SettingsList template -->
     <Style x:Key="SettingsListView" TargetType="{x:Type ListView}">
-        <Setter Property="Background" Value="{DynamicResource backgroundDefault}" />
-        <Setter Property="HorizontalAlignment" Value="Left" />
-        <Setter Property="Margin" Value="10,10,10,10" />
-        <Setter Property="SelectionMode" Value="Single" />
-        <Setter Property="VerticalAlignment" Value="Top" />
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="Background" Value="{DynamicResource backgroundDefault}"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="10,10,10,10"/>
+        <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
 
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListView">
                     <Border Name="Border" BorderThickness="0">
                         <ScrollViewer Style="{DynamicResource SettingsScrollViewer}">
-                            <ItemsPresenter />
+                            <ItemsPresenter/>
                         </ScrollViewer>
                     </Border>
+                    <ControlTemplate.Triggers>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -272,43 +242,37 @@
         <Style.Resources>
             <FontFamily x:Key="Montserrat-SemiBold">pack://application:,,,/View/Resources/Fonts/Montserrat-SemiBold.ttf#Montserrat SemiBold</FontFamily>
         </Style.Resources>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}" />
-        <Setter Property="Margin" Value="0 5 0 2" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>
+        <Setter Property="Margin" Value="0 5 0 2"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListViewItem}">
                     <Border BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}">
                         <StackPanel>
                             <Grid Width="250" Height="60">
-                                <Border x:Name="background" Background="Transparent" Width="250" CornerRadius="8 0 0 8"
-                                        Margin="0 0 0 0" />
+                                <Border x:Name="background" Background="Transparent" Width="250" CornerRadius="8 0 0 8" Margin="0 0 0 0"/>
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Margin="20 0 0 0" x:Name="title" Text="{Binding FileName}"
-                                               VerticalAlignment="Center" FontSize="16"
-                                               FontFamily="{StaticResource Montserrat-SemiBold}"
-                                               Foreground="{DynamicResource textUnselected}" />
-                                    <TextBlock Margin="0 0 0 0" x:Name="extension" Text="{Binding FileExtension}"
-                                               VerticalAlignment="Center" FontSize="16"
-                                               FontFamily="{StaticResource Montserrat-SemiBold}"
-                                               Foreground="{DynamicResource textUnselected}" Opacity="0.35" />
+                                    <TextBlock Margin="20 0 0 0" x:Name="title" Text="{Binding FileName}" VerticalAlignment="Center" FontSize="16" FontFamily="{StaticResource Montserrat-SemiBold}" Foreground="{DynamicResource textUnselected}"/>
+                                    <TextBlock Margin="0 0 0 0" x:Name="extension" Text="{Binding FileExtension}" VerticalAlignment="Center" FontSize="16" FontFamily="{StaticResource Montserrat-SemiBold}" 
+                                               Foreground="{DynamicResource textUnselected}" Opacity="0.35"/>
                                 </StackPanel>
                             </Grid>
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="background" Property="Background" Value="{DynamicResource tabSelected}" />
-                            <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}" />
-                            <Setter TargetName="extension" Property="Foreground" Value="{DynamicResource textSelected}" />
+                            <Setter TargetName="background" Property="Background" Value="{DynamicResource tabSelected}"/>
+                            <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
+                            <Setter TargetName="extension" Property="Foreground" Value="{DynamicResource textSelected}"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="False">
-                            <Setter Property="Cursor" Value="Hand" />
+                            <Setter Property="Cursor" Value="Hand"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}" />
-                            <Setter TargetName="extension" Property="Foreground" Value="{DynamicResource textSelected}" />
+                            <Setter TargetName="title" Property="Foreground" Value="{DynamicResource textSelected}"/>
+                            <Setter TargetName="extension" Property="Foreground" Value="{DynamicResource textSelected}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -318,21 +282,23 @@
 
     <!-- Network ServerList template -->
     <Style x:Key="NetworkServerListView" TargetType="{x:Type ListView}">
-        <Setter Property="Background" Value="{DynamicResource backgroundDefault}" />
-        <Setter Property="HorizontalAlignment" Value="Left" />
-        <Setter Property="Margin" Value="10,10,10,10" />
-        <Setter Property="SelectionMode" Value="Single" />
-        <Setter Property="VerticalAlignment" Value="Top" />
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
-        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="Background" Value="{DynamicResource backgroundDefault}"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="10,10,10,10"/>
+        <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
 
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListView">
                     <Border Name="Border" BorderThickness="0">
-                        <ItemsPresenter />
+                        <ItemsPresenter/>
                     </Border>
+                    <ControlTemplate.Triggers>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -342,88 +308,70 @@
         <Style.Resources>
             <FontFamily x:Key="Montserrat-SemiBold">pack://application:,,,/View/Resources/Fonts/Montserrat-SemiBold.ttf#Montserrat SemiBold</FontFamily>
         </Style.Resources>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}" />
-        <Setter Property="Margin" Value="0 7" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>
+        <Setter Property="Margin" Value="0 7"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListViewItem}">
                     <Border BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}">
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Name" VerticalAlignment="Center" Margin="10 0"
-                                           FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18" />
+                                <TextBlock Text="Name" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
                                 <Border CornerRadius="3" MinWidth="120" DockPanel.Dock="Right" Height="26"
-                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
+                                    Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                     <TextBox Margin="5 0" Text="{Binding Name}"
-                                             Background="{DynamicResource textBackground}" BorderThickness="0"
-                                             Foreground="{DynamicResource backgroundDark}"
-                                             FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                             FontSize="16" Height="18" MaxWidth="300" />
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
+                                         Foreground="{DynamicResource backgroundDark}"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="16" Height="18" MaxWidth="300"/>
                                 </Border>
-                                <controls:IconButton Margin="10 0"
-                                                     IconSource="pack://application:,,,/view/resources/images/icons/delete.png"
-                                                     IconHeight="12" IconWidth="20"
-                                                     Background="{DynamicResource buttonBgrDefault}"
-                                                     Height="20" Width="20"
-                                                     HoverBackground="{DynamicResource buttonBgrRed}"
-                                                     HoverIconSource="pack://application:,,,/view/resources/images/icons/deleteW.png"
-                                                     Click="RemoveFromNetwork_Click"
-                                                     CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}, Path=DataContext}" />
-                                <TextBlock x:Name="externalServerTxt" Text="External Server" VerticalAlignment="Center"
-                                           Margin="5 0" FontFamily="{DynamicResource Montserrat-Medium}"
-                                           Foreground="{DynamicResource buttonBgrYellow}" />
-                                <TextBlock x:Name="ForkServerTxt" Text="Fork Server"
-                                           PreviewMouseLeftButtonDown="OpenServer_Click" VerticalAlignment="Center"
-                                           Margin="5 0" FontFamily="{DynamicResource Montserrat-Medium}"
-                                           Foreground="{DynamicResource buttonBgrYellow}" Visibility="Collapsed"
-                                           Cursor="Hand">
+                                <controls:IconButton Margin="10 0" IconSource="pack://application:,,,/view/resources/images/icons/delete.png" IconHeight="12" IconWidth="20" Background="{DynamicResource buttonBgrDefault}"
+                                                     Height="20" Width="20" HoverBackground="{DynamicResource buttonBgrRed}" HoverIconSource="pack://application:,,,/view/resources/images/icons/deleteW.png"
+                                                     Click="RemoveFromNetwork_Click" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}, Path=DataContext}"/>
+                                <TextBlock x:Name="externalServerTxt" Text="External Server" VerticalAlignment="Center" Margin="5 0" FontFamily="{DynamicResource Montserrat-Medium}" Foreground="{DynamicResource buttonBgrYellow}"/>
+                                <TextBlock x:Name="ForkServerTxt" Text="Fork Server" PreviewMouseLeftButtonDown="OpenServer_Click" VerticalAlignment="Center" Margin="5 0" FontFamily="{DynamicResource Montserrat-Medium}" 
+                                           Foreground="{DynamicResource buttonBgrYellow}" Visibility="Collapsed" Cursor="Hand">
                                     <TextBlock.ToolTip>
-                                        <TextBlock Text="{Binding ServerViewModel.ServerTitle}"
-                                                   VerticalAlignment="Center"
-                                                   Foreground="{DynamicResource textSelected}"
-                                                   FontFamily="{DynamicResource Montserrat-Medium}" FontSize="14" />
+                                        <TextBlock Text="{Binding ServerViewModel.ServerTitle}" VerticalAlignment="Center" Foreground="{DynamicResource textSelected}" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="14"/>
                                     </TextBlock.ToolTip>
                                 </TextBlock>
                             </StackPanel>
                             <StackPanel Margin="60 10 0 10">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Address" VerticalAlignment="Center" Margin="0 5 15 5"
-                                               FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18" />
-                                    <Border CornerRadius="3" MinWidth="200" Height="26"
-                                            Background="{DynamicResource textBackground}" Margin="0 0 10 0">
+                                    <TextBlock Text="Address" VerticalAlignment="Center" Margin="0 5 15 5" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
+                                    <Border CornerRadius="3" MinWidth="200" Grid.Column="1" Height="26"
+                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                         <TextBox x:Name="address" Margin="5 0" Text="{Binding Address}"
-                                                 Background="{DynamicResource textBackground}" BorderThickness="0"
-                                                 Foreground="{DynamicResource backgroundDark}"
-                                                 FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                                 FontSize="16" Height="18" />
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
+                                         Foreground="{DynamicResource backgroundDark}"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="16" Height="18"/>
                                     </Border>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="MOTD" VerticalAlignment="Center" Margin="0 5 30 5"
-                                               FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18" />
-                                    <Border CornerRadius="3" MinWidth="120" Height="26"
-                                            Background="{DynamicResource textBackground}" Margin="0 0 10 0">
+                                    <TextBlock Text="MOTD" Grid.Row="1" VerticalAlignment="Center" Margin="0 5 30 5" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
+                                    <Border CornerRadius="3" MinWidth="120" Grid.Row="1" Grid.Column="1" Height="26"
+                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                         <TextBox Margin="5 0" Text="{Binding Motd}"
-                                                 Background="{DynamicResource textBackground}" BorderThickness="0"
-                                                 Foreground="{DynamicResource backgroundDark}"
-                                                 FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                                 FontSize="16" Height="18" MaxWidth="400" />
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
+                                         Foreground="{DynamicResource backgroundDark}"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="16" Height="18" MaxWidth="400"/>
                                     </Border>
                                 </StackPanel>
 
-                                <CheckBox Margin="0 5" IsChecked="{Binding Restricted}" Content="Restricted Mode"
-                                          FontSize="18" Style="{DynamicResource TextCheckBox}" />
+                                <CheckBox Margin="0 5" IsChecked="{Binding Restricted}" Content="Restricted Mode" FontSize="18" Style="{DynamicResource TextCheckBox}"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
                         <DataTrigger Binding="{Binding IsForkServer}" Value="True">
-                            <Setter TargetName="externalServerTxt" Property="Visibility" Value="Collapsed" />
-                            <Setter TargetName="ForkServerTxt" Property="Visibility" Value="Visible" />
-                            <Setter TargetName="address" Property="IsEnabled" Value="False" />
+                            <Setter TargetName="externalServerTxt" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="ForkServerTxt" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="address" Property="IsEnabled" Value="False"/>
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -440,12 +388,12 @@
     <Style x:Key="NetworkPermissionItem" TargetType="{x:Type ListViewItem}">
         <Style.Resources>
             <FontFamily x:Key="Montserrat-SemiBold">pack://application:,,,/View/Resources/Fonts/Montserrat-SemiBold.ttf#Montserrat SemiBold</FontFamily>
-            <converter:ListToStringConverter x:Key="ListToStringConverter" />
+            <converter:ListToStringConverter x:Key="ListToStringConverter"/>
         </Style.Resources>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}" />
-        <Setter Property="Margin" Value="0 7" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>
+        <Setter Property="Margin" Value="0 7"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListViewItem}">
@@ -453,32 +401,28 @@
                         <StackPanel>
                             <DockPanel LastChildFill="False">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Name}" FontSize="19" />
-                                    <TextBlock Text=":" FontSize="19" />
+                                    <TextBlock Text="{Binding Name}" FontSize="19"/>
+                                    <TextBlock Text=":" FontSize="19"/>
                                 </StackPanel>
-                                <controls:IconButton DockPanel.Dock="Right" Margin="10 0"
-                                                     IconSource="pack://application:,,,/view/resources/images/icons/delete.png"
-                                                     IconHeight="12" IconWidth="20"
-                                                     Background="{DynamicResource buttonBgrDefault}"
-                                                     Height="20" Width="20"
-                                                     HoverBackground="{DynamicResource buttonBgrRed}"
-                                                     HoverIconSource="pack://application:,,,/view/resources/images/icons/deleteW.png"
-                                                     Click="RemoveGroup_Click"
-                                                     CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}, Path=DataContext}" />
+                                <controls:IconButton DockPanel.Dock="Right" Margin="10 0" IconSource="pack://application:,,,/view/resources/images/icons/delete.png" IconHeight="12" IconWidth="20" Background="{DynamicResource buttonBgrDefault}"
+                                                     Height="20" Width="20" HoverBackground="{DynamicResource buttonBgrRed}" HoverIconSource="pack://application:,,,/view/resources/images/icons/deleteW.png"
+                                                     Click="RemoveGroup_Click" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}, Path=DataContext}"/>
                             </DockPanel>
-                            <StackPanel Orientation="Horizontal" Margin="10 5 0 0">
-                                <Border CornerRadius="3" MinWidth="66" MinHeight="26"
+                            <StackPanel Orientation="Horizontal" Margin="10 5 0 0" >
+                                <Border CornerRadius="3" MinWidth="66"  MinHeight="26"
                                         Background="{DynamicResource textBackground}" Margin="0 0 10 0">
-                                    <TextBox Margin="5 5"
-                                             Text="{Binding PermissionList, Converter={StaticResource ListToStringConverter}}"
-                                             Background="{DynamicResource textBackground}" BorderThickness="0"
-                                             Foreground="{DynamicResource backgroundDark}" AcceptsReturn="True"
-                                             FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                             FontSize="16" MinHeight="18" Width="290" />
+                                    <TextBox Margin="5 5" Text="{Binding PermissionList, Converter={StaticResource ListToStringConverter}}"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
+                                         Foreground="{DynamicResource backgroundDark}" AcceptsReturn="True"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="16" MinHeight="18" Width="290"/>
                                 </Border>
                             </StackPanel>
                         </StackPanel>
                     </Border>
+                    <ControlTemplate.Triggers>
+                        
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -493,12 +437,12 @@
     <Style x:Key="NetworkGroupItem" TargetType="{x:Type ListViewItem}">
         <Style.Resources>
             <FontFamily x:Key="Montserrat-SemiBold">pack://application:,,,/View/Resources/Fonts/Montserrat-SemiBold.ttf#Montserrat SemiBold</FontFamily>
-            <converter:ListToStringConverter x:Key="ListToStringConverter" />
+            <converter:ListToStringConverter x:Key="ListToStringConverter"/>
         </Style.Resources>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}" />
-        <Setter Property="Margin" Value="0 7" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>
+        <Setter Property="Margin" Value="0 7"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListViewItem}">
@@ -506,32 +450,28 @@
                         <StackPanel>
                             <DockPanel LastChildFill="False">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding User}" FontSize="19" />
-                                    <TextBlock Text=":" FontSize="19" />
+                                    <TextBlock Text="{Binding User}" FontSize="19"/>
+                                    <TextBlock Text=":" FontSize="19"/>
                                 </StackPanel>
-                                <controls:IconButton DockPanel.Dock="Right" Margin="10 0"
-                                                     IconSource="pack://application:,,,/view/resources/images/icons/delete.png"
-                                                     IconHeight="12" IconWidth="20"
-                                                     Background="{DynamicResource buttonBgrDefault}"
-                                                     Height="20" Width="20"
-                                                     HoverBackground="{DynamicResource buttonBgrRed}"
-                                                     HoverIconSource="pack://application:,,,/view/resources/images/icons/deleteW.png"
-                                                     Click="RemoveUser_Click"
-                                                     CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}, Path=DataContext}" />
+                                <controls:IconButton DockPanel.Dock="Right" Margin="10 0" IconSource="pack://application:,,,/view/resources/images/icons/delete.png" IconHeight="12" IconWidth="20" Background="{DynamicResource buttonBgrDefault}"
+                                                     Height="20" Width="20" HoverBackground="{DynamicResource buttonBgrRed}" HoverIconSource="pack://application:,,,/view/resources/images/icons/deleteW.png"
+                                                     Click="RemoveUser_Click" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}, Path=DataContext}"/>
                             </DockPanel>
-                            <StackPanel Orientation="Horizontal" Margin="10 5 0 0">
-                                <Border CornerRadius="3" MinWidth="130" MinHeight="26"
+                            <StackPanel Orientation="Horizontal" Margin="10 5 0 0" >
+                                <Border CornerRadius="3" MinWidth="130"  MinHeight="26"
                                         Background="{DynamicResource textBackground}" Margin="0 0 10 0">
-                                    <TextBox Margin="5 5"
-                                             Text="{Binding Groups, Converter={StaticResource ListToStringConverter}}"
-                                             Background="{DynamicResource textBackground}" BorderThickness="0"
-                                             Foreground="{DynamicResource backgroundDark}" AcceptsReturn="True"
-                                             FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                             FontSize="16" MinHeight="18" Width="150" />
+                                    <TextBox Margin="5 5" Text="{Binding Groups, Converter={StaticResource ListToStringConverter}}"
+                                         Background="{DynamicResource textBackground}" BorderThickness="0"
+                                         Foreground="{DynamicResource backgroundDark}" AcceptsReturn="True"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="16" MinHeight="18" Width="150"/>
                                 </Border>
                             </StackPanel>
                         </StackPanel>
                     </Border>
+                    <ControlTemplate.Triggers>
+
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -545,149 +485,119 @@
 
     <!-- PluginList template -->
     <Style x:Key="PluginListView" TargetType="{x:Type ListView}">
-        <Setter Property="Background" Value="{DynamicResource backgroundDefault}" />
-        <Setter Property="HorizontalAlignment" Value="Left" />
-        <Setter Property="SelectionMode" Value="Single" />
-        <Setter Property="VerticalAlignment" Value="Top" />
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
-        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="Background" Value="{DynamicResource backgroundDefault}"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
 
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListView">
                     <Border Name="Border" BorderThickness="0">
-                        <ItemsPresenter />
+                        <ItemsPresenter/>
                     </Border>
+                    <ControlTemplate.Triggers>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
     <Style x:Key="PluginListItem" TargetType="{x:Type ListViewItem}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}" />
-        <Setter Property="Margin" Value="0 7" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>
+        <Setter Property="Margin" Value="0 7"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListViewItem}">
-                    <Border x:Name="background" BorderBrush="Transparent" BorderThickness="0"
-                            Background="{DynamicResource backgroundDark}" CornerRadius="15" Height="150"
-                            Margin="0 0 20 0">
+                    <Border x:Name="background" BorderBrush="Transparent" BorderThickness="0" Background="{DynamicResource backgroundDark}" CornerRadius="15" Height="150" Margin="0 0 20 0">
                         <Grid Margin="15 0 15 0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="96px" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="200px" />
+                                <ColumnDefinition Width="96px"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="200px"/>
                             </Grid.ColumnDefinitions>
                             <Border CornerRadius="10" Height="96" Width="96">
                                 <Border.Background>
-                                    <ImageBrush ImageSource="{Binding icon.URL}" />
+                                    <ImageBrush ImageSource="{Binding icon.URL}"/>
                                 </Border.Background>
                             </Border>
                             <StackPanel Grid.Column="1" Margin="10 0" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding name}" TextWrapping="Wrap" MaxHeight="52"
-                                           FontFamily="{DynamicResource Montserrat-Bold}" FontSize="21">
+                                <TextBlock Text="{Binding name}" TextWrapping="Wrap" MaxHeight="52" FontFamily="{DynamicResource Montserrat-Bold}" FontSize="21">
                                     <TextBlock.ToolTip>
                                         <ToolTip>
-                                            <TextBlock Text="{Binding name}" />
+                                            <TextBlock Text="{Binding name}"/>
                                         </ToolTip>
                                     </TextBlock.ToolTip>
                                 </TextBlock>
                                 <StackPanel Margin="0 3 0 12" Orientation="Horizontal">
-                                    <TextBlock Text="{Binding author.name}"
-                                               FontFamily="{DynamicResource Montserrat-SemiBold}" />
-                                    <TextBlock Text=" - " FontFamily="{DynamicResource Montserrat-SemiBold}" />
-                                    <TextBlock Text="{Binding ReleaseDate}"
-                                               FontFamily="{DynamicResource Montserrat-SemiBold}" />
-                                    <TextBlock Text=" - " FontFamily="{DynamicResource Montserrat-SemiBold}" />
-                                    <TextBlock Text="{Binding category.name}"
-                                               FontFamily="{DynamicResource Montserrat-SemiBold}" />
+                                    <TextBlock Text="{Binding author.name}" FontFamily="{DynamicResource Montserrat-SemiBold}" />
+                                    <TextBlock Text=" - " FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                                    <TextBlock Text="{Binding ReleaseDate}" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                                    <TextBlock Text=" - " FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                                    <TextBlock Text="{Binding category.name}" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
                                 </StackPanel>
-                                <TextBlock Text="{Binding tag}" TextWrapping="Wrap"
-                                           Foreground="{DynamicResource textBackground}" />
-                                <TextBlock Width="1000000" Height="0" />
+                                <TextBlock Text="{Binding tag}" TextWrapping="Wrap" Foreground="{DynamicResource textBackground}"/>
+                                <TextBlock Width="1000000" Height="0"/>
                             </StackPanel>
                             <DockPanel Grid.Column="2" Margin="0 0 0 10">
-                                <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right"
-                                            Orientation="Horizontal">
-                                    <Border Background="{DynamicResource buttonBgrDefault}" Height="35"
-                                            CornerRadius="5" x:Name="installedText">
-                                        <TextBlock Text="Installed" HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"
-                                                   FontFamily="{DynamicResource Montserrat-Bold}"
-                                                   Foreground="{DynamicResource backgroundLight}" FontSize="17"
-                                                   Margin="10 0" />
+                                <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right" Orientation="Horizontal">
+                                    <Border Background="{DynamicResource buttonBgrDefault}" Height="35" CornerRadius="5" x:Name="installedText">
+                                        <TextBlock Text="Installed" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="{DynamicResource Montserrat-Bold}"
+                                                     Foreground="{DynamicResource backgroundLight}" FontSize="17" Margin="10 0"/>
                                     </Border>
-                                    <controls:IconButton Background="{DynamicResource buttonBgrDefault}"
-                                                         HoverBackground="{DynamicResource buttonBgrDefault}"
-                                                         Width="40" Height="35"
-                                                         IconSource="pack://application:,,,/View/Resources/images/Icons/Download.png"
-                                                         IconWidth="100" IconHeight="20" Click="InstallPlugin_Click"
-                                                         HoverIconSource="pack://application:,,,/View/Resources/images/Icons/DownloadW.png"
-                                                         x:Name="downloadBtn" Visibility="Collapsed"
-                                                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}, Path=DataContext}" />
-                                    <Button Margin="10 5 0 5" Content="Visit"
-                                            Style="{DynamicResource RoundedTextButton}" Click="VisitPlugin_Click" />
+                                    <controls:IconButton Background="{DynamicResource buttonBgrDefault}" HoverBackground="{DynamicResource buttonBgrDefault}" Width="40" Height="35"
+                                                         IconSource="pack://application:,,,/View/Resources/images/Icons/Download.png" IconWidth="100" IconHeight="20" Click="InstallPlugin_Click"
+                                                         HoverIconSource="pack://application:,,,/View/Resources/images/Icons/DownloadW.png" x:Name="downloadBtn" Visibility="Collapsed"
+                                                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}, Path=DataContext}"/>
+                                    <Button Margin="10 5 0 5" Content="Visit" Style="{DynamicResource RoundedTextButton}" Click="VisitPlugin_Click"/>
                                 </StackPanel>
                                 <StackPanel VerticalAlignment="Center" Margin="0 10 0 0">
                                     <StackPanel Margin="0 5" HorizontalAlignment="Right" Orientation="Horizontal">
-                                        <controls:RatingsControl Value="{Binding rating.average}" NumberOfStars="5"
-                                                                 BackgroundColor="{DynamicResource backgroundDark}"
-                                                                 StarForegroundColor="{DynamicResource tabSelected}"
-                                                                 StarOutlineColor="{DynamicResource backgroundLight}"
-                                                                 HorizontalAlignment="Center" Margin="0 0 5 0"
-                                                                 x:Name="rating">
-                                            <controls:RatingsControl.ToolTip>
-                                                <ToolTip>
-                                                    <TextBlock Text="{Binding rating.average}" />
-                                                </ToolTip>
-                                            </controls:RatingsControl.ToolTip>
-                                        </controls:RatingsControl>
-                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
-                                            <TextBlock Text="{Binding rating.count}"
-                                                       Foreground="{DynamicResource textBackground}"
-                                                       FontFamily="{DynamicResource Montserrat-SemiBold}" />
-                                            <TextBlock Text=" Ratings" Foreground="{DynamicResource textBackground}"
-                                                       FontFamily="{DynamicResource Montserrat-SemiBold}" />
-                                        </StackPanel>
-                                    </StackPanel>
-                                    <StackPanel Margin="0 2" HorizontalAlignment="Right" Orientation="Horizontal">
-                                        <TextBlock DockPanel.Dock="Right" Text="{Binding downloads}"
-                                                   Foreground="{DynamicResource textBackground}"
-                                                   FontFamily="{DynamicResource Montserrat-SemiBold}" />
-                                        <TextBlock Text=" Downloads" Foreground="{DynamicResource textBackground}"
-                                                   FontFamily="{DynamicResource Montserrat-SemiBold}" />
-                                    </StackPanel>
-                                    <StackPanel Margin="0 2" HorizontalAlignment="Right" Orientation="Horizontal">
-                                        <TextBlock Text="Updated - " Foreground="{DynamicResource textBackground}"
-                                                   FontFamily="{DynamicResource Montserrat-SemiBold}" />
-                                        <TextBlock DockPanel.Dock="Right" Text="{Binding UpdateDate}"
-                                                   Foreground="{DynamicResource textBackground}"
-                                                   FontFamily="{DynamicResource Montserrat-SemiBold}" />
+                                    <controls:RatingsControl Value="{Binding rating.average}" NumberOfStars="5" BackgroundColor="{DynamicResource backgroundDark}" StarForegroundColor="{DynamicResource tabSelected}" StarOutlineColor="{DynamicResource backgroundLight}"
+                                                             HorizontalAlignment="Center" Margin="0 0 5 0" x:Name="rating">
+                                        <controls:RatingsControl.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock Text="{Binding rating.average}"/>
+                                            </ToolTip>
+                                        </controls:RatingsControl.ToolTip>
+                                    </controls:RatingsControl>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                                        <TextBlock Text="{Binding rating.count}" Foreground="{DynamicResource textBackground}" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                                        <TextBlock Text=" Ratings" Foreground="{DynamicResource textBackground}" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
                                     </StackPanel>
                                 </StackPanel>
+                                <StackPanel Margin="0 2" HorizontalAlignment="Right" Orientation="Horizontal">
+                                        <TextBlock DockPanel.Dock="Right" Text="{Binding downloads}" Foreground="{DynamicResource textBackground}" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                                        <TextBlock Text=" Downloads" Foreground="{DynamicResource textBackground}" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                                </StackPanel>
+                                <StackPanel Margin="0 2" HorizontalAlignment="Right" Orientation="Horizontal">
+                                        <TextBlock Text="Updated - " Foreground="{DynamicResource textBackground}" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                                        <TextBlock DockPanel.Dock="Right" Text="{Binding UpdateDate}" Foreground="{DynamicResource textBackground}" FontFamily="{DynamicResource Montserrat-SemiBold}"/>
+                                </StackPanel>                                
+                                </StackPanel>
                             </DockPanel>
-
+                            
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="background" Property="Background"
-                                    Value="{DynamicResource backgroundDarker}" />
-                            <Setter TargetName="rating" Property="BackgroundColor"
-                                    Value="{DynamicResource backgroundDarker}" />
+                            <Setter TargetName="background" Property="Background" Value="{DynamicResource backgroundDarker}"/>
+                            <Setter TargetName="rating" Property="BackgroundColor" Value="{DynamicResource backgroundDarker}"/>
                         </Trigger>
                         <DataTrigger Binding="{Binding file.type}" Value=".jar">
-                            <Setter TargetName="downloadBtn" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="downloadBtn" Property="Visibility" Value="Visible"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding installed}" Value="true">
-                            <Setter TargetName="installedText" Property="Visibility" Value="Visible" />
-                            <Setter TargetName="downloadBtn" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="installedText" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="downloadBtn" Property="Visibility" Value="Collapsed"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding installed}" Value="false">
-                            <Setter TargetName="installedText" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="installedText" Property="Visibility" Value="Collapsed"/>
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -703,19 +613,19 @@
 
     <!-- Console list template -->
     <Style x:Key="ConsoleListView" TargetType="{x:Type ListView}">
-        <Setter Property="Background" Value="{DynamicResource backgroundDefault}" />
-        <Setter Property="HorizontalAlignment" Value="Left" />
-        <Setter Property="Margin" Value="0" />
-        <Setter Property="VerticalAlignment" Value="Top" />
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
-        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="Background" Value="{DynamicResource backgroundDefault}"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="0"/>        
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
 
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListView">
                     <Border Name="Border" BorderThickness="0">
-                        <ItemsPresenter />
+                        <ItemsPresenter/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -723,29 +633,27 @@
     </Style>
 
     <Style x:Key="ConsoleListViewItem" TargetType="{x:Type ListViewItem}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}" />
-        <Setter Property="Margin" Value="0 0.5" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>
+        <Setter Property="Margin" Value="0 0.5"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListViewItem}">
-                    <TextBox Text="{Binding Content, Mode=OneWay}" TextWrapping="Wrap" FontFamily="Consolas"
-                             Foreground="{DynamicResource textTerminal}"
-                             Background="{x:Null}" BorderThickness="0" IsReadOnly="True" x:Name="text" />
+                    <TextBox Text="{Binding Content, Mode=OneWay}" TextWrapping="Wrap" FontFamily="Consolas" Foreground="{DynamicResource textTerminal}" 
+                                Background="{x:Null}" BorderThickness="0" IsReadOnly="True" x:Name="text"/>
                     <ControlTemplate.Triggers>
                         <DataTrigger Binding="{Binding Level}" Value="INFO">
-                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource textTerminal}" />
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource textTerminal}"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Level}" Value="WARN">
-                            <Setter TargetName="text" Property="Foreground"
-                                    Value="{DynamicResource textTerminalYellow}" />
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource textTerminalYellow}"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Level}" Value="ERROR">
-                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource textTerminalRed}" />
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource textTerminalRed}"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Level}" Value="SUCCESS">
-                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource textTerminalGreen}" />
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource textTerminalGreen}"/>
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

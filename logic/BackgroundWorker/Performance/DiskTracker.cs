@@ -8,8 +8,8 @@ namespace Fork.Logic.BackgroundWorker.Performance
 {
     public class DiskTracker
     {
-        private bool interrupted;
-        private readonly List<Thread> threads = new();
+        private bool interrupted = false;
+        private List<Thread> threads = new List<Thread>();
 
         public void TrackTotal(Process p, EntityViewModel viewModel)
         {
@@ -26,15 +26,9 @@ namespace Fork.Logic.BackgroundWorker.Performance
                     try
                     {
                         viewModel.DiskValueUpdate(cpuCounter.NextValue());
-                    }
-                    catch (Exception e)
-                    {
-                        break;
-                    }
-
+                    } catch(Exception e) { break; }
                     Thread.Sleep(500);
                 }
-
                 viewModel.DiskValueUpdate(0.0);
                 viewModel.DiskValueUpdate(0.0);
                 viewModel.DiskValueUpdate(0.0);
@@ -43,7 +37,7 @@ namespace Fork.Logic.BackgroundWorker.Performance
             t.IsBackground = true;
             threads.Add(t);
         }
-
+        
         public void StopThreads()
         {
             interrupted = true;

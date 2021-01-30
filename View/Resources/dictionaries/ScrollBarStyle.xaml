@@ -10,8 +10,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
                     <Border CornerRadius="2"
-                            Background="{DynamicResource backgroundDark}"
-                            BorderThickness="0" />
+                        Background="{DynamicResource backgroundDark}"
+                        BorderThickness="0" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -26,8 +26,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
                     <Border CornerRadius="2"
-                            Background="{DynamicResource textBackground}"
-                            BorderThickness="0" />
+                        Background="{DynamicResource textBackground}"
+                        BorderThickness="0" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -36,8 +36,8 @@
     <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
         <Track Name="PART_Track" IsDirectionReversed="true">
             <Track.Thumb>
-                <Thumb Style="{StaticResource ScrollBarThumb}"
-                       Margin="0" />
+                <Thumb  Style="{StaticResource ScrollBarThumb}"
+                        Margin="0"/>
             </Track.Thumb>
         </Track>
     </ControlTemplate>
@@ -45,28 +45,28 @@
     <ControlTemplate x:Key="VerticalScrollBarLight" TargetType="{x:Type ScrollBar}">
         <Track Name="PART_Track" IsDirectionReversed="true">
             <Track.Thumb>
-                <Thumb Style="{StaticResource ScrollBarThumbLight}"
-                       Margin="0" />
+                <Thumb  Style="{StaticResource ScrollBarThumbLight}"
+                        Margin="0"/>
             </Track.Thumb>
         </Track>
     </ControlTemplate>
 
     <ControlTemplate x:Key="HorizontalScrollBar" TargetType="{x:Type ScrollBar}">
         <Track Name="PART_Track"
-               IsDirectionReversed="False">
+                IsDirectionReversed="False">
             <Track.Thumb>
                 <Thumb Style="{StaticResource ScrollBarThumb}"
-                       Margin="0" />
+                        Margin="0"/>
             </Track.Thumb>
         </Track>
     </ControlTemplate>
 
     <ControlTemplate x:Key="HorizontalScrollBarLight" TargetType="{x:Type ScrollBar}">
         <Track Name="PART_Track"
-               IsDirectionReversed="False">
+                IsDirectionReversed="False">
             <Track.Thumb>
                 <Thumb Style="{StaticResource ScrollBarThumbLight}"
-                       Margin="0" />
+                        Margin="0"/>
             </Track.Thumb>
         </Track>
     </ControlTemplate>
@@ -83,10 +83,10 @@
             </Trigger>
             <Trigger Property="Orientation" Value="Vertical">
                 <Setter Property="Width" Value="30" />
-                <Setter Property="Margin" Value="0 0 0 0" />
+                <Setter Property="Margin" Value="0 0 0 0"/>
                 <Setter Property="Height" Value="Auto" />
                 <Setter Property="Template"
-                        Value="{StaticResource VerticalScrollBar}" />
+                        Value="{StaticResource VerticalScrollBar}" />                
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -103,7 +103,7 @@
             </Trigger>
             <Trigger Property="Orientation" Value="Vertical">
                 <Setter Property="Width" Value="7" />
-                <Setter Property="Margin" Value="0 0 0 0" />
+                <Setter Property="Margin" Value="0 0 0 0"/>
                 <Setter Property="Height" Value="Auto" />
                 <Setter Property="Template"
                         Value="{StaticResource VerticalScrollBar}" />
@@ -139,23 +139,21 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
-                                <ColumnDefinition Width="auto" />
-                            </Grid.ColumnDefinitions>
-                            <Border Grid.Column="1" Background="Transparent" Width="30" />
-                            <Border Grid.Column="1" Panel.ZIndex="1" Background="{DynamicResource backgroundDefault}"
-                                    Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" />
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>   
+                            <Border Grid.Column="1" Background="Transparent" Width="30"/>
+                            <Border Grid.Column="1" Panel.ZIndex="1" Background="{DynamicResource backgroundDefault}" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
                             <ScrollBar Name="PART_VerticalScrollBar"
-                                       Grid.Column="1"
-                                       Panel.ZIndex="2"
-                                       Value="{TemplateBinding VerticalOffset}"
-                                       Maximum="{TemplateBinding ScrollableHeight}"
-                                       ViewportSize="{TemplateBinding ViewportHeight}"
-                                       Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
-                                       Style="{StaticResource BigScrollBar}" />
+                                   Grid.Column="1"
+                                   Panel.ZIndex="2"
+                                   Value="{TemplateBinding VerticalOffset}"
+                                   Maximum="{TemplateBinding ScrollableHeight}"
+                                   ViewportSize="{TemplateBinding ViewportHeight}"
+                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" 
+                                   Style="{StaticResource BigScrollBar}"/>
 
-                            <Border Background="{DynamicResource textBackground}" CornerRadius="3" BorderThickness="2"
-                                    BorderBrush="{DynamicResource textBackground}">
-                                <ScrollContentPresenter />
+                            <Border Background="{DynamicResource textBackground}" CornerRadius="3" BorderThickness="2" BorderBrush="{DynamicResource textBackground}">
+                                <ScrollContentPresenter/>
                             </Border>
                         </Grid>
                     </Border>
@@ -173,17 +171,17 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
-                                <ColumnDefinition Width="7" />
+                                <ColumnDefinition Width="7"/>
                             </Grid.ColumnDefinitions>
                             <ScrollBar Name="PART_VerticalScrollBar"
-                                       Grid.Column="1"
-                                       Grid.ZIndex="2" Style="{DynamicResource DefaultScrollBarLight}"
-                                       Value="{TemplateBinding VerticalOffset}"
-                                       Maximum="{TemplateBinding ScrollableHeight}"
-                                       ViewportSize="{TemplateBinding ViewportHeight}"
-                                       Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" />
+                                   Grid.Column="1"
+                                   Grid.ZIndex="2" Style="{DynamicResource DefaultScrollBarLight}"
+                                   Value="{TemplateBinding VerticalOffset}"
+                                   Maximum="{TemplateBinding ScrollableHeight}"
+                                   ViewportSize="{TemplateBinding ViewportHeight}"
+                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" />
 
-                            <ScrollContentPresenter Margin="0 0 -10 0" />
+                            <ScrollContentPresenter Margin="0 0 -10 0"/>
                         </Grid>
                     </Border>
                 </ControlTemplate>
@@ -198,16 +196,16 @@
                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="5"/>
                         </Grid.ColumnDefinitions>
-                        <ScrollContentPresenter />
+                        <ScrollContentPresenter/>
                         <ScrollBar Grid.Column="1" Name="PART_VerticalScrollBar"
                                    Value="{TemplateBinding VerticalOffset}"
                                    Maximum="{TemplateBinding ScrollableHeight}"
                                    ViewportSize="{TemplateBinding ViewportHeight}"
                                    Visibility="Visible"
-                                   Style="{StaticResource BigScrollBar}" />
+                                   Style="{StaticResource BigScrollBar}"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -215,39 +213,38 @@
     </Style>
 
     <Style x:Key="ServerListScrollViewer" TargetType="ScrollViewer">
-        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ScrollViewer">
                     <Grid Background="{TemplateBinding Background}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <ScrollBar Name="PART_VerticalScrollBar" Panel.ZIndex="1"
                                    Value="{TemplateBinding VerticalOffset}"
                                    Maximum="{TemplateBinding ScrollableHeight}"
                                    ViewportSize="{TemplateBinding ViewportHeight}"
-                                   Style="{DynamicResource DefaultScrollBarLight}" />
-                        <ScrollContentPresenter Grid.Column="1" Margin="-7 0 0 0" />
-                        <Border x:Name="ScrollBarProp"
-                                Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" />
+                                   Style="{DynamicResource DefaultScrollBarLight}"/>
+                        <ScrollContentPresenter Grid.Column="1" Margin="-7 0 0 0"/>
+                        <Border x:Name="ScrollBarProp" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
                     </Grid>
 
                     <ControlTemplate.Triggers>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition SourceName="ScrollBarProp" Property="Visibility" Value="Visible" />
-                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition SourceName="ScrollBarProp" Property="Visibility" Value="Visible"/>
+                                <Condition Property="IsMouseOver" Value="True"/>
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="PART_VerticalScrollBar" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="PART_VerticalScrollBar" Property="Visibility" Value="Visible"/>
                         </MultiTrigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition SourceName="ScrollBarProp" Property="Visibility" Value="Visible" />
-                                <Condition Property="IsMouseOver" Value="False" />
+                                <Condition SourceName="ScrollBarProp" Property="Visibility" Value="Visible"/>
+                                <Condition Property="IsMouseOver" Value="False"/>
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="PART_VerticalScrollBar" Property="Visibility" Value="Hidden" />
+                            <Setter TargetName="PART_VerticalScrollBar" Property="Visibility" Value="Hidden"/>
                         </MultiTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -262,51 +259,52 @@
                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <ScrollContentPresenter x:Name="Presenter" />
+                        <ScrollContentPresenter x:Name="Presenter"/>
 
                         <ScrollBar Grid.Column="1" Name="PART_VerticalScrollBar"
                                    Value="{TemplateBinding VerticalOffset}"
                                    Maximum="{TemplateBinding ScrollableHeight}"
                                    ViewportSize="{TemplateBinding ViewportHeight}"
                                    Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
-                                   Style="{StaticResource DefaultScrollBarLight}" />
+                                   Style="{StaticResource DefaultScrollBarLight}"/>
 
                         <ScrollBar Grid.Row="1" x:Name="PART_HorizontalScrollBar"
-                                   Orientation="Horizontal"
-                                   Value="{TemplateBinding HorizontalOffset}"
-                                   Maximum="{TemplateBinding ScrollableWidth}"
-                                   ViewportSize="{TemplateBinding ViewportWidth}"
-                                   Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
-                                   Style="{StaticResource DefaultScrollBarLight}" />
+                                    Orientation="Horizontal"
+                                    Value="{TemplateBinding HorizontalOffset}"
+                                    Maximum="{TemplateBinding ScrollableWidth}"
+                                    ViewportSize="{TemplateBinding ViewportWidth}"
+                                    Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
+                                    Style="{StaticResource DefaultScrollBarLight}"/>
                     </Grid>
 
                     <ControlTemplate.Triggers>
                         <Trigger SourceName="PART_VerticalScrollBar" Property="Visibility" Value="Visible">
-                            <Setter TargetName="Presenter" Property="Margin" Value="0 0 5 0" />
+                            <Setter TargetName="Presenter" Property="Margin" Value="0 0 5 0"/>
                         </Trigger>
                         <Trigger SourceName="PART_HorizontalScrollBar" Property="Visibility" Value="Visible">
-                            <Setter TargetName="Presenter" Property="Margin" Value="0 0 0 5" />
+                            <Setter TargetName="Presenter" Property="Margin" Value="0 0 0 5"/>
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition SourceName="PART_VerticalScrollBar" Property="Visibility" Value="Visible" />
-                                <Condition SourceName="PART_HorizontalScrollBar" Property="Visibility" Value="Visible" />
+                                <Condition SourceName="PART_VerticalScrollBar" Property="Visibility" Value="Visible"/>
+                                <Condition SourceName="PART_HorizontalScrollBar" Property="Visibility" Value="Visible"/>                                
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Presenter" Property="Margin" Value="0 0 5 5" />
+                            <Setter TargetName="Presenter" Property="Margin" Value="0 0 5 5"/>
                         </MultiTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-
-    <Style TargetType="{x:Type ScrollViewer}" BasedOn="{StaticResource DefaultScrollViewer}" />
+    
+    <Style TargetType="{x:Type ScrollViewer}" BasedOn="{StaticResource DefaultScrollViewer}">
+    </Style>
 </ResourceDictionary>

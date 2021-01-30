@@ -11,6 +11,29 @@ namespace Fork.Logic.Query
 {
     public class Query
     {
+        #region Properties
+
+        // Public properties
+        public static long responseTime { get; set; } = 0;
+        public UdpClient udpClient { get; set; } = new UdpClient();
+
+        // Private properties
+        private string serverIp { get; set; }
+        private int serverPort { get; set; }
+        private int timeoutPing { get; set; } = 3000;
+        private bool messageReceived { get; set; } = false;
+        private byte[] outputBytes { get; set; }
+
+        #endregion
+
+        #region Variables
+
+        private IPEndPoint receivePoint;
+        private IPEndPoint endPoint;
+        private static IPAddress[] serverIpAddresses;
+
+        #endregion
+
         public Query(string serverIp, int serverPort)
         {
             this.serverIp = "localhost";
@@ -23,10 +46,7 @@ namespace Fork.Logic.Query
             endPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), serverPort);
             udpClient = new UdpClient();
         }
-
-        protected Query()
-        {
-        }
+        protected Query(){}
 
         public bool ServerAvailable()
         {
@@ -47,7 +67,7 @@ namespace Fork.Logic.Query
             }
             catch (Exception e)
             {
-                Console.WriteLine("Ping to server " + serverIp + ":" + serverPort + " failed: " + e.Message);
+                Console.WriteLine("Ping to server "+serverIp+":"+serverPort+" failed: "+e.Message);
                 return false;
             }
         }
@@ -59,7 +79,7 @@ namespace Fork.Logic.Query
             FullStats fullStats = new FullStats(fullStatsBytes);
             return fullStats;
         }
-
+        
         private byte[] ConnectToServer(byte[] inputBytes)
         {
             // Ping minecraft server
@@ -82,19 +102,18 @@ namespace Fork.Logic.Query
             try
             {
                 udpClient.BeginReceive(ReceiveCallback, receivePoint);
-            }
-            catch (Exception e)
+            } catch(Exception e)
             {
-                Console.WriteLine(
-                    "Query encountered an excepption while connecting to server\nThe server query is probably disabled or the server stopped!\n" +
-                    e.Message);
+                Console.WriteLine("Query encountered an excepption while connecting to server\nThe server query is probably disabled or the server stopped!\n"+e.Message);
             }
 
             while (!messageReceived)
             {
                 Thread.Sleep(100);
                 if (DateTime.Now > endTimeout)
+                {
                     throw new TimeoutException("The server does not respond at specified port");
+                }
             }
 
             // Receiving data sync - Block application if not receive data of port
@@ -103,13 +122,13 @@ namespace Fork.Logic.Query
             // Returning data
             return outputBytes;
         }
-
+        
         private void ReceiveCallback(IAsyncResult ar)
         {
             outputBytes = udpClient.EndReceive(ar, ref receivePoint);
             messageReceived = true;
         }
-
+        
         private int Handshake()
         {
             // Declare vars
@@ -136,8 +155,12 @@ namespace Fork.Logic.Query
             string number = "";
 
             for (int i = 0; i < receivedBytes.Length; i++)
+            {
                 if (i > 4 && receivedBytes[i] != 0x00)
-                    number += (char) receivedBytes[i];
+                {
+                    number += (char)receivedBytes[i];
+                }
+            }
 
             // Return token
             return int.Parse(number);
@@ -172,28 +195,5 @@ namespace Fork.Logic.Query
             // Return data
             return ConnectToServer(sendme);
         }
-
-        #region Properties
-
-        // Public properties
-        public static long responseTime { get; set; }
-        public UdpClient udpClient { get; set; } = new();
-
-        // Private properties
-        private string serverIp { get; }
-        private int serverPort { get; }
-        private int timeoutPing { get; } = 3000;
-        private bool messageReceived { get; set; }
-        private byte[] outputBytes { get; set; }
-
-        #endregion
-
-        #region Variables
-
-        private IPEndPoint receivePoint;
-        private readonly IPEndPoint endPoint;
-        private static IPAddress[] serverIpAddresses;
-
-        #endregion
     }
 }

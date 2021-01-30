@@ -1,28 +1,29 @@
 ﻿<Application x:Class="Fork.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Fork"
              StartupUri="View/Xaml2/MainWindow.xaml"
              ShutdownMode="OnMainWindowClose"
              Exit="ExitApplication">
-    <Application.Resources>
+    <Application.Resources>        
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/Styles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/WindowStyles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/ButtonStyles.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/DefaultTheme.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/DefaultTheme.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/RadioButtonStyles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/ContextMenuStyle.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/ListViewStyles.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/MenuItemStyles.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/TabControlStyles.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/ComboBoxStyles.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/TextBlockStyles.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/CheckBoxStyles.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/AvalonStyles.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/TextBoxStyles.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/SliderStyles.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/ListBoxStyles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/MenuItemStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/TabControlStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/ComboBoxStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/TextBlockStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/CheckBoxStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/AvalonStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/TextBoxStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/SliderStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/ListBoxStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <FontFamily x:Key="MaterialIO">View/Resources/Fonts/MaterialIcons-Regular.ttf#Material Icons</FontFamily>
             <FontFamily x:Key="Montserrat-Medium">View/Resources/Fonts/Montserrat-Medium.ttf#Montserrat Medium</FontFamily>

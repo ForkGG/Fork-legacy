@@ -2,9 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Navigation;
 using Fork.Logic.Logging;
 using Fork.Logic.Manager;
 using Fork.ViewModel;
@@ -33,9 +37,13 @@ namespace Fork.Logic.WebRequesters
                         await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Head, downloadUrl)))
                     {
                         if (headMessage.Content.Headers.ContentLength != null)
+                        {
                             length = (long) headMessage.Content.Headers.ContentLength;
+                        }
                         else
+                        {
                             length = 0;
+                        }
                     }
 
                     using (HttpResponseMessage response =
@@ -70,10 +78,14 @@ namespace Fork.Logic.WebRequesters
                         }
 
                         if (!downloadCanceled.Contains(viewModel))
+                        {
                             viewModel.DownloadCompletedHandler(new object(),
                                 new AsyncCompletedEventArgs(null, false, null));
+                        }
                         else
+                        {
                             downloadCanceled.Remove(viewModel);
+                        }
                         jarDownloading.Remove(viewModel);
                     }
                 }
@@ -90,7 +102,10 @@ namespace Fork.Logic.WebRequesters
             if (jarDownloading.Contains(viewModel))
             {
                 downloadCanceled.Add(viewModel);
-                while (jarDownloading.Contains(viewModel)) await Task.Delay(100);
+                while (jarDownloading.Contains(viewModel))
+                {
+                    await Task.Delay(100);
+                }
             }
         }
 
@@ -104,15 +119,15 @@ namespace Fork.Logic.WebRequesters
 
         public class DownloadProgressChangedEventArgs
         {
+            public long BytesReceived { get; }
+
+            public long TotalBytesToReceive { get; }
+
             public DownloadProgressChangedEventArgs(long bytesReceived, long totalBytesToReceive)
             {
                 BytesReceived = bytesReceived;
                 TotalBytesToReceive = totalBytesToReceive;
             }
-
-            public long BytesReceived { get; }
-
-            public long TotalBytesToReceive { get; }
         }
     }
 }

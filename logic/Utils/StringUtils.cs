@@ -24,10 +24,14 @@ namespace Fork.Logic.Utils
 
             rawPluginName = rawPluginName.Trim();
             if (rawPluginName.Contains("|"))
+            {
                 rawPluginName = rawPluginName.Remove(rawPluginName.IndexOf("|", StringComparison.Ordinal));
+            }
 
             if (rawPluginName.Contains("-"))
+            {
                 rawPluginName = rawPluginName.Remove(rawPluginName.IndexOf("-", StringComparison.Ordinal));
+            }
 
             rawPluginName = rawPluginName.Trim();
 
@@ -37,16 +41,16 @@ namespace Fork.Logic.Utils
         public static string PluginNameToJarName(string pluginName)
         {
             string jarName = BeautifyPluginName(pluginName);
-            jarName = string.Concat(jarName.Where(c => !char.IsWhiteSpace(c)));
+            jarName = String.Concat(jarName.Where(c => !Char.IsWhiteSpace(c)));
 
             return jarName;
         }
 
         //Source: https://stackoverflow.com/a/9454016/10188858
         /// <summary>
-        ///     Computes the Damerau-Levenshtein Distance between two strings, represented as arrays of
-        ///     integers, where each integer represents the code point of a character in the source string.
-        ///     Includes an optional threshold which can be used to indicate the maximum allowable distance.
+        /// Computes the Damerau-Levenshtein Distance between two strings, represented as arrays of
+        /// integers, where each integer represents the code point of a character in the source string.
+        /// Includes an optional threshold which can be used to indicate the maximum allowable distance.
         /// </summary>
         /// <param name="source">An array of the code points of the first string</param>
         /// <param name="target">An array of the code points of the second string</param>
@@ -58,7 +62,10 @@ namespace Fork.Logic.Utils
             int length2 = target.Length;
 
             // Return trivial case - difference in string lengths exceeds threshold
-            if (Math.Abs(length1 - length2) > threshold) return int.MaxValue;
+            if (Math.Abs(length1 - length2) > threshold)
+            {
+                return int.MaxValue;
+            }
 
             // Ensure arrays [i] / length1 use shorter length 
             if (length1 > length2)
@@ -75,7 +82,10 @@ namespace Fork.Logic.Utils
             int[] dMinus2 = new int[maxi + 1];
             int[] dSwap;
 
-            for (int i = 0; i <= maxi; i++) dCurrent[i] = i;
+            for (int i = 0; i <= maxi; i++)
+            {
+                dCurrent[i] = i;
+            }
 
             int jm1 = 0, im1 = 0, im2 = -1;
 
@@ -102,28 +112,33 @@ namespace Fork.Logic.Utils
                     int sub = dMinus1[im1] + cost;
 
                     //Fastest execution for min value of 3 integers
-                    int min = del > ins ? ins > sub ? sub : ins : del > sub ? sub : del;
+                    int min = (del > ins) ? (ins > sub ? sub : ins) : (del > sub ? sub : del);
 
                     if (i > 1 && j > 1 && source[im2] == target[jm1] && source[im1] == target[j - 2])
                         min = Math.Min(min, dMinus2[im2] + cost);
 
                     dCurrent[i] = min;
-                    if (min < minDistance) minDistance = min;
+                    if (min < minDistance)
+                    {
+                        minDistance = min;
+                    }
 
                     im1++;
                     im2++;
                 }
 
                 jm1++;
-                if (minDistance > threshold) return int.MaxValue;
+                if (minDistance > threshold)
+                {
+                    return int.MaxValue;
+                }
             }
 
             int result = dCurrent[maxi];
-            return result > threshold ? int.MaxValue : result;
+            return (result > threshold) ? int.MaxValue : result;
         }
-
-        private static void Swap<T>(ref T arg1, ref T arg2)
-        {
+        
+        private static void Swap<T>(ref T arg1,ref T arg2) {
             T temp = arg1;
             arg1 = arg2;
             arg2 = temp;

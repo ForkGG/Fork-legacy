@@ -1,4 +1,5 @@
 using System;
+using Fork.Logic.Model.Settings;
 
 namespace Fork.Logic.Model.ProxyModels
 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -40,142 +41,41 @@ namespace Fork.ViewModel
 {
     public abstract class EntityViewModel : BaseViewModel
     {
-        public delegate void HandleEntityPathChangedEvent(object sender, EntityPathChangedEventArgs e);
-
-        protected readonly PersistenceContext Context;
-        private int consoleMessagesLastSecond;
-        private readonly List<ConsoleMessage> consoleOutListNoQuery;
-
-        public ConsoleReader ConsoleReader;
-        private List<double> cpuList;
+        private List<ConsoleMessage> consoleOutListNoQuery;
+        private string currentQuery = "";
+        private int consoleMessagesLastSecond = 0;
+        private ConsoleMessage lastConsoleMessage = new ConsoleMessage("");
 
         private CPUTracker cpuTracker;
-        private string currentQuery = "";
-        private List<double> diskList;
-
-        private DiskTracker diskTracker;
-        private bool isDeleted;
-        private ConsoleMessage lastConsoleMessage = new("");
-        private List<double> memList;
+        private List<double> cpuList;
+        private double cpuValue;
 
         private MemTracker memTracker;
+        private List<double> memList;
         private double memValue;
 
-        private ICommand readConsoleIn;
+        private DiskTracker diskTracker;
+        private List<double> diskList;
+        private double diskValue;
+        
+        private Stopwatch timeSinceLastConsoleMessage = new Stopwatch();
+        private bool isDeleted = false;
 
-        public Task SettingsSavingTask = Task.CompletedTask;
+        protected readonly PersistenceContext Context;
 
-        private readonly Stopwatch timeSinceLastConsoleMessage = new();
-
-
-        protected EntityViewModel(string entityId)
+        public class EntityPathChangedEventArgs
         {
-            Context = new PersistenceContext();
-            Entity = Context.Servers.FirstOrDefault(server => server.UID == entityId)
-                     ?? (Entity) Context.Networks.FirstOrDefault(network => network.UID == entityId)
-                     ?? throw new Exception("Database did not contain Entity with UID:" + entityId);
+            public string NewPath { get; }
 
-            new Thread(() =>
+            public EntityPathChangedEventArgs(string newPath)
             {
-                while (true)
-                {
-                    Thread.Sleep(1000);
-                    consoleMessagesLastSecond = 0;
-                }
-            }) {IsBackground = true}.Start();
-
-            //Entity = Persistence.Instance.PersistenceContext.;
-
-            //Error weird crash (should not happen unless entities.json is corrupted)
-            //TODO check for json errors in entities.json
-            if (Entity.Version == null)
-                Console.WriteLine(
-                    "Persistence file storing servers probably is corrupted (entities.json). Can not start Fork!");
-
-            CurrentStatus = ServerStatus.STOPPED;
-            consoleOutListNoQuery = new List<ConsoleMessage>();
-            ConsoleOutList = new ObservableCollection<ConsoleMessage>();
-            ServerIcons = new ObservableCollection<ImageSource>();
-
-            FileInfo customIcon = new FileInfo(Path.Combine(App.ServerPath, Entity.Name, "custom-icon.png"));
-            if (!customIcon.Exists)
-            {
-                PngBitmapEncoder encoder = new PngBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(
-                    new Uri("pack://application:,,,/View/Resources/images/Server-Icons/default.png")));
-                using (FileStream fileStream = new FileStream(customIcon.FullName, FileMode.Create))
-                {
-                    encoder.Save(fileStream);
-                }
+                NewPath = newPath;
             }
-
-            List<string> iconUris = new List<string>
-            {
-                "pack://application:,,,/View/Resources/images/Server-Icons/default.png",
-                "pack://application:,,,/View/Resources/images/Server-Icons/forkboi.png",
-                "pack://application:,,,/View/Resources/images/Server-Icons/forkchristmas.png",
-                "pack://application:,,,/View/Resources/images/Server-Icons/icon1.png",
-                customIcon.FullName
-            };
-            foreach (string iconUri in iconUris)
-            {
-                Image image;
-                if (iconUri.StartsWith("pack://application:,,,/"))
-                {
-                    StreamResourceInfo info = Application.GetResourceStream(new Uri(iconUri));
-                    image = Image.FromStream(info?.Stream);
-                }
-                else
-                {
-                    image = Image.FromFile(iconUri);
-                }
-
-                Bitmap bitmap = ImageUtils.ResizeImage(image, 64, 64);
-                ImageSource img = ImageUtils.BitmapToImageSource(bitmap);
-                img.Freeze();
-                Application.Current.Dispatcher?.Invoke(() => ServerIcons.Add(img));
-            }
-
-            if (Entity.ServerIconId >= 0 && Entity.ServerIconId < ServerIcons.Count)
-            {
-                SelectedServerIcon = ServerIcons[Entity.ServerIconId];
-            }
-            else
-            {
-                SelectedServerIcon = ServerIcons[0];
-                Entity.ServerIconId = 0;
-            }
-
-            WriteServerIcon();
-
-
-            ConsoleOutList.CollectionChanged += ConsoleOutChanged;
-
-            UpdateAddressInfo();
-
-            if (Entity.StartWithFork)
-                Task.Run(async () =>
-                {
-                    while (!ServerManager.Initialized) await Task.Delay(500);
-
-                    switch (this)
-                    {
-                        case ServerViewModel serverViewModel:
-                            await ServerManager.Instance.StartServerAsync(serverViewModel);
-                            break;
-                        case NetworkViewModel networkViewModel:
-                            await ServerManager.Instance.StartNetworkAsync(networkViewModel,
-                                networkViewModel.Network.SyncServers);
-                            break;
-                    }
-                });
-
-            PropertyChanged += (sender, e) =>
-            {
-                if (e.PropertyName != null && e.PropertyName.Equals(nameof(CurrentStatus)))
-                    ApplicationManager.Instance.TriggerServerListEvent(sender, e);
-            };
         }
+
+        public delegate void HandleEntityPathChangedEvent(object sender, EntityPathChangedEventArgs e);
+
+        public event HandleEntityPathChangedEvent EntityPathChangedEvent;
 
         public Entity Entity { get; set; }
 
@@ -190,8 +90,13 @@ namespace Fork.ViewModel
                 new Thread(() =>
                 {
                     if (this is ServerViewModel s)
+                    {
                         raisePropertyChanged(nameof(s.ServerTitle));
-                    else if (this is NetworkViewModel n) raisePropertyChanged(nameof(n.NetworkTitle));
+                    }
+                    else if (this is NetworkViewModel n)
+                    {
+                        raisePropertyChanged(nameof(n.NetworkTitle));
+                    }
 
                     Context.SaveChanges();
                     Persistence.Instance.SaveChanges();
@@ -199,6 +104,7 @@ namespace Fork.ViewModel
             }
         }
 
+        public ConsoleReader ConsoleReader;
         public ObservableCollection<ConsoleMessage> ConsoleOutList { get; set; }
 
         public AppSettings AppSettings => AppSettingsSerializer.Instance.AppSettings;
@@ -209,14 +115,16 @@ namespace Fork.ViewModel
 
         public string AddressInfo { get; set; }
 
-        public string CPUValue => Math.Round(CPUValueRaw, 0) + "%";
-        public double CPUValueRaw { get; private set; }
+        public string CPUValue => Math.Round(cpuValue, 0) + "%";
+        public double CPUValueRaw => cpuValue;
 
         public string MemValue => Math.Round(memValue / Entity.JavaSettings.MaxRam * 100, 0) + "%";
         public double MemValueRaw => memValue / Entity.JavaSettings.MaxRam * 100;
 
-        public string DiskValue => Math.Round(DiskValueRaw, 0) + "%";
-        public double DiskValueRaw { get; private set; }
+        public string DiskValue => Math.Round(diskValue, 0) + "%";
+        public double DiskValueRaw => diskValue;
+
+        private ICommand readConsoleIn;
 
         public ICommand ReadConsoleIn
         {
@@ -333,11 +241,130 @@ namespace Fork.ViewModel
 
         public SettingsViewModel SettingsViewModel { get; set; }
 
-        public event HandleEntityPathChangedEvent EntityPathChangedEvent;
+        public Task SettingsSavingTask = Task.CompletedTask;
+
+
+        protected EntityViewModel(string entityId)
+        {
+            Context = new PersistenceContext();
+            Entity = Context.Servers.FirstOrDefault(server => server.UID == entityId)
+                     ?? (Entity) Context.Networks.FirstOrDefault(network => network.UID == entityId)
+                     ?? throw new Exception("Database did not contain Entity with UID:" + entityId);
+            
+            new Thread(() =>
+            {
+                while (true)
+                {
+                    Thread.Sleep(1000);
+                    consoleMessagesLastSecond = 0;
+                }
+            }) {IsBackground = true}.Start();
+
+            //Entity = Persistence.Instance.PersistenceContext.;
+
+            //Error weird crash (should not happen unless entities.json is corrupted)
+            //TODO check for json errors in entities.json
+            if (Entity.Version == null)
+            {
+                Console.WriteLine(
+                    "Persistence file storing servers probably is corrupted (entities.json). Can not start Fork!");
+            }
+
+            CurrentStatus = ServerStatus.STOPPED;
+            consoleOutListNoQuery = new List<ConsoleMessage>();
+            ConsoleOutList = new ObservableCollection<ConsoleMessage>();
+            ServerIcons = new ObservableCollection<ImageSource>();
+
+            FileInfo customIcon = new FileInfo(Path.Combine(App.ServerPath, Entity.Name, "custom-icon.png"));
+            if (!customIcon.Exists)
+            {
+                PngBitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(
+                    new Uri("pack://application:,,,/View/Resources/images/Server-Icons/default.png")));
+                using (FileStream fileStream = new FileStream(customIcon.FullName, FileMode.Create))
+                {
+                    encoder.Save(fileStream);
+                }
+            }
+
+            List<string> iconUris = new List<string>
+            {
+                "pack://application:,,,/View/Resources/images/Server-Icons/default.png",
+                "pack://application:,,,/View/Resources/images/Server-Icons/forkboi.png",
+                "pack://application:,,,/View/Resources/images/Server-Icons/forkchristmas.png",
+                "pack://application:,,,/View/Resources/images/Server-Icons/icon1.png",
+                customIcon.FullName
+            };
+            foreach (string iconUri in iconUris)
+            {
+                Image image;
+                if (iconUri.StartsWith("pack://application:,,,/"))
+                {
+                    StreamResourceInfo info = Application.GetResourceStream(new Uri(iconUri));
+                    image = Image.FromStream(info?.Stream);
+                }
+                else
+                {
+                    image = Image.FromFile(iconUri);
+                }
+                
+                Bitmap bitmap = ImageUtils.ResizeImage(image, 64, 64);
+                ImageSource img = ImageUtils.BitmapToImageSource(bitmap);
+                img.Freeze();
+                Application.Current.Dispatcher?.Invoke(() => ServerIcons.Add(img));
+            }
+            if (Entity.ServerIconId >= 0 && Entity.ServerIconId < ServerIcons.Count)
+            {
+                SelectedServerIcon = ServerIcons[Entity.ServerIconId];
+            }
+            else
+            {
+                SelectedServerIcon = ServerIcons[0];
+                Entity.ServerIconId = 0;
+            }
+            WriteServerIcon();
+
+
+            ConsoleOutList.CollectionChanged += ConsoleOutChanged;
+
+            UpdateAddressInfo();
+
+            if (Entity.StartWithFork)
+            {
+                Task.Run(async () =>
+                {
+                    while (!ServerManager.Initialized)
+                    {
+                        await Task.Delay(500);
+                    }
+
+                    switch (this)
+                    {
+                        case ServerViewModel serverViewModel:
+                            await ServerManager.Instance.StartServerAsync(serverViewModel);
+                            break;
+                        case NetworkViewModel networkViewModel:
+                            await ServerManager.Instance.StartNetworkAsync(networkViewModel, networkViewModel.Network.SyncServers);
+                            break;
+                    }
+                });
+            }
+
+            PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName != null && e.PropertyName.Equals(nameof(CurrentStatus)))
+                {
+                    ApplicationManager.Instance.TriggerServerListEvent(sender, e);
+                }
+            };
+        }
 
         public void UpdateCustomImage(string filePath)
         {
-            if (isDeleted) return;
+            if (isDeleted)
+            {
+                return;
+            }
             try
             {
                 ImageSource toRemove = ServerIcons.Last();
@@ -348,12 +375,14 @@ namespace Fork.ViewModel
                 {
                     bitmap = ImageUtils.ResizeImage(image, 64, 64);
                 }
-
                 ImageSource img = ImageUtils.BitmapToImageSource(bitmap);
                 img.Freeze();
                 Application.Current.Dispatcher?.Invoke(() => ServerIcons.Add(img));
-                if (newIsSelected) SelectedServerIcon = img;
-                bitmap.Save(Path.Combine(App.ServerPath, Entity.Name, "custom-icon.png"));
+                if (newIsSelected)
+                {
+                    SelectedServerIcon = img;
+                }
+                bitmap.Save(Path.Combine(App.ServerPath,Entity.Name,"custom-icon.png"));
             }
             catch (Exception e)
             {
@@ -363,23 +392,40 @@ namespace Fork.ViewModel
 
         public void SaveSettings()
         {
-            if (isDeleted) return;
+            if (isDeleted)
+            {
+                return;
+            }
             SettingsSavingTask = SettingsViewModel.SaveChanges();
             Task.Run(() => SettingsSavingTask);
             if (this is ServerViewModel serverViewModel)
+            {
                 ServerAutomationManager.Instance.UpdateAutomation(serverViewModel);
+            }
             Task.Run(async () =>
             {
                 WriteServerIcon();
                 UpdateAddressInfo();
                 //Update Network page if one exists where this server is in
                 if (this is ServerViewModel serverViewModel)
+                {
                     foreach (EntityViewModel entityViewModel in ServerManager.Instance.Entities)
+                    {
                         if (entityViewModel is NetworkViewModel networkViewModel)
+                        {
                             foreach (NetworkServer networkServer in networkViewModel.Servers)
+                            {
                                 if (networkServer is NetworkForkServer networkForkServer)
+                                {
                                     if (networkForkServer.ServerViewModel == this)
+                                    {
                                         networkViewModel.UpdateServer(networkServer, serverViewModel);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 await Context.SaveChangesAsync();
                 Persistence.Instance.SaveChanges();
             });
@@ -391,22 +437,27 @@ namespace Fork.ViewModel
             {
                 if (message.Level == ConsoleMessage.MessageLevel.INFO)
                 {
-                    int threshold =
-                        (int) Math.Round(Math.Min(lastConsoleMessage.Content.Length, message.Content.Length) * 0.10);
-                    int dist = StringUtils.DamerauLevenshteinDistance(lastConsoleMessage.Content,
+                    int threshold = (int) Math.Round(Math.Min(lastConsoleMessage.Content.Length, message.Content.Length) * 0.10);
+                    int dist = StringUtils.DamerauLevenshteinDistance(lastConsoleMessage.Content, 
                         message.Content, threshold);
-                    if (dist < threshold * 5 / Math.Max(timeSinceLastConsoleMessage.Elapsed.TotalSeconds, 1))
+                    if (dist < (threshold*5)/Math.Max(timeSinceLastConsoleMessage.Elapsed.TotalSeconds,1))
                     {
                         lastConsoleMessage.SubContents++;
                         return;
                     }
 
-                    if (consoleMessagesLastSecond > AppSettings.MaxConsoleLinesPerSecond) return;
-                }
+                    if (consoleMessagesLastSecond > AppSettings.MaxConsoleLinesPerSecond)
+                    {
+                        return;
+                    }
+                } 
 
                 try
                 {
-                    if (CurrentStatus == ServerStatus.RUNNING) consoleMessagesLastSecond++;
+                    if (CurrentStatus == ServerStatus.RUNNING)
+                    {
+                        consoleMessagesLastSecond++;
+                    }
 
                     lastConsoleMessage = message;
                     consoleOutListNoQuery.Add(message);
@@ -421,8 +472,10 @@ namespace Fork.ViewModel
                     {
                         ConsoleMessage messageToDelete = consoleOutListNoQuery[0];
                         if (ConsoleOutList.Contains(messageToDelete))
+                        {
                             Application.Current?.Dispatcher?.Invoke(() => ConsoleOutList.RemoveAt(0),
                                 DispatcherPriority.ApplicationIdle);
+                        }
 
                         consoleOutListNoQuery.RemoveAt(0);
                     }
@@ -468,7 +521,7 @@ namespace Fork.ViewModel
         {
             SettingsViewModel.InitializeSettings(files);
         }
-
+        
         public async Task UpdateSettingsFiles(List<string> fileNames)
         {
             await SettingsViewModel.UpdateSettings(fileNames);
@@ -510,17 +563,19 @@ namespace Fork.ViewModel
         public void CPUValueUpdate(double value)
         {
             cpuList.Add(value);
-            if (cpuList.Count > 3) cpuList.RemoveAt(0);
+            if (cpuList.Count > 3)
+            {
+                cpuList.RemoveAt(0);
+            }
 
             try
             {
-                CPUValueRaw = cpuList.Average();
+                cpuValue = cpuList.Average();
             }
             catch
             {
                 //ignore, only errors rarely if collection was modified
             }
-
             raisePropertyChanged(nameof(CPUValue));
             raisePropertyChanged(nameof(CPUValueRaw));
         }
@@ -528,7 +583,10 @@ namespace Fork.ViewModel
         public void MemValueUpdate(double value)
         {
             memList.Add(value);
-            if (memList.Count > 3) memList.RemoveAt(0);
+            if (memList.Count > 3)
+            {
+                memList.RemoveAt(0);
+            }
 
             try
             {
@@ -538,7 +596,6 @@ namespace Fork.ViewModel
             {
                 //ignore, only errors rarely if collection was modified
             }
-
             raisePropertyChanged(nameof(MemValue));
             raisePropertyChanged(nameof(MemValueRaw));
         }
@@ -546,17 +603,17 @@ namespace Fork.ViewModel
         public void DiskValueUpdate(double value)
         {
             diskList.Add(value);
-            if (diskList.Count > 3) diskList.RemoveAt(0);
+            if (diskList.Count > 3)
+            {
+                diskList.RemoveAt(0);
+            }
 
             try
             {
-                DiskValueRaw = diskList.Average();
-            }
-            catch
-            {
+                diskValue = diskList.Average();
+            } catch{
                 //ignore, only errors rarely if collection was modified
             }
-
             raisePropertyChanged(nameof(DiskValue));
             raisePropertyChanged(nameof(DiskValueRaw));
         }
@@ -600,7 +657,10 @@ namespace Fork.ViewModel
         public void FinishedCopying()
         {
             ImportCompleted = true;
-            if (this is ServerViewModel serverViewModel) serverViewModel.InitializeLists(serverViewModel.Server);
+            if (this is ServerViewModel serverViewModel)
+            {
+                serverViewModel.InitializeLists(serverViewModel.Server);
+            }
 
             raisePropertyChanged(nameof(ImportCompleted));
             raisePropertyChanged(nameof(ReadyToUse));
@@ -608,7 +668,7 @@ namespace Fork.ViewModel
 
         public void CopyProgressChanged(object sender, FileImporter.CopyProgressChangedEventArgs e)
         {
-            CopyProgress = e.FilesCopied / (double) e.FilesToCopy * 100;
+            CopyProgress = (double) e.FilesCopied / (double) e.FilesToCopy * 100;
             //CopyProgressReadable = Math.Round(CopyProgress, 0) + "%";
         }
 
@@ -622,8 +682,8 @@ namespace Fork.ViewModel
             SettingsReader settingsReader = new SettingsReader(this);
             ApplicationManager.Instance.SettingsReaders.Add(settingsReader);
         }
-
-
+        
+        
         private void WriteServerIcon()
         {
             try
@@ -636,8 +696,10 @@ namespace Fork.ViewModel
                     customIcon.Delete();
                     return;
                 }
-
-                if (Entity.ServerIconId == 0) return;
+                if (Entity.ServerIconId == 0)
+                {
+                    return;
+                }
                 PngBitmapEncoder encoder = new PngBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create((BitmapSource) SelectedServerIcon));
                 using (FileStream fileStream = new FileStream(customIcon.FullName, FileMode.Create))
@@ -655,26 +717,34 @@ namespace Fork.ViewModel
         private void UpdateAddressInfo()
         {
             if (Entity is Server server)
+            {
                 AddressInfo = new APIController().GetExternalIPAddress() + ":" + server.ServerSettings.ServerPort;
+            }
         }
 
         private void RemoveNotMatchingMessages(string query)
         {
             List<ConsoleMessage> original = new List<ConsoleMessage>(ConsoleOutList);
             foreach (ConsoleMessage consoleMessage in original)
+            {
                 if (!consoleMessage.Content.ToLower().Contains(query.ToLower()))
+                {
                     Application.Current.Dispatcher?.Invoke(() => ConsoleOutList.Remove(consoleMessage),
                         DispatcherPriority.Send);
+                }
+            }
         }
 
         private void ResetConsoleOutList()
         {
             for (int i = 0; i < consoleOutListNoQuery.Count; i++)
+            {
                 if (ConsoleOutList.Count <= i || consoleOutListNoQuery[i] != ConsoleOutList[i])
                 {
                     var i1 = i;
                     Application.Current.Dispatcher?.Invoke(() => ConsoleOutList.Insert(i1, consoleOutListNoQuery[i1]));
                 }
+            }
         }
 
 
@@ -682,16 +752,6 @@ namespace Fork.ViewModel
         protected void raisePropertyChanged([CallerMemberName] string propertyName = null)
         {
             RaisePropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public class EntityPathChangedEventArgs
-        {
-            public EntityPathChangedEventArgs(string newPath)
-            {
-                NewPath = newPath;
-            }
-
-            public string NewPath { get; }
         }
 
         private class ActionCommand : ICommand

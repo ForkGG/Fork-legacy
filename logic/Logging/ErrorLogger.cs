@@ -1,12 +1,14 @@
 using System;
+using System.Data;
+using System.Windows;
 using Fork.Logic.Persistence;
 
 namespace Fork.Logic.Logging
 {
     public class ErrorLogger
     {
-        private static readonly FileWriter fileWriter = new();
-
+        private static FileWriter fileWriter = new FileWriter();
+        
         public ErrorLogger()
         {
             /*AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
@@ -21,14 +23,13 @@ namespace Fork.Logic.Logging
 #if DEBUG
                 Console.WriteLine(errorMessage);
 #endif
-                fileWriter.AppendToErrorLog("[" + DateTime.Now + "] [UnhandledException] " + errorMessage + "\n");
+                fileWriter.AppendToErrorLog("["+DateTime.Now+"] [UnhandledException] "+errorMessage+"\n");
             };
         }
 
         public static void Append(Exception e)
         {
-            fileWriter.AppendToErrorLog("[" + DateTime.Now + "] [HandledException] " + e?.GetType() + "\n" +
-                                        e?.Message + "\n" + e?.StackTrace + "\n");
+            fileWriter.AppendToErrorLog("["+DateTime.Now+"] [HandledException] "+e?.GetType()+"\n" +e?.Message+"\n" +e?.StackTrace+"\n");
         }
     }
 }

@@ -1,25 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 using Fork.Logic.Manager;
 using Fork.Logic.Model;
 using Fork.ViewModel;
+using Brush = System.Windows.Media.Brush;
 
 namespace Fork.View.Xaml2
 {
     public partial class MainWindow : Window
     {
-        private bool createOpen;
-        private bool importOpen;
+        private MainViewModel viewModel;
         private object lastSelected;
-        private readonly MainViewModel viewModel;
-
+        private bool importOpen;
+        private bool createOpen;
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -36,37 +45,54 @@ namespace Fork.View.Xaml2
         private void CreateServer_Click(object sender, RoutedEventArgs e)
         {
             if (CreatePage.Visibility == Visibility.Hidden)
+            {
                 OpenCreateServer();
+            }
             else
+            {
                 CloseCreateServer();
+            }
         }
-
         private void DeleteOpen_Click(object sender, RoutedEventArgs e)
         {
             if (viewModel.SelectedEntity is ServerViewModel)
+            {
                 DeleteServerOverlay.Visibility = Visibility.Visible;
+            }
             else
+            {
                 DeleteNetworkOverlay.Visibility = Visibility.Visible;
+            }
         }
 
         private void RenameOpen_Click(object sender, RoutedEventArgs e)
         {
             if (viewModel.SelectedEntity is ServerViewModel)
+            {
                 RenameServerOverlay.Visibility = Visibility.Visible;
+            }
             else
+            {
                 RenameNetworkOverlay.Visibility = Visibility.Visible;
+            }
         }
 
         private void CloneOpen_Click(object sender, RoutedEventArgs e)
         {
             if (viewModel.SelectedEntity is ServerViewModel serverViewModel)
             {
-                if (serverViewModel.CurrentStatus == ServerStatus.STOPPED) Clone_Click(sender, e);
+                if(serverViewModel.CurrentStatus == ServerStatus.STOPPED)
+                {
+                    Clone_Click(sender, e);
+                }
                 CloneServerOverlay.Visibility = Visibility.Visible;
             }
-            else if (viewModel.SelectedEntity is NetworkViewModel networkViewModel)
+            else if(viewModel.SelectedEntity is NetworkViewModel networkViewModel)
             {
-                if (networkViewModel.CurrentStatus == ServerStatus.STOPPED) Clone_Click(sender, e);
+                if (networkViewModel.CurrentStatus == ServerStatus.STOPPED)
+                {
+                    Clone_Click(sender, e);
+                }
                 CloneNetworkOverlay.Visibility = Visibility.Visible;
             }
         }
@@ -74,16 +100,20 @@ namespace Fork.View.Xaml2
         private void ImportServer_Click(object sender, RoutedEventArgs e)
         {
             if (ImportPage.Visibility == Visibility.Hidden)
+            {
                 OpenImportServer();
+            }
             else
+            {
                 CloseImportServer();
+            }
         }
 
         private void DiscordOpen_Click(object sender, RoutedEventArgs e)
         {
             string url = "https://discord.fork.gg";
             //hack for windows only https://github.com/dotnet/corefx/issues/10361
-            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") {CreateNoWindow = true});
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
         }
 
         private void OnMainWindowClose(object sender, CancelEventArgs e)
@@ -93,84 +123,88 @@ namespace Fork.View.Xaml2
 
         private void OpenCreateServer()
         {
-            if (AppSettingsPage.Visibility == Visibility.Visible) CloseAppSettings();
+            if (AppSettingsPage.Visibility == Visibility.Visible)
+            {
+                CloseAppSettings();
+            }
             lastSelected = ServerList.SelectedItem;
             ServerList.UnselectAll();
-
+            
             //Open createServer Frame
             ServerPage.Visibility = Visibility.Hidden;
             CreatePage.Visibility = Visibility.Visible;
-
+            
             //Change Buttons
             DeleteButton.IsEnabled = false;
             ImportButton.IsEnabled = false;
-
+            
             CreateButton.Background = (Brush) Application.Current.FindResource("buttonBgrRed");
             CreateButton.HoverBackground = (Brush) Application.Current.FindResource("buttonBgrRed");
-            CreateButton.IconSource =
-                new BitmapImage(new Uri(@"pack://application:,,,/View/Resources/images/Icons/Cancel.png",
-                    UriKind.Absolute));
-            CreateButton.HoverIconSource =
-                new BitmapImage(new Uri(@"pack://application:,,,/View/Resources/images/Icons/CancelW.png",
-                    UriKind.Absolute));
+            CreateButton.IconSource = new BitmapImage(new Uri(@"pack://application:,,,/View/Resources/images/Icons/Cancel.png", UriKind.Absolute));
+            CreateButton.HoverIconSource = new BitmapImage(new Uri(@"pack://application:,,,/View/Resources/images/Icons/CancelW.png", UriKind.Absolute));
             createOpen = true;
         }
 
         private void CloseCreateServer()
         {
-            if (!createOpen) return;
+            
+            if (!createOpen)
+            {
+                return;
+            }
             createOpen = false;
-
-            if (ServerList.SelectedItems.Count == 0) ServerList.SelectedItem = lastSelected;
-
+            
+            if (ServerList.SelectedItems.Count == 0)
+            {
+                ServerList.SelectedItem = lastSelected;
+            }
+            
             //Close createServer Frame
             ServerPage.Visibility = Visibility.Visible;
             CreatePage.Visibility = Visibility.Hidden;
-
+            
             //Change Buttons
             DeleteButton.IsEnabled = true;
             ImportButton.IsEnabled = true;
-
+            
             CreateButton.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
             CreateButton.HoverBackground = (Brush) Application.Current.FindResource("buttonBgrGreen");
-            CreateButton.IconSource =
-                new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/Create.png"));
-            CreateButton.HoverIconSource =
-                new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/CreateW.png"));
-        }
+            CreateButton.IconSource = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/Create.png"));
+            CreateButton.HoverIconSource = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/CreateW.png"));
 
+        }
+        
         private void OpenImportServer()
         {
-            if (AppSettingsPage.Visibility == Visibility.Visible) CloseAppSettings();
+            if (AppSettingsPage.Visibility == Visibility.Visible)
+            {
+                CloseAppSettings();
+            }
             lastSelected = ServerList.SelectedItem;
             ServerList.UnselectAll();
-
+            
             //Open importServer Frame
             ServerPage.Visibility = Visibility.Hidden;
             ImportPage.Visibility = Visibility.Visible;
-
+            
             //Change Buttons
             DeleteButton.IsEnabled = false;
-
+            
             CreateButton.IsEnabled = false;
 
             ImportButton.Background = (Brush) Application.Current.FindResource("buttonBgrRed");
             ImportButton.HoverBackground = (Brush) Application.Current.FindResource("buttonBgrRed");
-            ImportButton.IconSource =
-                new BitmapImage(new Uri(@"pack://application:,,,/View/Resources/images/Icons/Cancel.png",
-                    UriKind.Absolute));
-            ImportButton.HoverIconSource =
-                new BitmapImage(new Uri(@"pack://application:,,,/View/Resources/images/Icons/CancelW.png",
-                    UriKind.Absolute));
-
+            ImportButton.IconSource = new BitmapImage(new Uri(@"pack://application:,,,/View/Resources/images/Icons/Cancel.png", UriKind.Absolute));
+            ImportButton.HoverIconSource = new BitmapImage(new Uri(@"pack://application:,,,/View/Resources/images/Icons/CancelW.png", UriKind.Absolute));
+            
             ImportButton.Height = CreateButton.Height;
             ImportButton.IconHeight = CreateButton.IconHeight;
             ImportButton.Width = CreateButton.Width;
             ImportButton.IconWidth = CreateButton.IconWidth;
             CreateButton.Height = DeleteButton.Height;
-            CreateButton.IconHeight = DeleteButton.IconHeight * 1.2;
+            CreateButton.IconHeight = DeleteButton.IconHeight *1.2;
             CreateButton.Width = DeleteButton.Width;
-            CreateButton.IconWidth = DeleteButton.IconWidth * 1.2;
+            CreateButton.IconWidth = DeleteButton.IconWidth *1.2;
 
             importOpen = true;
         }
@@ -178,25 +212,29 @@ namespace Fork.View.Xaml2
         private void CloseImportServer()
         {
             //Check if window is already closed
-            if (!importOpen) return;
+            if (!importOpen)
+            {
+                return;
+            }
             importOpen = false;
-
-            if (ServerList.SelectedItems.Count == 0) ServerList.SelectedItem = lastSelected;
+            
+            if (ServerList.SelectedItems.Count == 0)
+            {
+                ServerList.SelectedItem = lastSelected;
+            }
 
             //Close importServer Frame
             ServerPage.Visibility = Visibility.Visible;
             ImportPage.Visibility = Visibility.Hidden;
-
+            
             //Change Buttons
             DeleteButton.IsEnabled = true;
             CreateButton.IsEnabled = true;
 
             ImportButton.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
             ImportButton.HoverBackground = (Brush) Application.Current.FindResource("buttonBgrBlue");
-            ImportButton.IconSource =
-                new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/Import.png"));
-            ImportButton.HoverIconSource =
-                new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/ImportW.png"));
+            ImportButton.IconSource = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/Import.png"));
+            ImportButton.HoverIconSource = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/ImportW.png"));
 
             CreateButton.Height = ImportButton.Height;
             CreateButton.IconHeight = ImportButton.IconHeight;
@@ -213,11 +251,11 @@ namespace Fork.View.Xaml2
             CloseNonEntityPages();
             lastSelected = ServerList.SelectedItem;
             ServerList.UnselectAll();
-
-
+            
+            
             //TODO make loading icon or smth
             viewModel.AppSettingsViewModel.OpenAppSettingsPage();
-
+            
             //Open importServer Frame
             ServerPage.Visibility = Visibility.Hidden;
             AppSettingsPage.Visibility = Visibility.Visible;
@@ -232,13 +270,16 @@ namespace Fork.View.Xaml2
             //Close importServer Frame
             ServerPage.Visibility = Visibility.Visible;
             AppSettingsPage.Visibility = Visibility.Hidden;
-
+            
             //Save settings:
             viewModel.AppSettingsViewModel.CloseAppSettingsPage();
             viewModel.UpdateInstalledJavaVersion();
-
-            if (ServerList.SelectedItems.Count == 0) ServerList.SelectedItem = lastSelected;
-
+            
+            if (ServerList.SelectedItems.Count == 0)
+            {
+                ServerList.SelectedItem = lastSelected;
+            }
+            
             //Change Buttons
             AppSettingsButton.IsEnabled = true;
             AppSettingsButton.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
@@ -247,17 +288,27 @@ namespace Fork.View.Xaml2
         private void ServerList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.RemovedItems.Count > 0 && e.RemovedItems[0] is EntityViewModel entityViewModel)
+            {
                 entityViewModel.SaveSettings();
+            }
             CloseNonEntityPages();
         }
 
         private void CloseNonEntityPages()
         {
-            if (CreatePage.Visibility == Visibility.Visible) CloseCreateServer();
+            if (CreatePage.Visibility == Visibility.Visible){
+                CloseCreateServer();
+            }
 
-            if (ImportPage.Visibility == Visibility.Visible) CloseImportServer();
+            if (ImportPage.Visibility == Visibility.Visible)
+            {
+                CloseImportServer();
+            }
 
-            if (AppSettingsPage.Visibility == Visibility.Visible) CloseAppSettings();
+            if (AppSettingsPage.Visibility == Visibility.Visible)
+            {
+                CloseAppSettings();
+            }
         }
 
         private void Abort_Click(object sender, RoutedEventArgs e)
@@ -279,15 +330,22 @@ namespace Fork.View.Xaml2
                 ServerRenameCancelBtn.IsEnabled = false;
                 newName = NewServerName.Text;
                 //TODO name verifier instead of this
-                if (newName.Equals("")) newName = "ForkEntity";
+                if (newName.Equals(""))
+                {
+                    newName = "ForkEntity";
+                }
 
                 bool success = await ServerManager.Instance.RenameServerAsync(serverViewModel, newName);
                 if (success)
-                    Console.WriteLine("Successfully renamed Server to: " + newName);
+                {
+                    Console.WriteLine("Successfully renamed Server to: "+newName);
+                }
                 else
+                {
                     //TODO Show error
-                    Console.WriteLine("Error renaming Server: " + serverViewModel.Name);
-
+                    Console.WriteLine("Error renaming Server: "+serverViewModel.Name);
+                }
+                    
                 ServerRenameBtn.IsEnabled = true;
                 ServerRenameCancelBtn.IsEnabled = true;
             }
@@ -297,24 +355,30 @@ namespace Fork.View.Xaml2
                 NetworkRenameCancelBtn.IsEnabled = false;
                 newName = NewNetworkName.Text;
                 //TODO name verifier instead of this
-                if (newName.Equals("")) newName = "ForkEntity";
+                if (newName.Equals(""))
+                {
+                    newName = "ForkEntity";
+                }
 
                 bool success = await ServerManager.Instance.RenameNetworkAsync(networkViewModel, newName);
                 if (success)
-                    Console.WriteLine("Successfully renamed Network to: " + newName);
+                {
+                    Console.WriteLine("Successfully renamed Network to: "+newName);
+                }
                 else
+                {
                     //TODO Show error
-                    Console.WriteLine("Error renaming Network: " + networkViewModel.Name);
-
+                    Console.WriteLine("Error renaming Network: "+networkViewModel.Name);
+                }
+                
                 NetworkRenameBtn.IsEnabled = true;
                 NetworkRenameCancelBtn.IsEnabled = true;
             }
             else
             {
-                throw new NotImplementedException("Rename does not support this type of entity: " +
-                                                  viewModel.GetType());
+                throw new NotImplementedException("Rename does not support this type of entity: "+viewModel.GetType());
             }
-
+            
             Abort_Click(this, e);
         }
 
@@ -327,10 +391,14 @@ namespace Fork.View.Xaml2
 
                 bool success = await ServerManager.Instance.CloneServerAsync(serverViewModel);
                 if (success)
-                    Console.WriteLine("Successfully cloned Server:" + serverViewModel.Name);
+                {
+                    Console.WriteLine("Successfully cloned Server:"+ serverViewModel.Name);
+                }
                 else
+                {
                     //TODO Show error
                     Console.WriteLine("Error cloning Server: " + serverViewModel.Name);
+                }
 
                 ServerCloneBtn.IsEnabled = true;
                 ServerCloneCancelBtn.IsEnabled = true;
@@ -342,18 +410,21 @@ namespace Fork.View.Xaml2
 
                 bool success = await ServerManager.Instance.CloneNetworkAsync(networkViewModel);
                 if (success)
+                {
                     Console.WriteLine("Successfully renamed Network to: " + networkViewModel.Name);
+                }
                 else
+                {
                     //TODO Show error
                     Console.WriteLine("Error renaming Network: " + networkViewModel.Name);
+                }
 
                 NetworkCloneBtn.IsEnabled = true;
                 NetworkCloneCancelBtn.IsEnabled = true;
             }
             else
             {
-                throw new NotImplementedException("Rename does not support this type of entity: " +
-                                                  viewModel.GetType());
+                throw new NotImplementedException("Rename does not support this type of entity: " + viewModel.GetType());
             }
 
             Abort_Click(this, e);
@@ -367,20 +438,19 @@ namespace Fork.View.Xaml2
                 ServerDeleteCancelBtn.IsEnabled = false;
                 ServerDeleteBtn.IsEnabled = false;
                 ServerDeleteBtn.Content = "Deleting...";
-
+                
                 bool success = await ServerManager.Instance.DeleteServerAsync(serverToDelete);
                 if (!success)
                 {
-                    Console.WriteLine("Problem while deleting " + serverToDelete);
+                    Console.WriteLine("Problem while deleting "+serverToDelete);
                 }
                 else
                 {
-                    Console.WriteLine("Successfully deleted server " + serverToDelete);
-                    Application.Current.Dispatcher?.Invoke(() => viewModel.Entities.Remove(serverToDelete),
-                        DispatcherPriority.Background); //This shouldn't be here
+                    Console.WriteLine("Successfully deleted server "+serverToDelete);
+                    Application.Current.Dispatcher?.Invoke(()=>viewModel.Entities.Remove(serverToDelete), DispatcherPriority.Background); //This shouldn't be here
                     ServerList.SelectedIndex = 0;
                 }
-
+                
                 ServerDeleteCancelBtn.IsEnabled = true;
                 ServerDeleteBtn.IsEnabled = true;
                 ServerDeleteBtn.Content = "Delete";
@@ -390,25 +460,24 @@ namespace Fork.View.Xaml2
                 NetworkDeleteCancelBtn.IsEnabled = false;
                 NetworkDeleteBtn.IsEnabled = false;
                 NetworkDeleteBtn.Content = "Deleting...";
-
+                
                 bool success = await ServerManager.Instance.DeleteNetworkAsync(networkToDelete);
                 if (!success)
                 {
-                    Console.WriteLine("Problem while deleting " + networkToDelete.Network);
+                    Console.WriteLine("Problem while deleting "+networkToDelete.Network);
                 }
                 else
                 {
-                    Console.WriteLine("Successfully deleted network " + networkToDelete.Network);
-                    Application.Current.Dispatcher?.Invoke(() => viewModel.Entities.Remove(networkToDelete),
-                        DispatcherPriority.Background); //This shouldn't be here
+                    Console.WriteLine("Successfully deleted network "+networkToDelete.Network);
+                    Application.Current.Dispatcher?.Invoke(()=>viewModel.Entities.Remove(networkToDelete), DispatcherPriority.Background); //This shouldn't be here
                     ServerList.SelectedIndex = 0;
                 }
-
+                
                 NetworkDeleteCancelBtn.IsEnabled = true;
                 NetworkDeleteBtn.IsEnabled = true;
                 NetworkDeleteBtn.Content = "Delete";
             }
-
+            
             DeleteServerOverlay.Visibility = Visibility.Collapsed;
             DeleteNetworkOverlay.Visibility = Visibility.Collapsed;
         }
@@ -417,7 +486,7 @@ namespace Fork.View.Xaml2
         {
             viewModel.UpdateInstalledJavaVersion(true);
         }
-
+        
         private void CheckAgain_Click(object sender, RoutedEventArgs e)
         {
             viewModel.UpdateInstalledJavaVersion();
@@ -429,7 +498,7 @@ namespace Fork.View.Xaml2
             {
                 string url = textBlock.Text;
                 //hack for windows only https://github.com/dotnet/corefx/issues/10361
-                Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") {CreateNoWindow = true});
+                Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
             }
         }
 
@@ -448,7 +517,7 @@ namespace Fork.View.Xaml2
         {
             string url = viewModel.LatestForkVersion.URL;
             //hack for windows only https://github.com/dotnet/corefx/issues/10361
-            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") {CreateNoWindow = true});
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
         }
     }
 }

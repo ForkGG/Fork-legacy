@@ -7,15 +7,12 @@ namespace Fork.Logic.Model.MinecraftVersionModels
     {
         public enum VersionType
         {
-            release,
-            snapshot,
-            old_beta,
-            old_alpha
+            release, snapshot,old_beta,old_alpha
         }
-
+        
         public Latest latest { get; set; }
         public List<Version> versions { get; set; }
-
+        
         public class Latest
         {
             public string release { get; set; }

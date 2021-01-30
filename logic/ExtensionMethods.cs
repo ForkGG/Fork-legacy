@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
+using System.Security.Claims;
 using System.Windows;
 using System.Windows.Media;
 using Fork.Logic.Logging;
+using Fork.Logic.Model;
 using Fork.Logic.Model.PluginModels;
 using Fork.Logic.Model.ServerConsole;
 using Fork.Logic.RoleManagement;
@@ -66,14 +69,12 @@ namespace Fork.Logic
             {
                 ConsoleMessage.MessageLevel.INFO => (SolidColorBrush) new BrushConverter().ConvertFromString("#D1C2EF"),
                 ConsoleMessage.MessageLevel.WARN => (SolidColorBrush) new BrushConverter().ConvertFromString("#E3BD72"),
-                ConsoleMessage.MessageLevel.ERROR =>
-                    (SolidColorBrush) new BrushConverter().ConvertFromString("#E37272"),
-                ConsoleMessage.MessageLevel.SUCCESS => (SolidColorBrush) new BrushConverter().ConvertFromString(
-                    "#72E388"),
+                ConsoleMessage.MessageLevel.ERROR => (SolidColorBrush) new BrushConverter().ConvertFromString("#E37272"),
+                ConsoleMessage.MessageLevel.SUCCESS => (SolidColorBrush) new BrushConverter().ConvertFromString("#72E388"),
                 _ => throw new ArgumentException("Undefined enum entry in ConsoleMessage.MessageLevel.Color()")
             };
         }
-
+        
         public static void Sort<T>(this ObservableCollection<T> collection)
             where T : IComparable<T>, IEquatable<T>
         {
@@ -85,6 +86,7 @@ namespace Fork.Logic
                 while (ptr < sorted.Count - 1)
                 {
                     if (!collection[ptr].Equals(sorted[ptr]))
+                    {
                         try
                         {
                             int idx = CollectionUtils.Search(collection, ptr + 1, sorted[ptr]);
@@ -96,6 +98,7 @@ namespace Fork.Logic
                                 new AggregateException("Error while sorting ObservableCollection. See inner Exception",
                                     e));
                         }
+                    }
 
                     ptr++;
                 }

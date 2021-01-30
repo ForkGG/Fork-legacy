@@ -1,4 +1,8 @@
-﻿namespace Fork.logic.model.PluginModels
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Fork.logic.model.PluginModels
 {
     public class PluginCategory
     {

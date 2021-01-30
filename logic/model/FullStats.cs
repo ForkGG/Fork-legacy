@@ -6,6 +6,19 @@ namespace Fork.Logic.Model
 {
     public class FullStats
     {
+        public string Motd { get; }
+        public string GameMode { get; }
+        public string MapName { get; }
+        public string HostIP { get; }
+        public string GameID { get; }
+        public string Version{ get; }
+        public string ServerInfo { get; set; }
+        public int OnlinePlayers{ get; }
+        public int MaxPlayers{ get; }
+        public int HostPort{ get; }
+        public List<string> PlayerList{ get; set; }
+        public List<string> PluginList{ get; set; }
+        
         //public FullStats() {}
 
         public FullStats(byte[] data)
@@ -25,25 +38,15 @@ namespace Fork.Logic.Model
             SetPluginList(datos[11]);
             SetPlayerList(datos);
         }
-
-        public string Motd { get; }
-        public string GameMode { get; }
-        public string MapName { get; }
-        public string HostIP { get; }
-        public string GameID { get; }
-        public string Version { get; }
-        public string ServerInfo { get; set; }
-        public int OnlinePlayers { get; }
-        public int MaxPlayers { get; }
-        public int HostPort { get; }
-        public List<string> PlayerList { get; set; }
-        public List<string> PluginList { get; set; }
-
+        
         private void SetPlayerList(List<string> players)
         {
             PlayerList = new List<string>();
 
-            for (int i = 25; i < players.Count; i++) PlayerList.Add(players[i]);
+            for (int i = 25; i < players.Count; i++)
+            {
+                PlayerList.Add(players[i]);
+            }
         }
 
         private void SetPluginList(string pluginInfo)
@@ -59,8 +62,11 @@ namespace Fork.Logic.Model
                 string[] plugins = infoPlugins.Last().Split(';');
 
                 ServerInfo = infoPlugins.First();
-
-                foreach (string plugin in plugins) PluginList.Add(plugin.Trim());
+                
+                foreach (string plugin in plugins)
+                {
+                    PluginList.Add(plugin.Trim());
+                }
             }
         }
     }

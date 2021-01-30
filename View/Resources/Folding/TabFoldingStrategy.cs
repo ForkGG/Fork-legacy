@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Text;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Folding;
 
@@ -10,7 +12,13 @@ namespace Fork.View.Resources.Folding
         private const int SpacesInTab = 2;
 
         /// <summary>
-        ///     Create <see cref="NewFolding" />s for the specified document and updates the folding manager with them.
+        /// Creates a new TabFoldingStrategy.
+        /// </summary>
+        public TabFoldingStrategy() {
+        }
+        
+        /// <summary>
+        /// Create <see cref="NewFolding"/>s for the specified document and updates the folding manager with them.
         /// </summary>
         public void UpdateFoldings(FoldingManager manager, TextDocument document)
         {
@@ -20,7 +28,7 @@ namespace Fork.View.Resources.Folding
         }
 
         /// <summary>
-        ///     Create <see cref="NewFolding" />s for the specified document.
+        /// Create <see cref="NewFolding"/>s for the specified document.
         /// </summary>
         public IEnumerable<NewFolding> CreateNewFoldings(TextDocument document, out int firstErrorOffset)
         {
@@ -29,22 +37,24 @@ namespace Fork.View.Resources.Folding
         }
 
         /// <summary>
-        ///     Create <see cref="NewFolding" />s for the specified document.
+        /// Create <see cref="NewFolding"/>s for the specified document.
         /// </summary>
         public IEnumerable<NewFolding> CreateNewFoldingsByLine(TextDocument document)
         {
             List<NewFolding> newFoldings = new List<NewFolding>();
-            if (document == null || document.LineCount <= 1) return newFoldings;
-
+            if (document == null || document.LineCount <= 1)
+            {
+                return newFoldings;
+            }
+            
             ActualDocument actualDocument = ActualDocument.BuildActualDocument(document);
             newFoldings.AddRange(CreateFoldings(actualDocument.Lines.First, new Stack<NewFolding>()));
-
-            newFoldings.Sort((a, b) => a.StartOffset.CompareTo(b.StartOffset));
+            
+            newFoldings.Sort((a, b) => (a.StartOffset.CompareTo(b.StartOffset)));
             return newFoldings;
         }
 
-        private List<NewFolding> CreateFoldings(LinkedListNode<ActualDocument.ActualLine> linkedLine,
-            Stack<NewFolding> offsetStack)
+        private List<NewFolding> CreateFoldings(LinkedListNode<ActualDocument.ActualLine> linkedLine, Stack<NewFolding> offsetStack)
         {
             List<NewFolding> foldings = new List<NewFolding>();
 
@@ -59,10 +69,10 @@ namespace Fork.View.Resources.Folding
 
                 return foldings;
             }
-
+            
             int thisLineOffset = linkedLine.Value.FrontOffset;
             int nextLineOffset = linkedLine.Next.Value.FrontOffset;
-
+            
             //This is the first line of a folding
             if (nextLineOffset > thisLineOffset)
             {
@@ -72,7 +82,7 @@ namespace Fork.View.Resources.Folding
                 folding.StartOffset = documentOffset;
                 offsetStack.Push(folding);
             }
-
+            
             //This is the last line of a folding
             while (thisLineOffset > nextLineOffset)
             {
@@ -86,7 +96,10 @@ namespace Fork.View.Resources.Folding
                 thisLineOffset -= 2;
             }
 
-            if (linkedLine.Next != null) foldings.AddRange(CreateFoldings(linkedLine.Next, offsetStack));
+            if (linkedLine.Next != null)
+            {
+                foldings.AddRange(CreateFoldings(linkedLine.Next, offsetStack));
+            }
 
 
             return foldings;

@@ -1,64 +1,63 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Forms;
 using Fork.Logic.ImportLogic;
 using Fork.Logic.Manager;
 using Fork.Logic.Model;
 using Fork.ViewModel;
 using Application = System.Windows.Application;
 using Binding = System.Windows.Data.Binding;
+using ComboBox = System.Windows.Controls.ComboBox;
 
 namespace Fork.View.Xaml2.Pages
 {
     public partial class CreatePage : Page
     {
-        private bool isProxy;
+        private AddServerViewModel viewModel;
         private string lastPath;
+        private bool isProxy = false;
         private ServerVersion.VersionType proxyType = ServerVersion.VersionType.Waterfall;
-        private readonly AddServerViewModel viewModel;
-
+        
         public CreatePage()
         {
             InitializeComponent();
             viewModel = new AddServerViewModel();
             DataContext = viewModel;
         }
-
+        
         private void ServerTypeVanilla_Click(object sender, RoutedEventArgs e)
         {
             UnSelectProxyType();
-            versionComboBox.SetBinding(ItemsControl.ItemsSourceProperty,
-                new Binding {Source = viewModel.VanillaServerVersions});
+            versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.VanillaServerVersions });
             versionComboBox.SelectedIndex = 0;
         }
 
         private void ServerTypePaper_Click(object sender, RoutedEventArgs e)
         {
             UnSelectProxyType();
-            versionComboBox.SetBinding(ItemsControl.ItemsSourceProperty,
-                new Binding {Source = viewModel.PaperVersions});
+            versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.PaperVersions });
             versionComboBox.SelectedIndex = 0;
         }
 
         private void ServerTypeSpigot_Click(object sender, RoutedEventArgs e)
         {
             UnSelectProxyType();
-            versionComboBox.SetBinding(ItemsControl.ItemsSourceProperty,
-                new Binding {Source = viewModel.SpigotServerVersions});
+            versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.SpigotServerVersions });
             versionComboBox.SelectedIndex = 0;
         }
-
+        
         private void ServerTypeBungeeCord_Click(object sender, RoutedEventArgs e)
         {
             //TODO
             SelectProxyType();
             proxyType = ServerVersion.VersionType.Waterfall;
         }
-
+        
         private void ServerTypeWaterfall_Click(object sender, RoutedEventArgs e)
         {
             SelectProxyType();
@@ -92,64 +91,85 @@ namespace Fork.View.Xaml2.Pages
                 string networkName = NetworkName.Text;
                 string refinedNetworkName = networkName;
                 foreach (char c in networkName)
+                {
                     if (illegalDirChars.Contains(c))
-                        refinedNetworkName = refinedNetworkName.Replace(c + "", "");
-                if (refinedNetworkName.Equals("")) refinedNetworkName = "Network";
+                    {
+                        refinedNetworkName = refinedNetworkName.Replace(c+"","");
+                    }
+                }
+                if (refinedNetworkName.Equals(""))
+                {
+                    refinedNetworkName = "Network";
+                }
 
                 //TODO replace this with int value verifier
                 int maxRam;
-                if (!int.TryParse(NetworkMaxRam.Text, out maxRam)) maxRam = 1024;
-
-                JavaSettings javaSettings = new JavaSettings {MaxRam = maxRam};
-                bool createNetworkSuccess =
-                    await ServerManager.Instance.CreateNetworkAsync(refinedNetworkName, proxyType, javaSettings);
+                if (!int.TryParse(NetworkMaxRam.Text, out maxRam))
+                {
+                    maxRam = 1024;
+                }
+                
+                JavaSettings javaSettings = new JavaSettings{MaxRam = maxRam};
+                bool createNetworkSuccess = await ServerManager.Instance.CreateNetworkAsync(refinedNetworkName,proxyType, javaSettings);
             }
             else
-            {
-                ServerVersion selectedVersion = (ServerVersion) versionComboBox.SelectedValue;
+            {   
+                ServerVersion selectedVersion = (ServerVersion)versionComboBox.SelectedValue;
                 //TODO check if inputs are valid / server not existing
 
                 string serverName = ServerName.Text;
                 string refinedServerName = serverName;
                 foreach (char c in serverName)
-                    if (illegalDirChars.Contains(c))
-                        refinedServerName = refinedServerName.Replace(c + "", "");
-                if (refinedServerName.Equals("")) refinedServerName = "Server";
-
-                string worldPath = null;
-                if (lastPath != null)
                 {
-                    WorldValidationInfo valInfo =
-                        DirectoryValidator.ValidateWorldDirectory(new DirectoryInfo(lastPath));
-                    if (valInfo.IsValid) worldPath = lastPath;
+                    if (illegalDirChars.Contains(c))
+                    {
+                        refinedServerName = refinedServerName.Replace(c+"","");
+                    }
+                }
+                if (refinedServerName.Equals(""))
+                {
+                    refinedServerName = "Server";
                 }
 
-                bool createServerSuccess = await ServerManager.Instance.CreateServerAsync(refinedServerName,
-                    selectedVersion, viewModel.ServerSettings, new JavaSettings(), worldPath);
+                string worldPath = null;
+                if (lastPath!=null)
+                {
+                    WorldValidationInfo valInfo = DirectoryValidator.ValidateWorldDirectory(new DirectoryInfo(lastPath));
+                    if (valInfo.IsValid)
+                    {
+                        worldPath = lastPath;
+                    }
+                }
+                bool createServerSuccess = await ServerManager.Instance.CreateServerAsync(refinedServerName,selectedVersion, viewModel.ServerSettings, new JavaSettings(),worldPath);
             }
-
             viewModel.GenerateNewSettings();
             CreateBtn.IsEnabled = true;
 
             //TODO Do something if creating fails
         }
-
+        
         private void ServerDirPath_MouseDown(object sender, MouseButtonEventArgs e)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
-            if (lastPath != null) fbd.SelectedPath = lastPath;
-
+            if (lastPath != null)
+            {
+                fbd.SelectedPath = lastPath;
+            }
+            
             DialogResult result = fbd.ShowDialog();
             if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
             {
                 worldFolderPathText.Text = fbd.SelectedPath;
                 lastPath = fbd.SelectedPath;
-                WorldValidationInfo valInfo =
-                    DirectoryValidator.ValidateWorldDirectory(new DirectoryInfo(fbd.SelectedPath));
+                WorldValidationInfo valInfo = DirectoryValidator.ValidateWorldDirectory(new DirectoryInfo(fbd.SelectedPath));
                 if (!valInfo.IsValid)
+                {
                     serverPathBgr.Background = (Brush) Application.Current.FindResource("buttonBgrRed");
+                }
                 else
+                {
                     serverPathBgr.Background = (Brush) Application.Current.FindResource("tabSelected");
+                }
             }
         }
     }

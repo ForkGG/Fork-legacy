@@ -10,8 +10,8 @@ namespace Fork.Logic.BackgroundWorker.Performance
 {
     public class CPUTracker
     {
-        private bool interrupted;
-        private readonly List<Thread> threads = new();
+        private bool interrupted = false;
+        private List<Thread> threads = new List<Thread>();
 
         public void TrackTotal(Process p, EntityViewModel viewModel)
         {
@@ -28,19 +28,13 @@ namespace Fork.Logic.BackgroundWorker.Performance
                     try
                     {
                         viewModel.CPUValueUpdate(cpuCounter.NextValue());
-                    }
-                    catch (Exception e)
-                    {
-                        break;
-                    }
-
+                    } catch(Exception e) { break; }
                     Thread.Sleep(500);
                 }
-
                 viewModel.CPUValueUpdate(0.0);
                 viewModel.CPUValueUpdate(0.0);
                 viewModel.CPUValueUpdate(0.0);
-            }) {IsBackground = true};
+            }){IsBackground = true};
             t.Start();
             threads.Add(t);
         }
@@ -56,13 +50,17 @@ namespace Fork.Logic.BackgroundWorker.Performance
                 .ToArray();
 
             foreach (string instance in instances)
+            {
                 using (PerformanceCounter cnt = new PerformanceCounter("Process",
                     "ID Process", instance, true))
                 {
-                    int val = (int) cnt.RawValue;
-                    if (val == processId) return instance;
+                    int val = (int)cnt.RawValue;
+                    if (val == processId)
+                    {
+                        return instance;
+                    }
                 }
-
+            }
             return null;
         }
 

@@ -17,40 +17,49 @@ namespace Fork.ViewModel
     public class AppSettingsViewModel : BaseViewModel
     {
         private string oldDefaultJavaPath;
-        private readonly Timer retryTimer = new() {Interval = 1000, AutoReset = true, Enabled = false};
-
-        public AppSettingsViewModel(MainViewModel mainViewModel)
-        {
-            retryTimer.Elapsed += (sender, e) =>
-            {
-                if (RetrySeconds > 0) RetrySeconds--;
-            };
-
-            if (AppSettings.EnableDiscordBot) ApplicationManager.StartDiscordWebSocket();
-
-            MainViewModel = mainViewModel;
-            AppSettingsPage = new AppSettingsPage(this);
-            Patrons = new ObservableCollection<string>(new APIController().GetPatrons());
-        }
-
+        private Timer retryTimer = new Timer {Interval = 1000, AutoReset = true, Enabled = false};
+        
         public AppSettings AppSettings => AppSettingsSerializer.Instance.AppSettings;
 
         public string DiscordSocketStateMessage
         {
             get
             {
-                if (!IsDiscordBotConnected) return "Disconnected";
+                if (!IsDiscordBotConnected)
+                {
+                    return "Disconnected";
+                }
                 return !IsDiscordLinked ? "Waiting for token" : "Connected";
             }
         }
 
-        public bool IsDiscordBotConnected { get; set; }
-        public bool IsDiscordLinked { get; set; }
+        public bool IsDiscordBotConnected { get; set; } = false;
+        public bool IsDiscordLinked { get; set; } = false;
         public int RetrySeconds { get; set; } = 30;
         public string DiscordGuildName { get; set; } = "";
         public AppSettingsPage AppSettingsPage { get; }
         public MainViewModel MainViewModel { get; }
         public ObservableCollection<string> Patrons { get; set; }
+
+        public AppSettingsViewModel(MainViewModel mainViewModel)
+        {
+            retryTimer.Elapsed += (sender, e) =>
+            {
+                if (RetrySeconds > 0)
+                {
+                    RetrySeconds--;
+                }
+            };
+
+            if (AppSettings.EnableDiscordBot)
+            {
+                ApplicationManager.StartDiscordWebSocket();
+            }
+            
+            MainViewModel = mainViewModel;
+            AppSettingsPage = new AppSettingsPage(this);
+            Patrons = new ObservableCollection<string>(new APIController().GetPatrons());
+        }
 
         public async Task OpenAppSettingsPage()
         {
@@ -60,9 +69,13 @@ namespace Fork.ViewModel
 
         public async Task CloseAppSettingsPage()
         {
-            if (oldDefaultJavaPath != null && !oldDefaultJavaPath.Equals(AppSettings.DefaultJavaPath))
+            if (oldDefaultJavaPath!=null && !oldDefaultJavaPath.Equals(AppSettings.DefaultJavaPath))
+            {
                 foreach (EntityViewModel entityViewModel in MainViewModel.Entities)
+                {
                     entityViewModel.UpdateDefaultJavaPath(oldDefaultJavaPath, AppSettings.DefaultJavaPath);
+                }
+            }
             await WriteAppSettingsAsync();
         }
 
@@ -72,7 +85,7 @@ namespace Fork.ViewModel
             retryTimer.Stop();
             RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(DiscordSocketStateMessage)));
         }
-
+        
         public void UpdateDiscordWebSocketState(DisconnectionType type)
         {
             IsDiscordBotConnected = false;

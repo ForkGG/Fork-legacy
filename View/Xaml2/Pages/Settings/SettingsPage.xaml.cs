@@ -1,4 +1,10 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Threading;
+using Fork.Logic.Model.Settings;
+using Fork.View.Xaml2.Pages.Settings;
 using Fork.ViewModel;
 
 namespace Fork.View.Xaml2.Pages.Settings
@@ -17,12 +23,17 @@ namespace Fork.View.Xaml2.Pages.Settings
         private void FileSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0 && e.AddedItems[0] is ISettingsPage settingsPage)
+            {
                 UpdateSettingsFrame(settingsPage);
+            }
         }
 
         public void UpdateSettingsFrame(ISettingsPage settingsPage)
         {
-            if (settingsPage == null) return;
+            if (settingsPage == null)
+            {
+                return;
+            }
             settingsFrame.Content = settingsPage;
         }
     }

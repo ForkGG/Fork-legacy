@@ -1,12 +1,13 @@
 ﻿<Page x:Class="Fork.View.Xaml2.Pages.Settings.ForkServerSettingsPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Fork.View.Xaml2.Pages.Settings"
       xmlns:controls="clr-namespace:Fork.View.Xaml2.Controls"
       xmlns:val="clr-namespace:Fork.View.Xaml.ValidationRules"
       xmlns:converter="clr-namespace:Fork.View.Xaml.Converter"
-      mc:Ignorable="d"
+      mc:Ignorable="d" 
       d:DesignHeight="1000" d:DesignWidth="800"
       Title="ForkSettingsPage">
 
@@ -16,8 +17,8 @@
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition Height="20" />
+                <RowDefinition/>
+                <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
 
             <ScrollViewer Margin="10 0 5 10" Style="{DynamicResource SettingsScrollViewer}">
@@ -26,8 +27,7 @@
                     <Border CornerRadius="10" Margin="5 5 10 5">
                         <StackPanel Background="Transparent" Margin="0 20" Width="720" HorizontalAlignment="Left">
                             <TextBlock Text="Manage Your Server" Foreground="{DynamicResource textHeader}"
-                                       FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23"
-                                       Margin="95 0 5 20" />
+                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="95 0 5 20" />
                             <StackPanel Margin="110 10 50 10" HorizontalAlignment="Left">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -35,46 +35,36 @@
                                         <ColumnDefinition Width="180" />
                                     </Grid.ColumnDefinitions>
                                     <Grid>
-                                        <Button Content="Regen Nether" Margin="0 0 5 0"
-                                                Style="{DynamicResource RoundedTextButton}" Click="RegenNether_Click" />
-                                        <Border x:Name="RegNetherSucc" Background="{DynamicResource tabSelected}"
-                                                Margin="0 0 5 0" IsHitTestVisible="False"
-                                                Opacity="0" CornerRadius="5" />
-                                        <Border x:Name="RegNetherFail" Background="{DynamicResource buttonBgrRed}"
-                                                Margin="0 0 5 0" IsHitTestVisible="False"
-                                                Opacity="0" CornerRadius="5" />
+                                        <Button Content="Regen Nether" Margin="0 0 5 0" Style="{DynamicResource RoundedTextButton}" Click="RegenNether_Click" />
+                                        <Border x:Name="RegNetherSucc" Background="{DynamicResource tabSelected}" Margin="0 0 5 0" IsHitTestVisible="False"
+                                                       Opacity="0" CornerRadius="5"/>
+                                        <Border x:Name="RegNetherFail" Background="{DynamicResource buttonBgrRed}" Margin="0 0 5 0" IsHitTestVisible="False"
+                                                       Opacity="0" CornerRadius="5"/>
                                     </Grid>
 
                                     <Grid Grid.Column="1">
                                         <Button Content="Regen End" Margin="5 0 0 0"
-                                                Style="{DynamicResource RoundedTextButton}" Click="RegenEnd_Click" />
-                                        <Border x:Name="RegEndSucc" Background="{DynamicResource tabSelected}"
-                                                Margin="5 0 0 0" IsHitTestVisible="False"
-                                                Opacity="0" CornerRadius="5" />
-                                        <Border x:Name="RegEndFail" Background="{DynamicResource buttonBgrRed}"
-                                                Margin="5 0 0 0" IsHitTestVisible="False"
-                                                Opacity="0" CornerRadius="5" />
+                                            Style="{DynamicResource RoundedTextButton}" Click="RegenEnd_Click"/>
+                                        <Border x:Name="RegEndSucc" Background="{DynamicResource tabSelected}" Margin="5 0 0 0" IsHitTestVisible="False"
+                                                       Opacity="0" CornerRadius="5"/>
+                                        <Border x:Name="RegEndFail" Background="{DynamicResource buttonBgrRed}" Margin="5 0 0 0" IsHitTestVisible="False"
+                                                       Opacity="0" CornerRadius="5"/>
                                     </Grid>
                                 </Grid>
                                 <StackPanel Orientation="Horizontal" Margin="0 40 0 0">
                                     <TextBlock Text="Change Version" Style="{DynamicResource CreateServerTextBlock}"
-                                               Margin="0 0 10 0" />
-                                    <ComboBox SelectionChanged="VersionChange_SelectionChanged"
-                                              ItemsSource="{Binding Versions}"
-                                              x:Name="versionComboBox"
-                                              SelectedItem="{Binding Server.Version, Mode=OneWay}"
-                                              ItemContainerStyle="{DynamicResource DefaultComboBoxItem}"
-                                              FontFamily="{DynamicResource Montserrat-Bold}" FontSize="17" />
-                                    <Button x:Name="VersionChangeBtn" Visibility="Collapsed" Margin="10 0 0 0"
-                                            Content="Apply"
-                                            Width="80" Style="{DynamicResource RoundedTextButton}"
-                                            Click="VersionChange_Click" />
+                                   Margin="0 0 10 0"
+                                   VerticalAlignment="Center" />
+                                    <ComboBox SelectionChanged="VersionChange_SelectionChanged" ItemsSource="{Binding Versions}"
+                                  x:Name="versionComboBox" SelectedItem="{Binding Server.Version, Mode=OneWay}"
+                                  ItemContainerStyle="{DynamicResource DefaultComboBoxItem}"
+                                  FontFamily="{DynamicResource Montserrat-Bold}" FontSize="17" />
+                                    <Button x:Name="VersionChangeBtn" Visibility="Collapsed" Margin="10 0 0 0" Content="Apply"
+                                Width="80" Style="{DynamicResource RoundedTextButton}" Click="VersionChange_Click"/>
                                 </StackPanel>
-                                <TextBlock
-                                    Text="WARNING: Switching to older Minecraft Versions prevents starting your current Worlds"
-                                    Margin="0 10 0 0" />
+                                <TextBlock Text="WARNING: Switching to older Minecraft Versions prevents starting your current Worlds" Margin="0 10 0 0"/>
                             </StackPanel>
-
+                            
                         </StackPanel>
                         <Border.Style>
                             <Style TargetType="Border">
@@ -92,10 +82,9 @@
                     <Border CornerRadius="10" Margin="5 5 10 5">
                         <StackPanel Background="Transparent" Margin="0 20" Width="720" HorizontalAlignment="Left">
                             <TextBlock Text="Server Automation" Foreground="{DynamicResource textHeader}"
-                                       FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23"
-                                       Margin="95 0 5 0" />
+                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="95 0 5 0" />
                             <StackPanel Margin="110 10 50 10" HorizontalAlignment="Left">
-                                <TextBlock Text="Automatic Server Restarts" FontSize="20" Margin="0 5 0 10" />
+                                <TextBlock Text="Automatic Server Restarts" FontSize="20" Margin="0 5 0 10"/>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
@@ -106,19 +95,18 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <CheckBox IsChecked="{Binding Server.Restart1.Enabled}"
-                                              Style="{DynamicResource DefaultCheckBox}"
-                                              Margin="20 5">
+                                  Style="{DynamicResource DefaultCheckBox}"
+                                  Margin="20 5">
                                         <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
-                                                Background="{DynamicResource textBackground}">
+                                    Background="{DynamicResource textBackground}">
                                             <TextBox Margin="5 0" Background="{DynamicResource textBackground}"
-                                                     BorderThickness="0"
-                                                     Foreground="{DynamicResource backgroundDark}"
-                                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                                     FontSize="17" Height="20">
+                                         BorderThickness="0"
+                                         Foreground="{DynamicResource backgroundDark}"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="17" Height="20">
                                                 <TextBox.Text>
                                                     <Binding Path="Server.Restart1.Time"
-                                                             Converter="{StaticResource SimpleTimeToStringConverter}"
-                                                             Mode="TwoWay">
+                                                 Converter="{StaticResource SimpleTimeToStringConverter}" Mode="TwoWay">
                                                         <Binding.ValidationRules>
                                                             <val:TimeValidationRule ValidationStep="RawProposedValue" />
                                                         </Binding.ValidationRules>
@@ -128,19 +116,18 @@
                                         </Border>
                                     </CheckBox>
                                     <CheckBox IsChecked="{Binding Server.Restart2.Enabled}"
-                                              Style="{DynamicResource DefaultCheckBox}"
-                                              Grid.Column="1" Margin="20 5">
+                                  Style="{DynamicResource DefaultCheckBox}"
+                                  Grid.Column="1" Margin="20 5">
                                         <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
-                                                Background="{DynamicResource textBackground}">
+                                    Background="{DynamicResource textBackground}">
                                             <TextBox Margin="5 0" Background="{DynamicResource textBackground}"
-                                                     BorderThickness="0"
-                                                     Foreground="{DynamicResource backgroundDark}"
-                                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                                     FontSize="17" Height="20">
+                                         BorderThickness="0"
+                                         Foreground="{DynamicResource backgroundDark}"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="17" Height="20">
                                                 <TextBox.Text>
                                                     <Binding Path="Server.Restart2.Time"
-                                                             Converter="{StaticResource SimpleTimeToStringConverter}"
-                                                             Mode="TwoWay">
+                                                 Converter="{StaticResource SimpleTimeToStringConverter}" Mode="TwoWay">
                                                         <Binding.ValidationRules>
                                                             <val:TimeValidationRule ValidationStep="RawProposedValue" />
                                                         </Binding.ValidationRules>
@@ -150,19 +137,18 @@
                                         </Border>
                                     </CheckBox>
                                     <CheckBox IsChecked="{Binding Server.Restart3.Enabled}"
-                                              Style="{DynamicResource DefaultCheckBox}"
-                                              Grid.Row="1" Margin="20 5">
+                                  Style="{DynamicResource DefaultCheckBox}"
+                                  Grid.Row="1" Margin="20 5">
                                         <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
-                                                Background="{DynamicResource textBackground}">
+                                    Background="{DynamicResource textBackground}">
                                             <TextBox Margin="5 0" Background="{DynamicResource textBackground}"
-                                                     BorderThickness="0"
-                                                     Foreground="{DynamicResource backgroundDark}"
-                                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                                     FontSize="17" Height="20">
+                                         BorderThickness="0"
+                                         Foreground="{DynamicResource backgroundDark}"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="17" Height="20">
                                                 <TextBox.Text>
                                                     <Binding Path="Server.Restart3.Time"
-                                                             Converter="{StaticResource SimpleTimeToStringConverter}"
-                                                             Mode="TwoWay">
+                                                 Converter="{StaticResource SimpleTimeToStringConverter}" Mode="TwoWay">
                                                         <Binding.ValidationRules>
                                                             <val:TimeValidationRule ValidationStep="RawProposedValue" />
                                                         </Binding.ValidationRules>
@@ -172,19 +158,18 @@
                                         </Border>
                                     </CheckBox>
                                     <CheckBox IsChecked="{Binding Server.Restart4.Enabled}"
-                                              Style="{DynamicResource DefaultCheckBox}"
-                                              Grid.Row="1" Grid.Column="1" Margin="20 5">
+                                  Style="{DynamicResource DefaultCheckBox}"
+                                  Grid.Row="1" Grid.Column="1" Margin="20 5">
                                         <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
-                                                Background="{DynamicResource textBackground}">
+                                    Background="{DynamicResource textBackground}">
                                             <TextBox Margin="5 0" Background="{DynamicResource textBackground}"
-                                                     BorderThickness="0"
-                                                     Foreground="{DynamicResource backgroundDark}"
-                                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                                     FontSize="17" Height="20">
+                                         BorderThickness="0"
+                                         Foreground="{DynamicResource backgroundDark}"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="17" Height="20">
                                                 <TextBox.Text>
                                                     <Binding Path="Server.Restart4.Time"
-                                                             Converter="{StaticResource SimpleTimeToStringConverter}"
-                                                             Mode="TwoWay">
+                                                 Converter="{StaticResource SimpleTimeToStringConverter}" Mode="TwoWay">
                                                         <Binding.ValidationRules>
                                                             <val:TimeValidationRule ValidationStep="RawProposedValue" />
                                                         </Binding.ValidationRules>
@@ -194,29 +179,30 @@
                                         </Border>
                                     </CheckBox>
                                 </Grid>
-                                <TextBlock Text="Automatic Server Starting" FontSize="20" Margin="0 20 0 10" />
-                                <CheckBox Content="Start Server when Fork launches"
-                                          IsChecked="{Binding Server.StartWithFork}"
-                                          Style="{DynamicResource TextCheckBox}" FontSize="20" Margin="20 5 0 10" />
+                                <TextBlock Text="Automatic Server Starting" FontSize="20" Margin="0 20 0 10"/>
+                                <CheckBox Content="Start Server when Fork launches" IsChecked="{Binding Server.StartWithFork}"
+                                  Style="{DynamicResource TextCheckBox}" FontSize="20" Margin="20 5 0 10" />
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
                                         <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
                                     <CheckBox IsChecked="{Binding Server.AutoStart1.Enabled}"
-                                              Style="{DynamicResource DefaultCheckBox}"
-                                              Margin="20 5">
+                                  Style="{DynamicResource DefaultCheckBox}"
+                                  Margin="20 5">
                                         <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
-                                                Background="{DynamicResource textBackground}">
+                                    Background="{DynamicResource textBackground}">
                                             <TextBox Margin="5 0" Background="{DynamicResource textBackground}"
-                                                     BorderThickness="0"
-                                                     Foreground="{DynamicResource backgroundDark}"
-                                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                                     FontSize="17" Height="20">
+                                         BorderThickness="0"
+                                         Foreground="{DynamicResource backgroundDark}"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="17" Height="20">
                                                 <TextBox.Text>
                                                     <Binding Path="Server.AutoStart1.Time"
-                                                             Converter="{StaticResource SimpleTimeToStringConverter}"
-                                                             Mode="TwoWay">
+                                                 Converter="{StaticResource SimpleTimeToStringConverter}" Mode="TwoWay">
                                                         <Binding.ValidationRules>
                                                             <val:TimeValidationRule ValidationStep="RawProposedValue" />
                                                         </Binding.ValidationRules>
@@ -226,19 +212,18 @@
                                         </Border>
                                     </CheckBox>
                                     <CheckBox IsChecked="{Binding Server.AutoStart2.Enabled}"
-                                              Style="{DynamicResource DefaultCheckBox}"
-                                              Grid.Column="1" Margin="20 5">
+                                  Style="{DynamicResource DefaultCheckBox}"
+                                  Grid.Column="1" Margin="20 5">
                                         <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
-                                                Background="{DynamicResource textBackground}">
+                                    Background="{DynamicResource textBackground}">
                                             <TextBox Margin="5 0" Background="{DynamicResource textBackground}"
-                                                     BorderThickness="0"
-                                                     Foreground="{DynamicResource backgroundDark}"
-                                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                                     FontSize="17" Height="20">
+                                         BorderThickness="0"
+                                         Foreground="{DynamicResource backgroundDark}"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="17" Height="20">
                                                 <TextBox.Text>
                                                     <Binding Path="Server.AutoStart2.Time"
-                                                             Converter="{StaticResource SimpleTimeToStringConverter}"
-                                                             Mode="TwoWay">
+                                                 Converter="{StaticResource SimpleTimeToStringConverter}" Mode="TwoWay">
                                                         <Binding.ValidationRules>
                                                             <val:TimeValidationRule ValidationStep="RawProposedValue" />
                                                         </Binding.ValidationRules>
@@ -246,28 +231,30 @@
                                                 </TextBox.Text>
                                             </TextBox>
                                         </Border>
-                                    </CheckBox>
+                                    </CheckBox>                                    
                                 </Grid>
-                                <TextBlock Text="Automatic Server Stopping" FontSize="20" Margin="0 20 0 10" />
+                                <TextBlock Text="Automatic Server Stopping" FontSize="20" Margin="0 20 0 10"/>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
                                         <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
                                     <CheckBox IsChecked="{Binding Server.AutoStop1.Enabled}"
-                                              Style="{DynamicResource DefaultCheckBox}"
-                                              Margin="20 5">
+                                  Style="{DynamicResource DefaultCheckBox}"
+                                  Margin="20 5">
                                         <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
-                                                Background="{DynamicResource textBackground}">
+                                    Background="{DynamicResource textBackground}">
                                             <TextBox Margin="5 0" Background="{DynamicResource textBackground}"
-                                                     BorderThickness="0"
-                                                     Foreground="{DynamicResource backgroundDark}"
-                                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                                     FontSize="17" Height="20">
+                                         BorderThickness="0"
+                                         Foreground="{DynamicResource backgroundDark}"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="17" Height="20">
                                                 <TextBox.Text>
                                                     <Binding Path="Server.AutoStop1.Time"
-                                                             Converter="{StaticResource SimpleTimeToStringConverter}"
-                                                             Mode="TwoWay">
+                                                 Converter="{StaticResource SimpleTimeToStringConverter}" Mode="TwoWay">
                                                         <Binding.ValidationRules>
                                                             <val:TimeValidationRule ValidationStep="RawProposedValue" />
                                                         </Binding.ValidationRules>
@@ -277,19 +264,18 @@
                                         </Border>
                                     </CheckBox>
                                     <CheckBox IsChecked="{Binding Server.AutoStop2.Enabled}"
-                                              Style="{DynamicResource DefaultCheckBox}"
-                                              Grid.Column="1" Margin="20 5">
+                                  Style="{DynamicResource DefaultCheckBox}"
+                                  Grid.Column="1" Margin="20 5">
                                         <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
-                                                Background="{DynamicResource textBackground}">
+                                    Background="{DynamicResource textBackground}">
                                             <TextBox Margin="5 0" Background="{DynamicResource textBackground}"
-                                                     BorderThickness="0"
-                                                     Foreground="{DynamicResource backgroundDark}"
-                                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                                     FontSize="17" Height="20">
+                                         BorderThickness="0"
+                                         Foreground="{DynamicResource backgroundDark}"
+                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                         FontSize="17" Height="20">
                                                 <TextBox.Text>
                                                     <Binding Path="Server.AutoStop2.Time"
-                                                             Converter="{StaticResource SimpleTimeToStringConverter}"
-                                                             Mode="TwoWay">
+                                                 Converter="{StaticResource SimpleTimeToStringConverter}" Mode="TwoWay">
                                                         <Binding.ValidationRules>
                                                             <val:TimeValidationRule ValidationStep="RawProposedValue" />
                                                         </Binding.ValidationRules>

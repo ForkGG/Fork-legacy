@@ -1,12 +1,14 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Fork.View.Resources.dictionaries"
+                    xmlns:avalon="http://icsharpcode.net/sharpdevelop/avalonedit"
                     xmlns:folding="clr-namespace:ICSharpCode.AvalonEdit.Folding;assembly=ICSharpCode.AvalonEdit">
     <Style TargetType="{x:Type folding:FoldingMargin}">
-        <Setter Property="FoldingMarkerBackgroundBrush" Value="#565B7A" />
-        <Setter Property="FoldingMarkerBrush" Value="#565B7A" />
-        <Setter Property="SelectedFoldingMarkerBackgroundBrush" Value="White" />
-        <Setter Property="SelectedFoldingMarkerBrush" Value="White" />
+        <Setter Property="FoldingMarkerBackgroundBrush" Value="#565B7A"/>
+        <Setter Property="FoldingMarkerBrush" Value="#565B7A"/>
+        <Setter Property="SelectedFoldingMarkerBackgroundBrush" Value="White"/>
+        <Setter Property="SelectedFoldingMarkerBrush" Value="White"/>
     </Style>
 
-
+    
 </ResourceDictionary>

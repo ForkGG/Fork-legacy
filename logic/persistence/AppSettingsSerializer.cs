@@ -12,22 +12,28 @@ namespace Fork.Logic.Persistence
 {
     public class AppSettingsSerializer : INotifyPropertyChanged
     {
-        private AppSettings appSettings;
+        #region Singleton
 
-        private AppSettingsSerializer()
-        {
-        }
+        private static AppSettingsSerializer instance;
+        public static AppSettingsSerializer Instance => instance ??= new AppSettingsSerializer();
+
+        #endregion
+        
+        private AppSettings appSettings;
 
         public AppSettings AppSettings
         {
             get
             {
-                if (appSettings == null) ReadSettings();
+                if (appSettings == null)
+                {
+                    ReadSettings();
+                }
                 return appSettings;
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        private AppSettingsSerializer(){}
 
         public void SaveSettings()
         {
@@ -47,8 +53,11 @@ namespace Fork.Logic.Persistence
 
         private AppSettings ReadAppSettings()
         {
-            FileInfo settingsFile = new FileInfo(Path.Combine(App.ApplicationPath, "persistence", "settings.json"));
-            if (!settingsFile.Exists) return WriteDefaultAppSettings();
+            FileInfo settingsFile = new FileInfo(Path.Combine(App.ApplicationPath,"persistence","settings.json"));
+            if (!settingsFile.Exists)
+            {
+                return WriteDefaultAppSettings();
+            }
 
             try
             {
@@ -65,7 +74,10 @@ namespace Fork.Logic.Persistence
         private void WriteAppSettings(AppSettings appSettings)
         {
             DirectoryInfo persistenceDir = new DirectoryInfo(Path.Combine(App.ApplicationPath, "persistence"));
-            if (!persistenceDir.Exists) persistenceDir.Create();
+            if (!persistenceDir.Exists)
+            {
+                persistenceDir.Create();
+            }
             FileInfo settingsFile = new FileInfo(Path.Combine(persistenceDir.FullName, "settings.json"));
             if (!settingsFile.Exists)
             {
@@ -76,7 +88,7 @@ namespace Fork.Logic.Persistence
             try
             {
                 string settingsJson = JsonConvert.SerializeObject(appSettings, Formatting.Indented);
-                File.WriteAllText(settingsFile.FullName, settingsJson);
+                File.WriteAllText(settingsFile.FullName,settingsJson);
             }
             catch (Exception e)
             {
@@ -92,17 +104,12 @@ namespace Fork.Logic.Persistence
             return defaultAppSettings;
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         [NotifyPropertyChangedInvocator]
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(nameof(AppSettingsSerializer), new PropertyChangedEventArgs(propertyName));
         }
-
-        #region Singleton
-
-        private static AppSettingsSerializer instance;
-        public static AppSettingsSerializer Instance => instance ??= new AppSettingsSerializer();
-
-        #endregion
     }
 }

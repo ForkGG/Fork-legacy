@@ -19,7 +19,7 @@ namespace Fork.View.Xaml2.Pages
 {
     public partial class AppSettingsPage : Page
     {
-        private readonly AppSettingsViewModel viewModel;
+        private AppSettingsViewModel viewModel;
 
         public AppSettingsPage(AppSettingsViewModel viewModel)
         {
@@ -45,10 +45,14 @@ namespace Fork.View.Xaml2.Pages
             {
                 ServerDirChangeErrorGrid.Visibility = Visibility.Visible;
                 if (ex is UnauthorizedAccessException)
+                {
                     ErrorMsgBox.Text = "Fork can't access \"" + ForkServerPath.Text +
                                        "\"! Please try to use another directory.";
+                }
                 else
+                {
                     ErrorMsgBox.Text = ex.Message;
+                }
 
                 ErrorLogger.Append(ex);
                 return;
@@ -88,6 +92,7 @@ namespace Fork.View.Xaml2.Pages
                     ResetServerDirButton.Visibility = Visibility.Collapsed;
                     serverPathBgr.Background = (Brush) Application.Current.FindResource("textBackground");
                 }
+
             }
         }
 
@@ -96,13 +101,19 @@ namespace Fork.View.Xaml2.Pages
             OpenFileDialog ofd = new OpenFileDialog
                 {Multiselect = false, Filter = "Java executable|java.exe", Title = "Select a java.exe"};
             if (new DirectoryInfo(ForkDefaultJavaPath.Text.Replace(@"\java.exe", "")).Exists)
+            {
                 ofd.InitialDirectory = ForkDefaultJavaPath.Text.Replace(@"\java.exe", "");
+            }
             else
+            {
                 ofd.InitialDirectory = @"C:\Program Files";
+            }
 
             DialogResult result = ofd.ShowDialog();
             if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(ofd.FileName))
+            {
                 ForkDefaultJavaPath.Text = ofd.FileName;
+            }
         }
 
         private void DefaultJavaDirReset_Click(object sender, RoutedEventArgs e)
@@ -151,22 +162,32 @@ namespace Fork.View.Xaml2.Pages
         private void EnableDisableDiscordBot_Click(object sender, MouseButtonEventArgs e)
         {
             if (sender is CheckBox checkBox)
+            {
                 if (checkBox.IsChecked != null)
                 {
                     if ((bool) checkBox.IsChecked)
+                    {
                         ApplicationManager.StopDiscordWebSocket();
+                    }
                     else
+                    {
                         ApplicationManager.StartDiscordWebSocket();
+                    }
                 }
+            }
         }
 
         private async void UseBetaChanged(object sender, RoutedEventArgs e)
         {
             UseBetaBox.IsEnabled = false;
             if (viewModel.MainViewModel.IsBetaVersion != viewModel.AppSettings.UseBetaVersions)
+            {
                 restartNotice.Visibility = Visibility.Visible;
+            }
             else
+            {
                 restartNotice.Visibility = Visibility.Collapsed;
+            }
             viewModel.MainViewModel.CheckForkVersion();
             await viewModel.WriteAppSettingsAsync();
             UseBetaBox.IsEnabled = true;
