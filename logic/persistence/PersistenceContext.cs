@@ -17,7 +17,8 @@ namespace Fork.Logic.Persistence
             optionsBuilder.UseSqlite("foreign keys=true;Data Source=" +
                                      Path.Combine(App.ApplicationPath, "persistence", "data.db"));
 #if DEBUG
-            optionsBuilder.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
+            optionsBuilder.UseLoggerFactory(LoggerFactory.Create(builder =>
+                builder.AddConsole().AddFilter(level => level == LogLevel.Error)));
 #endif
 
             base.OnConfiguring(optionsBuilder);
