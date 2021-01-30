@@ -31,7 +31,7 @@ namespace Fork.Logic.Persistence
             File.WriteAllLines(Path.Combine(folderPath, "eula.txt"),lines,Encoding.UTF8);
         }
 
-        public async Task WriteServerSettings(string folderPath, Dictionary<string, string> serverSettings)
+        public async Task WriteServerSettings(string folderPath, IDictionary<string, string> serverSettings)
         {
             if (!new DirectoryInfo(folderPath).Exists)
             {

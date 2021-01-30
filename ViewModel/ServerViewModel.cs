@@ -248,10 +248,14 @@ namespace Fork.ViewModel
 
         public async Task SaveProperties()
         {
-            await new FileWriter().WriteServerSettings(Path.Combine(App.ServerPath, Server.Name),
+            if (Server.ServerSettings.HasChanged)
+            {
+                await new FileWriter().WriteServerSettings(Path.Combine(App.ServerPath, Server.Name),
                     Server.ServerSettings.SettingsDictionary);
-            await Context.SaveChangesAsync();
-            Persistence.Instance.SaveChanges();
+                await Context.SaveChangesAsync();
+                Persistence.Instance.SaveChanges();
+                Server.ServerSettings.HasChanged = false;
+            }
         }
 
         public void UpdateActiveWorld(World world)

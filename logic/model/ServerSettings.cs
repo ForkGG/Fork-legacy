@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Fork.Annotations;
+using Fork.Logic.Utils;
 
 namespace Fork.Logic.Model
 {
@@ -20,7 +14,8 @@ namespace Fork.Logic.Model
         public List<Gamemode> Gamemodes { get; } = new List<Gamemode>(Enum.GetValues(typeof(Gamemode)).Cast<Gamemode>());
         public List<LevelType> LevelTypes { get; } = new List<LevelType>(Enum.GetValues(typeof(LevelType)).Cast<LevelType>());
 
-        public Dictionary<string, string> SettingsDictionary { get; set; } = new Dictionary<string, string>();
+        public ObservableDictionary<string, string> SettingsDictionary { get; private set; }
+        public bool HasChanged { get; set; }
 
         public int SpawnProtection
         {
@@ -320,11 +315,19 @@ namespace Fork.Logic.Model
 
         public ServerSettings(string levelname)
         {
+            SettingsDictionary = new();
+            SettingsDictionary.CollectionChanged += (_, _) =>
+            {
+                HasChanged = true;
+            };
+            
             InitializeValues(levelname);
         }
 
         public ServerSettings(Dictionary<string, string> settingsDictionary)
         {
+            SettingsDictionary = new();
+            
             if (settingsDictionary!=null && settingsDictionary.ContainsKey("LevelName"))
             {
                 InitializeValues(settingsDictionary["LevelName"]);
@@ -338,22 +341,22 @@ namespace Fork.Logic.Model
             {
                 SettingsDictionary[keyValuePair.Key] = keyValuePair.Value;
             }
-        }
-
-        public ServerSettings(ServerSettings serverSettings)
-        {
-            SettingsDictionary = new Dictionary<string, string>(serverSettings.SettingsDictionary);
+            
+            SettingsDictionary.CollectionChanged += (_, _) =>
+            {
+                HasChanged = true;
+            };
         }
 
         private void InitializeValues(string levelname)
         {
             SpawnProtection = 16;
-            SettingsDictionary["query.port"] = "25565";
             OpPermissionLevel = 4;
             MaxPlayers = 20;
             NetworkCompressionThreshold = 256;
             RconPort = 25575;
             ServerPort = 25565;
+            QueryPort = 25565;
             ViewDistance = 10;
             MaxBuildHeight = 256;
             RateLimit = 0;
