@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,21 +18,24 @@ using Fork.Logic.CustomConsole;
 using Fork.Logic.ImportLogic;
 using Fork.Logic.Logging;
 using Fork.Logic.Model;
-using Fork.logic.model.PluginModels;
 using Fork.Logic.Model.ProxyModels;
 using Fork.Logic.Model.ServerConsole;
 using Fork.Logic.Persistence;
 using Fork.Logic.Utils;
 using Fork.Logic.WebRequesters;
 using Fork.ViewModel;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace Fork.Logic.Manager
 {
     public sealed class ServerManager
     {
-        private static ServerManager instance = null;
+        private static ServerManager instance;
+
+        private ObservableCollection<EntityViewModel> entities;
+        private readonly NetworkController networkController = new();
+
+        private readonly List<string> serverNames;
 
         private ServerManager()
         {
@@ -46,23 +46,16 @@ namespace Fork.Logic.Manager
             LoadEntityList().Wait();
 
             foreach (EntityViewModel viewModel in Entities)
-            {
                 if (!viewModel.Entity.Initialized)
-                {
                     Downloader.DownloadJarAsync(viewModel,
                         new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Name)));
-                }
-            }
 
             Entities.CollectionChanged += ServerListChanged;
 
             serverNames = new List<string>();
-            foreach (EntityViewModel server in Entities)
-            {
-                serverNames.Add(server.Entity.Name);
-            }
+            foreach (EntityViewModel server in Entities) serverNames.Add(server.Entity.Name);
 
-            initialized = true;
+            Initialized = true;
         }
 
         public static ServerManager Instance
@@ -75,14 +68,7 @@ namespace Fork.Logic.Manager
             }
         }
 
-        private static bool initialized = false;
-
-        public static bool Initialized => initialized;
-
-        private List<string> serverNames;
-        private NetworkController networkController = new NetworkController();
-
-        private ObservableCollection<EntityViewModel> entities;
+        public static bool Initialized { get; private set; }
 
         public ObservableCollection<EntityViewModel> Entities => entities;
 
@@ -93,181 +79,6 @@ namespace Fork.Logic.Manager
             bool r = await t;
             return r;
         }
-
-        #region Server Managment Methods
-
-        public async Task<bool> ImportServerAsync(ServerVersion version, ServerValidationInfo validationInfo,
-            string originalServerDirectory, string serverName)
-        {
-            Task<bool> t = new Task<bool>(() =>
-                ImportServer(version, validationInfo, originalServerDirectory, serverName));
-            t.Start();
-            return await t;
-        }
-
-        public void StopServer(ServerViewModel serverViewModel)
-        {
-            if (!ApplicationManager.Instance.ActiveEntities.ContainsKey(serverViewModel.Server))
-            {
-                Console.WriteLine("Can't stop server that has no active process");
-                return;
-            }
-
-            ApplicationManager.Instance.ActiveEntities[serverViewModel.Server].StandardInput.WriteLine("stop");
-            foreach (ServerPlayer serverPlayer in serverViewModel.PlayerList)
-            {
-                serverPlayer.IsOnline = false;
-            }
-
-            serverViewModel.RefreshPlayerList();
-        }
-
-        public async Task<bool> RestartServerAsync(ServerViewModel serverViewModel)
-        {
-            Task<bool> t = new Task<bool>(() => RestartServer(serverViewModel));
-            t.Start();
-            bool result = await t;
-            return result;
-        }
-
-        public async Task<bool> RenameServerAsync(ServerViewModel viewModel, string newName)
-        {
-            Task<bool> t = new Task<bool>(() => RenameServer(viewModel, newName));
-            t.Start();
-            bool r = await t;
-            return r;
-        }
-
-        public async Task<bool> CloneServerAsync(ServerViewModel viewModel)
-        {
-            Task<bool> t = new Task<bool>(() => CloneServer(viewModel));
-            t.Start();
-            bool r = await t;
-            return r;
-        }
-
-        public async Task<bool> ChangeServerVersionAsync(ServerVersion newVersion, ServerViewModel serverViewModel)
-        {
-            Task<bool> t = new Task<bool>(() => ChangeServerVersion(newVersion, serverViewModel));
-            t.Start();
-            bool result = await t;
-            return result;
-        }
-
-        public bool RestartServer(ServerViewModel serverViewModel)
-        {
-            StopServer(serverViewModel);
-            while (serverViewModel.CurrentStatus != ServerStatus.STOPPED)
-            {
-                Thread.Sleep(500);
-            }
-
-            Task.Run(async () => await StartServerAsync(serverViewModel));
-
-            return true;
-        }
-
-        #endregion
-
-        #region World Managment Methods
-
-        public async Task<bool> ImportWorldAsync(ServerViewModel viewModel, string worldSource)
-        {
-            Task<bool> t = new Task<bool>(() =>
-                ImportWorld(viewModel, worldSource));
-            t.Start();
-            return await t;
-        }
-
-        public async Task<bool> CreateWorldAsync(string name, ServerViewModel viewModel)
-        {
-            Task<bool> t = new Task<bool>(() =>
-                CreateWorld(name, viewModel));
-            t.Start();
-            return await t;
-        }
-
-        public async Task<bool> DeleteDimensionAsync(MinecraftDimension dimension, Server server)
-        {
-            Task<bool> t = new Task<bool>(() => DeleteDimension(dimension, server));
-            t.Start();
-            bool result = await t;
-            return result;
-        }
-
-        #endregion
-
-        #region Network Managment Methods
-
-        public async Task<bool> CreateNetworkAsync(string networkName, ServerVersion.VersionType networkType,
-            JavaSettings javaSettings)
-        {
-            Task<bool> t = new Task<bool>(() =>
-                networkController.CreateNetwork(networkName, networkType, javaSettings, serverNames));
-            t.Start();
-            bool r = await t;
-            return r;
-        }
-
-        public async Task<bool> StartNetworkAsync(NetworkViewModel viewModel, bool startServers = false)
-        {
-            return await networkController.StartNetworkAsync(viewModel, startServers);
-        }
-
-        public async Task<bool> StopNetworkAsync(NetworkViewModel viewModel, bool stopServers = false)
-        {
-            Task<bool> t = new Task<bool>(() =>
-                networkController.StopNetwork(viewModel, stopServers));
-            t.Start();
-            bool r = await t;
-            return r;
-        }
-
-        public async Task<bool> RestartNetworkAsync(NetworkViewModel viewModel, bool restartServers = false)
-        {
-            bool stopSuccess = await StopNetworkAsync(viewModel, restartServers);
-            if (!stopSuccess)
-            {
-                return false;
-            }
-
-            bool startSuccess = await StartNetworkAsync(viewModel, restartServers);
-            return startSuccess;
-        }
-
-        public async Task<bool> RenameNetworkAsync(NetworkViewModel viewModel, string newName)
-        {
-            Task<bool> t = new Task<bool>(() =>
-                networkController.RenameNetwork(viewModel, newName));
-            t.Start();
-            bool r = await t;
-            return r;
-        }
-
-        public async Task<bool> CloneNetworkAsync(NetworkViewModel viewModel)
-        {
-            Task<bool> t = new Task<bool>(() =>
-                networkController.CloneNetwork(viewModel, serverNames));
-            t.Start();
-            bool r = await t;
-            return r;
-        }
-
-        public async Task<bool> DeleteNetworkAsync(NetworkViewModel viewModel)
-        {
-            return await networkController.DeleteNetworkAsync(viewModel);
-        }
-
-        public async Task<bool> KillNetworkAsync(NetworkViewModel viewModel, bool killServers = false)
-        {
-            Task<bool> t = new Task<bool>(() =>
-                networkController.KillNetwork(viewModel, killServers));
-            t.Start();
-            bool r = await t;
-            return r;
-        }
-
-        #endregion
 
         public void AddEntity(EntityViewModel entityViewModel)
         {
@@ -379,10 +190,8 @@ namespace Fork.Logic.Manager
             Downloader.DownloadJarAsync(viewModel, serverDirectory);
 
             if (!validationInfo.EulaTxt)
-            {
                 //Write Eula
                 new FileWriter().WriteEula(serverPath);
-            }
 
 
             return new DirectoryInfo(serverPath).Exists;
@@ -396,15 +205,9 @@ namespace Fork.Logic.Manager
                 DirectoryInfo importWorldDir = new DirectoryInfo(worldSource);
                 string worldName = importWorldDir.Name;
                 List<string> worlds = new List<string>();
-                foreach (World world in viewModel.Worlds)
-                {
-                    worlds.Add(world.Name);
-                }
+                foreach (World world in viewModel.Worlds) worlds.Add(world.Name);
 
-                while (worlds.Contains(worldName))
-                {
-                    worldName += "1";
-                }
+                while (worlds.Contains(worldName)) worldName += "1";
 
                 if (!serverDir.Exists || !importWorldDir.Exists)
                 {
@@ -430,15 +233,9 @@ namespace Fork.Logic.Manager
             {
                 DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Server.Name));
                 List<string> worlds = new List<string>();
-                foreach (World world in viewModel.Worlds)
-                {
-                    worlds.Add(world.Name);
-                }
+                foreach (World world in viewModel.Worlds) worlds.Add(world.Name);
 
-                while (worlds.Contains(worldName))
-                {
-                    worldName += "1";
-                }
+                while (worlds.Contains(worldName)) worldName += "1";
 
                 if (!serverDir.Exists)
                 {
@@ -466,10 +263,7 @@ namespace Fork.Logic.Manager
             serverName = RefineName(serverName);
             string serverPath = Path.Combine(App.ServerPath, serverName);
             serverNames.Add(serverName);
-            if (string.IsNullOrEmpty(serverSettings.LevelName))
-            {
-                serverSettings.LevelName = "world";
-            }
+            if (string.IsNullOrEmpty(serverSettings.LevelName)) serverSettings.LevelName = "world";
 
             DirectoryInfo directoryInfo = Directory.CreateDirectory(serverPath);
             serverVersion.Build = await VersionManager.Instance.GetLatestBuild(serverVersion);
@@ -485,10 +279,8 @@ namespace Fork.Logic.Manager
 
             //Move World Files
             if (worldPath != null)
-            {
                 new FileImporter().DirectoryCopy(worldPath,
                     Path.Combine(directoryInfo.FullName, server.ServerSettings.LevelName), true);
-            }
 
             //Writing necessary files
             new FileWriter().WriteEula(Path.Combine(App.ServerPath, directoryInfo.Name));
@@ -503,10 +295,7 @@ namespace Fork.Logic.Manager
             if (viewModel.CurrentStatus != ServerStatus.STOPPED)
             {
                 StopServer(viewModel);
-                while (viewModel.CurrentStatus != ServerStatus.STOPPED)
-                {
-                    Thread.Sleep(500);
-                }
+                while (viewModel.CurrentStatus != ServerStatus.STOPPED) Thread.Sleep(500);
             }
 
             try
@@ -537,10 +326,7 @@ namespace Fork.Logic.Manager
             if (viewModel.CurrentStatus != ServerStatus.STOPPED)
             {
                 StopServer(viewModel);
-                while (viewModel.CurrentStatus != ServerStatus.STOPPED)
-                {
-                    Thread.Sleep(500);
-                }
+                while (viewModel.CurrentStatus != ServerStatus.STOPPED) Thread.Sleep(500);
             }
 
             try
@@ -600,17 +386,12 @@ namespace Fork.Logic.Manager
                 if (serverViewModel.CurrentStatus != ServerStatus.STOPPED)
                 {
                     StopServer(serverViewModel);
-                    while (serverViewModel.CurrentStatus != ServerStatus.STOPPED)
-                    {
-                        await Task.Delay(500);
-                    }
+                    while (serverViewModel.CurrentStatus != ServerStatus.STOPPED) await Task.Delay(500);
                 }
 
                 if (!serverViewModel.DownloadCompleted)
-                {
                     //Cancel download
                     await Downloader.CancelJarDownloadAsync(serverViewModel);
-                }
 
                 serverViewModel.DeleteEntity();
                 DirectoryInfo serverDirectory =
@@ -634,10 +415,7 @@ namespace Fork.Logic.Manager
                 if (serverViewModel.CurrentStatus != ServerStatus.STOPPED)
                 {
                     StopServer(serverViewModel);
-                    while (serverViewModel.CurrentStatus != ServerStatus.STOPPED)
-                    {
-                        Thread.Sleep(500);
-                    }
+                    while (serverViewModel.CurrentStatus != ServerStatus.STOPPED) Thread.Sleep(500);
                 }
 
                 serverViewModel.DownloadCompleted = false;
@@ -667,10 +445,7 @@ namespace Fork.Logic.Manager
         private bool DeleteDimension(MinecraftDimension dimension, Server server)
         {
             DirectoryInfo dimensionDir = GetDimensionFolder(dimension, server);
-            if (!dimensionDir.Exists)
-            {
-                return true;
-            }
+            if (!dimensionDir.Exists) return true;
 
             DirectoryInfo dimBackups =
                 Directory.CreateDirectory(Path.Combine(App.ServerPath, server.Name, "DimensionBackups"));
@@ -722,8 +497,8 @@ namespace Fork.Logic.Manager
             ConsoleWriter.Write("\n", viewModel);
             //if (!viewModel.SettingsSavingTask.IsCompleted)
             //{
-                ConsoleWriter.Write("Saving settings files before starting server ...", viewModel);
-                await viewModel.SettingsSavingTask;
+            ConsoleWriter.Write("Saving settings files before starting server ...", viewModel);
+            await viewModel.SettingsSavingTask;
             //}
 
             ConsoleWriter.Write(
@@ -732,10 +507,7 @@ namespace Fork.Logic.Manager
             Console.WriteLine("Starting server " + viewModel.Server.Name + " on world: " +
                               viewModel.Server.ServerSettings.LevelName);
             DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Server.Name));
-            if (!directoryInfo.Exists)
-            {
-                return false;
-            }
+            if (!directoryInfo.Exists) return false;
 
             JavaVersion javaVersion = JavaVersionUtils.GetInstalledJavaVersion(viewModel.Server.JavaSettings.JavaPath);
             if (javaVersion == null)
@@ -745,18 +517,14 @@ namespace Fork.Logic.Manager
             }
 
             if (!javaVersion.Is64Bit)
-            {
                 ConsoleWriter.Write(
                     "WARN: The Java installation selected for this server is a 32-bit version, which can cause errors.",
                     viewModel);
-            }
 
             if (javaVersion.VersionComputed < 11)
-            {
                 ConsoleWriter.Write(
                     "WARN: The Java installation selected for this server is outdated. Please update Java to version 11 or higher.",
                     viewModel);
-            }
 
             if (!viewModel.Server.ServerSettings.ResourcePack.Equals("") && viewModel.Server.AutoSetSha1)
             {
@@ -837,10 +605,7 @@ namespace Fork.Logic.Manager
             //Register new world if created
             Task.Run(async () =>
             {
-                while (!viewModel.ServerRunning)
-                {
-                    await Task.Delay(500);
-                }
+                while (!viewModel.ServerRunning) await Task.Delay(500);
 
                 viewModel.InitializeWorldsList();
             });
@@ -884,20 +649,14 @@ namespace Fork.Logic.Manager
 
         private async Task<bool> IsHashUpToDate(DateTime hashDate, string fileSourceUrl)
         {
-            if (string.IsNullOrEmpty(fileSourceUrl))
-            {
-                return false;
-            }
+            if (string.IsNullOrEmpty(fileSourceUrl)) return false;
 
             HttpWebRequest request = WebRequest.CreateHttp(fileSourceUrl);
             request.Method = WebRequestMethods.Http.Head;
             HttpWebResponse webResponse = await request.GetResponseAsync() as HttpWebResponse;
             DateTime? lastModified = webResponse?.LastModified;
 
-            if (lastModified != null && lastModified.Value.CompareTo(hashDate) < 0)
-            {
-                return true;
-            }
+            if (lastModified != null && lastModified.Value.CompareTo(hashDate) < 0) return true;
 
             return false;
         }
@@ -905,10 +664,7 @@ namespace Fork.Logic.Manager
         private async Task<string> HashResourcePack(string url, IProgress<double> downloadProgress)
         {
             string result = "";
-            if (string.IsNullOrEmpty(url))
-            {
-                return result;
-            }
+            if (string.IsNullOrEmpty(url)) return result;
 
             //ensure tmp directory
             new DirectoryInfo(Path.Combine(App.ApplicationPath, "tmp")).Create();
@@ -920,10 +676,7 @@ namespace Fork.Logic.Manager
             HttpWebRequest request = WebRequest.CreateHttp(url);
             request.Method = WebRequestMethods.Http.Head;
             HttpWebResponse webResponse = await request.GetResponseAsync() as HttpWebResponse;
-            if (webResponse != null && webResponse.ContentType != "application/zip")
-            {
-                return result;
-            }
+            if (webResponse != null && webResponse.ContentType != "application/zip") return result;
 
             await Downloader.DownloadFileAsync(url, resourcePackFile.FullName, downloadProgress);
 
@@ -935,10 +688,7 @@ namespace Fork.Logic.Manager
                 {
                     byte[] hash = sha1.ComputeHash(bs);
                     StringBuilder formatted = new StringBuilder(2 * hash.Length);
-                    foreach (byte b in hash)
-                    {
-                        formatted.AppendFormat("{0:X2}", b);
-                    }
+                    foreach (byte b in hash) formatted.AppendFormat("{0:X2}", b);
 
                     result = formatted.ToString();
                 }
@@ -950,18 +700,13 @@ namespace Fork.Logic.Manager
 
         private async Task LoadEntityList()
         {
-            if (!new FileInfo(Path.Combine(App.ApplicationPath,"persistence","data.db")).Exists)
-            {
+            if (!new FileInfo(Path.Combine(App.ApplicationPath, "persistence", "data.db")).Exists)
                 if (new DirectoryInfo(Path.Combine(App.ApplicationPath, "persistence")).Exists)
                 {
                     var entitiesFromJson = EntitySerializer.Instance.LoadEntities();
-                    if (entitiesFromJson != null)
-                    {
-                        await Persistence.Persistence.Instance.SaveEntities(entitiesFromJson);
-                    }
+                    if (entitiesFromJson != null) await Persistence.Persistence.Instance.SaveEntities(entitiesFromJson);
                 }
-            }
-            
+
             foreach (Server server in Persistence.Persistence.Instance.RequestServerList())
             {
                 var viewModel = new ServerViewModel(server.UID);
@@ -974,5 +719,171 @@ namespace Fork.Logic.Manager
                 Application.Current.Dispatcher?.Invoke(() => entities.Add(viewModel));
             }
         }
+
+        #region Server Managment Methods
+
+        public async Task<bool> ImportServerAsync(ServerVersion version, ServerValidationInfo validationInfo,
+            string originalServerDirectory, string serverName)
+        {
+            Task<bool> t = new Task<bool>(() =>
+                ImportServer(version, validationInfo, originalServerDirectory, serverName));
+            t.Start();
+            return await t;
+        }
+
+        public void StopServer(ServerViewModel serverViewModel)
+        {
+            if (!ApplicationManager.Instance.ActiveEntities.ContainsKey(serverViewModel.Server))
+            {
+                Console.WriteLine("Can't stop server that has no active process");
+                return;
+            }
+
+            ApplicationManager.Instance.ActiveEntities[serverViewModel.Server].StandardInput.WriteLine("stop");
+            foreach (ServerPlayer serverPlayer in serverViewModel.PlayerList) serverPlayer.IsOnline = false;
+
+            serverViewModel.RefreshPlayerList();
+        }
+
+        public async Task<bool> RestartServerAsync(ServerViewModel serverViewModel)
+        {
+            Task<bool> t = new Task<bool>(() => RestartServer(serverViewModel));
+            t.Start();
+            bool result = await t;
+            return result;
+        }
+
+        public async Task<bool> RenameServerAsync(ServerViewModel viewModel, string newName)
+        {
+            Task<bool> t = new Task<bool>(() => RenameServer(viewModel, newName));
+            t.Start();
+            bool r = await t;
+            return r;
+        }
+
+        public async Task<bool> CloneServerAsync(ServerViewModel viewModel)
+        {
+            Task<bool> t = new Task<bool>(() => CloneServer(viewModel));
+            t.Start();
+            bool r = await t;
+            return r;
+        }
+
+        public async Task<bool> ChangeServerVersionAsync(ServerVersion newVersion, ServerViewModel serverViewModel)
+        {
+            Task<bool> t = new Task<bool>(() => ChangeServerVersion(newVersion, serverViewModel));
+            t.Start();
+            bool result = await t;
+            return result;
+        }
+
+        public bool RestartServer(ServerViewModel serverViewModel)
+        {
+            StopServer(serverViewModel);
+            while (serverViewModel.CurrentStatus != ServerStatus.STOPPED) Thread.Sleep(500);
+
+            Task.Run(async () => await StartServerAsync(serverViewModel));
+
+            return true;
+        }
+
+        #endregion
+
+        #region World Managment Methods
+
+        public async Task<bool> ImportWorldAsync(ServerViewModel viewModel, string worldSource)
+        {
+            Task<bool> t = new Task<bool>(() =>
+                ImportWorld(viewModel, worldSource));
+            t.Start();
+            return await t;
+        }
+
+        public async Task<bool> CreateWorldAsync(string name, ServerViewModel viewModel)
+        {
+            Task<bool> t = new Task<bool>(() =>
+                CreateWorld(name, viewModel));
+            t.Start();
+            return await t;
+        }
+
+        public async Task<bool> DeleteDimensionAsync(MinecraftDimension dimension, Server server)
+        {
+            Task<bool> t = new Task<bool>(() => DeleteDimension(dimension, server));
+            t.Start();
+            bool result = await t;
+            return result;
+        }
+
+        #endregion
+
+        #region Network Managment Methods
+
+        public async Task<bool> CreateNetworkAsync(string networkName, ServerVersion.VersionType networkType,
+            JavaSettings javaSettings)
+        {
+            Task<bool> t = new Task<bool>(() =>
+                networkController.CreateNetwork(networkName, networkType, javaSettings, serverNames));
+            t.Start();
+            bool r = await t;
+            return r;
+        }
+
+        public async Task<bool> StartNetworkAsync(NetworkViewModel viewModel, bool startServers = false)
+        {
+            return await networkController.StartNetworkAsync(viewModel, startServers);
+        }
+
+        public async Task<bool> StopNetworkAsync(NetworkViewModel viewModel, bool stopServers = false)
+        {
+            Task<bool> t = new Task<bool>(() =>
+                networkController.StopNetwork(viewModel, stopServers));
+            t.Start();
+            bool r = await t;
+            return r;
+        }
+
+        public async Task<bool> RestartNetworkAsync(NetworkViewModel viewModel, bool restartServers = false)
+        {
+            bool stopSuccess = await StopNetworkAsync(viewModel, restartServers);
+            if (!stopSuccess) return false;
+
+            bool startSuccess = await StartNetworkAsync(viewModel, restartServers);
+            return startSuccess;
+        }
+
+        public async Task<bool> RenameNetworkAsync(NetworkViewModel viewModel, string newName)
+        {
+            Task<bool> t = new Task<bool>(() =>
+                networkController.RenameNetwork(viewModel, newName));
+            t.Start();
+            bool r = await t;
+            return r;
+        }
+
+        public async Task<bool> CloneNetworkAsync(NetworkViewModel viewModel)
+        {
+            Task<bool> t = new Task<bool>(() =>
+                networkController.CloneNetwork(viewModel, serverNames));
+            t.Start();
+            bool r = await t;
+            return r;
+        }
+
+        public async Task<bool> DeleteNetworkAsync(NetworkViewModel viewModel)
+        {
+            return await networkController.DeleteNetworkAsync(viewModel);
+        }
+
+        public async Task<bool> KillNetworkAsync(NetworkViewModel viewModel, bool killServers = false)
+        {
+            Task<bool> t = new Task<bool>(() =>
+                networkController.KillNetwork(viewModel, killServers));
+            t.Start();
+            bool r = await t;
+            return r;
+        }
+
+        #endregion
     }
 }

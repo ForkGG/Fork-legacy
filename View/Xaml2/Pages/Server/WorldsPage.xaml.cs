@@ -6,7 +6,6 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
-using Fork;
 using Fork.Logic.ImportLogic;
 using Fork.Logic.Manager;
 using Fork.ViewModel;
@@ -16,9 +15,9 @@ namespace Fork.View.Xaml2.Pages.Server
 {
     public partial class WorldsPage : Page
     {
-        private ServerViewModel viewModel;
         private string lastPath;
-        
+        private readonly ServerViewModel viewModel;
+
         public WorldsPage(ServerViewModel viewModel)
         {
             InitializeComponent();
@@ -26,9 +25,9 @@ namespace Fork.View.Xaml2.Pages.Server
             DataContext = this.viewModel;
         }
 
-        private void OpenExplorer_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void OpenExplorer_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            string path = Path.Combine(App.ServerPath,viewModel.Server.Name);
+            string path = Path.Combine(App.ServerPath, viewModel.Server.Name);
             Process.Start("explorer.exe", "-p, " + path);
         }
 
@@ -49,13 +48,13 @@ namespace Fork.View.Xaml2.Pages.Server
                     throw new ArgumentOutOfRangeException();
             }
         }
-        
+
         private async void CreateWorld_Click(object sender, RoutedEventArgs e)
         {
             bool result = await ServerManager.Instance.CreateWorldAsync(createWorldName.Text, viewModel);
             //TODO indicate result
         }
-        
+
         private async void ImportWorld_Click(object sender, RoutedEventArgs e)
         {
             worldFolderPathText.Text = "Click To Select Your World";
@@ -68,17 +67,15 @@ namespace Fork.View.Xaml2.Pages.Server
         private void WorldDirPath_MouseDown(object sender, MouseButtonEventArgs e)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
-            if (lastPath != null)
-            {
-                fbd.SelectedPath = lastPath;
-            }
-            
+            if (lastPath != null) fbd.SelectedPath = lastPath;
+
             DialogResult result = fbd.ShowDialog();
             if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
             {
                 worldFolderPathText.Text = fbd.SelectedPath;
                 lastPath = fbd.SelectedPath;
-                WorldValidationInfo valInfo = DirectoryValidator.ValidateWorldDirectory(new DirectoryInfo(fbd.SelectedPath));
+                WorldValidationInfo valInfo =
+                    DirectoryValidator.ValidateWorldDirectory(new DirectoryInfo(fbd.SelectedPath));
                 if (!valInfo.IsValid)
                 {
                     serverPathBgr.Background = (Brush) Application.Current.FindResource("buttonBgrRed");

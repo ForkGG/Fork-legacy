@@ -1,13 +1,12 @@
 ﻿using System.Windows;
 using System.Windows.Media;
-using Fork.View.Xaml;
 
 namespace Fork
 {
     public partial class WindowStyles : ResourceDictionary
     {
         //private Console Console = new Console();
-        
+
         private void BtnCloseClick(object sender, RoutedEventArgs e)
         {
             Window window = GetParentWindow((DependencyObject) sender);
@@ -18,13 +17,9 @@ namespace Fork
         {
             Window window = GetParentWindow((DependencyObject) sender);
             if (window.WindowState == WindowState.Normal)
-            {
                 window.WindowState = WindowState.Maximized;
-            }
             else
-            {
                 window.WindowState = WindowState.Normal;
-            }
         }
 
         private void BtnMinimizeClick(object sender, RoutedEventArgs e)
@@ -42,20 +37,12 @@ namespace Fork
         {
             DependencyObject parentObject = VisualTreeHelper.GetParent(child);
 
-            if (parentObject == null)
-            {
-                return null;
-            }
+            if (parentObject == null) return null;
 
             Window parent = parentObject as Window;
             if (parent != null)
-            {
                 return parent;
-            }
-            else
-            {
-                return GetParentWindow(parentObject);
-            }
+            return GetParentWindow(parentObject);
         }
     }
 }

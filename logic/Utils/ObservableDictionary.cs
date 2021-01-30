@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -7,10 +8,8 @@ namespace Fork.Logic.Utils
 {
     public class ObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, INotifyCollectionChanged
     {
-        private Dictionary<TKey, TValue> internalDict;
-        
-        public event NotifyCollectionChangedEventHandler? CollectionChanged;
-        
+        private readonly Dictionary<TKey, TValue> internalDict;
+
         public ObservableDictionary()
         {
             internalDict = new Dictionary<TKey, TValue>();
@@ -20,7 +19,7 @@ namespace Fork.Logic.Utils
         {
             internalDict = new Dictionary<TKey, TValue>(dict);
         }
-        
+
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
             return internalDict.GetEnumerator();
@@ -34,13 +33,14 @@ namespace Fork.Logic.Utils
         public void Add(KeyValuePair<TKey, TValue> item)
         {
             internalDict.Add(item.Key, item.Value);
-            CollectionChanged?.Invoke(this, new(NotifyCollectionChangedAction.Add, item));
+            CollectionChanged?.Invoke(this,
+                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
         }
 
         public void Clear()
         {
             internalDict.Clear();
-            CollectionChanged?.Invoke(this, new(NotifyCollectionChangedAction.Reset));
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         public bool Contains(KeyValuePair<TKey, TValue> item)
@@ -50,23 +50,26 @@ namespace Fork.Logic.Utils
 
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
             bool result = internalDict.Remove(item.Key);
-            CollectionChanged?.Invoke(this, new(NotifyCollectionChangedAction.Remove, item));
+            CollectionChanged?.Invoke(this,
+                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item));
             return result;
         }
 
         public int Count => internalDict.Count;
         public bool IsReadOnly => false;
+
         public void Add(TKey key, TValue value)
         {
             var pair = new KeyValuePair<TKey, TValue>(key, value);
             internalDict.Add(pair.Key, pair.Value);
-            CollectionChanged?.Invoke(this, new(NotifyCollectionChangedAction.Add, pair));
+            CollectionChanged?.Invoke(this,
+                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, pair));
         }
 
         public bool ContainsKey(TKey key)
@@ -77,7 +80,9 @@ namespace Fork.Logic.Utils
         public bool Remove(TKey key)
         {
             bool result = internalDict.Remove(key, out TValue value);
-            CollectionChanged?.Invoke(this, new(NotifyCollectionChangedAction.Remove, new KeyValuePair<TKey,TValue>(key, value)));
+            CollectionChanged?.Invoke(this,
+                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
+                    new KeyValuePair<TKey, TValue>(key, value)));
             return result;
         }
 
@@ -93,23 +98,26 @@ namespace Fork.Logic.Utils
             {
                 if (internalDict.TryGetValue(key, out TValue origValue))
                 {
-                    if (origValue.Equals(value))
-                    {
-                        return;
-                    }
+                    if (origValue.Equals(value)) return;
                     internalDict[key] = value;
-                    CollectionChanged?.Invoke(this, new(NotifyCollectionChangedAction.Replace, new KeyValuePair<TKey,TValue>(key, value), new KeyValuePair<TKey,TValue>(key, origValue)));
+                    CollectionChanged?.Invoke(this,
+                        new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace,
+                            new KeyValuePair<TKey, TValue>(key, value),
+                            new KeyValuePair<TKey, TValue>(key, origValue)));
                 }
                 else
                 {
                     internalDict[key] = value;
-                    CollectionChanged?.Invoke(this, new(NotifyCollectionChangedAction.Add, new KeyValuePair<TKey,TValue>(key, value)));
+                    CollectionChanged?.Invoke(this,
+                        new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add,
+                            new KeyValuePair<TKey, TValue>(key, value)));
                 }
-                
             }
         }
 
         public ICollection<TKey> Keys => internalDict.Keys;
         public ICollection<TValue> Values => internalDict.Values;
+
+        public event NotifyCollectionChangedEventHandler? CollectionChanged;
     }
 }

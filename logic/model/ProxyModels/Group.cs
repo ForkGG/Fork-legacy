@@ -1,18 +1,17 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Fork.Logic.Model.ProxyModels
 {
     public class Group
     {
-        public string User { get; set; }
-        public ObservableCollection<string> Groups { get; set; }
-
         public Group(string user, ObservableCollection<string> groups)
         {
             User = user;
             Groups = groups;
         }
+
+        public string User { get; set; }
+        public ObservableCollection<string> Groups { get; set; }
 
         protected bool Equals(Group other)
         {
@@ -23,7 +22,7 @@ namespace Fork.Logic.Model.ProxyModels
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((Group) obj);
         }
 

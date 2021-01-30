@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace Fork.ViewModel
 {
     public class ConsoleViewModel : BaseViewModel
     {
-        private static string welcomeMsg =
+        private static readonly string welcomeMsg =
             "__        __   _                            _          _   _ _ _     _ _ \n" +
             "\\ \\      / /__| | ___ ___  _ __ ___   ___  | |_ ___   | \\ | (_) |__ (_) |_   _ ___ \n" +
             " \\ \\ /\\ / / _ \\ |/ __/ _ \\| '_ ` _ \\ / _ \\ | __/ _ \\  |  \\| | | '_ \\| | | | | / __|\n" +
@@ -17,13 +15,13 @@ namespace Fork.ViewModel
         public string ConsoleInput { get; set; } = string.Empty;
 
         public ObservableCollection<string> ConsoleOutput { get; set; } =
-            new ObservableCollection<string>() {welcomeMsg};
+            new() {welcomeMsg};
 
         public void RunCommand()
         {
             ConsoleOutput.Add(ConsoleInput);
             // do your stuff here.
-            ConsoleInput = String.Empty;
+            ConsoleInput = string.Empty;
         }
 
         public void WriteLine(string line)

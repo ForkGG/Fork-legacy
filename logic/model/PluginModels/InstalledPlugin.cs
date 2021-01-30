@@ -1,9 +1,8 @@
 using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
 using System.Timers;
 using Fork.Logic.Model.PluginModels;
 using Fork.Logic.WebRequesters;
-using Timer = System.Timers.Timer;
+using Newtonsoft.Json;
 
 namespace Fork.logic.model.PluginModels
 {
@@ -16,26 +15,17 @@ namespace Fork.logic.model.PluginModels
         public bool IsDownloaded { get; set; } = false;
         public bool IsEnabled { get; set; } = true;
 
-        [Newtonsoft.Json.JsonIgnore, JsonIgnore]
+        [JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
         public Plugin Plugin { get; private set; }
 
-        [Newtonsoft.Json.JsonIgnore, JsonIgnore]
+        [JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
         public long LatestVersion { get; private set; }
 
-        [Newtonsoft.Json.JsonIgnore, JsonIgnore]
-        public bool Initialized { get; private set; } = false;
-
-
-        #region events
-
-        public delegate void HandleInitializedEvent();
-
-        public delegate void HandleUpdatedEvent();
-
-        public event HandleInitializedEvent PluginInitializedEvent;
-        public event HandleUpdatedEvent PluginUpdateEvent;
-
-        #endregion
+        [JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool Initialized { get; private set; }
 
         [OnDeserialized]
         public void AfterInit(StreamingContext context)
@@ -43,10 +33,7 @@ namespace Fork.logic.model.PluginModels
             if (IsSpigetPlugin)
             {
                 PluginWebRequester webRequester = new PluginWebRequester();
-                if (Plugin == null)
-                {
-                    Plugin = webRequester.RequestPlugin(SpigetId);
-                }
+                if (Plugin == null) Plugin = webRequester.RequestPlugin(SpigetId);
 
                 LatestVersion = InstalledVersion;
                 Timer t = new Timer(1000 * 60 * 60 * 2);
@@ -68,5 +55,17 @@ namespace Fork.logic.model.PluginModels
                 PluginUpdateEvent?.Invoke();
             }
         }
+
+
+        #region events
+
+        public delegate void HandleInitializedEvent();
+
+        public delegate void HandleUpdatedEvent();
+
+        public event HandleInitializedEvent PluginInitializedEvent;
+        public event HandleUpdatedEvent PluginUpdateEvent;
+
+        #endregion
     }
 }

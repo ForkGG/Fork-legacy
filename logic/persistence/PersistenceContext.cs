@@ -1,6 +1,4 @@
 ﻿using System.IO;
-using System.Linq;
-using DiscordRPC;
 using Fork.Logic.Model;
 using Fork.Logic.Model.ProxyModels;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +14,8 @@ namespace Fork.Logic.Persistence
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseLazyLoadingProxies();
-            optionsBuilder.UseSqlite("foreign keys=true;Data Source=" + Path.Combine(App.ApplicationPath, "persistence", "data.db"));
+            optionsBuilder.UseSqlite("foreign keys=true;Data Source=" +
+                                     Path.Combine(App.ApplicationPath, "persistence", "data.db"));
 #if DEBUG
             optionsBuilder.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
 #endif
@@ -33,7 +32,7 @@ namespace Fork.Logic.Persistence
             {
                 restrictFk.DeleteBehavior = DeleteBehavior.Cascade;
             }*/
-            
+
             base.OnModelCreating(modelBuilder);
         }
     }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Data;
 using Fork.Logic;
@@ -19,10 +17,7 @@ namespace Fork.View.Xaml.Converter
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is PluginEnums.Sorting s)
-            {
-                return s.FriendlyName();
-            }
+            if (value is PluginEnums.Sorting s) return s.FriendlyName();
             string friendly = value.ToString();
             switch (friendly)
             {

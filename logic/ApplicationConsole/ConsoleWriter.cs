@@ -2,21 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Threading;
 using Fork.Logic.Manager;
-using Fork.Logic.Persistence;
 
 namespace Fork.Logic.ApplicationConsole
 {
     public class ConsoleWriter : TextWriter
     {
-        private List<string> preCachedList = new List<string>();
-        private bool appStarted = false;
+        private bool appStarted;
         private FileInfo logFile;
-        
-        public override Encoding Encoding => Encoding.ASCII;
+        private readonly List<string> preCachedList = new();
 
-        public ConsoleWriter() { }
+        public override Encoding Encoding => Encoding.ASCII;
 
         public override void WriteLine(string value)
         {
@@ -41,19 +37,14 @@ namespace Fork.Logic.ApplicationConsole
             logFile = new FileInfo(Path.Combine(App.ApplicationPath, "logs", "consoleLog.txt"));
             if (!logFile.Exists)
             {
-                if (!new DirectoryInfo(Path.Combine(App.ApplicationPath,"logs")).Exists)
-                {
+                if (!new DirectoryInfo(Path.Combine(App.ApplicationPath, "logs")).Exists)
                     Directory.CreateDirectory(Path.Combine(App.ApplicationPath, "logs"));
-                }
                 var r = logFile.Create();
                 r.Close();
             }
-            
+
             appStarted = true;
-            foreach (string s in preCachedList)
-            {
-                WriteLine(s);
-            }
+            foreach (string s in preCachedList) WriteLine(s);
         }
     }
 }

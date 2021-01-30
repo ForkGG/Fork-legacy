@@ -7,9 +7,11 @@ namespace Fork.Logic.Model.Settings
 {
     public enum TabListType
     {
-        GLOBAL_PING, GLOBAL, SERVER
+        GLOBAL_PING,
+        GLOBAL,
+        SERVER
     }
-    
+
     public class Server
     {
         public string motd { get; set; } = "Default MOTD";
@@ -40,14 +42,14 @@ namespace Fork.Logic.Model.Settings
         public bool proxy_protocol { get; set; } = false;
         public bool query_enabled { get; set; } = false;
         public bool bind_local_address { get; set; } = true;
-        public List<string> priorities { get; set; } = new List<string>();
-        public Dictionary<string, string> forced_hosts { get; set; } = new Dictionary<string, string>();
+        public List<string> priorities { get; set; } = new();
+        public Dictionary<string, string> forced_hosts { get; set; } = new();
     }
 
     public class BungeeSettings
     {
         [YamlIgnore]
-        public List<TabListType> TabListTypes { get; } = new List<TabListType>(Enum.GetValues(typeof(TabListType)).Cast<TabListType>());
+        public List<TabListType> TabListTypes { get; } = new(Enum.GetValues(typeof(TabListType)).Cast<TabListType>());
 
         public int server_connect_timeout { get; set; } = 5000;
         public int player_limit { get; set; } = -1;
@@ -63,12 +65,14 @@ namespace Fork.Logic.Model.Settings
         public bool forge_support { get; set; } = false;
         public bool inject_commands { get; set; } = false;
         public bool log_pings { get; set; } = true;
+
         public bool prevent_proxy_connections { get; set; } = false;
+
         //public string stats { get; set; }
-        public Dictionary<string, List<string>> permissions { get; set; } = new Dictionary<string, List<string>>();
-        public Dictionary<string, Server> servers { get; set; } = new Dictionary<string, Server>();
-        public List<Listener> listeners { get; set; } = new List<Listener>();
-        public List<string> disabled_commands { get; set; } = new List<string>();
-        public Dictionary<string, List<string>> groups { get; set; } = new Dictionary<string, List<string>>();
+        public Dictionary<string, List<string>> permissions { get; set; } = new();
+        public Dictionary<string, Server> servers { get; set; } = new();
+        public List<Listener> listeners { get; set; } = new();
+        public List<string> disabled_commands { get; set; } = new();
+        public Dictionary<string, List<string>> groups { get; set; } = new();
     }
 }

@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using Fork.Logic.CustomConsole;
 using Fork.Logic.Logging;
@@ -15,8 +13,24 @@ namespace Fork.Logic.BackgroundWorker
 {
     public class QueryStatsWorker : IDisposable
     {
-        private ServerViewModel _viewModel;
-    
+        private readonly ServerViewModel _viewModel;
+
+
+        private readonly Regex playerJoin =
+            new(@"\[([0-9]+:*)+\] \[Server thread/INFO\]: ([0-9a-zA-Z_]+) joined the game$");
+
+        private readonly Regex playerJoinPaper =
+            new(@"\[([0-9]+:*)+ INFO\]: ([0-9a-zA-Z_]+) joined the game$");
+
+        private Regex playerJoinPaper2 =
+            new(@"\[([0-9]+:*)+ INFO\]: ([A-Za-z0-9_]+)\[.*\] logged in with entity id [0-9]+ at \(.*\)$");
+
+        private readonly Regex playerLeave =
+            new(@"\[([0-9]+:*)+\] \[Server thread/INFO\]: ([0-9a-zA-Z_]+) left the game$");
+
+        private readonly Regex playerLeavePaper =
+            new(@"\[([0-9]+:*)+ INFO\]: ([0-9a-zA-Z_]+) left the game$");
+
         public QueryStatsWorker(ServerViewModel viewModel)
         {
             //Wait for se server to start (max 60 sec)
@@ -46,23 +60,9 @@ namespace Fork.Logic.BackgroundWorker
             ConsoleWriter.ConsoleWriteLine -= HandleConsoleWrite;
         }
 
-
-        private Regex playerJoin =
-            new Regex(@"\[([0-9]+:*)+\] \[Server thread/INFO\]: ([0-9a-zA-Z_]+) joined the game$");
-        private Regex playerJoinPaper =
-            new Regex(@"\[([0-9]+:*)+ INFO\]: ([0-9a-zA-Z_]+) joined the game$");
-        private Regex playerJoinPaper2 =
-            new Regex(@"\[([0-9]+:*)+ INFO\]: ([A-Za-z0-9_]+)\[.*\] logged in with entity id [0-9]+ at \(.*\)$");
-
-        private Regex playerLeave =
-            new Regex(@"\[([0-9]+:*)+\] \[Server thread/INFO\]: ([0-9a-zA-Z_]+) left the game$");
-        private Regex playerLeavePaper =
-            new Regex(@"\[([0-9]+:*)+ INFO\]: ([0-9a-zA-Z_]+) left the game$");
-
         private async void HandleConsoleWrite(string line, EntityViewModel entityViewModel)
         {
             if (entityViewModel is ServerViewModel viewModel && viewModel == _viewModel)
-            {
                 switch (viewModel.Server.Version.Type)
                 {
                     case ServerVersion.VersionType.Vanilla:
@@ -73,12 +73,13 @@ namespace Fork.Logic.BackgroundWorker
                         //HandlePlayerJoinLeave(line,viewModel, playerJoinPaper2, playerLeavePaper);
                         break;
                     default:
-                        throw new Exception("Handle Player join/leave function does not implement "+viewModel.Server.Version.Type);
-                } 
-            }
+                        throw new Exception("Handle Player join/leave function does not implement " +
+                                            viewModel.Server.Version.Type);
+                }
         }
 
-        private async void HandlePlayerJoinLeave(string line, ServerViewModel viewModel, Regex playerJoin, Regex playerLeave)
+        private async void HandlePlayerJoinLeave(string line, ServerViewModel viewModel, Regex playerJoin,
+            Regex playerLeave)
         {
             Match joinMatch = playerJoin.Match(line);
             if (joinMatch.Success)
@@ -88,13 +89,11 @@ namespace Fork.Logic.BackgroundWorker
                 {
                     bool found = false;
                     foreach (ServerPlayer serverPlayer in viewModel.PlayerList)
-                    {
                         if (serverPlayer.Player.Name.Equals(playerName))
                         {
                             serverPlayer.IsOnline = true;
                             found = true;
                         }
-                    }
 
                     if (!found)
                     {
@@ -102,8 +101,9 @@ namespace Fork.Logic.BackgroundWorker
                         ServerPlayer player = new ServerPlayer(p, viewModel, viewModel.OPList.Contains(p), true);
                         Application.Current.Dispatcher?.Invoke(() => viewModel.PlayerList.Add(player));
                     }
-                    
-                    ApplicationManager.Instance.TriggerPlayerEvent(this, new PlayerEventArgs(PlayerEventArgs.PlayerEventType.Join, playerName, viewModel));
+
+                    ApplicationManager.Instance.TriggerPlayerEvent(this,
+                        new PlayerEventArgs(PlayerEventArgs.PlayerEventType.Join, playerName, viewModel));
                     viewModel.RefreshPlayerList();
                 }
                 catch (Exception e)
@@ -121,13 +121,10 @@ namespace Fork.Logic.BackgroundWorker
                 string playerName = leaveMatch.Groups[2].Value;
 
                 foreach (ServerPlayer serverPlayer in viewModel.PlayerList)
-                {
                     if (serverPlayer.Player.Name.Equals(playerName))
-                    {
                         serverPlayer.IsOnline = false;
-                    }
-                }
-                ApplicationManager.Instance.TriggerPlayerEvent(this, new PlayerEventArgs(PlayerEventArgs.PlayerEventType.Leave, playerName, viewModel));
+                ApplicationManager.Instance.TriggerPlayerEvent(this,
+                    new PlayerEventArgs(PlayerEventArgs.PlayerEventType.Leave, playerName, viewModel));
 
                 viewModel.RefreshPlayerList();
             }

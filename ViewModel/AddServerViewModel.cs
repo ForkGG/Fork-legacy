@@ -1,25 +1,14 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Net;
+﻿using System.Collections.ObjectModel;
 using Fork.Logic.Manager;
 using Fork.Logic.Model;
 
 namespace Fork.ViewModel
 {
-    
     public class AddServerViewModel : BaseViewModel
     {
-
-        public ObservableCollection<ServerVersion> VanillaServerVersions { get; set; } 
-        public ObservableCollection<ServerVersion> PaperVersions { get; set; }
-        public ObservableCollection<ServerVersion> SpigotServerVersions { get; set; }
-        public ServerSettings ServerSettings { get; set; }
-        public bool DownloadCompleted { get; set; }
-
         /// <summary>
-        /// Constructor
-        /// Sets ServerVersion to the currently existing server versions
+        ///     Constructor
+        ///     Sets ServerVersion to the currently existing server versions
         /// </summary>
         public AddServerViewModel()
         {
@@ -28,6 +17,12 @@ namespace Fork.ViewModel
             SpigotServerVersions = VersionManager.Instance.SpigotVersions;
             GenerateNewSettings();
         }
+
+        public ObservableCollection<ServerVersion> VanillaServerVersions { get; set; }
+        public ObservableCollection<ServerVersion> PaperVersions { get; set; }
+        public ObservableCollection<ServerVersion> SpigotServerVersions { get; set; }
+        public ServerSettings ServerSettings { get; set; }
+        public bool DownloadCompleted { get; set; }
 
         public void GenerateNewSettings()
         {

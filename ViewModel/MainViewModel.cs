@@ -13,14 +13,44 @@ using Fork.Logic.Model;
 using Fork.Logic.Model.APIModels;
 using Fork.Logic.Utils;
 using Fork.View.Xaml2.Pages;
-using Timer = System.Timers.Timer;
 
 namespace Fork.ViewModel
 {
     public sealed class MainViewModel : INotifyPropertyChanged
     {
         private ImportPage importPage;
-        
+
+
+        public MainViewModel()
+        {
+            if (!ApplicationManager.Initialized)
+                ApplicationManager.ApplicationInitialized += SetupVersionChecking;
+            else
+                SetupVersionChecking();
+            AppSettingsViewModel = new AppSettingsViewModel(this);
+            UpdateInstalledJavaVersion();
+            Entities = ServerManager.Instance.Entities;
+            Entities.CollectionChanged += ServerListChanged;
+            if (Entities.Count != 0)
+            {
+                SelectedEntity = Entities[0];
+                HasServers = true;
+            }
+
+            Boi = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/BoiTransparent.png"));
+            BoiHover = new BitmapImage(
+                new Uri("pack://application:,,,/View/Resources/images/Icons/BoiTransparentHover.png"));
+
+            DateTime now = DateTime.Now;
+            if (now.Month == 12 && now.Day < 27)
+            {
+                Boi = new BitmapImage(
+                    new Uri("pack://application:,,,/View/Resources/images/Icons/XMasBoiTransparent.png"));
+                BoiHover = new BitmapImage(
+                    new Uri("pack://application:,,,/View/Resources/images/Icons/XMasBoiTransparentHover.png"));
+            }
+        }
+
         public ObservableCollection<EntityViewModel> Entities { get; set; }
         public EntityViewModel SelectedEntity { get; set; }
         public AppSettingsViewModel AppSettingsViewModel { get; }
@@ -33,53 +63,22 @@ namespace Fork.ViewModel
         public JavaVersion InstalledJavaVersion { get; private set; }
         public bool ShowJavaWarning { get; private set; }
         public string JavaWarningMessage { get; private set; }
-        public ImageSource Boi { get; private set; }
-        public ImageSource BoiHover { get; private set; }
-        
-        
-        public CreatePage CreatePage { get; } = new CreatePage();
-        public ImportPage ImportPage { get; } = new ImportPage();
-        
+        public ImageSource Boi { get; }
+        public ImageSource BoiHover { get; }
 
-        public MainViewModel()
-        {
-            if (!ApplicationManager.Initialized)
-            {
-                ApplicationManager.ApplicationInitialized += SetupVersionChecking;
-            }
-            else
-            {
-                SetupVersionChecking();
-            }
-            AppSettingsViewModel = new AppSettingsViewModel(this);
-            UpdateInstalledJavaVersion();
-            Entities = ServerManager.Instance.Entities;
-            Entities.CollectionChanged += ServerListChanged;
-            if (Entities.Count != 0)
-            {
-                SelectedEntity = Entities[0];
-                HasServers = true;
-            }
-            
-            Boi = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/BoiTransparent.png"));
-            BoiHover = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/BoiTransparentHover.png"));
 
-            DateTime now = DateTime.Now;
-            if (now.Month == 12 && now.Day<27)
-            {
-                Boi = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/XMasBoiTransparent.png"));
-                BoiHover = new BitmapImage(new Uri("pack://application:,,,/View/Resources/images/Icons/XMasBoiTransparentHover.png"));
-            }
-        }
+        public CreatePage CreatePage { get; } = new();
+        public ImportPage ImportPage { get; } = new();
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public void UpdateInstalledJavaVersion(bool ignoreWarnings = false)
         {
-            
             InstalledJavaVersion = JavaVersionUtils.GetInstalledJavaVersion();
             if (InstalledJavaVersion == null)
             {
                 ShowJavaWarning = !ignoreWarnings;
-                JavaWarningMessage = 
+                JavaWarningMessage =
                     "No Java installation detected!" +
                     "\nMinecraft Servers require Java to be installed on your system";
                 return;
@@ -94,7 +93,7 @@ namespace Fork.ViewModel
                 return;
             }
 
-            
+
             //TODO enable this at a latest point when new java versions don't cause issues anymore
             /*if (InstalledJavaVersion.VersionComputed < 11)
             {
@@ -113,14 +112,15 @@ namespace Fork.ViewModel
         public void SetServerList(ref ObservableCollection<EntityViewModel> entities)
         {
             Entities = entities;
-            HasServers = Entities.Count!=0;
+            HasServers = Entities.Count != 0;
             Entities.CollectionChanged += ServerListChanged;
         }
-        
+
         public void CheckForkVersion()
         {
-            LatestForkVersion = new APIController().GetLatestForkVersion(AppSettingsViewModel.AppSettings.UseBetaVersions);
-            if (LatestForkVersion.CompareTo(CurrentForkVersion)>0)
+            LatestForkVersion =
+                new APIController().GetLatestForkVersion(AppSettingsViewModel.AppSettings.UseBetaVersions);
+            if (LatestForkVersion.CompareTo(CurrentForkVersion) > 0)
             {
                 NewerVersionExists = true;
                 raisePropertyChanged(nameof(IsLatestBeta));
@@ -149,8 +149,6 @@ namespace Fork.ViewModel
         {
             CheckForkVersion();
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
         private void raisePropertyChanged([CallerMemberName] string propertyName = null)

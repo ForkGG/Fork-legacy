@@ -13,7 +13,7 @@
                             Background="{DynamicResource backgroundDefault}"
                             BorderThickness="0"
                             CornerRadius="10">
-                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle" Margin="0 10"/>
+                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle" Margin="0 10" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -25,22 +25,24 @@
             <Setter.Value>
                 <ControlTemplate TargetType="MenuItem">
                     <Border x:Name="background" CornerRadius="0" BorderThickness="0" MinWidth="150" Height="40">
-                        <TextBlock x:Name="text" Text="{TemplateBinding Header}" TextAlignment="Center" FontSize="15" Margin="10 5" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="text" Text="{TemplateBinding Header}" TextAlignment="Center" FontSize="15"
+                                   Margin="10 5" VerticalAlignment="Center" />
                     </Border>
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource textUnselected}"/>
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource textUnselected}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="True">
-                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource textSelected}"/>
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource textSelected}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="background" Property="Background" Value="{DynamicResource backgroundDarker}"/>
+                            <Setter TargetName="background" Property="Background"
+                                    Value="{DynamicResource backgroundDarker}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
-            </Setter.Value>            
+            </Setter.Value>
         </Setter>
     </Style>
 
@@ -49,18 +51,20 @@
             <Setter.Value>
                 <ControlTemplate TargetType="MenuItem">
                     <Border x:Name="background" CornerRadius="0" BorderThickness="0" MinWidth="150" Height="40">
-                        <TextBlock x:Name="text" Text="{TemplateBinding Header}" TextAlignment="Center" FontSize="15" Margin="10 5" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="text" Text="{TemplateBinding Header}" TextAlignment="Center" FontSize="15"
+                                   Margin="10 5" VerticalAlignment="Center" />
                     </Border>
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource buttonBgrRed}"/>
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource buttonBgrRed}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="True">
-                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource buttonBgrRed}"/>
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource buttonBgrRed}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="background" Property="Background" Value="{DynamicResource backgroundDarker}"/>
+                            <Setter TargetName="background" Property="Background"
+                                    Value="{DynamicResource backgroundDarker}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

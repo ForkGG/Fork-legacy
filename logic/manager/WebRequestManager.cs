@@ -6,11 +6,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Fork.Logic.Logging;
-using Newtonsoft.Json;
 using Fork.Logic.Model;
 using Fork.Logic.Model.MinecraftVersionModels;
 using Fork.Logic.WebRequesters;
-using Fork.ViewModel;
+using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Fork.Logic.Manager
@@ -18,19 +17,23 @@ namespace Fork.Logic.Manager
     public sealed class WebRequestManager
     {
         private static WebRequestManager instance;
+        private readonly Dictionary<Manifest.VersionType, DateTime> vanillaCacheAge = new();
+
+        private readonly Dictionary<Manifest.VersionType, List<ServerVersion>> vanillaDict = new();
+
+        private WebRequestManager()
+        {
+        }
+
         public static WebRequestManager Instance
         {
-            get 
+            get
             {
                 if (instance == null)
                     instance = new WebRequestManager();
                 return instance;
             }
         }
-        private WebRequestManager(){}
-        
-        private Dictionary<Manifest.VersionType,List<ServerVersion>> vanillaDict = new Dictionary<Manifest.VersionType, List<ServerVersion>>();
-        private Dictionary<Manifest.VersionType, DateTime> vanillaCacheAge = new Dictionary<Manifest.VersionType, DateTime>();
 
         public List<ServerVersion> GetVanillaVersions(Manifest.VersionType type)
         {
@@ -48,6 +51,7 @@ namespace Fork.Logic.Manager
                 Console.Error.WriteLine("[CRITICAL] No Paper versions found!");
                 return versions;
             }
+
             foreach (string version in versionStrings)
             {
                 ServerVersion serverVersion = new ServerVersion();
@@ -71,7 +75,7 @@ namespace Fork.Logic.Manager
             version.Version = "test";
             version.JarLink = "NOT IMPLEMENTED";
             version.Type = ServerVersion.VersionType.Spigot;
-            
+
             List<ServerVersion> serverVersions = new List<ServerVersion>();
             serverVersions.Add(version);
 
@@ -83,7 +87,7 @@ namespace Fork.Logic.Manager
             Uri uri = new Uri(jsonURL);
             HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uri);
             string json;
-            using (var response =  request.GetResponse())
+            using (var response = request.GetResponse())
             using (Stream stream = response.GetResponseStream())
             using (StreamReader reader = new StreamReader(stream))
             {
@@ -92,16 +96,14 @@ namespace Fork.Logic.Manager
 
             VersionDetails versionDetails = JsonConvert.DeserializeObject<VersionDetails>(json);
 
-            if (versionDetails.downloads.server==null)
-            {
-                return null;
-            }
+            if (versionDetails.downloads.server == null) return null;
             return versionDetails.downloads.server.url;
         }
-        
-        private void CacheVanillaVersions(Manifest.VersionType versionType, List<ServerVersion> versions){
+
+        private void CacheVanillaVersions(Manifest.VersionType versionType, List<ServerVersion> versions)
+        {
             DateTime cacheAge = DateTime.Now;
-            
+
             //RAM cache
             vanillaDict[versionType] = versions;
             vanillaCacheAge[versionType] = cacheAge;
@@ -111,13 +113,10 @@ namespace Fork.Logic.Manager
             string json = JsonSerializer.Serialize(versionCache);
             try
             {
-                string path = Path.Combine(App.ApplicationPath,"persistence");
-                if (!Directory.Exists(path))
-                {
-                    Directory.CreateDirectory(path);
-                }
-                path = Path.Combine(path, "vanilla-"+versionType+".json");
-                File.WriteAllText(path,json, Encoding.UTF8);
+                string path = Path.Combine(App.ApplicationPath, "persistence");
+                if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+                path = Path.Combine(path, "vanilla-" + versionType + ".json");
+                File.WriteAllText(path, json, Encoding.UTF8);
             }
             catch (Exception e)
             {
@@ -128,21 +127,15 @@ namespace Fork.Logic.Manager
 
         private List<ServerVersion> GetVanillaVersionsFromCache(Manifest.VersionType versionType)
         {
-            if (vanillaDict.ContainsKey(versionType)&&VanillaCacheUpToDate(versionType))
-            {
+            if (vanillaDict.ContainsKey(versionType) && VanillaCacheUpToDate(versionType))
                 return vanillaDict[versionType];
-            }
             string path = Path.Combine(App.ApplicationPath, "persistence", "vanilla-" + versionType + ".json");
             if (File.Exists(path))
-            {
                 try
                 {
-                    string json = File.ReadAllText(path,Encoding.UTF8);
+                    string json = File.ReadAllText(path, Encoding.UTF8);
                     VanillaVersionCache versionCache = JsonSerializer.Deserialize<VanillaVersionCache>(json);
-                    if (DateTime.Now.Subtract(versionCache.CacheCreation).TotalHours < 12)
-                    {
-                        return versionCache.Versions;
-                    }
+                    if (DateTime.Now.Subtract(versionCache.CacheCreation).TotalHours < 12) return versionCache.Versions;
                     //TODO update visual list after updating
                     UpdateVanillaVersionsAsync(versionType);
                     return versionCache.Versions;
@@ -152,7 +145,7 @@ namespace Fork.Logic.Manager
                     ErrorLogger.Append(e);
                     Console.WriteLine("Error while reading Vanilla version cache. Skipping...");
                 }
-            }
+
             UpdateVanillaVersions(versionType);
             return GetVanillaVersionsFromCache(versionType);
         }
@@ -170,39 +163,34 @@ namespace Fork.Logic.Manager
                 {
                     json = reader.ReadToEnd();
                 }
-            } catch(WebException e)
+            }
+            catch (WebException e)
             {
                 ErrorLogger.Append(e);
-                Console.WriteLine("WebException while updating Vanilla Versions (Either mojang.com is down or your internet coeenction is not working)");
+                Console.WriteLine(
+                    "WebException while updating Vanilla Versions (Either mojang.com is down or your internet coeenction is not working)");
                 return;
             }
-            
-            
+
+
             Manifest manifest = JsonConvert.DeserializeObject<Manifest>(json);
             List<ServerVersion> result = new List<ServerVersion>();
             foreach (Manifest.Version version in manifest.versions)
-            {
                 if (version.type == versionType)
                 {
                     ServerVersion internalVersion = new ServerVersion();
                     internalVersion.Type = ServerVersion.VersionType.Vanilla;
                     internalVersion.Version = version.id;
                     internalVersion.JarLink = GetJarURL(version.url);
-                    if (internalVersion.JarLink!=null)
-                    {
-                        result.Add(internalVersion);
-                    }
+                    if (internalVersion.JarLink != null) result.Add(internalVersion);
                 }
-            }
+
             CacheVanillaVersions(versionType, result);
         }
 
         private void UpdateVanillaVersionsAsync(Manifest.VersionType versionType)
         {
-            new Thread(() =>
-            {
-                UpdateVanillaVersions(versionType);
-            }){IsBackground = true}.Start();
+            new Thread(() => { UpdateVanillaVersions(versionType); }) {IsBackground = true}.Start();
         }
 
         private bool VanillaCacheUpToDate(Manifest.VersionType versionType)
@@ -212,21 +200,14 @@ namespace Fork.Logic.Manager
                 DateTime age = vanillaCacheAge[versionType];
                 DateTime now = DateTime.Now;
                 TimeSpan difference = now - age;
-                if (difference.TotalHours<12)
-                {
-                    return true;
-                }
+                if (difference.TotalHours < 12) return true;
             }
 
             return false;
         }
-        
+
         private class VanillaVersionCache
         {
-            public DateTime CacheCreation { get; set; }
-            public Manifest.VersionType VersionType { get; set; }
-            public List<ServerVersion> Versions { get; set; }
-
             public VanillaVersionCache(DateTime cacheCreation, Manifest.VersionType versionType,
                 List<ServerVersion> versions)
             {
@@ -237,7 +218,12 @@ namespace Fork.Logic.Manager
 
             //Empty constructor for serializers
             public VanillaVersionCache()
-            { }
+            {
+            }
+
+            public DateTime CacheCreation { get; }
+            public Manifest.VersionType VersionType { get; }
+            public List<ServerVersion> Versions { get; }
         }
     }
 }

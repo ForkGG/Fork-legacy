@@ -1,28 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Fork.View.Xaml2.Controls
 {
     public partial class StarControl : UserControl
     {
-         #region Data
-        private const Int32 STAR_SIZE = 20;
+        #region Data
+
+        private const int STAR_SIZE = 20;
+
         #endregion
 
         #region Ctor
+
         public StarControl()
         {
-            this.DataContext = this;
+            DataContext = this;
             InitializeComponent();
 
             gdStar.Width = STAR_SIZE;
@@ -35,158 +29,157 @@ namespace Fork.View.Xaml2.Controls
             mask.Width = STAR_SIZE;
             mask.Height = STAR_SIZE;
         }
+
         #endregion
 
 
         #region BackgroundColor
 
         /// <summary>
-        /// BackgroundColor Dependency Property
+        ///     BackgroundColor Dependency Property
         /// </summary>
         public static readonly DependencyProperty BackgroundColorProperty =
-            DependencyProperty.Register("BackgroundColor", 
-            typeof(SolidColorBrush), typeof(StarControl),
-                new FrameworkPropertyMetadata((SolidColorBrush)Brushes.Transparent,
-                    new PropertyChangedCallback(OnBackgroundColorChanged)));
+            DependencyProperty.Register("BackgroundColor",
+                typeof(SolidColorBrush), typeof(StarControl),
+                new FrameworkPropertyMetadata(Brushes.Transparent,
+                    OnBackgroundColorChanged));
 
         /// <summary>
-        /// Gets or sets the BackgroundColor property.  
+        ///     Gets or sets the BackgroundColor property.
         /// </summary>
         public SolidColorBrush BackgroundColor
         {
-            get { return (SolidColorBrush)GetValue(BackgroundColorProperty); }
-            set { SetValue(BackgroundColorProperty, value); }
+            get => (SolidColorBrush) GetValue(BackgroundColorProperty);
+            set => SetValue(BackgroundColorProperty, value);
         }
 
         /// <summary>
-        /// Handles changes to the BackgroundColor property.
+        ///     Handles changes to the BackgroundColor property.
         /// </summary>
-        private static void OnBackgroundColorChanged(DependencyObject d, 
+        private static void OnBackgroundColorChanged(DependencyObject d,
             DependencyPropertyChangedEventArgs e)
         {
-            StarControl control = (StarControl)d;
-            control.gdStar.Background = (SolidColorBrush)e.NewValue;
-            control.mask.Fill = (SolidColorBrush)e.NewValue;
+            StarControl control = (StarControl) d;
+            control.gdStar.Background = (SolidColorBrush) e.NewValue;
+            control.mask.Fill = (SolidColorBrush) e.NewValue;
         }
+
         #endregion
 
         #region StarForegroundColor
 
         /// <summary>
-        /// StarForegroundColor Dependency Property
+        ///     StarForegroundColor Dependency Property
         /// </summary>
         public static readonly DependencyProperty StarForegroundColorProperty =
-            DependencyProperty.Register("StarForegroundColor", typeof(SolidColorBrush), 
-            typeof(StarControl),
-                new FrameworkPropertyMetadata((SolidColorBrush)Brushes.Transparent,
-                    new PropertyChangedCallback(OnStarForegroundColorChanged)));
+            DependencyProperty.Register("StarForegroundColor", typeof(SolidColorBrush),
+                typeof(StarControl),
+                new FrameworkPropertyMetadata(Brushes.Transparent,
+                    OnStarForegroundColorChanged));
 
         /// <summary>
-        /// Gets or sets the StarForegroundColor property.  
+        ///     Gets or sets the StarForegroundColor property.
         /// </summary>
         public SolidColorBrush StarForegroundColor
         {
-            get { return (SolidColorBrush)GetValue(StarForegroundColorProperty); }
-            set { SetValue(StarForegroundColorProperty, value); }
+            get => (SolidColorBrush) GetValue(StarForegroundColorProperty);
+            set => SetValue(StarForegroundColorProperty, value);
         }
 
         /// <summary>
-        /// Handles changes to the StarForegroundColor property.
+        ///     Handles changes to the StarForegroundColor property.
         /// </summary>
-        private static void OnStarForegroundColorChanged(DependencyObject d, 
+        private static void OnStarForegroundColorChanged(DependencyObject d,
             DependencyPropertyChangedEventArgs e)
         {
-            StarControl control = (StarControl)d;
-            control.starForeground.Fill = (SolidColorBrush)e.NewValue;
+            StarControl control = (StarControl) d;
+            control.starForeground.Fill = (SolidColorBrush) e.NewValue;
         }
+
         #endregion
 
         #region StarOutlineColor
 
         /// <summary>
-        /// StarOutlineColor Dependency Property
+        ///     StarOutlineColor Dependency Property
         /// </summary>
         public static readonly DependencyProperty StarOutlineColorProperty =
-            DependencyProperty.Register("StarOutlineColor", typeof(SolidColorBrush), 
-            typeof(StarControl),
-                new FrameworkPropertyMetadata((SolidColorBrush)Brushes.Transparent,
-                    new PropertyChangedCallback(OnStarOutlineColorChanged)));
+            DependencyProperty.Register("StarOutlineColor", typeof(SolidColorBrush),
+                typeof(StarControl),
+                new FrameworkPropertyMetadata(Brushes.Transparent,
+                    OnStarOutlineColorChanged));
 
         /// <summary>
-        /// Gets or sets the StarOutlineColor property.  
+        ///     Gets or sets the StarOutlineColor property.
         /// </summary>
         public SolidColorBrush StarOutlineColor
         {
-            get { return (SolidColorBrush)GetValue(StarOutlineColorProperty); }
-            set { SetValue(StarOutlineColorProperty, value); }
+            get => (SolidColorBrush) GetValue(StarOutlineColorProperty);
+            set => SetValue(StarOutlineColorProperty, value);
         }
 
         /// <summary>
-        /// Handles changes to the StarOutlineColor property.
+        ///     Handles changes to the StarOutlineColor property.
         /// </summary>
-        private static void OnStarOutlineColorChanged(DependencyObject d, 
+        private static void OnStarOutlineColorChanged(DependencyObject d,
             DependencyPropertyChangedEventArgs e)
         {
-            StarControl control = (StarControl)d;
-            control.starOutline.Stroke = (SolidColorBrush)e.NewValue;
+            StarControl control = (StarControl) d;
+            control.starOutline.Stroke = (SolidColorBrush) e.NewValue;
         }
+
         #endregion
 
 
         #region Value
 
         /// <summary>
-        /// Value Dependency Property
+        ///     Value Dependency Property
         /// </summary>
         public static readonly DependencyProperty ValueProperty =
-            DependencyProperty.Register("Value", typeof(Decimal), 
-            typeof(StarControl),
-                new FrameworkPropertyMetadata((Decimal)0.0,
-                    new PropertyChangedCallback(OnValueChanged),
-                    new CoerceValueCallback(CoerceValueValue)));
+            DependencyProperty.Register("Value", typeof(decimal),
+                typeof(StarControl),
+                new FrameworkPropertyMetadata((decimal) 0.0,
+                    OnValueChanged,
+                    CoerceValueValue));
 
         /// <summary>
-        /// Gets or sets the Value property.  
+        ///     Gets or sets the Value property.
         /// </summary>
-        public Decimal Value
+        public decimal Value
         {
-            get { return (Decimal)GetValue(ValueProperty); }
-            set { SetValue(ValueProperty, value); }
+            get => (decimal) GetValue(ValueProperty);
+            set => SetValue(ValueProperty, value);
         }
 
         /// <summary>
-        /// Handles changes to the Value property.
+        ///     Handles changes to the Value property.
         /// </summary>
-        private static void OnValueChanged(DependencyObject d, 
+        private static void OnValueChanged(DependencyObject d,
             DependencyPropertyChangedEventArgs e)
         {
             d.CoerceValue(MinimumProperty);
             d.CoerceValue(MaximumProperty);
-            StarControl starControl = (StarControl)d;
+            StarControl starControl = (StarControl) d;
             if (starControl.Value == 0.0m)
-            {
                 starControl.starForeground.Fill = Brushes.Gray;
-            }
             else
-            {
                 starControl.starForeground.Fill = starControl.StarForegroundColor;
-            }
 
-            Int32 marginLeftOffset = (Int32)(starControl.Value * (Decimal)STAR_SIZE);
+            int marginLeftOffset = (int) (starControl.Value * STAR_SIZE);
             starControl.mask.Margin = new Thickness(marginLeftOffset, 0, 0, 0);
             starControl.InvalidateArrange();
             starControl.InvalidateMeasure();
             starControl.InvalidateVisual();
-
         }
 
         /// <summary>
-        /// Coerces the Value value.
+        ///     Coerces the Value value.
         /// </summary>
         private static object CoerceValueValue(DependencyObject d, object value)
         {
-            StarControl starControl = (StarControl)d;
-            Decimal current = (Decimal)value;
+            StarControl starControl = (StarControl) d;
+            decimal current = (decimal) value;
             if (current < starControl.Minimum) current = starControl.Minimum;
             if (current > starControl.Maximum) current = starControl.Maximum;
             return current;
@@ -197,20 +190,20 @@ namespace Fork.View.Xaml2.Controls
         #region Maximum
 
         /// <summary>
-        /// Maximum Dependency Property
+        ///     Maximum Dependency Property
         /// </summary>
         public static readonly DependencyProperty MaximumProperty =
-            DependencyProperty.Register("Maximum", typeof(Decimal), 
-            typeof(StarControl),
-                new FrameworkPropertyMetadata((Decimal)1.0));
+            DependencyProperty.Register("Maximum", typeof(decimal),
+                typeof(StarControl),
+                new FrameworkPropertyMetadata((decimal) 1.0));
 
         /// <summary>
-        /// Gets or sets the Maximum property.  
+        ///     Gets or sets the Maximum property.
         /// </summary>
-        public Decimal Maximum
+        public decimal Maximum
         {
-            get { return (Decimal)GetValue(MaximumProperty); }
-            set { SetValue(MaximumProperty, value); }
+            get => (decimal) GetValue(MaximumProperty);
+            set => SetValue(MaximumProperty, value);
         }
 
         #endregion
@@ -218,20 +211,20 @@ namespace Fork.View.Xaml2.Controls
         #region Minimum
 
         /// <summary>
-        /// Minimum Dependency Property
+        ///     Minimum Dependency Property
         /// </summary>
         public static readonly DependencyProperty MinimumProperty =
-            DependencyProperty.Register("Minimum", typeof(Decimal), 
-            typeof(StarControl),
-                new FrameworkPropertyMetadata((Decimal)0.0));
+            DependencyProperty.Register("Minimum", typeof(decimal),
+                typeof(StarControl),
+                new FrameworkPropertyMetadata((decimal) 0.0));
 
         /// <summary>
-        /// Gets or sets the Minimum property.  
+        ///     Gets or sets the Minimum property.
         /// </summary>
-        public Decimal Minimum
+        public decimal Minimum
         {
-            get { return (Decimal)GetValue(MinimumProperty); }
-            set { SetValue(MinimumProperty, value); }
+            get => (decimal) GetValue(MinimumProperty);
+            set => SetValue(MinimumProperty, value);
         }
 
         #endregion

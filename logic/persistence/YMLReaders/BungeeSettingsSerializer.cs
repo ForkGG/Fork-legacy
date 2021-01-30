@@ -1,34 +1,26 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.AccessControl;
 using System.Threading;
-using Fork.Annotations;
-using Fork.Logic.Model;
 using Fork.Logic.Model.Settings;
-using Fork.ViewModel;
 using YamlDotNet.Serialization;
-using Server = Fork.Logic.Model.Settings.Server;
 
 namespace Fork.Logic.Persistence.YMLReaders
 {
     public class BungeeSettingsSerializer
     {
-        private object fileLock = new object();
-        
-        public FileInfo ConfigYML { get; }
+        private readonly object fileLock = new();
 
         public BungeeSettingsSerializer(FileInfo configYml)
         {
             ConfigYML = configYml;
         }
 
+        public FileInfo ConfigYML { get; }
+
         public BungeeSettings ReadSettings()
         {
-            if (!ConfigYML.Exists)
-            {
-                InitializeBungeeConfig();
-            }
+            if (!ConfigYML.Exists) InitializeBungeeConfig();
 
             lock (fileLock)
             {
@@ -45,11 +37,12 @@ namespace Fork.Logic.Persistence.YMLReaders
             int i = 0;
             while (!FileWriter.IsFileWritable(ConfigYML))
             {
-                if (i>60*5)
+                if (i > 60 * 5)
                 {
-                    Console.WriteLine("File "+ConfigYML.FullName+" was not writable for 5 minutes, aborting...");
+                    Console.WriteLine("File " + ConfigYML.FullName + " was not writable for 5 minutes, aborting...");
                     return;
                 }
+
                 Thread.Sleep(1000);
                 i++;
             }
@@ -68,13 +61,19 @@ namespace Fork.Logic.Persistence.YMLReaders
         private void InitializeBungeeConfig()
         {
             BungeeSettings bungeeSettings = new BungeeSettings();
-            bungeeSettings.groups.Add("md_5",new List<string>{"admin"});
+            bungeeSettings.groups.Add("md_5", new List<string> {"admin"});
             bungeeSettings.disabled_commands.Add("disabledcommandhere");
-            bungeeSettings.servers.Add("lobby",new Server());
-            bungeeSettings.listeners = new List<Listener>{new Listener()};
+            bungeeSettings.servers.Add("lobby", new Server());
+            bungeeSettings.listeners = new List<Listener> {new()};
             bungeeSettings.listeners[0].priorities.Add("lobby");
-            bungeeSettings.permissions.Add("default",new List<string>{"bungeecord.command.server", "bungeecord.command.list"});
-            bungeeSettings.permissions.Add("admin",new List<string>{"bungeecord.command.alert", "bungeecord.command.end", "bungeecord.command.ip", "bungeecord.command.reload"});
+            bungeeSettings.permissions.Add("default",
+                new List<string> {"bungeecord.command.server", "bungeecord.command.list"});
+            bungeeSettings.permissions.Add("admin",
+                new List<string>
+                {
+                    "bungeecord.command.alert", "bungeecord.command.end", "bungeecord.command.ip",
+                    "bungeecord.command.reload"
+                });
 
             WriteSettings(bungeeSettings);
         }

@@ -6,7 +6,6 @@ using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Fork.Properties;
 using Newtonsoft.Json;
@@ -15,7 +14,7 @@ namespace Fork.Logic.Model
 {
     public class Player : IEquatable<Player>
     {
-        public bool OfflineChar { get; set; } = false;
+        public bool OfflineChar { get; set; }
         public string Name { get; set; }
         public string Uid { get; set; }
         public string Head { get; set; }
@@ -23,21 +22,21 @@ namespace Fork.Logic.Model
 
         [JsonIgnore] public Player Self => this;
 
-        public Player()
-        { }
+        public bool Equals(Player other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return OfflineChar == other.OfflineChar && Name == other.Name && Uid == other.Uid;
+        }
 
         public async Task InitWithName(string name)
         {
             Name = name;
             await RetrieveUid();
             if (!OfflineChar)
-            {
                 await Task.Run(RetrieveHead);
-            }
             else
-            {
                 Head = SetOfflineHead();
-            }
             LastUpdated = DateTime.Now;
         }
 
@@ -94,9 +93,7 @@ namespace Fork.Logic.Model
             Name = fullProfile.name;
             Head = SetOfflineHead();
             if (fullProfile.properties.Count != 0)
-            {
-                await Task.Run(async() => Head = await RetrieveImageFromBase64(fullProfile.properties[0].value));
-            }
+                await Task.Run(async () => Head = await RetrieveImageFromBase64(fullProfile.properties[0].value));
         }
 
         private async Task RetrieveUid()
@@ -139,15 +136,9 @@ namespace Fork.Logic.Model
         private string NameFromCache(string uid)
         {
             string path = Path.Combine(App.ApplicationPath, "players", uid, "profile.json");
-            if (!File.Exists(path))
-            {
-                return null;
-            }
+            if (!File.Exists(path)) return null;
 
-            if (File.GetCreationTime(path).AddDays(2) < DateTime.Now)
-            {
-                return null;
-            }
+            if (File.GetCreationTime(path).AddDays(2) < DateTime.Now) return null;
 
             FullProfile profile = JsonConvert.DeserializeObject<FullProfile>(File.ReadAllText(path));
             return profile.name;
@@ -156,15 +147,9 @@ namespace Fork.Logic.Model
         private string HeadFromCache(string uid)
         {
             string path = Path.Combine(App.ApplicationPath, "players", uid, "head.jpg");
-            if (!File.Exists(path))
-            {
-                return null;
-            }
+            if (!File.Exists(path)) return null;
 
-            if (File.GetCreationTime(path).AddDays(2) < DateTime.Now)
-            {
-                return null;
-            }
+            if (File.GetCreationTime(path).AddDays(2) < DateTime.Now) return null;
 
             return Path.GetFullPath(path);
         }
@@ -203,13 +188,9 @@ namespace Fork.Logic.Model
             FullProfile fullProfile = JsonConvert.DeserializeObject<FullProfile>(fullProfileString);
             CacheProfileJson(fullProfile);
             if (fullProfile.properties.Count == 0)
-            {
                 Head = SetOfflineHead();
-            }
             else
-            {
                 Head = await RetrieveImageFromBase64(fullProfile.properties[0].value);
-            }
         }
 
         private async Task<string> RetrieveImageFromBase64(string base64String)
@@ -291,6 +272,19 @@ namespace Fork.Logic.Model
             return BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
         }
 
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((Player) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(OfflineChar, Name, Uid);
+        }
+
 
         private class NameUid
         {
@@ -332,26 +326,6 @@ namespace Fork.Logic.Model
         private class Cape
         {
             public string Url { get; set; }
-        }
-
-        public bool Equals(Player other)
-        {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return OfflineChar == other.OfflineChar && Name == other.Name && Uid == other.Uid;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((Player) obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(OfflineChar, Name, Uid);
         }
     }
 }

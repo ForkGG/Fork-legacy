@@ -1,5 +1,3 @@
-using System;
-
 namespace Fork.Logic.Persistence.PersistencePO
 {
     public class WhitelistedPlayer

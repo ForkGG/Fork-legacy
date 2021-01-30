@@ -3,41 +3,49 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:controls="clr-namespace:Fork.View.Xaml2.Controls"
-      xmlns:local="clr-namespace:Fork.View.Xaml2.Pages"
       mc:Ignorable="d"
       Title="WorldsPage" d:DesignHeight="450" d:DesignWidth="800">
     <DockPanel>
         <Grid DockPanel.Dock="Right" Width="230">
-            <Border Background="{DynamicResource backgroundDark}" Margin="35 0 0 0" CornerRadius="5 0 0 5"/>
+            <Border Background="{DynamicResource backgroundDark}" Margin="35 0 0 0" CornerRadius="5 0 0 5" />
             <DockPanel Panel.ZIndex="1">
-                <TextBlock Text="Open in File Explorer" DockPanel.Dock="Bottom" TextAlignment="Center" Margin="45 10 10 10" 
-                           PreviewMouseLeftButtonDown="OpenExplorer_PreviewMouseLeftButtonDown" Cursor="Hand" Foreground="{DynamicResource textLink}">
-                </TextBlock>
+                <TextBlock Text="Open in File Explorer" DockPanel.Dock="Bottom" TextAlignment="Center"
+                           Margin="45 10 10 10"
+                           PreviewMouseLeftButtonDown="OpenExplorer_PreviewMouseLeftButtonDown" Cursor="Hand"
+                           Foreground="{DynamicResource textLink}" />
                 <StackPanel Panel.ZIndex="1">
-                    <TextBlock Text="Worlds" Margin="45 10 10 10" Foreground="{DynamicResource textUnselected}" FontSize="20" 
-                               FontFamily="{DynamicResource Montserrat-SemiBold}" HorizontalAlignment="Center"/>
-                    <ListView Margin="0" Background="{DynamicResource backgroundDark}" Style="{DynamicResource SettingsListView}"
+                    <TextBlock Text="Worlds" Margin="45 10 10 10" Foreground="{DynamicResource textUnselected}"
+                               FontSize="20"
+                               FontFamily="{DynamicResource Montserrat-SemiBold}" HorizontalAlignment="Center" />
+                    <ListView Margin="0" Background="{DynamicResource backgroundDark}"
+                              Style="{DynamicResource SettingsListView}"
                               ItemsSource="{Binding Worlds}">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
-                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Foreground" Value="{StaticResource foregroundDefault}"/>
-                                <Setter Property="Margin" Value="0 5 0 2"/>
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="Foreground" Value="{StaticResource foregroundDefault}" />
+                                <Setter Property="Margin" Value="0 5 0 2" />
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                            <Border BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}">
+                                            <Border BorderBrush="Transparent" BorderThickness="0"
+                                                    Background="{TemplateBinding Background}">
                                                 <StackPanel>
                                                     <Grid Width="280" Height="60">
-                                                        <Border x:Name="background" Background="Transparent" Width="250" CornerRadius="8 0 0 8" Margin="30 0 0 0"/>
+                                                        <Border x:Name="background" Background="Transparent"
+                                                                Width="250" CornerRadius="8 0 0 8" Margin="30 0 0 0" />
                                                         <DockPanel Panel.ZIndex="1" LastChildFill="True">
-                                                            <TextBlock Margin="50 0 0 0" x:Name="title" Text="{Binding Name}" VerticalAlignment="Center" FontSize="16" 
-                                                                       FontFamily="{DynamicResource Montserrat-SemiBold}" Foreground="{DynamicResource textSelected}"/>
+                                                            <TextBlock Margin="50 0 0 0" x:Name="title"
+                                                                       Text="{Binding Name}" VerticalAlignment="Center"
+                                                                       FontSize="16"
+                                                                       FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                                                       Foreground="{DynamicResource textSelected}" />
                                                         </DockPanel>
-                                                        <RadioButton  Width="20" Height="20" Margin="0 0 0 0"  HorizontalAlignment="Left" GroupName="Worlds" IsChecked="{Binding IsActive}" 
-                                                                     Style="{DynamicResource CustomRadioButton}"/>
+                                                        <RadioButton Width="20" Height="20" Margin="0 0 0 0"
+                                                                     HorizontalAlignment="Left" GroupName="Worlds"
+                                                                     IsChecked="{Binding IsActive}"
+                                                                     Style="{DynamicResource CustomRadioButton}" />
                                                     </Grid>
                                                 </StackPanel>
                                             </Border>
@@ -60,32 +68,34 @@
             </DockPanel>
         </Grid>
         <Grid Margin="0 0 20 0">
-            
+
             <!-- TODO world view-->
-            
-            
+
+
             <Grid x:Name="CreateWorldOverlay">
                 <StackPanel VerticalAlignment="Center">
                     <!-- Create World -->
                     <Border CornerRadius="10" Margin="5">
                         <StackPanel Background="Transparent" Margin="0 10">
                             <TextBlock Text="Create new World" Foreground="{DynamicResource textHeader}"
-                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="15 0 5 20" />
+                                       FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23"
+                                       Margin="15 0 5 20" />
                             <StackPanel>
-                                <DockPanel Height="40" Grid.Column="1" Margin="50 0 0 0" HorizontalAlignment="Center">
+                                <DockPanel Height="40" Margin="50 0 0 0" HorizontalAlignment="Center">
                                     <Border CornerRadius="4" Width="150" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource textBackground}">
+                                            Background="{DynamicResource textBackground}">
                                         <TextBox Margin="5 0" Text="world" x:Name="createWorldName"
-                                         Background="{DynamicResource textBackground}" BorderThickness="0"
-                                         Foreground="{DynamicResource backgroundDark}"
-                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                         FontSize="17" Height="20" />
+                                                 Background="{DynamicResource textBackground}" BorderThickness="0"
+                                                 Foreground="{DynamicResource backgroundDark}"
+                                                 FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                                 FontSize="17" Height="20" />
                                     </Border>
                                     <TextBlock Text="World Name" TextAlignment="Right"
-                                       Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
+                                               Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
                                 </DockPanel>
-                                <Button x:Name="CreateWorld" Margin="0 20 0 5" Content="Create" Click="CreateWorld_Click"
-                                            Width="120" Style="{DynamicResource RoundedTextButton}"/>
+                                <Button x:Name="CreateWorld" Margin="0 20 0 5" Content="Create"
+                                        Click="CreateWorld_Click"
+                                        Width="120" Style="{DynamicResource RoundedTextButton}" />
                             </StackPanel>
                         </StackPanel>
                         <Border.Style>
@@ -106,18 +116,27 @@
                     <Border CornerRadius="10" Margin="5">
                         <StackPanel Background="Transparent" Margin="0 10">
                             <TextBlock Text="Import existing World" Foreground="{DynamicResource textHeader}"
-                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="15 0 5 20" />
+                                       FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23"
+                                       Margin="15 0 5 20" />
                             <StackPanel>
-                                <StackPanel Margin="25 0 0 0" Height="40" Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <TextBlock Text="Path"  Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0"/>
-                                    <Border x:Name="serverPathBgr" CornerRadius="4" Height="26" Background="{DynamicResource textBackground}">
-                                        <TextBlock Margin="10 0" Text="Click To Select Your World" Background="Transparent"
-                                     Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                     FontSize="17" Height="20" PreviewMouseDown="WorldDirPath_MouseDown" Name="worldFolderPathText"/>
+                                <StackPanel Margin="25 0 0 0" Height="40" Orientation="Horizontal"
+                                            HorizontalAlignment="Center">
+                                    <TextBlock Text="Path" Style="{DynamicResource CreateServerTextBlock}"
+                                               Margin="0 0 10 0" />
+                                    <Border x:Name="serverPathBgr" CornerRadius="4" Height="26"
+                                            Background="{DynamicResource textBackground}">
+                                        <TextBlock Margin="10 0" Text="Click To Select Your World"
+                                                   Background="Transparent"
+                                                   Foreground="{DynamicResource backgroundDark}"
+                                                   FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                                   FontSize="17" Height="20" PreviewMouseDown="WorldDirPath_MouseDown"
+                                                   Name="worldFolderPathText" />
                                     </Border>
                                 </StackPanel>
-                                <Button x:Name="ImportWorld" Margin="0 20 0 5" Content="Import" Click="ImportWorld_Click"
-                                            Width="120" Style="{DynamicResource RoundedTextButton}"  IsEnabled="False" Visibility="Collapsed"/>
+                                <Button x:Name="ImportWorld" Margin="0 20 0 5" Content="Import"
+                                        Click="ImportWorld_Click"
+                                        Width="120" Style="{DynamicResource RoundedTextButton}" IsEnabled="False"
+                                        Visibility="Collapsed" />
                             </StackPanel>
                         </StackPanel>
                         <Border.Style>
@@ -135,6 +154,6 @@
                     </Border>
                 </StackPanel>
             </Grid>
-        </Grid> 
+        </Grid>
     </DockPanel>
 </Page>

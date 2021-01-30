@@ -1,62 +1,37 @@
 using System;
 using System.IO;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Fork.Logic.Logging;
 using Fork.Logic.Manager;
 using Fork.Logic.Persistence;
-using Fork.ViewModel;
-using ICSharpCode.AvalonEdit.Utils;
-using FileReader = Fork.Logic.Persistence.FileReader;
 
 namespace Fork.Logic.Model.Settings
 {
     public class SettingsFile
     {
+        public delegate void HandleTextReadUpdate(object sender, TextReadUpdatedEventArgs eventArgs);
+
         public enum SettingsType
         {
-            Vanilla, Bungee, Undefined
+            Vanilla,
+            Bungee,
+            Undefined
         }
-        public class TextReadUpdatedEventArgs
-        {
-            public string NewText { get; }
 
-            public TextReadUpdatedEventArgs(string newText)
-            {
-                NewText = newText;
-            }
-        }
-        public delegate void HandleTextReadUpdate(object sender, TextReadUpdatedEventArgs eventArgs);
-        public event HandleTextReadUpdate TextReadUpdateEvent;
-        
-        private static SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1,1);
-        private bool textChanged = false;
+        private static readonly SemaphoreSlim semaphoreSlim = new(1, 1);
         private string text;
-        
-        public FileInfo FileInfo { get; set; }
-        public int NameID { get; }
+        private bool textChanged;
 
-        public string Text
-        {
-            get => text;
-            set
-            {
-                textChanged = true;
-                text = value;
-            }
-        }
-
-        public SettingsType Type { get; }
-        
 
         //Constructor for Settings without file
         public SettingsFile(string name)
         {
             Type = SettingsType.Undefined;
             NameID = GetNameID(name);
-            FileInfo = new FileInfo(Path.Combine(App.ApplicationPath,"persistence","entities.json"));
+            FileInfo = new FileInfo(Path.Combine(App.ApplicationPath, "persistence", "entities.json"));
         }
+
         public SettingsFile(FileInfo fileInfo)
         {
             FileInfo = fileInfo;
@@ -77,6 +52,22 @@ namespace Fork.Logic.Model.Settings
             NameID = GetNameID(FileInfo.Name);
         }
 
+        public FileInfo FileInfo { get; set; }
+        public int NameID { get; }
+
+        public string Text
+        {
+            get => text;
+            set
+            {
+                textChanged = true;
+                text = value;
+            }
+        }
+
+        public SettingsType Type { get; }
+        public event HandleTextReadUpdate TextReadUpdateEvent;
+
 
         public async Task ReadText()
         {
@@ -85,10 +76,7 @@ namespace Fork.Logic.Model.Settings
                 while (!FileReader.IsFileReadable(FileInfo))
                 {
                     await Task.Delay(500);
-                    if (ApplicationManager.Instance.HasExited || !FileInfo.Exists)
-                    {
-                        return;
-                    }
+                    if (ApplicationManager.Instance.HasExited || !FileInfo.Exists) return;
                 }
 
                 await semaphoreSlim.WaitAsync();
@@ -121,10 +109,7 @@ namespace Fork.Logic.Model.Settings
                     while (!FileWriter.IsFileWritable(FileInfo))
                     {
                         await Task.Delay(500);
-                        if (ApplicationManager.Instance.HasExited)
-                        {
-                            return;
-                        }
+                        if (ApplicationManager.Instance.HasExited) return;
                     }
 
                     await semaphoreSlim.WaitAsync();
@@ -173,8 +158,8 @@ namespace Fork.Logic.Model.Settings
                     return 10;
             }
         }
-        
-        
+
+
         public override string ToString()
         {
             return FileInfo.Name;
@@ -189,13 +174,23 @@ namespace Fork.Logic.Model.Settings
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((SettingsFile) obj);
         }
 
         public override int GetHashCode()
         {
-            return (FileInfo != null ? FileInfo.GetHashCode() : 0);
+            return FileInfo != null ? FileInfo.GetHashCode() : 0;
+        }
+
+        public class TextReadUpdatedEventArgs
+        {
+            public TextReadUpdatedEventArgs(string newText)
+            {
+                NewText = newText;
+            }
+
+            public string NewText { get; }
         }
     }
 }

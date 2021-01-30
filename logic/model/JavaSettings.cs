@@ -9,12 +9,9 @@ namespace Fork.Logic.Model
     [Serializable]
     public class JavaSettings : INotifyPropertyChanged
     {
-        public int Id { get; set; }
-        public int MaxRam { get; set; } = 2048;
-        public string JavaPath { get; set; } = AppSettingsSerializer.Instance.AppSettings.DefaultJavaPath;
-        public string StartupParameters { get; set; } = "";
-        
-        public JavaSettings(){}
+        public JavaSettings()
+        {
+        }
 
         public JavaSettings(JavaSettings javaSettings)
         {
@@ -22,6 +19,11 @@ namespace Fork.Logic.Model
             JavaPath = javaSettings.JavaPath;
             StartupParameters = javaSettings.StartupParameters;
         }
+
+        public int Id { get; set; }
+        public int MaxRam { get; set; } = 2048;
+        public string JavaPath { get; set; } = AppSettingsSerializer.Instance.AppSettings.DefaultJavaPath;
+        public string StartupParameters { get; set; } = "";
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

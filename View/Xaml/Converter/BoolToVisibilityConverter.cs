@@ -11,14 +11,9 @@ namespace Fork.View.Xaml.Converter
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (targetType != typeof(Visibility))
-            {
                 throw new ArgumentException("This converter can only convert bools to Visibility");
-            }
 
-            if ((bool)value)
-            {
-                return Visibility.Visible;
-            }
+            if ((bool) value) return Visibility.Visible;
 
             return Visibility.Collapsed;
         }
@@ -34,14 +29,9 @@ namespace Fork.View.Xaml.Converter
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (targetType != typeof(Visibility))
-            {
                 throw new ArgumentException("This converter can only convert bools to Visibility");
-            }
 
-            if ((bool)value)
-            {
-                return Visibility.Collapsed;
-            }
+            if ((bool) value) return Visibility.Collapsed;
 
             return Visibility.Visible;
         }

@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Fork.Logic.Model;
 using Fork.Logic.Persistence.PersistencePO;
+using Newtonsoft.Json;
 
 namespace Fork.Logic.Persistence
 {
@@ -17,26 +15,26 @@ namespace Fork.Logic.Persistence
             FileInfo propertiesFile = new FileInfo(propertiesPath);
             if (!propertiesFile.Exists)
             {
-                Console.WriteLine("Could not find properties file: "+propertiesPath+"\nCreating default server.properties file");
+                Console.WriteLine("Could not find properties file: " + propertiesPath +
+                                  "\nCreating default server.properties file");
                 new FileWriter().WriteServerSettings(folderPath, new ServerSettings("world").SettingsDictionary);
             }
-            
+
             Dictionary<string, string> serverSettings = new Dictionary<string, string>();
             try
-            {   // Open the text file using a stream reader.
+            {
+                // Open the text file using a stream reader.
                 using (StreamReader sr = new StreamReader(propertiesFile.FullName))
                 {
                     string line;
-                    while ((line = sr.ReadLine())!=null)
-                    {
+                    while ((line = sr.ReadLine()) != null)
                         if (!line.StartsWith("#"))
                         {
                             string[] args = line.Split('=');
-                            serverSettings.Add(args[0],args[1].Replace("\\n","\n"));
+                            serverSettings.Add(args[0], args[1].Replace("\\n", "\n"));
                         }
-                    }
                 }
-                
+
                 return serverSettings;
             }
             catch (IOException e)
@@ -50,36 +48,25 @@ namespace Fork.Logic.Persistence
         public static List<string> ReadWhiteListTxT(string path)
         {
             List<string> list = new List<string>();
-            if (!File.Exists(path))
-            {
-                return new List<string>();
-            }
-            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite); 
+            if (!File.Exists(path)) return new List<string>();
+            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             using (StreamReader sr = new StreamReader(fs))
             {
                 string line;
-                while ((line = sr.ReadLine())!=null)
+                while ((line = sr.ReadLine()) != null)
                 {
-                    if (line.StartsWith("#")||line.Length==0)
-                    {
-                        continue;
-                    }
-                    if (line.EndsWith(","))
-                    {
-                        line = line.Remove(line.Length - 1);
-                    }
+                    if (line.StartsWith("#") || line.Length == 0) continue;
+                    if (line.EndsWith(",")) line = line.Remove(line.Length - 1);
                     list.Add(line);
                 }
             }
+
             return list;
         }
 
         public static List<string> ReadWhiteListJson(string path)
         {
-            if (!File.Exists(path))
-            {
-                return new List<string>();
-            }
+            if (!File.Exists(path)) return new List<string>();
             string json;
             using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
@@ -88,12 +75,10 @@ namespace Fork.Logic.Persistence
                     json = sr.ReadToEnd();
                 }
             }
+
             List<WhitelistedPlayer> playerList = JsonConvert.DeserializeObject<List<WhitelistedPlayer>>(json);
             List<string> names = new List<string>();
-            foreach (WhitelistedPlayer player in playerList)
-            {
-                names.Add(player.name);
-            }
+            foreach (WhitelistedPlayer player in playerList) names.Add(player.name);
             return names;
         }
 
@@ -105,10 +90,7 @@ namespace Fork.Logic.Persistence
 
         public static List<string> ReadOPListJson(string path)
         {
-            if (!File.Exists(path))
-            {
-                return new List<string>();
-            }
+            if (!File.Exists(path)) return new List<string>();
             string json;
             using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
@@ -117,49 +99,36 @@ namespace Fork.Logic.Persistence
                     json = sr.ReadToEnd();
                 }
             }
+
             List<OPPlayer> playerList = JsonConvert.DeserializeObject<List<OPPlayer>>(json);
             List<string> names = new List<string>();
-            foreach (OPPlayer player in playerList)
-            {
-                names.Add(player.name);
-            }
+            foreach (OPPlayer player in playerList) names.Add(player.name);
             return names;
         }
 
         public static List<string> ReadBanListTxT(string path)
         {
-            if (!File.Exists(path))
-            {
-                return new List<string>();
-            }
+            if (!File.Exists(path)) return new List<string>();
             List<string> list = new List<string>();
-            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite); 
+            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             using (StreamReader sr = new StreamReader(fs))
             {
                 string line;
-                while ((line = sr.ReadLine())!=null)
+                while ((line = sr.ReadLine()) != null)
                 {
-                    if (line.StartsWith("#")||line.Length==0)
-                    {
-                        continue;
-                    }
+                    if (line.StartsWith("#") || line.Length == 0) continue;
                     string[] splittedLine = line.Split('|');
-                    if (splittedLine.Length!=5)
-                    {
-                        continue;
-                    }
+                    if (splittedLine.Length != 5) continue;
                     list.Add(splittedLine[0]);
                 }
             }
+
             return list;
         }
 
         public static List<string> ReadBanListJson(string path)
         {
-            if (!File.Exists(path))
-            {
-                return new List<string>();
-            }
+            if (!File.Exists(path)) return new List<string>();
             string json;
             using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
@@ -168,12 +137,10 @@ namespace Fork.Logic.Persistence
                     json = sr.ReadToEnd();
                 }
             }
+
             List<BannedPlayer> playerList = JsonConvert.DeserializeObject<List<BannedPlayer>>(json);
             List<string> names = new List<string>();
-            foreach (BannedPlayer player in playerList)
-            {
-                names.Add(player.name);
-            }
+            foreach (BannedPlayer player in playerList) names.Add(player.name);
             return names;
         }
 
@@ -184,7 +151,9 @@ namespace Fork.Logic.Persistence
             try
             {
                 using (FileStream inputStream = file.OpenRead())
+                {
                     return inputStream.Length >= 0;
+                }
             }
             catch (Exception)
             {

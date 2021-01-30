@@ -1,5 +1,4 @@
-﻿
-using System.Linq;
+﻿using System.Linq;
 using DiscordRPC;
 using DiscordRPC.Logging;
 using Fork.Logic.Manager;
@@ -17,20 +16,16 @@ namespace Fork.Logic.Utils
             rpcClient = new DiscordRpcClient("795015105061847111");
             rpcClient.Logger = new ConsoleLogger(LogLevel.Error);
             rpcClient.Initialize();
-            
+
             UpdateRichPresence();
             foreach (EntityViewModel entityViewModel in ServerManager.Instance.Entities)
-            {
                 entityViewModel.PropertyChanged += (sender, args) =>
                 {
                     if (args.PropertyName != null && args.PropertyName.Equals(nameof(entityViewModel.CurrentStatus)))
-                    {
                         UpdateRichPresence();
-                    }
                 };
-            }
         }
-        
+
         public static void UpdateRichPresence()
         {
             int runningCount =
@@ -48,6 +43,7 @@ namespace Fork.Logic.Utils
                     state = $"Running {runningCount} Servers";
                     break;
             }
+
             rpcClient.SetPresence(new RichPresence
             {
                 Details = "Hosting Minecraft Servers",

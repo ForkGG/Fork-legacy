@@ -16,7 +16,9 @@ namespace Fork.Logic.Model.APIModels
         {
             if (ReferenceEquals(null, obj)) return 1;
             if (ReferenceEquals(this, obj)) return 0;
-            return obj is ForkVersion other ? CompareTo(other) : throw new ArgumentException($"Object must be of type {nameof(ForkVersion)}");
+            return obj is ForkVersion other
+                ? CompareTo(other)
+                : throw new ArgumentException($"Object must be of type {nameof(ForkVersion)}");
         }
 
         public int CompareTo(ForkVersion other)
@@ -39,7 +41,7 @@ namespace Fork.Logic.Model.APIModels
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((ForkVersion) obj);
         }
 

@@ -12,70 +12,60 @@ namespace Fork.Logic.Manager
     {
         ///Singleton
         private static ServerAutomationManager instance;
+
+        private readonly Dictionary<ServerViewModel, List<Timer>> Timers = new();
+
+        private ServerAutomationManager()
+        {
+        }
+
         public static ServerAutomationManager Instance
         {
             get
             {
-                if (instance == null)
-                {
-                    instance = new ServerAutomationManager();
-                }
+                if (instance == null) instance = new ServerAutomationManager();
 
                 return instance;
             }
         }
-        private ServerAutomationManager(){}
-        
-        private Dictionary<ServerViewModel,List<Timer>> Timers = new Dictionary<ServerViewModel, List<Timer>>();
 
         /// <summary>
-        /// Dispose existing timers and set timer for the next automation event of a given server.
-        /// This should be called every time the server status changes, or the settings change. 
+        ///     Dispose existing timers and set timer for the next automation event of a given server.
+        ///     This should be called every time the server status changes, or the settings change.
         /// </summary>
         /// <param name="viewModel"></param>
         public void UpdateAutomation(ServerViewModel viewModel)
         {
             DisposeAutomation(viewModel);
-            
+
             AutomationTime nextAutomationTime = GetNextAutomation(viewModel);
-            if (nextAutomationTime != null)
-            {
-                RegisterRestart(viewModel, nextAutomationTime);
-            }
-            
+            if (nextAutomationTime != null) RegisterRestart(viewModel, nextAutomationTime);
+
             viewModel.SetAutomationTime(nextAutomationTime);
         }
 
         /// <summary>
-        /// Disposes the timer for the next automation event of the given ServerViewModel
+        ///     Disposes the timer for the next automation event of the given ServerViewModel
         /// </summary>
         /// <param name="viewModel"></param>
         public void DisposeAutomation(ServerViewModel viewModel)
         {
-            if (!Timers.ContainsKey(viewModel))
-            {
-                return;
-            }
-            foreach (Timer timer in Timers[viewModel])
-            {
-                timer.Dispose();
-            }
+            if (!Timers.ContainsKey(viewModel)) return;
+            foreach (Timer timer in Timers[viewModel]) timer.Dispose();
             Timers.Remove(viewModel);
         }
 
         /// <summary>
-        /// Calculate the time until an automation event in milliseconds
+        ///     Calculate the time until an automation event in milliseconds
         /// </summary>
         /// <param name="automationTime">Automation event</param>
         /// <returns>Time in milliseconds</returns>
         public double CalculateTime(AutomationTime automationTime)
         {
             DateTime nowTime = DateTime.Now;
-            DateTime restartTime = new DateTime(nowTime.Year,nowTime.Month,nowTime.Day,automationTime.Time.Hours,automationTime.Time.Minutes,0);
-            if (restartTime < nowTime)
-            {
-                restartTime = restartTime.AddDays(1);
-            }
+            DateTime restartTime = new DateTime(nowTime.Year, nowTime.Month, nowTime.Day, automationTime.Time.Hours,
+                automationTime.Time.Minutes, 0);
+            if (restartTime < nowTime) restartTime = restartTime.AddDays(1);
             return (restartTime - nowTime).TotalMilliseconds;
         }
 
@@ -85,7 +75,6 @@ namespace Fork.Logic.Manager
             AutomationTime result = null;
             List<AutomationTime> relevantTimes = GetRelevantTimes(server);
             foreach (AutomationTime automationTime in relevantTimes)
-            {
                 if (automationTime.Enabled)
                 {
                     double t = CalculateTime(automationTime);
@@ -95,7 +84,7 @@ namespace Fork.Logic.Manager
                         result = automationTime;
                     }
                 }
-            }
+
             return result;
         }
 
@@ -116,6 +105,7 @@ namespace Fork.Logic.Manager
                 result.Add(viewModel.Server.AutoStop1);
                 result.Add(viewModel.Server.AutoStop2);
             }
+
             return result;
         }
 
@@ -124,11 +114,8 @@ namespace Fork.Logic.Manager
             double restartTime = CalculateTime(time);
             Timer t = new Timer(restartTime);
             //t.AutoReset = cyclic;
-            t.Elapsed += async (sender, e) => await Task.Factory.StartNew(()=>TimerElapsed(server,t,time));
-            if (!Timers.ContainsKey(server))
-            {
-                Timers.Add(server,new List<Timer>());
-            }
+            t.Elapsed += async (sender, e) => await Task.Factory.StartNew(() => TimerElapsed(server, t, time));
+            if (!Timers.ContainsKey(server)) Timers.Add(server, new List<Timer>());
             Timers[server].Add(t);
             t.Start();
         }
@@ -136,17 +123,10 @@ namespace Fork.Logic.Manager
         private void TimerElapsed(ServerViewModel server, Timer t, AutomationTime time)
         {
             if (time is RestartTime)
-            {
                 TimerElapsedRestart(server);
-            }
             else if (time is StopTime)
-            {
                 TimerElapsedStop(server);
-            } 
-            else if (time is StartTime)
-            {
-                TimerElapsedStart(server);
-            }
+            else if (time is StartTime) TimerElapsedStart(server);
             if (!t.AutoReset)
             {
                 t.Dispose();
@@ -156,26 +136,18 @@ namespace Fork.Logic.Manager
 
         private void TimerElapsedRestart(ServerViewModel viewModel)
         {
-            if (viewModel.CurrentStatus == ServerStatus.RUNNING)
-            {
-                ServerManager.Instance.RestartServer(viewModel);
-            }
+            if (viewModel.CurrentStatus == ServerStatus.RUNNING) ServerManager.Instance.RestartServer(viewModel);
         }
 
         private void TimerElapsedStart(ServerViewModel viewModel)
         {
             if (viewModel.CurrentStatus == ServerStatus.STOPPED)
-            {
                 Task.Run(() => ServerManager.Instance.StartServerAsync(viewModel));
-            }
         }
 
         private void TimerElapsedStop(ServerViewModel viewModel)
         {
-            if (viewModel.CurrentStatus == ServerStatus.RUNNING)
-            {
-                ServerManager.Instance.StopServer(viewModel);
-            }
+            if (viewModel.CurrentStatus == ServerStatus.RUNNING) ServerManager.Instance.StopServer(viewModel);
         }
     }
 }

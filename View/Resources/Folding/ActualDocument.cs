@@ -1,19 +1,18 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using ICSharpCode.AvalonEdit.Document;
 
 namespace Fork.View.Resources.Folding
 {
     public class ActualDocument
     {
-        public LinkedList<ActualLine> Lines { get; }
-        public TextDocument Document { get; }
-
         private ActualDocument(IEnumerable<ActualLine> lines, TextDocument document)
         {
             Lines = new LinkedList<ActualLine>(lines);
             Document = document;
         }
+
+        public LinkedList<ActualLine> Lines { get; }
+        public TextDocument Document { get; }
 
         public static ActualDocument BuildActualDocument(TextDocument document)
         {
@@ -24,18 +23,16 @@ namespace Fork.View.Resources.Folding
                 ActualLine actualLine = new ActualLine(l, LineOffset(l), line);
                 lines.Add(actualLine);
             }
+
             return new ActualDocument(lines, document);
         }
-        
+
         private static string LineToString(DocumentLine line, TextDocument document)
         {
             char[] chars = new char[line.Length];
             int docOffset = line.Offset;
-            for (int i = 0; i < line.Length; i++)
-            {
-                chars[i] = document.GetCharAt(docOffset + i);
-            }
-            
+            for (int i = 0; i < line.Length; i++) chars[i] = document.GetCharAt(docOffset + i);
+
             string result = new string(chars);
             return result;
         }
@@ -44,9 +41,7 @@ namespace Fork.View.Resources.Folding
         {
             int offset = 0;
             if (!string.IsNullOrEmpty(line))
-            {
                 foreach (char c in line)
-                {
                     switch (c)
                     {
                         case ' ':
@@ -58,23 +53,22 @@ namespace Fork.View.Resources.Folding
                         default:
                             return offset;
                     }
-                }
-            }
+
             return offset;
         }
 
         public class ActualLine
         {
-            public string Line { get; }
-            public int FrontOffset { get; }
-            public DocumentLine DocumentLine { get; }
-
             public ActualLine(string line, int frontOffset, DocumentLine documentLine)
             {
                 Line = line;
                 FrontOffset = frontOffset;
                 DocumentLine = documentLine;
             }
+
+            public string Line { get; }
+            public int FrontOffset { get; }
+            public DocumentLine DocumentLine { get; }
         }
     }
 }

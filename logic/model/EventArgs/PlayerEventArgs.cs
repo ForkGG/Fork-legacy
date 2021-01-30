@@ -6,12 +6,9 @@ namespace Fork.Logic.Model.EventArgs
     {
         public enum PlayerEventType
         {
-            Join, Leave
+            Join,
+            Leave
         }
-        
-        public PlayerEventType EventType { get; }
-        public string PlayerName { get; }
-        public ServerViewModel Server { get; }
 
         public PlayerEventArgs(PlayerEventType eventType, string playerName, ServerViewModel server)
         {
@@ -19,5 +16,9 @@ namespace Fork.Logic.Model.EventArgs
             PlayerName = playerName;
             Server = server;
         }
+
+        public PlayerEventType EventType { get; }
+        public string PlayerName { get; }
+        public ServerViewModel Server { get; }
     }
 }

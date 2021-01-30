@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
@@ -9,7 +7,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Fork.Logic;
-using Fork.Logic.Controller;
 using Fork.Logic.ImportLogic;
 using Fork.Logic.Manager;
 using Fork.Logic.Model;
@@ -17,76 +14,41 @@ using Fork.Logic.Model.Automation;
 using Fork.Logic.Persistence;
 using Fork.Logic.RoleManagement;
 using Fork.View.Xaml2.Pages.Server;
-using Console = System.Console;
 using Timer = System.Timers.Timer;
 
 namespace Fork.ViewModel
 {
     public class ServerViewModel : EntityViewModel
     {
-        private Timer restartTimer = null;
-
-        private RoleUpdater whitelistUpdater;
+        private World activeWorld;
         private RoleUpdater banlistUpdater;
         private RoleUpdater oplistUpdater;
-        private World activeWorld;
+        private Timer restartTimer;
 
+        private RoleUpdater whitelistUpdater;
 
-        public ObservableCollection<ServerPlayer> PlayerList { get; set; } = new ObservableCollection<ServerPlayer>();
-        public ObservableCollection<Player> BanList { get; set; } = new ObservableCollection<Player>();
-        public ObservableCollection<Player> OPList { get; set; } = new ObservableCollection<Player>();
-        public ObservableCollection<Player> WhiteList { get; set; } = new ObservableCollection<Player>();
-        public ObservableCollection<ServerVersion> Versions { get; set; } = new ObservableCollection<ServerVersion>();
-        public ObservableCollection<World> Worlds { get; set; }
-
-        public Server Server
-        {
-            get => Entity as Server;
-            set => Entity = value;
-        }
-
-        public bool Initialized { get; set; } = false;
-        
-        public string NextAutomationName { get; set; }
-        public bool AutomationEnabled { get; set; }
-        public string NextAutomationHours { get; set; }
-        public string NextAutomationMinutes { get; set; }
-        public string NextAutomationSeconds { get; set; }
-
-        public string ServerTitle => Name + " - " + Server.Version.Type + " " + Server.Version.Version;
-
-        public Page WorldsPage { get; set; }
-        
         public ServerViewModel(string serverUid) : base(serverUid)
         {
             Server = Entity as Server;
-            if (Server == null)
-            {
-                throw new Exception();
-            }
-            
+            if (Server == null) throw new Exception();
+
             DateTime start = DateTime.Now;
             Console.WriteLine("Starting initialization of ViewModel for Server " + Server.Name);
             new Thread(() =>
             {
                 if (Server.Version.Type == ServerVersion.VersionType.Vanilla)
-                {
                     Versions = VersionManager.Instance.VanillaVersions;
-                }
                 else if (Server.Version.Type == ServerVersion.VersionType.Paper)
-                {
                     Versions = VersionManager.Instance.PaperVersions;
-                }
                 else if (Server.Version.Type == ServerVersion.VersionType.Spigot)
-                {
                     Versions = VersionManager.Instance.SpigotVersions;
-                }
-            }){IsBackground = true}.Start();
+            }) {IsBackground = true}.Start();
 
             Application.Current.Dispatcher.Invoke(new Action(() => EntityPage = new ServerPage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => ConsolePage = new ConsolePage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => WorldsPage = new WorldsPage(this)));
-            Application.Current.Dispatcher.Invoke(new Action(() => PluginsPage = new PluginsPage(new PluginViewModel(this))));
+            Application.Current.Dispatcher.Invoke(new Action(() =>
+                PluginsPage = new PluginsPage(new PluginViewModel(this))));
             Application.Current.Dispatcher.Invoke(new Action(() => SettingsViewModel = new SettingsViewModel(this)));
 
             PlayerList.CollectionChanged += PlayerListChanged;
@@ -100,19 +62,41 @@ namespace Fork.ViewModel
             InitializeLists(Server);
 
             if (!ApplicationManager.Initialized)
-            {
                 ApplicationManager.ApplicationInitialized +=
                     () => Application.Current.Dispatcher?.Invoke(StartSettingsReader);
-            }
             else
-            {
                 Application.Current.Dispatcher?.Invoke(StartSettingsReader);
-            }
 
             TimeSpan t = DateTime.Now - start;
             Console.WriteLine("Server ViewModel for " + Server.Name + " initialized in " + t.Seconds + "." +
                               t.Milliseconds + "s");
         }
+
+
+        public ObservableCollection<ServerPlayer> PlayerList { get; set; } = new();
+        public ObservableCollection<Player> BanList { get; set; } = new();
+        public ObservableCollection<Player> OPList { get; set; } = new();
+        public ObservableCollection<Player> WhiteList { get; set; } = new();
+        public ObservableCollection<ServerVersion> Versions { get; set; } = new();
+        public ObservableCollection<World> Worlds { get; set; }
+
+        public Server Server
+        {
+            get => Entity as Server;
+            set => Entity = value;
+        }
+
+        public bool Initialized { get; set; }
+
+        public string NextAutomationName { get; set; }
+        public bool AutomationEnabled { get; set; }
+        public string NextAutomationHours { get; set; }
+        public string NextAutomationMinutes { get; set; }
+        public string NextAutomationSeconds { get; set; }
+
+        public string ServerTitle => Name + " - " + Server.Version.Type + " " + Server.Version.Version;
+
+        public Page WorldsPage { get; set; }
 
         public void InitializeLists(Server server)
         {
@@ -125,13 +109,11 @@ namespace Fork.ViewModel
                 Console.WriteLine("Finished reading Role-lists for " + server);
                 PlayerList = new ObservableCollection<ServerPlayer>();
                 await foreach (ServerPlayer player in PlayerManager.Instance.GetInitialPlayerList(this))
-                {
                     Application.Current.Dispatcher?.Invoke(() =>
                     {
                         PlayerList.Add(player);
                         Task.Run(RefreshPlayerList);
                     });
-                }
 
                 Console.WriteLine("Initialized PlayerList for server " + server);
 
@@ -149,35 +131,27 @@ namespace Fork.ViewModel
                 whitelistUpdater.HandleOutputLine(line);
                 banlistUpdater.HandleOutputLine(line);
                 oplistUpdater.HandleOutputLine(line);
-            }){IsBackground = true}.Start();
+            }) {IsBackground = true}.Start();
         }
 
         public void SetAutomationTime(AutomationTime automationTime)
         {
             restartTimer?.Dispose();
             AutomationEnabled = false;
-            if (automationTime == null)
-            {
-                return;
-            }
+            if (automationTime == null) return;
 
             if (automationTime is RestartTime)
-            {
                 NextAutomationName = "Restart";
-            } else if (automationTime is StopTime)
-            {
+            else if (automationTime is StopTime)
                 NextAutomationName = "Shutdown";
-            }
-            else if (automationTime is StartTime)
-            {
-                NextAutomationName = "Starting";
-            }
-            TimeSpan timeSpan = TimeSpan.FromMilliseconds(ServerAutomationManager.Instance.CalculateTime(automationTime));
+            else if (automationTime is StartTime) NextAutomationName = "Starting";
+            TimeSpan timeSpan =
+                TimeSpan.FromMilliseconds(ServerAutomationManager.Instance.CalculateTime(automationTime));
             AutomationEnabled = true;
             NextAutomationHours = timeSpan.Hours.ToString();
             NextAutomationMinutes = timeSpan.Minutes.ToString();
             NextAutomationSeconds = timeSpan.Seconds.ToString();
-            
+
             new Thread(() =>
             {
                 restartTimer = new Timer {Interval = 1000};
@@ -189,61 +163,35 @@ namespace Fork.ViewModel
                     NextAutomationMinutes = timeSpan.Minutes.ToString();
                     NextAutomationSeconds = timeSpan.Seconds.ToString();
                     if (timeSpan.Hours == 0 && timeSpan.Minutes == 30 && timeSpan.Seconds == 0)
-                    {
                         WriteAutomationInfo(automationTime, "30 minutes");
-                    }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 5 && timeSpan.Seconds == 0)
-                    {
                         WriteAutomationInfo(automationTime, "5 minutes");
-                    }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 1 && timeSpan.Seconds == 0)
-                    {
                         WriteAutomationInfo(automationTime, "1 minute");
-                    }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 10)
-                    {
                         WriteAutomationInfo(automationTime, "10 seconds");
-                    }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 9)
-                    {
                         WriteAutomationInfo(automationTime, "9 seconds");
-                    }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 8)
-                    {
                         WriteAutomationInfo(automationTime, "8 seconds");
-                    }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 7)
-                    {
                         WriteAutomationInfo(automationTime, "7 seconds");
-                    }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 6)
-                    {
                         WriteAutomationInfo(automationTime, "6 seconds");
-                    }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 5)
-                    {
                         WriteAutomationInfo(automationTime, "5 seconds");
-                    }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 4)
-                    {
                         WriteAutomationInfo(automationTime, "4 seconds");
-                    }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 3)
-                    {
                         WriteAutomationInfo(automationTime, "3 seconds");
-                    }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 2)
-                    {
                         WriteAutomationInfo(automationTime, "2 seconds");
-                    }
                     else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 1)
-                    {
                         WriteAutomationInfo(automationTime, "1 seconds");
-                    }
                 };
                 restartTimer.AutoReset = true;
                 restartTimer.Enabled = true;
-            }){IsBackground = true}.Start();
+            }) {IsBackground = true}.Start();
         }
 
         public async Task SaveProperties()
@@ -274,10 +222,7 @@ namespace Fork.ViewModel
         public void InitializeWorldsList()
         {
             DirectoryInfo serverDir = new DirectoryInfo(Path.Combine(App.ServerPath, Server.Name));
-            if (!serverDir.Exists)
-            {
-                return;
-            }
+            if (!serverDir.Exists) return;
 
             Application.Current.Dispatcher?.Invoke(() => Worlds.Clear());
             foreach (DirectoryInfo directory in serverDir.EnumerateDirectories())
@@ -286,10 +231,7 @@ namespace Fork.ViewModel
                 if (worldVal.IsValid)
                 {
                     World world = new World(worldVal.Name, this, directory);
-                    if (Server.ServerSettings.LevelName.Equals(world.Name))
-                    {
-                        world.IsActive = true;
-                    }
+                    if (Server.ServerSettings.LevelName.Equals(world.Name)) world.IsActive = true;
 
                     Application.Current.Dispatcher?.Invoke(() => Worlds.Add(world));
                 }
@@ -304,14 +246,11 @@ namespace Fork.ViewModel
         private void WriteAutomationInfo(AutomationTime automationTime, string time)
         {
             if (automationTime is RestartTime)
-            {
                 ApplicationManager.Instance.ActiveEntities[Server].StandardInput
-                    .WriteLineAsync("say Next server restart in "+time+"!");
-            } else if (automationTime is StopTime)
-            {
+                    .WriteLineAsync("say Next server restart in " + time + "!");
+            else if (automationTime is StopTime)
                 ApplicationManager.Instance.ActiveEntities[Server].StandardInput
-                    .WriteLineAsync("say Server shutdown in "+time+"!");
-            }
+                    .WriteLineAsync("say Server shutdown in " + time + "!");
         }
 
         private void PlayerListChanged(object sender, NotifyCollectionChangedEventArgs e)

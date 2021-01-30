@@ -10,13 +10,13 @@ using Fork.ViewModel;
 namespace Fork.View.Xaml2.Pages.Server
 {
     /// <summary>
-    /// Interaktionslogik für ServerPage.xaml
+    ///     Interaktionslogik für ServerPage.xaml
     /// </summary>
     public partial class ServerPage : Page
     {
-        private ServerViewModel viewModel;
-        private HashSet<Frame> subPages = new HashSet<Frame>();
-        
+        private readonly HashSet<Frame> subPages = new();
+        private readonly ServerViewModel viewModel;
+
         public ServerPage(ServerViewModel viewModel)
         {
             InitializeComponent();
@@ -39,28 +39,22 @@ namespace Fork.View.Xaml2.Pages.Server
         {
             StartStopButton.IsEnabled = false;
             TerminalTab.IsChecked = true;
-            SelectTerminal(this,e);
+            SelectTerminal(this, e);
             if (viewModel.CurrentStatus == ServerStatus.STOPPED)
-            {
                 await ServerManager.Instance.StartServerAsync(viewModel);
-            }
 
             else if (viewModel.CurrentStatus == ServerStatus.STARTING)
-            {
                 await Task.Run(() => ServerManager.Instance.KillEntity(viewModel));
-            }
 
             else if (viewModel.CurrentStatus == ServerStatus.RUNNING)
-            {
                 await Task.Run(() => ServerManager.Instance.StopServer(viewModel));
-            }
             StartStopButton.IsEnabled = true;
         }
 
         private void CopyIP_Click(object sender, RoutedEventArgs e)
         {
             Clipboard.SetText(AddressInfoBox.Text);
-            
+
             new Thread(() =>
             {
                 Application.Current.Dispatcher.Invoke(() =>
@@ -74,25 +68,27 @@ namespace Fork.View.Xaml2.Pages.Server
                     CopyButtonText.Text = "Copy";
                     CopyButton.IsEnabled = true;
                 });
-            }){IsBackground = true}.Start();
+            }) {IsBackground = true}.Start();
         }
-        
+
         private void SelectTerminal(object sender, RoutedEventArgs e)
         {
             HideAllPages();
             terminalPage.Visibility = Visibility.Visible;
         }
+
         private void SelectSettings(object sender, RoutedEventArgs e)
         {
             HideAllPages();
             settingsPage.Visibility = Visibility.Visible;
         }
+
         private void SelectWorlds(object sender, RoutedEventArgs e)
         {
             HideAllPages();
             worldsPage.Visibility = Visibility.Visible;
         }
-        
+
         private void SelectPlugins(object sender, RoutedEventArgs e)
         {
             HideAllPages();
@@ -102,15 +98,9 @@ namespace Fork.View.Xaml2.Pages.Server
         private void HideAllPages()
         {
             //Save settings, if settings is closed
-            if (settingsPage.Visibility == Visibility.Visible)
-            {
-                viewModel.SaveSettings();
-            }
-            
-            foreach (Frame frame in subPages)
-            {
-                frame.Visibility = Visibility.Hidden;
-            }
+            if (settingsPage.Visibility == Visibility.Visible) viewModel.SaveSettings();
+
+            foreach (Frame frame in subPages) frame.Visibility = Visibility.Hidden;
         }
 
         private void RestartButton_Click(object sender, RoutedEventArgs e)

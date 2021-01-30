@@ -11,15 +11,15 @@ namespace Fork.View.Xaml2.Pages.Network
 {
     public partial class NetworkPage : Page
     {
-        private NetworkViewModel viewModel;
-        private HashSet<Frame> subPages = new HashSet<Frame>();
-        
+        private readonly HashSet<Frame> subPages = new();
+        private readonly NetworkViewModel viewModel;
+
         public NetworkPage(NetworkViewModel viewModel)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             DataContext = this.viewModel;
-            
+
             subPages.Add(terminalPage);
             subPages.Add(settingsPage);
             subPages.Add(pluginsPage);
@@ -29,21 +29,15 @@ namespace Fork.View.Xaml2.Pages.Network
         {
             StartStopButton.IsEnabled = false;
             TerminalTab.IsChecked = true;
-            SelectTerminal(this,e);
+            SelectTerminal(this, e);
             if (viewModel.CurrentStatus == ServerStatus.STOPPED)
-            {
                 await ServerManager.Instance.StartNetworkAsync(viewModel, viewModel.Network.SyncServers);
-            }
 
             else if (viewModel.CurrentStatus == ServerStatus.STARTING)
-            {
                 await Task.Run(() => ServerManager.Instance.KillEntity(viewModel));
-            }
 
             else if (viewModel.CurrentStatus == ServerStatus.RUNNING)
-            {
                 await ServerManager.Instance.StopNetworkAsync(viewModel, viewModel.Network.SyncServers);
-            }
             StartStopButton.IsEnabled = true;
         }
 
@@ -66,18 +60,19 @@ namespace Fork.View.Xaml2.Pages.Network
                 });
             }) {IsBackground = true}.Start();
         }
-        
+
         private void SelectTerminal(object sender, RoutedEventArgs e)
         {
             HideAllPages();
             terminalPage.Visibility = Visibility.Visible;
         }
+
         private void SelectSettings(object sender, RoutedEventArgs e)
         {
             HideAllPages();
             settingsPage.Visibility = Visibility.Visible;
         }
-        
+
         private void SelectPlugins(object sender, RoutedEventArgs e)
         {
             HideAllPages();
@@ -87,15 +82,9 @@ namespace Fork.View.Xaml2.Pages.Network
         private void HideAllPages()
         {
             //Save settings, if settings is closed
-            if (settingsPage.Visibility == Visibility.Visible)
-            {
-                viewModel.SaveSettings();
-            }
-            
-            foreach (Frame frame in subPages)
-            {
-                frame.Visibility = Visibility.Hidden;
-            }
+            if (settingsPage.Visibility == Visibility.Visible) viewModel.SaveSettings();
+
+            foreach (Frame frame in subPages) frame.Visibility = Visibility.Hidden;
         }
 
         private void RestartButton_Click(object sender, RoutedEventArgs e)
