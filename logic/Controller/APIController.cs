@@ -16,9 +16,16 @@ namespace Fork.Logic.Controller
     public class APIController
     {
         private string apiBaseURL = "https://api.Fork.gg/";
+        private string ip;
+        private DateTime ipAge = DateTime.MinValue;
 
         public string GetExternalIPAddress()
         {
+            if(ip != null && DateTime.Now.Subtract(ipAge).TotalHours < 1)
+            {
+                return ip;
+            }
+
             if (IsAPIAvailable())
             {
                 return RetrieveResponseBody(RequestRawResponse(apiBaseURL + "ip")).Trim();
