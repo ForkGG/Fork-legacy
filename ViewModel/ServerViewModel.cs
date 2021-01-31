@@ -46,7 +46,7 @@ namespace Fork.ViewModel
         }
 
         public bool Initialized { get; set; } = false;
-        
+
         public string NextAutomationName { get; set; }
         public bool AutomationEnabled { get; set; }
         public string NextAutomationHours { get; set; }
@@ -56,7 +56,7 @@ namespace Fork.ViewModel
         public string ServerTitle => Name + " - " + Server.Version.Type + " " + Server.Version.Version;
 
         public Page WorldsPage { get; set; }
-        
+
         public ServerViewModel(string serverUid) : base(serverUid)
         {
             Server = Entity as Server;
@@ -64,29 +64,27 @@ namespace Fork.ViewModel
             {
                 throw new Exception();
             }
-            
+
             DateTime start = DateTime.Now;
             Console.WriteLine("Starting initialization of ViewModel for Server " + Server.Name);
-            new Thread(() =>
+            if (Server.Version.Type == ServerVersion.VersionType.Vanilla)
             {
-                if (Server.Version.Type == ServerVersion.VersionType.Vanilla)
-                {
-                    Versions = VersionManager.Instance.VanillaVersions;
-                }
-                else if (Server.Version.Type == ServerVersion.VersionType.Paper)
-                {
-                    Versions = VersionManager.Instance.PaperVersions;
-                }
-                else if (Server.Version.Type == ServerVersion.VersionType.Spigot)
-                {
-                    Versions = VersionManager.Instance.SpigotVersions;
-                }
-            }){IsBackground = true}.Start();
+                Versions = VersionManager.Instance.VanillaVersions;
+            }
+            else if (Server.Version.Type == ServerVersion.VersionType.Paper)
+            {
+                Versions = VersionManager.Instance.PaperVersions;
+            }
+            else if (Server.Version.Type == ServerVersion.VersionType.Spigot)
+            {
+                Versions = VersionManager.Instance.SpigotVersions;
+            }
 
             Application.Current.Dispatcher.Invoke(new Action(() => EntityPage = new ServerPage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => ConsolePage = new ConsolePage(this)));
             Application.Current.Dispatcher.Invoke(new Action(() => WorldsPage = new WorldsPage(this)));
-            Application.Current.Dispatcher.Invoke(new Action(() => PluginsPage = new PluginsPage(new PluginViewModel(this))));
+            Application.Current.Dispatcher.Invoke(new Action(() =>
+                PluginsPage = new PluginsPage(new PluginViewModel(this))));
             Application.Current.Dispatcher.Invoke(new Action(() => SettingsViewModel = new SettingsViewModel(this)));
 
             PlayerList.CollectionChanged += PlayerListChanged;
@@ -149,7 +147,7 @@ namespace Fork.ViewModel
                 whitelistUpdater.HandleOutputLine(line);
                 banlistUpdater.HandleOutputLine(line);
                 oplistUpdater.HandleOutputLine(line);
-            }){IsBackground = true}.Start();
+            }) {IsBackground = true}.Start();
         }
 
         public void SetAutomationTime(AutomationTime automationTime)
@@ -164,7 +162,8 @@ namespace Fork.ViewModel
             if (automationTime is RestartTime)
             {
                 NextAutomationName = "Restart";
-            } else if (automationTime is StopTime)
+            }
+            else if (automationTime is StopTime)
             {
                 NextAutomationName = "Shutdown";
             }
@@ -172,12 +171,14 @@ namespace Fork.ViewModel
             {
                 NextAutomationName = "Starting";
             }
-            TimeSpan timeSpan = TimeSpan.FromMilliseconds(ServerAutomationManager.Instance.CalculateTime(automationTime));
+
+            TimeSpan timeSpan =
+                TimeSpan.FromMilliseconds(ServerAutomationManager.Instance.CalculateTime(automationTime));
             AutomationEnabled = true;
             NextAutomationHours = timeSpan.Hours.ToString();
             NextAutomationMinutes = timeSpan.Minutes.ToString();
             NextAutomationSeconds = timeSpan.Seconds.ToString();
-            
+
             new Thread(() =>
             {
                 restartTimer = new Timer {Interval = 1000};
@@ -243,7 +244,7 @@ namespace Fork.ViewModel
                 };
                 restartTimer.AutoReset = true;
                 restartTimer.Enabled = true;
-            }){IsBackground = true}.Start();
+            }) {IsBackground = true}.Start();
         }
 
         public async Task SaveProperties()
@@ -306,11 +307,12 @@ namespace Fork.ViewModel
             if (automationTime is RestartTime)
             {
                 ApplicationManager.Instance.ActiveEntities[Server].StandardInput
-                    .WriteLineAsync("say Next server restart in "+time+"!");
-            } else if (automationTime is StopTime)
+                    .WriteLineAsync("say Next server restart in " + time + "!");
+            }
+            else if (automationTime is StopTime)
             {
                 ApplicationManager.Instance.ActiveEntities[Server].StandardInput
-                    .WriteLineAsync("say Server shutdown in "+time+"!");
+                    .WriteLineAsync("say Server shutdown in " + time + "!");
             }
         }
 

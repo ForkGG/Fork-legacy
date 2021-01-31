@@ -105,8 +105,11 @@ namespace Fork.Logic.Model
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((ServerVersion) obj);
+            if (obj is ServerVersion otherVersion)
+            {
+                return Equals(otherVersion);
+            }
+            return false;
         }
 
         public override int GetHashCode()

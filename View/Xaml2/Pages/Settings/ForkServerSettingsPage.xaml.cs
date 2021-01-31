@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Collections.Specialized;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Fork.Logic.Manager;
 using Fork.Logic.Model;
 using Fork.Logic.Model.Settings;
@@ -38,6 +29,19 @@ namespace Fork.View.Xaml2.Pages.Settings
             }
 
             DataContext = serverViewModel;
+            serverViewModel.Versions.CollectionChanged += (_, args) =>
+            {
+                if (args.Action == NotifyCollectionChangedAction.Add)
+                {
+                    foreach (var item in args.NewItems)
+                    {
+                        if (item is ServerVersion serverVersion && serverVersion.Equals(serverViewModel.Server.Version))
+                        {
+                            versionComboBox.SelectedItem = item;
+                        }
+                    }
+                }
+            };
         }
         
         private void VersionChange_SelectionChanged(object sender, SelectionChangedEventArgs e)
