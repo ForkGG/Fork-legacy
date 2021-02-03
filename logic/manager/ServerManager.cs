@@ -723,7 +723,7 @@ namespace Fork.Logic.Manager
             //if (!viewModel.SettingsSavingTask.IsCompleted)
             //{
                 ConsoleWriter.Write("Saving settings files before starting server ...", viewModel);
-                await viewModel.SettingsSavingTask;
+                await Task.Run(async () => await viewModel.SettingsSavingTask);
             //}
 
             ConsoleWriter.Write(

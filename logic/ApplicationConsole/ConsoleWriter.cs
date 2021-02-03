@@ -24,7 +24,7 @@ namespace Fork.Logic.ApplicationConsole
             {
                 DateTime now = DateTime.Now;
                 value = "[" + now + "] " + value;
-                ApplicationManager.Instance.ConsoleViewModel.WriteLine(value);
+                //ApplicationManager.Instance.ConsoleViewModel.WriteLine(value);
                 using (StreamWriter sw = logFile.AppendText())
                 {
                     sw.WriteLine(value);

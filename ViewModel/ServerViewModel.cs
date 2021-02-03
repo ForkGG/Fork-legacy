@@ -39,11 +39,7 @@ namespace Fork.ViewModel
         public ObservableCollection<ServerVersion> Versions { get; set; } = new ObservableCollection<ServerVersion>();
         public ObservableCollection<World> Worlds { get; set; }
 
-        public Server Server
-        {
-            get => Entity as Server;
-            set => Entity = value;
-        }
+        public Server Server => Entity as Server;
 
         public bool Initialized { get; set; } = false;
 
@@ -59,7 +55,6 @@ namespace Fork.ViewModel
 
         public ServerViewModel(string serverUid) : base(serverUid)
         {
-            Server = Entity as Server;
             if (Server == null)
             {
                 throw new Exception();
