@@ -21,139 +21,15 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Fork.Logic.Persistence
 {
-    public class Persistence : IDisposable
+    public class Persistence
     {
-        #region Singleton
-        private static Persistence instance;
-        private static object contextLock;
-        public static Persistence Instance => instance ??= new Persistence();
-
-        private Persistence()
-        {
-            persistenceContext = new PersistenceContext();
-            persistenceContext.Database.Migrate();
-            ClearOrphans().Wait();
-        }
-        #endregion
-        private PersistenceContext persistenceContext;
-
-        public IEnumerable<Server> RequestServerList()
-        {
-            return persistenceContext.Servers;
-        }
-        
-        public IEnumerable<Network> RequestNetworkList()
-        {
-            return persistenceContext.Networks;
-        }
-
-        /// <summary>
-        /// Add entity to database
-        /// </summary>
-        /// <param name="entity"></param>
-        public void AddEntity(Entity entity)
-        {
-            lock (persistenceContext)
-            {
-                switch (entity)
-                {
-                    case Server server:
-                        persistenceContext.Servers.Add(server);
-                        break;
-                    case Network network:
-                        persistenceContext.Networks.Add(network);
-                        break;
-                }
-                persistenceContext.SaveChanges();
-            }
-        }
-
-        /// <summary>
-        /// Remove entity from database
-        /// </summary>
-        /// <param name="entity"></param>
-        public void RemoveEntity(Entity entity)
-        {
-            lock (persistenceContext)
-            {
-                switch (entity)
-                {
-                    case Server server:
-                        persistenceContext.Servers.Remove(server);
-                        break;
-                    case Network network:
-                        persistenceContext.Networks.Remove(network);
-                        break;
-                }
-                persistenceContext.SaveChanges();
-            }
-        }
-
-        /// <summary>
-        /// Save changes of all entities to the database
-        /// </summary>
-        public void SaveChanges()
-        {
-            lock (persistenceContext)
-                persistenceContext.SaveChanges();
-        }
-
-        /// <summary>
-        /// Updates or Adds a List of entities to the Database
-        /// </summary>
-        /// <param name="entities"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public async Task SaveEntities(IEnumerable<Entity> entities)
-        {
-            foreach (Entity entity in entities)
-            {
-                switch (entity)
-                {
-                    case Server server:
-                        if (persistenceContext.Servers.Any(server1 => server1.UID == server.UID))
-                        {
-                            persistenceContext.Servers.Update(server);
-                        }
-                        else
-                        {
-                            await persistenceContext.Servers.AddAsync(server);
-                        }
-                        break;
-                    case Network network:
-                        if (persistenceContext.Networks.Any(network1 => network1.UID == network.UID))
-                        {
-                            persistenceContext.Networks.Update(network);
-                        }
-                        else
-                        {
-                            await persistenceContext.Networks.AddAsync(network);
-                        }
-                        break;
-                    default:
-                        throw new NotImplementedException("Can't save entity, because the type is not implemented.");
-                }
-            }
-
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            await persistenceContext.SaveChangesAsync();
-            stopwatch.Stop();
-            Console.WriteLine($"Saved persistence database in {stopwatch.ElapsedMilliseconds}ms");
-        }
-
-        public void Dispose()
-        {
-            persistenceContext.Dispose();
-        }
-
         /// <summary>
         /// Clears orphans from each table
         ///
         /// Orphans are created when a parent entry is deleted, but the children (foreign keys) are not
         /// </summary>
         /// <returns></returns>
-        private async Task ClearOrphans()
+        public static async Task ClearOrphans()
         {
             await ClearOrphanedVersions(await GetUsedVersionIds());
             await ClearOrphanedJavaSettings(await GetUsedJavaSettingsId());
@@ -163,7 +39,7 @@ namespace Fork.Logic.Persistence
             await ClearOrphanedSimpleTimes(await GetUsedTimeIds());
         }
 
-        private async Task<List<long>> GetUsedVersionIds()
+        private static async Task<List<long>> GetUsedVersionIds()
         {
             await using var sqlConn = new SqliteConnection("Data Source=" + Path.Combine(App.ApplicationPath, "persistence", "data.db"));
             string serverRawQuery = $"SELECT VersionId FROM Servers";
@@ -197,7 +73,7 @@ namespace Fork.Logic.Persistence
             return result;
         }
 
-        private async Task<List<long>> GetUsedJavaSettingsId()
+        private static async Task<List<long>> GetUsedJavaSettingsId()
         {
             await using var sqlConn = new SqliteConnection("Data Source=" + Path.Combine(App.ApplicationPath, "persistence", "data.db"));
             string serverRawQuery = $"SELECT JavaSettingsId FROM Servers";
@@ -231,7 +107,7 @@ namespace Fork.Logic.Persistence
             return result;
         }
 
-        private async Task<List<long>> GetUsedRestartIds()
+        private static async Task<List<long>> GetUsedRestartIds()
         {
             await using var sqlConn = new SqliteConnection("Data Source=" + Path.Combine(App.ApplicationPath, "persistence", "data.db"));
             string serverRawQuery = $"SELECT Restart1Id, Restart2Id, Restart3Id, Restart4Id FROM Servers";
@@ -254,7 +130,7 @@ namespace Fork.Logic.Persistence
             return result;
         }
 
-        private async Task<List<long>> GetUsedAutoStartIds()
+        private static async Task<List<long>> GetUsedAutoStartIds()
         {
             await using var sqlConn = new SqliteConnection("Data Source=" + Path.Combine(App.ApplicationPath, "persistence", "data.db"));
             string serverRawQuery = $"SELECT AutoStart1Id, AutoStart2Id FROM Servers";
@@ -275,7 +151,7 @@ namespace Fork.Logic.Persistence
             return result;
         }
 
-        private async Task<List<long>> GetUsedAutoStopIds()
+        private static async Task<List<long>> GetUsedAutoStopIds()
         {
             await using var sqlConn = new SqliteConnection("Data Source=" + Path.Combine(App.ApplicationPath, "persistence", "data.db"));
             string serverRawQuery = $"SELECT AutoStop1Id, AutoStop2Id FROM Servers";
@@ -296,7 +172,7 @@ namespace Fork.Logic.Persistence
             return result;
         }
 
-        private async Task<List<long>> GetUsedTimeIds()
+        private static async Task<List<long>> GetUsedTimeIds()
         {
             await using var sqlConn = new SqliteConnection("Data Source=" + Path.Combine(App.ApplicationPath, "persistence", "data.db"));
             string restartRawQuery = $"SELECT TimeId FROM RestartTime";
@@ -348,7 +224,7 @@ namespace Fork.Logic.Persistence
             return result;
         }
 
-        private async Task ClearOrphanedVersions(List<long> usedVersions)
+        private static async Task ClearOrphanedVersions(List<long> usedVersions)
         {
             await using var sqlConn = new SqliteConnection("Data Source=" + Path.Combine(App.ApplicationPath, "persistence", "data.db"));
             string rawQuery = $"SELECT Id FROM ServerVersion";
@@ -375,7 +251,7 @@ namespace Fork.Logic.Persistence
             }
         }
 
-        private async Task ClearOrphanedJavaSettings(List<long> usedJavaSettings)
+        private static async Task ClearOrphanedJavaSettings(List<long> usedJavaSettings)
         {
             await using var sqlConn = new SqliteConnection("Data Source=" + Path.Combine(App.ApplicationPath, "persistence", "data.db"));
             string rawQuery = $"SELECT Id FROM JavaSettings";
@@ -402,7 +278,7 @@ namespace Fork.Logic.Persistence
             }
         }
         
-        private async Task ClearOrphanedSimpleTimes(List<long> usedTimeIds)
+        private static async Task ClearOrphanedSimpleTimes(List<long> usedTimeIds)
         {
             await using var sqlConn = new SqliteConnection("Data Source=" + Path.Combine(App.ApplicationPath, "persistence", "data.db"));
             string rawQuery = $"SELECT Id FROM SimpleTime";
@@ -429,7 +305,7 @@ namespace Fork.Logic.Persistence
             }
         }
         
-        private async Task ClearOrphanedRestartTimes(List<long> usedRestartTimeIds)
+        private static async Task ClearOrphanedRestartTimes(List<long> usedRestartTimeIds)
         {
             await using var sqlConn = new SqliteConnection("Data Source=" + Path.Combine(App.ApplicationPath, "persistence", "data.db"));
             string rawQuery = $"SELECT Id FROM RestartTime";
@@ -456,7 +332,7 @@ namespace Fork.Logic.Persistence
             }
         }
         
-        private async Task ClearOrphanedStartTimes(List<long> usedStartTimeIds)
+        private static async Task ClearOrphanedStartTimes(List<long> usedStartTimeIds)
         {
             await using var sqlConn = new SqliteConnection("Data Source=" + Path.Combine(App.ApplicationPath, "persistence", "data.db"));
             string rawQuery = $"SELECT Id FROM StartTime";
@@ -483,7 +359,7 @@ namespace Fork.Logic.Persistence
             }
         }
         
-        private async Task ClearOrphanedStopTimes(List<long> usedStopTimeIds)
+        private static async Task ClearOrphanedStopTimes(List<long> usedStopTimeIds)
         {
             await using var sqlConn = new SqliteConnection("Data Source=" + Path.Combine(App.ApplicationPath, "persistence", "data.db"));
             string rawQuery = $"SELECT Id FROM StopTime";
