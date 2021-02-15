@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using Fork.Annotations;
 using Fork.ViewModel;
 
 namespace Fork.Logic.Model
 {
-    public class ServerPlayer : IComparable<ServerPlayer>, IEquatable<ServerPlayer>
+    public class ServerPlayer : IComparable<ServerPlayer>, IEquatable<ServerPlayer>, INotifyPropertyChanged
     {
         public Player Player { get; set; }
         public ServerViewModel ServerViewModel { get; set; }
@@ -55,6 +58,14 @@ namespace Fork.Logic.Model
         public override int GetHashCode()
         {
             return HashCode.Combine(Player, ServerViewModel, IsOP, IsOnline);
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
