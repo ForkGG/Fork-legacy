@@ -47,8 +47,11 @@ namespace Fork.Logic.Persistence
                         break;
                 }
             }
-
+#if DEBUG
             string json = JsonConvert.SerializeObject(entities, Formatting.Indented);
+#else
+            string json = JsonConvert.SerializeObject(entities, Formatting.None);
+#endif
             DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ApplicationPath, "persistence"));
             if (!directoryInfo.Exists)
             {
