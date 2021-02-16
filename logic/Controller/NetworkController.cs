@@ -38,8 +38,7 @@ namespace Fork.Logic.Controller
             string serverPath = Path.Combine(App.ServerPath, networkName);
             DirectoryInfo directoryInfo = Directory.CreateDirectory(serverPath);
             Network network = new Network(networkName, networkType, javaSettings, VersionManager.Instance.WaterfallVersion);
-            Persistence.Persistence.Instance.AddEntity(network);
-            NetworkViewModel viewModel = new NetworkViewModel(network.UID);
+            NetworkViewModel viewModel = new NetworkViewModel(network);
             ServerManager.Instance.AddEntity(viewModel);
             //Select Server
             ApplicationManager.Instance.MainViewModel.SelectedEntity = viewModel;
@@ -266,8 +265,7 @@ namespace Fork.Logic.Controller
                 
                 newNetwork.Name = newName;
                 newNetwork.UID = Guid.NewGuid().ToString();
-                Persistence.Persistence.Instance.AddEntity(newNetwork);
-                NetworkViewModel newNetworkViewModel = new NetworkViewModel(newNetwork.UID);
+                NetworkViewModel newNetworkViewModel = new NetworkViewModel(newNetwork);
 
                 string newNetworkPath = Path.Combine(App.ServerPath, newName);
                 newNetworkViewModel.StartImport();
