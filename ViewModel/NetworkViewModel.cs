@@ -39,29 +39,9 @@ namespace Fork.ViewModel
 
         public string NetworkTitle => Name + " - " + Network.Version.Type;
 
-        public ServerDropHandler DropHandler { get; private set; }
+        public ServerDropHandler DropHandler { get; }
 
-        /// <summary>
-        /// Constructor for new Network
-        /// Should be called when creating a new Network instance which does not yet exist in the database
-        /// </summary>
-        /// <param name="network"></param>
-        public NetworkViewModel(Network network) : base(network)
-        {
-            Construct();
-        }
-        
-        /// <summary>
-        /// Constructor for loading an existing Network
-        /// Should be called when loading an existing Network from the database
-        /// </summary>
-        /// <param name="networkUid"></param>
         public NetworkViewModel(string networkUid) : base(networkUid)
-        {
-            Construct();
-        }
-
-        private void Construct()
         {
             Network = Entity as Network;
             if (Network == null)

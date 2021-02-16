@@ -32,7 +32,6 @@ using Fork.Logic.Model.Settings;
 using Fork.Logic.Persistence;
 using Fork.Logic.Utils;
 using Fork.Logic.WebRequesters;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using Image = System.Drawing.Image;
@@ -100,6 +99,7 @@ namespace Fork.ViewModel
                     }
 
                     Context.SaveChanges();
+                    Persistence.Instance.SaveChanges();
                 }) {IsBackground = true}.Start();
             }
         }
@@ -243,32 +243,6 @@ namespace Fork.ViewModel
 
         public Task SettingsSavingTask = Task.CompletedTask;
 
-        protected EntityViewModel(Entity entity)
-        {
-            Context = new PersistenceContext();
-            switch (entity)
-            {
-                case Server server:
-                    if (Context.Servers.Any(server1 => server.UID == server1.UID))
-                    {
-                        throw new Exception("Database already contains Server with UID: " + server.UID+"" +
-                                            "\nWrong Constructor was used when creating a ServerViewModel");
-                    }
-                    Context.Servers.Add(server);
-                    break;
-                case Network network:
-                    if (Context.Networks.Any(network1 => network.UID == network1.UID))
-                    {
-                        throw new Exception("Database already contains Network with UID: " + network.UID+"" +
-                                            "\nWrong Constructor was used when creating a NetworkViewModel");
-                    }
-                    Context.Networks.Add(network);
-                    break;
-            }
-            Context.SaveChanges();
-            Entity = entity;
-            Construct();
-        }
 
         protected EntityViewModel(string entityId)
         {
@@ -276,11 +250,7 @@ namespace Fork.ViewModel
             Entity = Context.Servers.FirstOrDefault(server => server.UID == entityId)
                      ?? (Entity) Context.Networks.FirstOrDefault(network => network.UID == entityId)
                      ?? throw new Exception("Database did not contain Entity with UID:" + entityId);
-            Construct();
-        }
-
-        private void Construct()
-        {
+            
             new Thread(() =>
             {
                 while (true)
@@ -289,6 +259,8 @@ namespace Fork.ViewModel
                     consoleMessagesLastSecond = 0;
                 }
             }) {IsBackground = true}.Start();
+
+            //Entity = Persistence.Instance.PersistenceContext.;
 
             //Error weird crash (should not happen unless entities.json is corrupted)
             //TODO check for json errors in entities.json
@@ -455,6 +427,7 @@ namespace Fork.ViewModel
                     }
                 }
                 await Context.SaveChangesAsync();
+                Persistence.Instance.SaveChanges();
             });
         }
 
@@ -540,6 +513,7 @@ namespace Fork.ViewModel
             {
                 Entity.JavaSettings.JavaPath = newPath;
                 Context.SaveChanges();
+                Persistence.Instance.SaveChanges();
             }
         }
 
@@ -555,17 +529,7 @@ namespace Fork.ViewModel
 
         public void DeleteEntity()
         {
-            switch (Entity)
-            {
-                case Server server:
-                    Context.Servers.Remove(server);
-                    break;
-                case Network network:
-                    Context.Networks.Remove(network);
-                    break;
-            }
-            Context.SaveChanges();
-            Context.Dispose();
+            Persistence.Instance.RemoveEntity(Entity);
             isDeleted = true;
         }
 
@@ -659,6 +623,7 @@ namespace Fork.ViewModel
             DownloadCompleted = false;
             Entity.Initialized = false;
             Context.SaveChanges();
+            Persistence.Instance.SaveChanges();
             Console.WriteLine("Starting server.jar download for server " + Entity);
             raisePropertyChanged(nameof(Server));
             raisePropertyChanged(nameof(ReadyToUse));
@@ -676,6 +641,7 @@ namespace Fork.ViewModel
             DownloadCompleted = true;
             Entity.Initialized = true;
             Context.SaveChanges();
+            Persistence.Instance.SaveChanges();
             Console.WriteLine("Finished downloading server.jar for server " + Entity);
             raisePropertyChanged(nameof(Server));
             raisePropertyChanged(nameof(ReadyToUse));

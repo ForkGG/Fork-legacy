@@ -357,7 +357,8 @@ namespace Fork.Logic.Manager
             DirectoryInfo serverDirectory = Directory.CreateDirectory(serverPath);
 
             //Add server to Fork
-            ServerViewModel viewModel = new ServerViewModel(server);
+            Persistence.Persistence.Instance.AddEntity(server);
+            ServerViewModel viewModel = new ServerViewModel(server.UID);
             viewModel.StartImport();
             Application.Current.Dispatcher.Invoke(() => Entities.Add(viewModel));
             ApplicationManager.Instance.MainViewModel.SelectedEntity = viewModel;
@@ -473,7 +474,8 @@ namespace Fork.Logic.Manager
             DirectoryInfo directoryInfo = Directory.CreateDirectory(serverPath);
             serverVersion.Build = await VersionManager.Instance.GetLatestBuild(serverVersion);
             Server server = new Server(serverName, serverVersion, serverSettings, javaSettings);
-            ServerViewModel viewModel = new ServerViewModel(server);
+            Persistence.Persistence.Instance.AddEntity(server);
+            ServerViewModel viewModel = new ServerViewModel(server.UID);
             Application.Current.Dispatcher.Invoke(() => Entities.Add(viewModel));
             //Select Server
             ApplicationManager.Instance.MainViewModel.SelectedEntity = viewModel;
@@ -559,7 +561,8 @@ namespace Fork.Logic.Manager
 
                 newServer.Name = newName;
                 newServer.UID = Guid.NewGuid().ToString();
-                ServerViewModel newServerViewModel = new ServerViewModel(newServer);
+                Persistence.Persistence.Instance.AddEntity(newServer);
+                ServerViewModel newServerViewModel = new ServerViewModel(newServer.UID);
 
                 string newServerPath = Path.Combine(App.ServerPath, newName);
                 newServerViewModel.StartImport();
@@ -947,45 +950,25 @@ namespace Fork.Logic.Manager
 
         private async Task LoadEntityList()
         {
-            bool dbExists = new FileInfo(Path.Combine(App.ApplicationPath, "persistence", "data.db")).Exists;
-            await using PersistenceContext context = new PersistenceContext();
-            await context.Database.MigrateAsync();
-            //TODO replace this with parent keys in child entries
-            await Persistence.Persistence.ClearOrphans();
-            if (!dbExists)
+            if (!new FileInfo(Path.Combine(App.ApplicationPath,"persistence","data.db")).Exists)
             {
                 if (new DirectoryInfo(Path.Combine(App.ApplicationPath, "persistence")).Exists)
                 {
                     var entitiesFromJson = EntitySerializer.Instance.LoadEntities();
                     if (entitiesFromJson != null)
                     {
-                        foreach (Entity entity in entitiesFromJson)
-                        {
-                            switch (entity)
-                            {
-                                case Server server:
-                                    await context.Servers.AddAsync(server);
-                                    break;
-                                case Network network:
-                                    await context.Networks.AddAsync(network);
-                                    break;
-                                default:
-                                    throw new NotImplementedException(
-                                        "Can't save entity, because the type is not implemented.");
-                            }
-                        }
-                        await context.SaveChangesAsync();
+                        await Persistence.Persistence.Instance.SaveEntities(entitiesFromJson);
                     }
                 }
             }
             
-            foreach (Server server in context.Servers)
+            foreach (Server server in Persistence.Persistence.Instance.RequestServerList())
             {
                 var viewModel = new ServerViewModel(server.UID);
                 Application.Current.Dispatcher?.Invoke(() => entities.Add(viewModel));
             }
 
-            foreach (Network network in context.Networks)
+            foreach (Network network in Persistence.Persistence.Instance.RequestNetworkList())
             {
                 var viewModel = new NetworkViewModel(network.UID);
                 Application.Current.Dispatcher?.Invoke(() => entities.Add(viewModel));
