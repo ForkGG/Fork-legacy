@@ -17,25 +17,24 @@ namespace Fork.Logic.Model
         [Key]
         public string UID { get; set; }
         public string Name { get; set; }
-        public virtual ServerVersion Version { get; set; }
-        public virtual JavaSettings JavaSettings { get; set; }
+        public ServerVersion Version { get; set; }
+        public JavaSettings JavaSettings { get; set; }
 
         public bool Initialized { get; set; } = false;
         public bool StartWithFork { get; set; } = false;
         public bool AutoSetSha1 { get; set; } = true;
         public int ServerIconId { get; set; }
         public DateTime ResourcePackHashAge { get; set; } = DateTime.MinValue;
-        public virtual RestartTime Restart1 { get; set; }
-        public virtual RestartTime Restart2 { get; set; }
-        public virtual RestartTime Restart3 { get; set; }
-        public virtual RestartTime Restart4 { get; set; }
-        public virtual StopTime AutoStop1 { get; set; } = new(false, new SimpleTime(0, 0));
-        public virtual StopTime AutoStop2 { get; set; } = new(false, new SimpleTime(12, 0));
-        public virtual StartTime AutoStart1 { get; set; } = new(false, new SimpleTime(0, 0));
-        public virtual StartTime AutoStart2 { get; set; } = new(false, new SimpleTime(12, 0));
+        public RestartTime Restart1 { get; set; }
+        public RestartTime Restart2 { get; set; }
+        public RestartTime Restart3 { get; set; }
+        public RestartTime Restart4 { get; set; }
+        public StopTime AutoStop1 { get; set; } = new(false, new SimpleTime(0, 0));
+        public StopTime AutoStop2 { get; set; } = new(false, new SimpleTime(12, 0));
+        public StartTime AutoStart1 { get; set; } = new(false, new SimpleTime(0, 0));
+        public StartTime AutoStart2 { get; set; } = new(false, new SimpleTime(12, 0));
 
         [JsonIgnore]
-        [NotMapped]
         public ServerSettings ServerSettings
         {
             get
@@ -48,11 +47,9 @@ namespace Fork.Logic.Model
         }
 
         [JsonIgnore]
-        [NotMapped]
         public string FullName => Name + " (" + Version.Version + ")";
 
         [JsonIgnore]
-        [NotMapped]
         public string JarLink => Version.JarLink;
 
         public Server(String name, ServerVersion version, ServerSettings serverSettings, JavaSettings javaSettings)

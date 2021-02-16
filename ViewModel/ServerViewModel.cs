@@ -53,27 +53,8 @@ namespace Fork.ViewModel
 
         public Page WorldsPage { get; set; }
 
-        /// <summary>
-        /// Constructor for new Server
-        /// Should be called when creating a new server instance which does not yet exist in the database
-        /// </summary>
-        /// <param name="server"></param>
-        public ServerViewModel(Server server) : base(server)
-        {
-            Construct();
-        }
         
-        /// <summary>
-        /// Constructor for loading an existing Server
-        /// Should be called when loading an existing Server from the database
-        /// </summary>
-        /// <param name="serverUid"></param>
-        public ServerViewModel(string serverUid) : base(serverUid)
-        {
-            Construct();
-        }
-
-        private void Construct()
+        public ServerViewModel(Server server) : base(server)
         {
             if (Server == null)
             {
@@ -268,7 +249,7 @@ namespace Fork.ViewModel
             {
                 await new FileWriter().WriteServerSettings(Path.Combine(App.ServerPath, Server.Name),
                     Server.ServerSettings.SettingsDictionary);
-                await Context.SaveChangesAsync();
+                EntitySerializer.Instance.StoreEntities();
                 Server.ServerSettings.HasChanged = false;
             }
         }
@@ -281,7 +262,7 @@ namespace Fork.ViewModel
 
         public void ServerNameChanged()
         {
-            Context.SaveChanges();
+            EntitySerializer.Instance.StoreEntities();
             raisePropertyChanged(nameof(ServerTitle));
         }
 

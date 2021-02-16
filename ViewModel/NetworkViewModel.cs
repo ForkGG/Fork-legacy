@@ -27,11 +27,7 @@ namespace Fork.ViewModel
 {
     public class NetworkViewModel : EntityViewModel
     {
-        public Network Network
-        {
-            get { return Entity as Network; }
-            set { Entity = value; }
-        }
+        public Network Network => Entity as Network;
 
         public ObservableCollection<NetworkServer> Servers { get; set; } = new ObservableCollection<NetworkServer>();
         public ObservableCollection<Permission> Permissions { get; set; } = new ObservableCollection<Permission>();
@@ -41,29 +37,9 @@ namespace Fork.ViewModel
 
         public ServerDropHandler DropHandler { get; private set; }
 
-        /// <summary>
-        /// Constructor for new Network
-        /// Should be called when creating a new Network instance which does not yet exist in the database
-        /// </summary>
-        /// <param name="network"></param>
+        
         public NetworkViewModel(Network network) : base(network)
         {
-            Construct();
-        }
-        
-        /// <summary>
-        /// Constructor for loading an existing Network
-        /// Should be called when loading an existing Network from the database
-        /// </summary>
-        /// <param name="networkUid"></param>
-        public NetworkViewModel(string networkUid) : base(networkUid)
-        {
-            Construct();
-        }
-
-        private void Construct()
-        {
-            Network = Entity as Network;
             if (Network == null)
             {
                 throw new Exception();

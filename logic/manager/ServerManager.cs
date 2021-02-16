@@ -615,6 +615,7 @@ namespace Fork.Logic.Manager
                 serverDirectory.Delete(true);
                 Application.Current.Dispatcher?.Invoke(() => Entities.Remove(serverViewModel));
                 serverNames.Remove(serverViewModel.Server.Name);
+                EntitySerializer.Instance.StoreEntities();
                 return true;
             }
             catch (Exception e)
@@ -947,48 +948,25 @@ namespace Fork.Logic.Manager
 
         private async Task LoadEntityList()
         {
-            bool dbExists = new FileInfo(Path.Combine(App.ApplicationPath, "persistence", "data.db")).Exists;
-            await using PersistenceContext context = new PersistenceContext();
-            await context.Database.MigrateAsync();
-            //TODO replace this with parent keys in child entries
-            await Persistence.Persistence.ClearOrphans();
-            if (!dbExists)
+            foreach (Entity entity in EntitySerializer.Instance.LoadEntities())
             {
-                if (new DirectoryInfo(Path.Combine(App.ApplicationPath, "persistence")).Exists)
+                switch (entity)
                 {
-                    var entitiesFromJson = EntitySerializer.Instance.LoadEntities();
-                    if (entitiesFromJson != null)
-                    {
-                        foreach (Entity entity in entitiesFromJson)
+                    case Server server:
+                        Application.Current.Dispatcher?.Invoke(() =>
                         {
-                            switch (entity)
-                            {
-                                case Server server:
-                                    await context.Servers.AddAsync(server);
-                                    break;
-                                case Network network:
-                                    await context.Networks.AddAsync(network);
-                                    break;
-                                default:
-                                    throw new NotImplementedException(
-                                        "Can't save entity, because the type is not implemented.");
-                            }
-                        }
-                        await context.SaveChangesAsync();
-                    }
+                            ServerViewModel serverViewModel = new ServerViewModel(server);
+                            entities.Add(serverViewModel);
+                        });
+                        break;
+                    case Network network:
+                        Application.Current.Dispatcher?.Invoke(() =>
+                        {
+                            NetworkViewModel networkViewModel = new NetworkViewModel(network);
+                            entities.Add(networkViewModel);
+                        });
+                        break;
                 }
-            }
-            
-            foreach (Server server in context.Servers)
-            {
-                var viewModel = new ServerViewModel(server.UID);
-                Application.Current.Dispatcher?.Invoke(() => entities.Add(viewModel));
-            }
-
-            foreach (Network network in context.Networks)
-            {
-                var viewModel = new NetworkViewModel(network.UID);
-                Application.Current.Dispatcher?.Invoke(() => entities.Add(viewModel));
             }
         }
     }

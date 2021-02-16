@@ -229,6 +229,7 @@ namespace Fork.Logic.Controller
                     new DirectoryInfo(Path.Combine(App.ServerPath, networkViewModel.Name));
                 serverDirectory.Delete(true);
                 Application.Current.Dispatcher?.Invoke(()=>ServerManager.Instance.RemoveEntity(networkViewModel));
+                EntitySerializer.Instance.StoreEntities();
                 return true;
             }
             catch (Exception e)

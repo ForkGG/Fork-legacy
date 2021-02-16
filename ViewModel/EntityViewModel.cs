@@ -62,8 +62,6 @@ namespace Fork.ViewModel
         private Stopwatch timeSinceLastConsoleMessage = new Stopwatch();
         private bool isDeleted = false;
 
-        protected readonly PersistenceContext Context;
-
         public class EntityPathChangedEventArgs
         {
             public string NewPath { get; }
@@ -99,7 +97,7 @@ namespace Fork.ViewModel
                         raisePropertyChanged(nameof(n.NetworkTitle));
                     }
 
-                    Context.SaveChanges();
+                    EntitySerializer.Instance.StoreEntities();
                 }) {IsBackground = true}.Start();
             }
         }
@@ -245,42 +243,7 @@ namespace Fork.ViewModel
 
         protected EntityViewModel(Entity entity)
         {
-            Context = new PersistenceContext();
-            switch (entity)
-            {
-                case Server server:
-                    if (Context.Servers.Any(server1 => server.UID == server1.UID))
-                    {
-                        throw new Exception("Database already contains Server with UID: " + server.UID+"" +
-                                            "\nWrong Constructor was used when creating a ServerViewModel");
-                    }
-                    Context.Servers.Add(server);
-                    break;
-                case Network network:
-                    if (Context.Networks.Any(network1 => network.UID == network1.UID))
-                    {
-                        throw new Exception("Database already contains Network with UID: " + network.UID+"" +
-                                            "\nWrong Constructor was used when creating a NetworkViewModel");
-                    }
-                    Context.Networks.Add(network);
-                    break;
-            }
-            Context.SaveChanges();
             Entity = entity;
-            Construct();
-        }
-
-        protected EntityViewModel(string entityId)
-        {
-            Context = new PersistenceContext();
-            Entity = Context.Servers.FirstOrDefault(server => server.UID == entityId)
-                     ?? (Entity) Context.Networks.FirstOrDefault(network => network.UID == entityId)
-                     ?? throw new Exception("Database did not contain Entity with UID:" + entityId);
-            Construct();
-        }
-
-        private void Construct()
-        {
             new Thread(() =>
             {
                 while (true)
@@ -454,7 +417,7 @@ namespace Fork.ViewModel
                         }
                     }
                 }
-                await Context.SaveChangesAsync();
+                EntitySerializer.Instance.StoreEntities();
             });
         }
 
@@ -539,7 +502,7 @@ namespace Fork.ViewModel
             if (Entity.JavaSettings.JavaPath.Equals(oldPath))
             {
                 Entity.JavaSettings.JavaPath = newPath;
-                Context.SaveChanges();
+                EntitySerializer.Instance.StoreEntities();
             }
         }
 
@@ -555,17 +518,6 @@ namespace Fork.ViewModel
 
         public void DeleteEntity()
         {
-            switch (Entity)
-            {
-                case Server server:
-                    Context.Servers.Remove(server);
-                    break;
-                case Network network:
-                    Context.Networks.Remove(network);
-                    break;
-            }
-            Context.SaveChanges();
-            Context.Dispose();
             isDeleted = true;
         }
 
@@ -658,7 +610,7 @@ namespace Fork.ViewModel
         {
             DownloadCompleted = false;
             Entity.Initialized = false;
-            Context.SaveChanges();
+            EntitySerializer.Instance.StoreEntities();
             Console.WriteLine("Starting server.jar download for server " + Entity);
             raisePropertyChanged(nameof(Server));
             raisePropertyChanged(nameof(ReadyToUse));
@@ -675,7 +627,7 @@ namespace Fork.ViewModel
         {
             DownloadCompleted = true;
             Entity.Initialized = true;
-            Context.SaveChanges();
+            EntitySerializer.Instance.StoreEntities();
             Console.WriteLine("Finished downloading server.jar for server " + Entity);
             raisePropertyChanged(nameof(Server));
             raisePropertyChanged(nameof(ReadyToUse));

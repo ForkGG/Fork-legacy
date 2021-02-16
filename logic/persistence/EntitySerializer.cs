@@ -6,6 +6,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using Fork.Logic.Logging;
+using Fork.Logic.Manager;
 using Fork.Logic.Model;
 using Fork.Logic.Model.ProxyModels;
 using Fork.ViewModel;
@@ -30,6 +31,39 @@ namespace Fork.Logic.Persistence
                 return instance;
             }
         }
+        
+        public void StoreEntities()
+        {
+            EntityLists entities = new EntityLists();
+            foreach (EntityViewModel viewModel in ServerManager.Instance.Entities)
+            {
+                switch (viewModel.Entity)
+                {
+                    case Server server:
+                        entities.ServerList.Add(server);
+                        break;
+                    case Network network:
+                        entities.NetworkList.Add(network);
+                        break;
+                }
+            }
+
+            string json = JsonConvert.SerializeObject(entities, Formatting.Indented);
+            DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ApplicationPath, "persistence"));
+            if (!directoryInfo.Exists)
+            {
+                directoryInfo.Create();
+            }
+            FileInfo entitiesFile = new FileInfo(Path.Combine(App.ApplicationPath, "persistence", "entities.json"));
+            lock (writeLock)
+            {
+                using (FileStream fs = entitiesFile.Create())
+                using (StreamWriter sw = new StreamWriter(fs))
+                {
+                    sw.WriteLine(json);
+                }
+            }
+        }
 
         public ObservableCollection<Entity> LoadEntities()
         {
@@ -39,7 +73,6 @@ namespace Fork.Logic.Persistence
                 return null;
             }
             
-            // Legacy stuff to support older Fork versions
             ObservableCollection<Entity> entityViewModels = new();
             EntityLists entities = JsonConvert.DeserializeObject<EntityLists>(File.ReadAllText(entitiesFile.FullName));
             if (entities != null)
@@ -71,9 +104,6 @@ namespace Fork.Logic.Persistence
                     entityViewModels.Add(network);
                 }
             }
-
-            //TODO uncomment this
-            //entitiesFile.Delete();
             return entityViewModels;
         }
 
