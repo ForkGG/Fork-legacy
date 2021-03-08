@@ -17,8 +17,8 @@
 </p>
   
 <p align="center">
-  <img src="https://www.fork.gg/screenshots/fork_screenshot1.png" width="49%" />
-  <img src="https://www.fork.gg/screenshots/fork_screenshot2.png" width="49%" />
+  <img src="https://www.fork.gg/data/screenshots/aterminal.png" width="49%" />
+  <img src="https://www.fork.gg/data/screenshots/settings1.png" width="49%" />
 </p>
   
 
