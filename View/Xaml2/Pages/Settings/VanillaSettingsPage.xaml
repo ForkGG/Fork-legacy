@@ -106,6 +106,7 @@
                                     <RowDefinition />
                                     <RowDefinition />
                                     <RowDefinition />
+                                    <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <CheckBox Content="Enable Nether" IsChecked="{Binding Server.ServerSettings.AllowNether}"
                                   Style="{DynamicResource TextCheckBox}" FontSize="20" Margin="0 0 20 0" />
@@ -120,6 +121,9 @@
                                   Margin="0 0 20 0" />
                                 <CheckBox Content="Generate Structures" IsChecked="{Binding Server.ServerSettings.GenerateStructures}"
                                   Style="{DynamicResource TextCheckBox}" FontSize="20" Grid.Row="4"
+                                  Margin="0 0 20 0" />
+                                <CheckBox Content="Allow Flight" IsChecked="{Binding Server.ServerSettings.AllowFlight}"
+                                  Style="{DynamicResource TextCheckBox}" FontSize="20" Grid.Row="5"
                                   Margin="0 0 20 0" />
                                 <CheckBox Content="Spawn Monsters" IsChecked="{Binding Server.ServerSettings.SpawnMonsters}"
                                   Style="{DynamicResource TextCheckBox}" FontSize="20" Grid.Column="1"
