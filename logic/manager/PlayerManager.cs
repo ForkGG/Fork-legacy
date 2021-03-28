@@ -88,7 +88,7 @@ namespace Fork.Logic.Manager
                 Console.WriteLine("Can only change roles while server is running!");
                 return;
             }
-            ApplicationManager.Instance.ActiveEntities[viewModel.Server].StandardInput.WriteLine("kick "+name);
+            ApplicationManager.Instance.ActiveEntities[viewModel.Server].StandardInput.WriteLine("kick "+name+" You were kicked by an Operator using the Fork Server Manager.");
         }
 
         public void BanPlayer(ServerViewModel viewModel, string name)
@@ -98,7 +98,7 @@ namespace Fork.Logic.Manager
                 Console.WriteLine("Can only change roles while server is running!");
                 return;
             }
-            ApplicationManager.Instance.ActiveEntities[viewModel.Server].StandardInput.WriteLine("ban "+name);
+            ApplicationManager.Instance.ActiveEntities[viewModel.Server].StandardInput.WriteLine("ban "+name+" You were banned by an Operator using the Fork Server Manager.");
         }
 
         public void UnBanPlayer(ServerViewModel viewModel, string name)
