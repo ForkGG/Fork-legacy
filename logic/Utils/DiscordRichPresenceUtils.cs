@@ -15,7 +15,9 @@ namespace Fork.Logic.Utils
         public static void SetupRichPresence()
         {
             rpcClient = new DiscordRpcClient("795015105061847111");
+#if DEBUG
             rpcClient.Logger = new ConsoleLogger(LogLevel.Error);
+#endif
             rpcClient.Initialize();
             
             UpdateRichPresence();
