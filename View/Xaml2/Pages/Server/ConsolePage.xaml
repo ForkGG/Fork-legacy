@@ -32,7 +32,7 @@
         </CollectionViewSource>
     </Page.Resources>
     <DockPanel Margin="0 10 0 0">
-        
+
         <!-- Right Part -->
         <TabControl DockPanel.Dock="Right" Margin="5" Width="220">
             <!-- Playerlist -->
@@ -214,7 +214,7 @@
                 </TabItem.Header>
                 <DockPanel Background="{DynamicResource backgroundDark}">
                     <TextBlock Text="Whitelisted Players" DockPanel.Dock="Top" Foreground="{DynamicResource textSelected}" TextAlignment="Center" FontSize="15" Margin="0 10 0 5"/>
-                    <Grid DockPanel.Dock="Bottom">                        
+                    <Grid DockPanel.Dock="Bottom">
                         <Button Style="{DynamicResource RoundedTextButton}" Content="Add Player" Margin="0 10 0 10" Width="120" Click="AddToWhiteList_Click" IsEnabled="{Binding ServerRunning}"/>
                         <StackPanel Background="{DynamicResource backgroundDark}" Visibility="Collapsed" x:Name="AddWhitelistPanel">
                             <TextBlock Text="Enter Player Name" Foreground="{DynamicResource textSelected}" FontSize="15" HorizontalAlignment="Center"/>
@@ -286,7 +286,7 @@
                 </DockPanel>
             </TabItem>
         </TabControl>
-        
+
         <!-- Center Part -->
         <DockPanel>
             <!-- Usage monitors -->
@@ -384,15 +384,25 @@
                         </ScrollViewer>
                     </Border>
                     <Border Panel.ZIndex="1" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="20">
-                        <TextBox x:Name="SearchBox" MinWidth="150" Style="{DynamicResource SearchStyle}" TextChanged="SearchBox_TextChanged"/>
+                        <TextBox x:Name="SearchBox" MinWidth="150" Style="{DynamicResource SearchStyle}" TextChanged="SearchBox_TextChanged" Visibility="Collapsed"/>
                     </Border>
-                </Grid>                
+                </Grid>
 
                 <!--Border Margin="10" CornerRadius="10" Background="{DynamicResource backgroundConsole}">
                     <ScrollViewer Margin="10" ScrollChanged="ScrollViewer_ScrollChanged" Style="{DynamicResource ConsoleScrollViewer}">
                         <ListView Style="{DynamicResource ConsoleListView}" ItemContainerStyle="{DynamicResource ConsolerListItem}" ItemsSource="{Binding ConsoleOutList}" />
                     </ScrollViewer>
                 </-->
+                <DockPanel.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Toggle Search" Style="{DynamicResource ContextMenuItem}"  InputGestureText="Ctrl + F" Click="SearchMenuItem_Click">
+
+                        </MenuItem>
+                        <MenuItem Header="Clear Console" Style="{DynamicResource RedContextMenuItem}" InputGestureText="Ctrl + Del" Click="ClearMenuItem_Click">
+
+                        </MenuItem>
+                    </ContextMenu>
+                </DockPanel.ContextMenu>
             </DockPanel>
         </DockPanel>
     </DockPanel>

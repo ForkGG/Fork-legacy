@@ -32,6 +32,7 @@ using Fork.Logic.Model.Settings;
 using Fork.Logic.Persistence;
 using Fork.Logic.Utils;
 using Fork.Logic.WebRequesters;
+using Fork.View.Xaml2.Pages.Server;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
@@ -58,7 +59,7 @@ namespace Fork.ViewModel
         private DiskTracker diskTracker;
         private List<double> diskList;
         private double diskValue;
-        
+
         private Stopwatch timeSinceLastConsoleMessage = new Stopwatch();
         private bool isDeleted = false;
 
@@ -298,12 +299,13 @@ namespace Fork.ViewModel
                 {
                     image = Image.FromFile(iconUri);
                 }
-                
+
                 Bitmap bitmap = ImageUtils.ResizeImage(image, 64, 64);
                 ImageSource img = ImageUtils.BitmapToImageSource(bitmap);
                 img.Freeze();
                 Application.Current.Dispatcher?.Invoke(() => ServerIcons.Add(img));
             }
+
             if (Entity.ServerIconId >= 0 && Entity.ServerIconId < ServerIcons.Count)
             {
                 SelectedServerIcon = ServerIcons[Entity.ServerIconId];
@@ -313,6 +315,7 @@ namespace Fork.ViewModel
                 SelectedServerIcon = ServerIcons[0];
                 Entity.ServerIconId = 0;
             }
+
             WriteServerIcon();
 
 
@@ -335,7 +338,8 @@ namespace Fork.ViewModel
                             await ServerManager.Instance.StartServerAsync(serverViewModel);
                             break;
                         case NetworkViewModel networkViewModel:
-                            await ServerManager.Instance.StartNetworkAsync(networkViewModel, networkViewModel.Network.SyncServers);
+                            await ServerManager.Instance.StartNetworkAsync(networkViewModel,
+                                networkViewModel.Network.SyncServers);
                             break;
                     }
                 });
@@ -356,6 +360,7 @@ namespace Fork.ViewModel
             {
                 return;
             }
+
             try
             {
                 ImageSource toRemove = ServerIcons.Last();
@@ -366,6 +371,7 @@ namespace Fork.ViewModel
                 {
                     bitmap = ImageUtils.ResizeImage(image, 64, 64);
                 }
+
                 ImageSource img = ImageUtils.BitmapToImageSource(bitmap);
                 img.Freeze();
                 Application.Current.Dispatcher?.Invoke(() => ServerIcons.Add(img));
@@ -373,7 +379,8 @@ namespace Fork.ViewModel
                 {
                     SelectedServerIcon = img;
                 }
-                bitmap.Save(Path.Combine(App.ServerPath,Entity.Name,"custom-icon.png"));
+
+                bitmap.Save(Path.Combine(App.ServerPath, Entity.Name, "custom-icon.png"));
             }
             catch (Exception e)
             {
@@ -387,12 +394,14 @@ namespace Fork.ViewModel
             {
                 return;
             }
+
             SettingsSavingTask = SettingsViewModel.SaveChanges();
             Task.Run(() => SettingsSavingTask);
             if (this is ServerViewModel serverViewModel)
             {
                 ServerAutomationManager.Instance.UpdateAutomation(serverViewModel);
             }
+
             Task.Run(async () =>
             {
                 WriteServerIcon();
@@ -417,6 +426,7 @@ namespace Fork.ViewModel
                         }
                     }
                 }
+
                 EntitySerializer.Instance.StoreEntities();
             });
         }
@@ -427,10 +437,11 @@ namespace Fork.ViewModel
             {
                 if (message.Level == ConsoleMessage.MessageLevel.INFO)
                 {
-                    int threshold = (int) Math.Round(Math.Min(lastConsoleMessage.Content.Length, message.Content.Length) * 0.10);
-                    int dist = StringUtils.DamerauLevenshteinDistance(lastConsoleMessage.Content, 
+                    int threshold =
+                        (int) Math.Round(Math.Min(lastConsoleMessage.Content.Length, message.Content.Length) * 0.10);
+                    int dist = StringUtils.DamerauLevenshteinDistance(lastConsoleMessage.Content,
                         message.Content, threshold);
-                    if (dist < (threshold*5)/Math.Max(timeSinceLastConsoleMessage.Elapsed.TotalSeconds,1))
+                    if (dist < (threshold * 5) / Math.Max(timeSinceLastConsoleMessage.Elapsed.TotalSeconds, 1))
                     {
                         lastConsoleMessage.SubContents++;
                         return;
@@ -440,7 +451,7 @@ namespace Fork.ViewModel
                     {
                         return;
                     }
-                } 
+                }
 
                 try
                 {
@@ -510,7 +521,7 @@ namespace Fork.ViewModel
         {
             SettingsViewModel.InitializeSettings(files);
         }
-        
+
         public async Task UpdateSettingsFiles(List<string> fileNames)
         {
             await SettingsViewModel.UpdateSettings(fileNames);
@@ -564,6 +575,7 @@ namespace Fork.ViewModel
             {
                 //ignore, only errors rarely if collection was modified
             }
+
             raisePropertyChanged(nameof(CPUValue));
             raisePropertyChanged(nameof(CPUValueRaw));
         }
@@ -584,6 +596,7 @@ namespace Fork.ViewModel
             {
                 //ignore, only errors rarely if collection was modified
             }
+
             raisePropertyChanged(nameof(MemValue));
             raisePropertyChanged(nameof(MemValueRaw));
         }
@@ -599,9 +612,12 @@ namespace Fork.ViewModel
             try
             {
                 diskValue = diskList.Average();
-            } catch{
+            }
+            catch
+            {
                 //ignore, only errors rarely if collection was modified
             }
+
             raisePropertyChanged(nameof(DiskValue));
             raisePropertyChanged(nameof(DiskValueRaw));
         }
@@ -658,18 +674,23 @@ namespace Fork.ViewModel
             //CopyProgressReadable = Math.Round(CopyProgress, 0) + "%";
         }
 
+        public void ClearConsole()
+        {
+            Application.Current.Dispatcher.Invoke(() => ConsoleOutList.Clear());
+        }
+
         private void ConsoleOutChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             raisePropertyChanged(nameof(ConsoleOutList));
         }
 
-        public void StartSettingsReader()
+        protected void StartSettingsReader()
         {
             SettingsReader settingsReader = new SettingsReader(this);
             ApplicationManager.Instance.SettingsReaders.Add(settingsReader);
         }
-        
-        
+
+
         private void WriteServerIcon()
         {
             try
@@ -682,10 +703,12 @@ namespace Fork.ViewModel
                     customIcon.Delete();
                     return;
                 }
+
                 if (Entity.ServerIconId == 0)
                 {
                     return;
                 }
+
                 PngBitmapEncoder encoder = new PngBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create((BitmapSource) SelectedServerIcon));
                 using (FileStream fileStream = new FileStream(customIcon.FullName, FileMode.Create))

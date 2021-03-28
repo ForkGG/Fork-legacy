@@ -30,8 +30,9 @@ namespace Fork.View.Xaml2.Pages.Server
 
             PlayerToWhitelist.KeyDown += HandleKeyDownText;
 
-            //viewModel.ConsoleOutList.CollectionChanged += UpdateConsoleOut;
+            this.KeyDown += OnPageKeyDown;
         }
+
         #region autoscrolling
         /// <summary>
         /// Automatically scrolls the scrollviewer
@@ -122,10 +123,36 @@ namespace Fork.View.Xaml2.Pages.Server
             }
         }
 
+        private void OnPageKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F && e.KeyboardDevice.Modifiers == ModifierKeys.Control)
+            {
+                ToggleConsoleSearch();
+            } else if (e.Key == Key.Delete && e.KeyboardDevice.Modifiers == ModifierKeys.Control)
+            {
+                viewModel.ClearConsole();
+            }
+        }
+
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             string query = SearchBox.Text;
             viewModel.ApplySearchQueryToConsole(query);
+        }
+
+        private void SearchMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleConsoleSearch();
+        }
+        
+        private void ClearMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            viewModel.ClearConsole();
+        }
+
+        private void ToggleConsoleSearch()
+        {
+            SearchBox.Visibility = SearchBox.Visibility == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 }
