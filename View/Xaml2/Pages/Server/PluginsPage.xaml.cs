@@ -106,10 +106,5 @@ namespace Fork.View.Xaml2.Pages.Server
                 checkBox.IsEnabled = true;
             }
         }
-
-        private void Help_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
     }
 }

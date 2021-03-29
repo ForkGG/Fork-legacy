@@ -91,17 +91,18 @@ namespace Fork.Logic.Manager
             }
             
             APIController apiController = new APIController();
-            var result = await apiController.DownloadPluginAsync(plugin,
-                Path.Combine(App.ServerPath, viewModel.Entity.Name, "plugins",
-                    StringUtils.PluginNameToJarName(plugin.Name) + ".jar"));
-            
-            /*HttpClient httpClient = new HttpClient(new HttpClientHandler{AllowAutoRedirect = true});
-            Uri uri = new Uri(new PluginWebRequester().BuildDownloadURL(plugin));
-            HttpResponseMessage response = await httpClient.GetAsync(uri);
-            await using (var fileStream = new FileStream(Path.Combine(App.ServerPath, viewModel.Entity.Name, "plugins", StringUtils.PluginNameToJarName(plugin.Name)+ ".jar"), FileMode.Create))
+            try
             {
-                await response.Content.CopyToAsync(fileStream);
-            }*/
+                var result = await apiController.DownloadPluginAsync(plugin,
+                    Path.Combine(App.ServerPath, viewModel.Entity.Name, "plugins",
+                        StringUtils.PluginNameToJarName(plugin.Name) + ".jar"));
+            }
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
+                return false;
+            }
+            
             
             plugin.IsDownloaded = true;
             return true;
@@ -132,6 +133,7 @@ namespace Fork.Logic.Manager
             };
             Application.Current.Dispatcher?.Invoke(() => pluginViewModel.InstalledPlugins.Add(installedPlugin));
             installedPlugin.AfterInit(new StreamingContext());
+            //TODO attach something to update event
             Console.WriteLine("Installed Plugin "+installedPlugin.Name);
 
             return DownloadPlugin(installedPlugin, pluginViewModel.EntityViewModel).Result;

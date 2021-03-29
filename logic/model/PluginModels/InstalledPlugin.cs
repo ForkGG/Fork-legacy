@@ -1,13 +1,16 @@
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using System.Timers;
+using Fork.Annotations;
 using Fork.Logic.Model.PluginModels;
 using Fork.Logic.WebRequesters;
 using Timer = System.Timers.Timer;
 
 namespace Fork.logic.model.PluginModels
 {
-    public class InstalledPlugin
+    public class InstalledPlugin : INotifyPropertyChanged
     {
         public string Name { get; set; }
         public bool IsSpigetPlugin { get; set; }
@@ -67,6 +70,14 @@ namespace Fork.logic.model.PluginModels
                 LatestVersion = newVersion;
                 PluginUpdateEvent?.Invoke();
             }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
