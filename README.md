@@ -15,6 +15,12 @@
     <img src="https://img.shields.io/github/license/ChristianKern97/Fork?color=brightgreen">
   </a>
 </p>
+  
+<p align="center">
+  <img src="https://www.fork.gg/data/screenshots/aterminal.png" width="49%" />
+  <img src="https://www.fork.gg/data/screenshots/settings1.png" width="49%" />
+</p>
+  
 
 
 
