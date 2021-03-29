@@ -25,7 +25,7 @@ namespace Fork.View.Xaml2.Pages.Server
 
         private void OpenExplorer_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            string path = Path.Combine(App.ServerPath, viewModel.EntityViewModel.Entity.Name);
+            string path = Path.Combine(App.ServerPath, viewModel.EntityViewModel.Entity.Name,"plugins");
             Process.Start("explorer.exe", "-p, " + path);
         }
 

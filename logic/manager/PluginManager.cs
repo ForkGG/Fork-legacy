@@ -96,6 +96,10 @@ namespace Fork.Logic.Manager
                 var result = await apiController.DownloadPluginAsync(plugin,
                     Path.Combine(App.ServerPath, viewModel.Entity.Name, "plugins",
                         StringUtils.PluginNameToJarName(plugin.Name) + ".jar"));
+                if (result == null)
+                {
+                    return false;
+                }
             }
             catch (Exception e)
             {
