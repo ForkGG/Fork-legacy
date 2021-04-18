@@ -55,7 +55,7 @@ namespace Fork.Logic.WebRequesters
                 discordWebSocket.MessageReceived.Subscribe(HandleDiscordWebSocketMessage);
                 discordWebSocket.ReconnectionHappened.Subscribe(HandleDiscordWebSocketReconnection);
                 discordWebSocket.DisconnectionHappened.Subscribe(HandleDiscordWebSocketDisconnection);
-                discordWebSocket.Start();
+                Task.Run(() => discordWebSocket.Start());
                 Console.WriteLine("Started WebSocket Client for Discord bot");
                 exitEvent.WaitOne();
             }
