@@ -65,17 +65,9 @@ namespace Fork.Logic.Manager
             return await new PaperWebRequester().RequestLatestBuildId(version);
         }
 
-        public List<ServerVersion> GetSpigotVersions()
+        public async Task<List<ServerVersion>> GetSpigotVersions()
         {
-            ServerVersion version = new ServerVersion();
-            version.Version = "test";
-            version.JarLink = "NOT IMPLEMENTED";
-            version.Type = ServerVersion.VersionType.Spigot;
-            
-            List<ServerVersion> serverVersions = new List<ServerVersion>();
-            serverVersions.Add(version);
-
-            return serverVersions;
+            return await new SpigotWebRequester().RequestSpigotVersions();
         }
 
         private string GetJarURL(string jsonURL)

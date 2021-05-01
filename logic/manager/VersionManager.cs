@@ -25,7 +25,7 @@ namespace Fork.Logic.Manager
                 BungeeCordVersion.JarLink =
                     "https://ci.md-5.net/job/BungeeCord/lastSuccessfulBuild/artifact/bootstrap/target/BungeeCord.jar";
             });
-            Task.Run(() =>
+            Task.Run(async () =>
             {
                 List<ServerVersion> versions =
                     WebRequestManager.Instance.GetVanillaVersions(Manifest.VersionType.release);
@@ -41,7 +41,7 @@ namespace Fork.Logic.Manager
                     Application.Current?.Dispatcher?.InvokeAsync(() => paperVersions.Add(version));
                 }
 
-                versions = WebRequestManager.Instance.GetSpigotVersions();
+                versions = await WebRequestManager.Instance.GetSpigotVersions();
                 foreach (var version in versions)
                 {
                     Application.Current?.Dispatcher?.InvokeAsync(() => spigotVersions.Add(version));

@@ -317,19 +317,6 @@ namespace Fork.Logic.WebRequesters
             return JsonConvert.DeserializeObject<Category>(json);
         }
 
-        public string BuildDownloadURL(InstalledPlugin plugin)
-        {
-            if (plugin.Plugin.file.type.Equals("external"))
-            {
-                throw new ArgumentException("Download links for external plugins can not be built");
-            }
-
-            //string url = baseURL + "resources/" + plugin.SpigetId + "/download";
-            string url = "https://www.spigetmc.org/" + plugin.Plugin.file.url;
-
-            return url;
-        }
-
         private string BuildResourceURL(int pageSize, int page = 1, PluginEnums.Sorting sort = PluginEnums.Sorting.RATING)
         {
             string URL = baseURL + "resources/free";

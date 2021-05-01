@@ -185,6 +185,9 @@ namespace Fork.ViewModel
                     case ServerVersion.VersionType.Waterfall:
                         bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/Waterfall.png");
                         break;
+                    case ServerVersion.VersionType.BungeeCord:
+                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/Waterfall.png");
+                        break;
                     default:
                         return null;
                 }
@@ -212,6 +215,9 @@ namespace Fork.ViewModel
                         bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/SpigotW.png");
                         break;
                     case ServerVersion.VersionType.Waterfall:
+                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/WaterfallW.png");
+                        break;
+                    case ServerVersion.VersionType.BungeeCord:
                         bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/WaterfallW.png");
                         break;
                     default:

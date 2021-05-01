@@ -53,9 +53,8 @@ namespace Fork.View.Xaml2.Pages
         
         private void ServerTypeBungeeCord_Click(object sender, RoutedEventArgs e)
         {
-            //TODO
             SelectProxyType();
-            proxyType = ServerVersion.VersionType.Waterfall;
+            proxyType = ServerVersion.VersionType.BungeeCord;
         }
         
         private void ServerTypeWaterfall_Click(object sender, RoutedEventArgs e)

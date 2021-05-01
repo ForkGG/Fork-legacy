@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.DirectoryServices.ActiveDirectory;
 using System.IO;
 using System.IO.Compression;
 using System.Threading;
@@ -30,14 +31,22 @@ namespace Fork.Logic.Controller
     {
         public bool CreateNetwork(string networkName, ServerVersion.VersionType networkType, JavaSettings javaSettings, List<string> usedServerNames)
         {
-            if (networkType != ServerVersion.VersionType.Waterfall)
+            ServerVersion version;
+            switch (networkType)
             {
-                return false;
+                case ServerVersion.VersionType.Waterfall:
+                    version = VersionManager.Instance.WaterfallVersion;
+                    break;
+                case ServerVersion.VersionType.BungeeCord:
+                    version = VersionManager.Instance.BungeeCordVersion;
+                    break;
+                default:
+                    return false;
             }
             networkName = RefineName(networkName, usedServerNames);
             string serverPath = Path.Combine(App.ServerPath, networkName);
             DirectoryInfo directoryInfo = Directory.CreateDirectory(serverPath);
-            Network network = new Network(networkName, networkType, javaSettings, VersionManager.Instance.WaterfallVersion);
+            Network network = new Network(networkName, networkType, javaSettings, version);
             NetworkViewModel viewModel = new NetworkViewModel(network);
             ServerManager.Instance.AddEntity(viewModel);
             //Select Server
