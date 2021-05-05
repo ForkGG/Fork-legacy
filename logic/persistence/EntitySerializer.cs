@@ -71,12 +71,12 @@ namespace Fork.Logic.Persistence
         public ObservableCollection<Entity> LoadEntities()
         {
             FileInfo entitiesFile = new FileInfo(Path.Combine(App.ApplicationPath, "persistence", "entities.json"));
+            ObservableCollection<Entity> entityViewModels = new();
             if (!entitiesFile.Exists)
             {
-                return null;
+                return entityViewModels;
             }
             
-            ObservableCollection<Entity> entityViewModels = new();
             EntityLists entities = JsonConvert.DeserializeObject<EntityLists>(File.ReadAllText(entitiesFile.FullName));
             if (entities != null)
             {
