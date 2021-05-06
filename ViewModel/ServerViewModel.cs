@@ -138,12 +138,16 @@ namespace Fork.ViewModel
 
         public void RoleInputHandler(string line)
         {
-            new Thread(() =>
+            Task.Run(() =>
             {
+                while (!Initialized)
+                {
+                    Thread.Sleep(500);
+                }
                 whitelistUpdater.HandleOutputLine(line);
                 banlistUpdater.HandleOutputLine(line);
                 oplistUpdater.HandleOutputLine(line);
-            }) {IsBackground = true}.Start();
+            });
         }
 
         public void SetAutomationTime(AutomationTime automationTime)

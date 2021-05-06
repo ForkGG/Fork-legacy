@@ -567,14 +567,13 @@ namespace Fork.ViewModel
 
         public void CPUValueUpdate(double value)
         {
-            cpuList.Add(value);
-            if (cpuList.Count > 3)
-            {
-                cpuList.RemoveAt(0);
-            }
-
             try
             {
+                cpuList.Add(value);
+                if (cpuList.Count > 3)
+                {
+                    cpuList.RemoveAt(0);
+                }
                 cpuValue = cpuList.Average();
             }
             catch
