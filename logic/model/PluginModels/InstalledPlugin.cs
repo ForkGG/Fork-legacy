@@ -46,10 +46,7 @@ namespace Fork.logic.model.PluginModels
             if (IsSpigetPlugin)
             {
                 PluginWebRequester webRequester = new PluginWebRequester();
-                if (Plugin == null)
-                {
-                    Plugin = webRequester.RequestPlugin(SpigetId);
-                }
+                Plugin ??= webRequester.RequestPlugin(SpigetId);
 
                 LatestVersion = InstalledVersion;
                 Timer t = new Timer(1000 * 60 * 60 * 2);

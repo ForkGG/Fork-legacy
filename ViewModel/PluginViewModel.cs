@@ -45,10 +45,15 @@ namespace Fork.ViewModel
             {
                 if (!plugin.IsDownloaded)
                 {
-                    PluginManager.Instance.DownloadPluginAsync(plugin, entityViewModel);
+                    Task.Run(() => PluginManager.Instance.DownloadPluginAsync(plugin, entityViewModel));
                 }
             }
 
+            foreach (InstalledPlugin plugin in PluginManager.Instance.LoadInstalledPlugins(InstalledPlugins, entityViewModel))
+            {
+                InstalledPlugins.Add(plugin);
+            }
+            
             InstalledPlugins.CollectionChanged += InstalledPluginsChanged;
             
             Categories = new List<PluginCategory>{new PluginCategory{id=0,name="All Categories"}};

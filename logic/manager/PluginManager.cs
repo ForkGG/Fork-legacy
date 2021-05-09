@@ -17,12 +17,14 @@ using Fork.Logic.Persistence;
 using Fork.Logic.Utils;
 using Fork.Logic.WebRequesters;
 using Fork.ViewModel;
+using File = System.IO.File;
 
 namespace Fork.Logic.Manager
 {
     public class PluginManager
     {
         private static PluginManager instance;
+
         public static PluginManager Instance
         {
             get
@@ -52,7 +54,7 @@ namespace Fork.Logic.Manager
             bool r = await t;
             return r;
         }
-        
+
         public async Task<bool> DeletePluginAsync(InstalledPlugin plugin, PluginViewModel pluginViewModel)
         {
             Task<bool> t = new Task<bool>(() => DeletePlugin(plugin, pluginViewModel));
@@ -60,7 +62,7 @@ namespace Fork.Logic.Manager
             bool r = await t;
             return r;
         }
-        
+
         public async Task<bool> DisablePluginAsync(InstalledPlugin plugin, PluginViewModel pluginViewModel)
         {
             Task<bool> t = new Task<bool>(() => DisablePlugin(plugin, pluginViewModel));
@@ -68,6 +70,7 @@ namespace Fork.Logic.Manager
             bool r = await t;
             return r;
         }
+
         public async Task<bool> EnablePluginAsync(InstalledPlugin plugin, PluginViewModel pluginViewModel)
         {
             Task<bool> t = new Task<bool>(() => EnablePlugin(plugin, pluginViewModel));
@@ -76,6 +79,23 @@ namespace Fork.Logic.Manager
             return r;
         }
 
+        public List<InstalledPlugin> LoadInstalledPlugins(Collection<InstalledPlugin> alreadyTrackedPlugins,
+            EntityViewModel viewModel)
+        {
+            List<FileInfo> pluginFiles =
+                InstalledPluginSerializer.Instance.ReadPluginJarsFromDirectory(viewModel);
+            List<InstalledPlugin> result = new List<InstalledPlugin>();
+            foreach (FileInfo pluginFile in pluginFiles)
+            {
+                if (!alreadyTrackedPlugins.Any(plugin => plugin.Name.Equals(pluginFile.Name)))
+                {
+                    result.Add(new InstalledPlugin()
+                        {IsDownloaded = true, IsEnabled = true, IsSpigetPlugin = false, Name = pluginFile.Name});
+                }
+            }
+
+            return result;
+        }
 
 
         private async Task<bool> DownloadPlugin(InstalledPlugin plugin, EntityViewModel viewModel)
@@ -89,7 +109,7 @@ namespace Fork.Logic.Manager
             {
                 return false;
             }
-            
+
             APIController apiController = new APIController();
             try
             {
@@ -106,8 +126,8 @@ namespace Fork.Logic.Manager
                 ErrorLogger.Append(e);
                 return false;
             }
-            
-            
+
+
             plugin.IsDownloaded = true;
             return true;
         }
@@ -120,13 +140,14 @@ namespace Fork.Logic.Manager
                 {
                     continue;
                 }
+
                 if (iPlugin.Plugin.id == plugin.id)
                 {
-                    Console.WriteLine("Error installing plugin: Plugin "+plugin.name+" is already installed.");
+                    Console.WriteLine("Error installing plugin: Plugin " + plugin.name + " is already installed.");
                     return false;
                 }
             }
-            
+
             PluginWebRequester webRequester = new PluginWebRequester();
             InstalledPlugin installedPlugin = new InstalledPlugin
             {
@@ -138,7 +159,7 @@ namespace Fork.Logic.Manager
             Application.Current.Dispatcher?.Invoke(() => pluginViewModel.InstalledPlugins.Add(installedPlugin));
             installedPlugin.AfterInit(new StreamingContext());
             //TODO attach something to update event
-            Console.WriteLine("Installed Plugin "+installedPlugin.Name);
+            Console.WriteLine("Installed Plugin " + installedPlugin.Name);
 
             return DownloadPlugin(installedPlugin, pluginViewModel.EntityViewModel).Result;
         }
@@ -149,7 +170,7 @@ namespace Fork.Logic.Manager
             {
                 string folder = plugin.IsEnabled ? "plugins" : "plugins_disabled";
                 FileInfo jarFile = new FileInfo(Path.Combine(App.ServerPath,
-                    viewModel.EntityViewModel.Name, folder, StringUtils.PluginNameToJarName(plugin.Name)+".jar"));
+                    viewModel.EntityViewModel.Name, folder, StringUtils.PluginNameToJarName(plugin.Name) + ".jar"));
                 if (!jarFile.Exists)
                 {
                     ErrorLogger.Append(new ArgumentException(
@@ -159,16 +180,17 @@ namespace Fork.Logic.Manager
                 {
                     jarFile.Delete();
                 }
+
                 Application.Current.Dispatcher?.Invoke(() => viewModel.InstalledPlugins.Remove(plugin));
                 //Check if plugin is in loaded list currently (in that case change it to downlaodable)
                 viewModel.CheckForDeletedPlugin(plugin.Plugin);
-                Console.WriteLine("Deleted Plugin "+plugin.Name);
+                Console.WriteLine("Deleted Plugin " + plugin.Name);
                 return true;
             }
             catch (Exception e)
             {
                 ErrorLogger.Append(e);
-                Console.WriteLine("Error while deleting Plugin "+plugin.Name);
+                Console.WriteLine("Error while deleting Plugin " + plugin.Name);
                 return false;
             }
         }
@@ -181,33 +203,36 @@ namespace Fork.Logic.Manager
                 {
                     return true;
                 }
+
                 FileInfo jarFile = new FileInfo(Path.Combine(App.ServerPath,
-                    viewModel.EntityViewModel.Name, "plugins", StringUtils.PluginNameToJarName(plugin.Name)+".jar"));
+                    viewModel.EntityViewModel.Name, "plugins", StringUtils.PluginNameToJarName(plugin.Name) + ".jar"));
                 if (!jarFile.Exists)
                 {
                     ErrorLogger.Append(new ArgumentException(
-                        ".jar for plugin " + plugin.Name + " was not found. Can't disable it. Removing it from the list..."));
+                        ".jar for plugin " + plugin.Name +
+                        " was not found. Can't disable it. Removing it from the list..."));
                     Application.Current.Dispatcher?.Invoke(() => viewModel.InstalledPlugins.Remove(plugin));
                 }
                 else
                 {
-                    DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, 
+                    DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath,
                         viewModel.EntityViewModel.Name, "plugins_disabled"));
                     if (!directoryInfo.Exists)
                     {
                         directoryInfo.Create();
                     }
-                    jarFile.MoveTo(Path.Combine(directoryInfo.FullName,jarFile.Name), true);
+
+                    jarFile.MoveTo(Path.Combine(directoryInfo.FullName, jarFile.Name), true);
                 }
 
-                Console.WriteLine("Disabled Plugin "+plugin.Name);
+                Console.WriteLine("Disabled Plugin " + plugin.Name);
                 viewModel.DisablePlugin(plugin);
                 return true;
             }
             catch (Exception e)
             {
                 ErrorLogger.Append(e);
-                Console.WriteLine("Error while disabling Plugin "+plugin.Name);
+                Console.WriteLine("Error while disabling Plugin " + plugin.Name);
                 return false;
             }
         }
@@ -220,33 +245,37 @@ namespace Fork.Logic.Manager
                 {
                     return true;
                 }
+
                 FileInfo jarFile = new FileInfo(Path.Combine(App.ServerPath,
-                    viewModel.EntityViewModel.Name, "plugins_disabled", StringUtils.PluginNameToJarName(plugin.Name)+".jar"));
+                    viewModel.EntityViewModel.Name, "plugins_disabled",
+                    StringUtils.PluginNameToJarName(plugin.Name) + ".jar"));
                 if (!jarFile.Exists)
                 {
                     ErrorLogger.Append(new ArgumentException(
-                        ".jar for plugin " + plugin.Name + " was not found. Can't enable it. Removing it from the list..."));
+                        ".jar for plugin " + plugin.Name +
+                        " was not found. Can't enable it. Removing it from the list..."));
                     Application.Current.Dispatcher?.Invoke(() => viewModel.InstalledPlugins.Remove(plugin));
                 }
                 else
                 {
-                    DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath, 
+                    DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(App.ServerPath,
                         viewModel.EntityViewModel.Name, "plugins"));
                     if (!directoryInfo.Exists)
                     {
                         directoryInfo.Create();
                     }
-                    jarFile.MoveTo(Path.Combine(directoryInfo.FullName,jarFile.Name), true);
+
+                    jarFile.MoveTo(Path.Combine(directoryInfo.FullName, jarFile.Name), true);
                 }
 
-                Console.WriteLine("Enabled Plugin "+plugin.Name);
+                Console.WriteLine("Enabled Plugin " + plugin.Name);
                 viewModel.EnablePlugin(plugin);
                 return true;
             }
             catch (Exception e)
             {
                 ErrorLogger.Append(e);
-                Console.WriteLine("Error while enabling Plugin "+plugin.Name);
+                Console.WriteLine("Error while enabling Plugin " + plugin.Name);
                 return false;
             }
         }

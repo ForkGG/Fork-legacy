@@ -4,6 +4,7 @@ using System.IO;
 using Fork.logic.model.PluginModels;
 using Fork.Logic.Model.ProxyModels;
 using Fork.ViewModel;
+using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 
 namespace Fork.Logic.Persistence
@@ -28,11 +29,9 @@ namespace Fork.Logic.Persistence
             FileInfo entitiesFile = new FileInfo(Path.Combine(directoryInfo.FullName, "plugins.json"));
             lock (writeLock)
             {
-                using (FileStream fs = entitiesFile.Create())
-                using (StreamWriter sw = new StreamWriter(fs))
-                {
-                    sw.WriteLine(json);
-                }
+                using FileStream fs = entitiesFile.Create();
+                using StreamWriter sw = new StreamWriter(fs);
+                sw.WriteLine(json);
             }
         }
 
@@ -54,6 +53,27 @@ namespace Fork.Logic.Persistence
 
             //Overwrite json if any changes appeared while deserializing (Unset value set etc.)
             //StoreInstalledPlugins(result);
+            return result;
+        }
+
+        public List<FileInfo> ReadPluginJarsFromDirectory(EntityViewModel viewModel)
+        {
+            DirectoryInfo pluginDir = new DirectoryInfo(Path.Combine(App.ServerPath, viewModel.Entity.Name, "plugins"));
+            if (!pluginDir.Exists)
+            {
+                return new List<FileInfo>();
+            }
+
+            var files =pluginDir.GetFiles();
+            List<FileInfo> result = new List<FileInfo>(files.Length);
+            foreach (FileInfo fileInfo in files)
+            {
+                if (fileInfo.Extension.Equals("jar"))
+                {
+                    result.Add(fileInfo);
+                }
+            }
+
             return result;
         }
     }
