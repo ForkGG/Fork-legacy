@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -90,9 +91,9 @@ namespace Fork.Logic.Persistence
             }
             List<WhitelistedPlayer> playerList = JsonConvert.DeserializeObject<List<WhitelistedPlayer>>(json);
             List<string> names = new List<string>();
-            foreach (WhitelistedPlayer player in playerList)
+            if (playerList != null)
             {
-                names.Add(player.name);
+                names.AddRange(playerList.Select(player => player.name));
             }
             return names;
         }

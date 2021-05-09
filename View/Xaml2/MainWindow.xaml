@@ -432,7 +432,7 @@
                             Background="{DynamicResource textBackground}">
                         <TextBox Margin="5 0" Background="{DynamicResource textBackground}"
                                  x:Name="NewServerName" TextAlignment="Center"
-                                 BorderThickness="0" Text="{Binding SelectedEntity.Name, Mode=OneTime}"
+                                 BorderThickness="0" Text="{Binding SelectedEntity.Name}"
                                  Foreground="{DynamicResource backgroundDark}"
                                  FontFamily="{DynamicResource Montserrat-SemiBold}"
                                  FontSize="17" Height="20" />
