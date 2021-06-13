@@ -568,13 +568,13 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 -5">
                     <TextBlock Text="Oracle: " Margin="0 0 0 5" FontSize="15" Foreground="{DynamicResource textSelected}" LineHeight="28"
                            FontFamily="{DynamicResource Montserrat-SemiBold}"/>
-                    <TextBlock Text="https://www.oracle.com/java/technologies/javase-jdk11-downloads.html" FontSize="15"
+                    <TextBlock Text="https://www.oracle.com/java/technologies/javase-jdk16-downloads.html" FontSize="15"
                            FontFamily="{DynamicResource Montserrat-SemiBold}" Cursor="Hand" PreviewMouseLeftButtonDown="TextBlock_Link_MouseDown"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock Text="Corretto: " Margin="0 0 0 5" FontSize="15" Foreground="{DynamicResource textSelected}" LineHeight="28"
                            FontFamily="{DynamicResource Montserrat-SemiBold}"/>
-                    <TextBlock Text="https://corretto.aws/downloads/latest/amazon-corretto-11-x64-windows-jdk.msi" FontSize="15" 
+                    <TextBlock Text="https://corretto.aws/downloads/latest/amazon-corretto-16-x64-windows-jdk.msi" FontSize="15" 
                            FontFamily="{DynamicResource Montserrat-SemiBold}" Cursor="Hand" PreviewMouseLeftButtonDown="TextBlock_Link_MouseDown"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5 0 30">
