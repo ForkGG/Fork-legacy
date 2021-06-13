@@ -93,18 +93,16 @@ namespace Fork.ViewModel
                     "\nThis will cause issues if you want to use more than 1GB of RAM";
                 return;
             }
-
             
-            //TODO enable this at a latest point when new java versions don't cause issues anymore
-            /*if (InstalledJavaVersion.VersionComputed < 11)
+            if (InstalledJavaVersion.VersionComputed < 16)
             {
                 ShowJavaWarning = !ignoreWarnings;
                 JavaWarningMessage = 
                     "Old Java installation detected (Version "+InstalledJavaVersion.VersionComputed+")!" +
-                    "\nOlder Java versions will cause problems in the near future" +
-                    "\nWe recommend installing Java version 11 or higher for full support";
+                    "\nOlder Java versions will cause problems from Minecraft 1.17 onwards." +
+                    "\nWe recommend installing Java version 16 or higher for full support";
                 return;
-            }*/
+            }
 
             ShowJavaWarning = false;
             JavaWarningMessage = "";

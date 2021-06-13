@@ -130,9 +130,17 @@ namespace Fork.Logic.Controller
             {
                 ConsoleWriter.Write("WARN: The Java installation selected for this network is a 32-bit version, which can cause errors.", viewModel);
             }
-            if (javaVersion.VersionComputed < 11)
+            if (javaVersion.VersionComputed < 16)
             {
-                ConsoleWriter.Write("WARN: The Java installation selected for this network is outdated. Please update Java to version 11 or higher.", viewModel);
+                if (new ServerVersion {Version = "1.17"}.CompareTo(viewModel.Entity.Version) <= 0)
+                {
+                    ConsoleWriter.Write("ERROR: The Java installation selected for this network is outdated. Please update Java to version 16 or higher.", viewModel);
+                    return false;
+                }
+                else
+                {
+                    ConsoleWriter.Write("WARN: The Java installation selected for this network is outdated. Please update Java to version 16 or higher.", viewModel);
+                }
             }
             
             Process process = new Process();
