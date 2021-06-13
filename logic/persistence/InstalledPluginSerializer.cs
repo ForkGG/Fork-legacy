@@ -68,7 +68,7 @@ namespace Fork.Logic.Persistence
             List<FileInfo> result = new List<FileInfo>(files.Length);
             foreach (FileInfo fileInfo in files)
             {
-                if (fileInfo.Extension.Equals("jar"))
+                if (fileInfo.Extension.Equals(".jar"))
                 {
                     result.Add(fileInfo);
                 }

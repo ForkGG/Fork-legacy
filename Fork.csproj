@@ -237,4 +237,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="logic\BackupLogic" />
+  </ItemGroup>
+
 </Project>

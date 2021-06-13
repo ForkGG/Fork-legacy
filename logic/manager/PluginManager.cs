@@ -87,7 +87,7 @@ namespace Fork.Logic.Manager
             List<InstalledPlugin> result = new List<InstalledPlugin>();
             foreach (FileInfo pluginFile in pluginFiles)
             {
-                if (!alreadyTrackedPlugins.Any(plugin => plugin.Name.Equals(pluginFile.Name)))
+                if (!alreadyTrackedPlugins.Any(plugin => plugin.Name.Equals(pluginFile.Name.Split(".")[0])))
                 {
                     result.Add(new InstalledPlugin()
                         {IsDownloaded = true, IsEnabled = true, IsSpigetPlugin = false, Name = pluginFile.Name});
