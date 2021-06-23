@@ -94,6 +94,7 @@ namespace Fork.Logic.Manager
             {
                 case ServerVersion.VersionType.Paper:
                     return await WebRequestManager.Instance.GetLatestPaperBuild(version.Version);
+                //TODO Spigot
                 default:
                     return 0;
             }

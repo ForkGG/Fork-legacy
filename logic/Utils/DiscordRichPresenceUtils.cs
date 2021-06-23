@@ -4,6 +4,7 @@ using DiscordRPC;
 using DiscordRPC.Logging;
 using Fork.Logic.Manager;
 using Fork.Logic.Model;
+using Fork.Logic.Persistence;
 using Fork.ViewModel;
 
 namespace Fork.Logic.Utils
@@ -14,8 +15,13 @@ namespace Fork.Logic.Utils
 
         public static void SetupRichPresence()
         {
+            if (!AppSettingsSerializer.Instance.AppSettings.RichPresence)
+                return;
+            
             rpcClient = new DiscordRpcClient("795015105061847111");
 #if DEBUG
+            rpcClient.Logger = new ConsoleLogger(LogLevel.Error); // When debugging set this to `Trace`
+#else
             rpcClient.Logger = new ConsoleLogger(LogLevel.Error);
 #endif
             rpcClient.Initialize();
@@ -33,11 +39,13 @@ namespace Fork.Logic.Utils
             }
         }
         
-        public static void UpdateRichPresence()
+        private static void UpdateRichPresence()
         {
+            if(rpcClient == null)
+                return;
             int runningCount =
                 ServerManager.Instance.Entities.Count(entity => entity.CurrentStatus == ServerStatus.RUNNING);
-            string state = "";
+            string state;
             switch (runningCount)
             {
                 case 0:

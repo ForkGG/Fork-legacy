@@ -441,7 +441,7 @@ namespace Fork.ViewModel
         {
             lock (this)
             {
-                if (message.Level == ConsoleMessage.MessageLevel.INFO)
+                if (AppSettings.ConsoleThrottling && message.Level == ConsoleMessage.MessageLevel.INFO)
                 {
                     int threshold =
                         (int) Math.Round(Math.Min(lastConsoleMessage.Content.Length, message.Content.Length) * 0.10);
