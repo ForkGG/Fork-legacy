@@ -104,7 +104,7 @@ namespace Fork.Logic.RoleManagement
 
                 if (p == null)
                 {
-                    Console.WriteLine("Player "+name+" should be removed from a list, where he isn*t on");
+                    Console.WriteLine("Player "+name+" should be removed from a list, where he isn't on");
                     return;
                 }
                 Application.Current.Dispatcher.Invoke(() => playerList.Remove(p),DispatcherPriority.Background);
