@@ -13,7 +13,7 @@ namespace Fork.Logic.WebRequesters
     {
         public List<string> RequestPaperVersions()
         {
-            string url = "https://papermc.io/api/v1/paper/";
+            string url = "https://papermc.io/api/v2/projects/paper/";
             string json = ResponseCache.Instance.UncacheResponse(url);
             if (json == null)
             {
@@ -40,7 +40,7 @@ namespace Fork.Logic.WebRequesters
 
             PaperVersions paperVersions = JsonConvert.DeserializeObject<PaperVersions>(json);
 
-            if (paperVersions == null || !paperVersions.project.Equals("paper"))
+            if (paperVersions == null || !paperVersions.project_id.Equals("paper"))
             {
                 return null;
             }
@@ -74,7 +74,7 @@ namespace Fork.Logic.WebRequesters
 
         private class PaperVersions
         {
-            public string project;
+            public string project_id;
             public List<string> versions;
         }
     }
