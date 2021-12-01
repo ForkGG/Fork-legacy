@@ -13,7 +13,7 @@ namespace Fork.Logic.WebRequesters
     {
         public ServerVersion RequestLatestWaterfallVersion()
         {
-            string url = "https://papermc.io/api/v1/waterfall";
+            string url = "https://papermc.io/api/v2/projects/waterfall/";
             string json = ResponseCache.Instance.UncacheResponse(url);
             if (json == null)
             {
@@ -39,7 +39,7 @@ namespace Fork.Logic.WebRequesters
             }
 
             WaterfallVersions waterfallVersions = JsonConvert.DeserializeObject<WaterfallVersions>(json);
-            if (waterfallVersions == null || !waterfallVersions.project.Equals("waterfall"))
+            if (waterfallVersions == null || !waterfallVersions.project_id.Equals("waterfall"))
             {
                 return null;
             }
@@ -54,7 +54,7 @@ namespace Fork.Logic.WebRequesters
         
         private class WaterfallVersions
         {
-            public string project;
+            public string project_id;
             public List<string> versions;
         }
     }
