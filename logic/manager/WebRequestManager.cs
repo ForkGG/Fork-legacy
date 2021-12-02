@@ -53,7 +53,7 @@ namespace Fork.Logic.Manager
                 ServerVersion serverVersion = new ServerVersion();
                 serverVersion.Type = ServerVersion.VersionType.Paper;
                 serverVersion.Version = version;
-                serverVersion.JarLink = "https://papermc.io/api/v1/paper/" + version + "/latest/download";
+                serverVersion.JarLink = "https://thatstupidpaperremovedv1api.madebyitoncek.repl.co/api/v1/paper/" + version + "/latest/download";
                 versions.Add(serverVersion);
             }
 

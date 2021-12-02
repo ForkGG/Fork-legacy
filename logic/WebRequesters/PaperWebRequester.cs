@@ -13,7 +13,7 @@ namespace Fork.Logic.WebRequesters
     {
         public List<string> RequestPaperVersions()
         {
-            string url = "https://papermc.io/api/v2/projects/paper/";
+            string url = "https://thatstupidpaperremovedv1api.madebyitoncek.repl.co/api/v1/paper";
             string json = ResponseCache.Instance.UncacheResponse(url);
             if (json == null)
             {
@@ -49,7 +49,7 @@ namespace Fork.Logic.WebRequesters
 
         public async Task<int> RequestLatestBuildId(string version)
         {
-            string url = "https://papermc.io/api/v1/paper/"+version+"/latest/";
+            string url = "https://https://thatstupidpaperremovedv1api.madebyitoncek.repl.co/api/v1/paper/" + version+"/latest/";
             {
                 try
                 {
