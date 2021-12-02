@@ -13,7 +13,7 @@ namespace Fork.Logic.WebRequesters
     {
         public ServerVersion RequestLatestWaterfallVersion()
         {
-            string url = "https://papermc.io/api/v2/projects/waterfall/";
+            string url = "https://thatstupidpaperremovedv1api.madebyitoncek.repl.co/api/v1/waterfall";
             string json = ResponseCache.Instance.UncacheResponse(url);
             if (json == null)
             {
@@ -47,7 +47,7 @@ namespace Fork.Logic.WebRequesters
             ServerVersion waterfallVersion = new ServerVersion();
             waterfallVersion.Type = ServerVersion.VersionType.Waterfall;
             waterfallVersion.Version = waterfallVersions.versions[0];
-            waterfallVersion.JarLink = "https://papermc.io/api/v1/waterfall/" + waterfallVersions.versions[0] + "/latest/download";
+            waterfallVersion.JarLink = "https://thatstupidpaperremovedv1api.madebyitoncek.repl.co/api/v1/waterfall/" + waterfallVersions.versions[0] + "/latest/download";
 
             return waterfallVersion;
         }
