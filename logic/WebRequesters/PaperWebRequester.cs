@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Fork.Logic.Logging;
@@ -13,7 +14,7 @@ namespace Fork.Logic.WebRequesters
     {
         public List<string> RequestPaperVersions()
         {
-            string url = "https://thatstupidpaperremovedv1api.madebyitoncek.repl.co/api/v1/paper";
+            string url = "https://papermc.io/api/v2/projects/paper";
             string json = ResponseCache.Instance.UncacheResponse(url);
             if (json == null)
             {
@@ -44,12 +45,13 @@ namespace Fork.Logic.WebRequesters
             {
                 return null;
             }
-            return paperVersions.versions;
+
+            return paperVersions.versions.Reverse().ToList();
         }
 
         public async Task<int> RequestLatestBuildId(string version)
         {
-            string url = "https://https://thatstupidpaperremovedv1api.madebyitoncek.repl.co/api/v1/paper/" + version+"/latest/";
+            string url = "https://papermc.io/api/v2/projects/paper/versions/" + version;
             {
                 try
                 {
@@ -59,8 +61,8 @@ namespace Fork.Logic.WebRequesters
                     await using Stream stream = response.GetResponseStream();
                     using StreamReader reader = new StreamReader(stream);
                     string json = await reader.ReadToEndAsync();
-                    dynamic obj = JsonConvert.DeserializeObject(json);
-                    return obj.build;
+                    PaperVersion obj = JsonConvert.DeserializeObject<PaperVersion>(json); ;
+                    return obj.builds.LastOrDefault();
                 }
                 catch (Exception e)
                 {
@@ -75,7 +77,17 @@ namespace Fork.Logic.WebRequesters
         private class PaperVersions
         {
             public string project_id;
-            public List<string> versions;
+            public string project_name;
+            public string[] version_groups;
+            public string[] versions;
+        }
+
+        private class PaperVersion
+        {
+            public string project_id;
+            public string project_name;
+            public string version;
+            public int[] builds;
         }
     }
 }

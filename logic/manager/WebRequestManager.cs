@@ -37,7 +37,7 @@ namespace Fork.Logic.Manager
             return GetVanillaVersionsFromCache(type);
         }
 
-        public List<ServerVersion> GetPaperVersions()
+        public async Task<List<ServerVersion>> GetPaperVersions()
         {
             PaperWebRequester paperWebRequester = new PaperWebRequester();
             List<string> versionStrings = paperWebRequester.RequestPaperVersions();
@@ -53,7 +53,8 @@ namespace Fork.Logic.Manager
                 ServerVersion serverVersion = new ServerVersion();
                 serverVersion.Type = ServerVersion.VersionType.Paper;
                 serverVersion.Version = version;
-                serverVersion.JarLink = "https://thatstupidpaperremovedv1api.madebyitoncek.repl.co/api/v1/paper/" + version + "/latest/download";
+                int latestBuild = await paperWebRequester.RequestLatestBuildId(version);
+                serverVersion.JarLink = $"https://papermc.io/api/v2/projects/paper/versions/{version}/builds/{latestBuild}/downloads/paper-{version}-{latestBuild}.jar";
                 versions.Add(serverVersion);
             }
 
