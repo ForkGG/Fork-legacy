@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -99,19 +100,11 @@ namespace Fork.Logic.RoleManagement
             {
                 string name = removeMatch.Groups[1].Value;
                 Console.WriteLine("Player "+name+" removed from a list");
-                Player p = null;
-                foreach (Player player in playerList)
-                {
-                    if (player.Name.Equals(name))
-                    {
-                        p = player;
-                        break;
-                    }
-                }
+                Player p = playerList.FirstOrDefault(player => player.Name.Equals(name));
 
                 if (p == null)
                 {
-                    Console.WriteLine("Player "+name+" should be removed from a list, where he isn*t on");
+                    Console.WriteLine("Player "+name+" should be removed from a list, where he isn't on");
                     return;
                 }
                 Application.Current.Dispatcher.Invoke(() => playerList.Remove(p),DispatcherPriority.Background);

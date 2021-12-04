@@ -699,6 +699,7 @@ namespace Fork.Logic.Manager
                                                         " on Vanilla servers");
                     }
                 case ServerVersion.VersionType.Paper:
+                case ServerVersion.VersionType.Spigot:
                     switch (dimension)
                     {
                         case MinecraftDimension.Nether:
