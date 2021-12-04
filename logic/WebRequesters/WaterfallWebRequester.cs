@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using Fork.Logic.Logging;
 using Fork.Logic.Manager;
 using Fork.Logic.Model;
@@ -11,9 +13,9 @@ namespace Fork.Logic.WebRequesters
 {
     public class WaterfallWebRequester
     {
-        public ServerVersion RequestLatestWaterfallVersion()
+        public async Task<ServerVersion> RequestLatestWaterfallVersion()
         {
-            string url = "https://papermc.io/api/v1/waterfall";
+            string url = "https://papermc.io/api/v2/projects/waterfall";
             string json = ResponseCache.Instance.UncacheResponse(url);
             if (json == null)
             {
@@ -26,7 +28,7 @@ namespace Fork.Logic.WebRequesters
                     using (Stream stream = response.GetResponseStream())
                     using (StreamReader reader = new StreamReader(stream))
                     {
-                        json = reader.ReadToEnd();
+                        json = await reader.ReadToEndAsync();
                     }
 
                     ResponseCache.Instance.CacheResponse(url, json);
@@ -39,23 +41,62 @@ namespace Fork.Logic.WebRequesters
             }
 
             WaterfallVersions waterfallVersions = JsonConvert.DeserializeObject<WaterfallVersions>(json);
-            if (waterfallVersions == null || !waterfallVersions.project.Equals("waterfall"))
+            if (waterfallVersions == null || !waterfallVersions.project_id.Equals("waterfall"))
             {
                 return null;
             }
             
+            string version = waterfallVersions.versions.Reverse().FirstOrDefault();
+            int build = await RequestLatestBuildId(version);
             ServerVersion waterfallVersion = new ServerVersion();
             waterfallVersion.Type = ServerVersion.VersionType.Waterfall;
-            waterfallVersion.Version = waterfallVersions.versions[0];
-            waterfallVersion.JarLink = "https://papermc.io/api/v1/waterfall/" + waterfallVersions.versions[0] + "/latest/download";
+            waterfallVersion.Version = version;
+            waterfallVersion.JarLink = "https://thatstupidpaperremovedv1api.madebyitoncek.repl.co/api/v1/waterfall/" + waterfallVersions.versions[0] + "/latest/download";
+            waterfallVersion.JarLink =
+                $"https://papermc.io/api/v2/projects/waterfall/versions/{version}/builds/{build}/downloads/waterfall-{version}-{build}.jar";
+
 
             return waterfallVersion;
+        }
+
+        private async Task<int> RequestLatestBuildId(string version)
+        {
+            string url = "https://papermc.io/api/v2/projects/waterfall/versions/" + version;
+            {
+                try
+                {
+                    HttpWebRequest request = WebRequest.CreateHttp(url);
+                    request.UserAgent = ApplicationManager.UserAgent;
+                    using var response = request.GetResponse();
+                    await using Stream stream = response.GetResponseStream();
+                    using StreamReader reader = new StreamReader(stream);
+                    string json = await reader.ReadToEndAsync();
+                    WaterfallVersion obj = JsonConvert.DeserializeObject<WaterfallVersion>(json);
+                    return obj.builds.LastOrDefault();
+                }
+                catch (Exception e)
+                {
+                    ErrorLogger.Append(e);
+                    Console.WriteLine("Could not get latest build id for paper version " + version);
+                    return 0;
+                }
+            }
         }
         
         private class WaterfallVersions
         {
-            public string project;
-            public List<string> versions;
+            public string project_id;
+            public string project_name;
+            public string[] version_groups;
+            public string[] versions;
+        }
+
+        private class WaterfallVersion
+        {
+            public string project_id;
+            public string project_name;
+            public string version;
+            public int[] builds;
         }
     }
 }
