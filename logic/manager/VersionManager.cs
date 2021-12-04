@@ -16,7 +16,7 @@ namespace Fork.Logic.Manager
 
         private VersionManager()
         {
-            Task.Run(() => { WaterfallVersion = new WaterfallWebRequester().RequestLatestWaterfallVersion(); });
+            Task.Run(async () => { WaterfallVersion = await new WaterfallWebRequester().RequestLatestWaterfallVersion(); });
             Task.Run(() =>
             {
                 BungeeCordVersion = new ServerVersion();
@@ -35,7 +35,7 @@ namespace Fork.Logic.Manager
                         DispatcherPriority.Background);
                 }
 
-                versions = WebRequestManager.Instance.GetPaperVersions();
+                versions = await WebRequestManager.Instance.GetPaperVersions();
                 foreach (var version in versions)
                 {
                     Application.Current?.Dispatcher?.InvokeAsync(() => paperVersions.Add(version));
@@ -94,6 +94,7 @@ namespace Fork.Logic.Manager
             {
                 case ServerVersion.VersionType.Paper:
                     return await WebRequestManager.Instance.GetLatestPaperBuild(version.Version);
+                //TODO Spigot
                 default:
                     return 0;
             }

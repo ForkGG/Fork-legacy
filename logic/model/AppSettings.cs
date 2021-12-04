@@ -11,6 +11,8 @@ namespace Fork.Logic.Model
         public bool EnableDiscordBot { get; set; } = false;
         public string DiscordBotToken { get; set; }
         public bool UseBetaVersions { get; set; } = false;
+        public bool ConsoleThrottling { get; set; } = true;
+        public bool RichPresence { get; set; } = true;
         public bool SendTelemetry { get; set; } = false;
     }
 }

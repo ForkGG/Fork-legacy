@@ -25,7 +25,7 @@
 
 
 ## Installation
-- Download the [Launcher](https://www.Fork.gg/downloads/launcher/ForkLauncher.exe) 
+- Download the [Launcher](https://api.fork.gg/download/launcher) 
 - Run the Launcher and enjoy
 
 ## Useful Links:
