@@ -11,8 +11,10 @@ namespace Fork.Logic.Model
         public enum VersionType
         {
             Vanilla,
+            Snapshot,
             Paper,
-            Spigot,
+            Purpur,
+            Fabric,
             Waterfall,
             BungeeCord
         }
@@ -25,10 +27,8 @@ namespace Fork.Logic.Model
         public int Build { get; set; } = 0;
         public string JarLink { get; set; }
         [JsonIgnore] public bool IsProxy => Type == VersionType.Waterfall;
-        [JsonIgnore] public bool SupportBuilds => Type == VersionType.Paper;
-
-        [JsonIgnore]
-        public bool HasPlugins => Type == VersionType.Paper || Type == VersionType.Spigot;
+        [JsonIgnore] public bool SupportBuilds => Type == VersionType.Paper || Type == VersionType.Purpur;
+        public bool HasPlugins => Type == VersionType.Paper || Type == VersionType.Purpur;
 
         public ServerVersion()
         {

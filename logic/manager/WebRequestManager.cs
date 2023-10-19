@@ -61,14 +61,24 @@ namespace Fork.Logic.Manager
             return versions;
         }
 
+
+        public async Task<List<ServerVersion>> GetSnapshotVersions()
+        {
+            return await new SnapshotWebRequester().RequestSnapshotVersions();
+        }
         public async Task<int> GetLatestPaperBuild(string version)
         {
             return await new PaperWebRequester().RequestLatestBuildId(version);
         }
 
-        public async Task<List<ServerVersion>> GetSpigotVersions()
+        public async Task<List<ServerVersion>> GetPurpurVersions()
         {
-            return await new SpigotWebRequester().RequestSpigotVersions();
+            return await new PurpurWebRequester().RequestPurpurVersions();
+        }
+
+        public async Task<List<ServerVersion>> GetFabricVersions()
+        {
+            return await new FabricWebRequester().RequestFabricVersions();
         }
 
         private string GetJarURL(string jsonURL)

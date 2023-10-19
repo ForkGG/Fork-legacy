@@ -37,15 +37,27 @@ namespace Fork.View.Xaml2.Pages
             versionComboBox.SelectedIndex = 0;
         }
 
+        private void ServerTypeSnapshot_Click(object sender, RoutedEventArgs e)
+        {
+            versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.SnapshotServerVersions });
+            versionComboBox.SelectedIndex = 0;
+        }
+
         private void ServerTypePaper_Click(object sender, RoutedEventArgs e)
         {
             versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.PaperVersions });
             versionComboBox.SelectedIndex = 0;
         }
 
-        private void ServerTypeSpigot_Click(object sender, RoutedEventArgs e)
+        private void ServerTypePurpur_Click(object sender, RoutedEventArgs e)
         {
-            versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.SpigotServerVersions });
+            versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.PurpurVersions });
+            versionComboBox.SelectedIndex = 0;
+        }
+
+        private void ServerTypeFabric_Click(object sender, RoutedEventArgs e)
+        {
+            versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.FabricServerVersions });
             versionComboBox.SelectedIndex = 0;
         }
         

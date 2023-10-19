@@ -176,11 +176,17 @@ namespace Fork.ViewModel
                     case ServerVersion.VersionType.Vanilla:
                         bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/Vanilla.png");
                         break;
+                    case ServerVersion.VersionType.Snapshot:
+                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/Snapshot.png");
+                        break;
                     case ServerVersion.VersionType.Paper:
                         bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/Paper.png");
                         break;
-                    case ServerVersion.VersionType.Spigot:
-                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/Spigot.png");
+                    case ServerVersion.VersionType.Purpur:
+                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/Purpur.png");
+                        break;
+                    case ServerVersion.VersionType.Fabric:
+                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/Fabric.png");
                         break;
                     case ServerVersion.VersionType.Waterfall:
                         bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/Waterfall.png");
@@ -208,11 +214,17 @@ namespace Fork.ViewModel
                     case ServerVersion.VersionType.Vanilla:
                         bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/VanillaW.png");
                         break;
+                    case ServerVersion.VersionType.Snapshot:
+                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/SnapshotW.png");
+                        break;
                     case ServerVersion.VersionType.Paper:
                         bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/PaperW.png");
                         break;
-                    case ServerVersion.VersionType.Spigot:
-                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/SpigotW.png");
+                    case ServerVersion.VersionType.Purpur:
+                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/PurpurW.png");
+                        break;
+                    case ServerVersion.VersionType.Fabric:
+                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/FabricW.png");
                         break;
                     case ServerVersion.VersionType.Waterfall:
                         bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/WaterfallW.png");

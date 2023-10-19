@@ -12,8 +12,10 @@ namespace Fork.ViewModel
     {
 
         public ObservableCollection<ServerVersion> VanillaServerVersions { get; set; } 
+        public ObservableCollection<ServerVersion> SnapshotServerVersions { get; set; } 
         public ObservableCollection<ServerVersion> PaperVersions { get; set; }
-        public ObservableCollection<ServerVersion> SpigotServerVersions { get; set; }
+        public ObservableCollection<ServerVersion> PurpurVersions { get; set; }
+        public ObservableCollection<ServerVersion> FabricServerVersions { get; set; }
         public ServerSettings ServerSettings { get; set; }
         public bool DownloadCompleted { get; set; }
 
@@ -24,8 +26,10 @@ namespace Fork.ViewModel
         public AddServerViewModel()
         {
             VanillaServerVersions = VersionManager.Instance.VanillaVersions;
+            SnapshotServerVersions = VersionManager.Instance.SnapshotVersions;
             PaperVersions = VersionManager.Instance.PaperVersions;
-            SpigotServerVersions = VersionManager.Instance.SpigotVersions;
+            PurpurVersions = VersionManager.Instance.PurpurVersions;
+            FabricServerVersions = VersionManager.Instance.FabricVersions;
             GenerateNewSettings();
         }
 

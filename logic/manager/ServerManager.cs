@@ -698,8 +698,21 @@ namespace Fork.Logic.Manager
                             throw new ArgumentException("No implementation for deletion of dimension " + dimension +
                                                         " on Vanilla servers");
                     }
+                case ServerVersion.VersionType.Snapshot:
+                    switch (dimension)
+                    {
+                        case MinecraftDimension.Nether:
+                            return new DirectoryInfo(Path.Combine(worldFolder, "DIM-1"));
+                        case MinecraftDimension.End:
+                            return new DirectoryInfo(
+                                Path.Combine(worldFolder, "DIM1"));
+                        default:
+                            throw new ArgumentException("No implementation for deletion of dimension " + dimension +
+                                                        " on Snapshot servers");
+                    }
                 case ServerVersion.VersionType.Paper:
-                case ServerVersion.VersionType.Spigot:
+                case ServerVersion.VersionType.Purpur:
+                case ServerVersion.VersionType.Fabric:
                     switch (dimension)
                     {
                         case MinecraftDimension.Nether:

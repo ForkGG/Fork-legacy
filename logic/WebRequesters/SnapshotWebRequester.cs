@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -12,11 +12,11 @@ using Newtonsoft.Json;
 
 namespace Fork.Logic.WebRequesters
 {
-    public class SpigotWebRequester
+    public class SnapshotWebRequester
     {
-        public async Task<List<ServerVersion>> RequestSpigotVersions()
+        public async Task<List<ServerVersion>> RequestSnapshotVersions()
         {
-            string url = "https://serverjars.com/api/fetchAll/spigot";
+            string url = "https://serverjars.com/api/fetchAll/vanilla/snapshot";
             string json = ResponseCache.Instance.UncacheResponse(url);
             if (json == null)
             {
@@ -43,7 +43,7 @@ namespace Fork.Logic.WebRequesters
                 {
                     ErrorLogger.Append(e);
                     Console.WriteLine(
-                        "Could not receive Spigot Versions (either serverjars.com is down or your Internet connection is not working)");
+                        "Could not receive Snapshot Versions (either serverjars.com is down or your Internet connection is not working)");
                     return new ();
                 }
                 catch (Exception e)
@@ -61,9 +61,9 @@ namespace Fork.Logic.WebRequesters
             foreach (dynamic version in dyn)
             {
                 ServerVersion serverVersion = new ServerVersion();
-                serverVersion.Type = ServerVersion.VersionType.Spigot;
+                serverVersion.Type = ServerVersion.VersionType.Snapshot;
                 serverVersion.Version = version.version;
-                serverVersion.JarLink = "https://serverjars.com/api/fetchJar/spigot/" + version.version;
+                serverVersion.JarLink = "https://serverjars.com/api/fetchJar/vanilla/snapshot/" + version.version;
                 result.Add(serverVersion);
             }
 
