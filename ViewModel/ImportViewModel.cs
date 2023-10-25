@@ -15,6 +15,7 @@ namespace Fork.ViewModel
         public ObservableCollection<ServerVersion> SnapshotServerVersions { get; set; } 
         public ObservableCollection<ServerVersion> PaperVersions { get; set; }
         public ObservableCollection<ServerVersion> PurpurVersions { get; set; }
+        public ObservableCollection<ServerVersion> SpigotVersions { get; set; }
         public ObservableCollection<ServerVersion> FabricServerVersions { get; set; }
         public ServerSettings ServerSettings { get; set; }
         public double DownloadProgress { get; set; }
@@ -35,6 +36,7 @@ namespace Fork.ViewModel
             SnapshotServerVersions = VersionManager.Instance.SnapshotVersions;
             PaperVersions = VersionManager.Instance.PaperVersions;
             PurpurVersions = VersionManager.Instance.PurpurVersions;
+            SpigotVersions = VersionManager.Instance.SpigotVersions;
             FabricServerVersions = VersionManager.Instance.FabricVersions;
             ServerSettings = new ServerSettings("world");
         }

@@ -57,6 +57,9 @@
     <None Remove="View\Resources\images\Icons\Paper.png" />
     <None Remove="View\Resources\images\Icons\PaperD.png" />
     <None Remove="View\Resources\images\Icons\PaperW.png" />
+    <None Remove="View\Resources\images\Icons\Spigot.png" />
+    <None Remove="View\Resources\images\Icons\SpigotD.png" />
+    <None Remove="View\Resources\images\Icons\SpigotW.png" />
     <None Remove="View\Resources\images\Icons\Purpur.png" />
     <None Remove="View\Resources\images\Icons\PurpurD.png" />
     <None Remove="View\Resources\images\Icons\PurpurW.png" />
@@ -182,6 +185,9 @@
     <Resource Include="View\Resources\images\Icons\Paper.png" />
     <Resource Include="View\Resources\images\Icons\PaperD.png" />
     <Resource Include="View\Resources\images\Icons\PaperW.png" />
+    <Resource Include="View\Resources\images\Icons\Spigot.png" />
+    <Resource Include="View\Resources\images\Icons\SpigotD.png" />
+    <Resource Include="View\Resources\images\Icons\SpigotW.png" />
     <Resource Include="View\Resources\images\Icons\Purpur.png" />
     <Resource Include="View\Resources\images\Icons\PurpurD.png" />
     <Resource Include="View\Resources\images\Icons\PurpurW.png" />

@@ -51,6 +51,12 @@ namespace Fork.Logic.Manager
                     Application.Current?.Dispatcher?.InvokeAsync(() => purpurVersions.Add(version));
                 }
 
+                versions = await WebRequestManager.Instance.GetSpigotVersions();
+                foreach (var version in versions)
+                {
+                    Application.Current?.Dispatcher?.InvokeAsync(() => spigotVersions.Add(version));
+                }
+
                 versions = await WebRequestManager.Instance.GetFabricVersions();
                 foreach (var version in versions)
                 {
@@ -71,6 +77,7 @@ namespace Fork.Logic.Manager
 
         private ObservableCollection<ServerVersion> vanillaVersions = new ObservableCollection<ServerVersion>();
         private ObservableCollection<ServerVersion> snapshotVersions = new ObservableCollection<ServerVersion>();
+        private ObservableCollection<ServerVersion> spigotVersions = new ObservableCollection<ServerVersion>();
         private ObservableCollection<ServerVersion> fabricVersions = new ObservableCollection<ServerVersion>();
         private ObservableCollection<ServerVersion> paperVersions = new ObservableCollection<ServerVersion>();
         private ObservableCollection<ServerVersion> purpurVersions = new ObservableCollection<ServerVersion>();
@@ -95,6 +102,11 @@ namespace Fork.Logic.Manager
         /// The property that holds all PurpurMC Server versions
         /// </summary>
         public ObservableCollection<ServerVersion> PurpurVersions => purpurVersions;
+
+        /// <summary>
+        /// The property that holds all Minecraft Spigot Server versions
+        /// </summary>
+        public ObservableCollection<ServerVersion> SpigotVersions => spigotVersions;
 
         /// <summary>
         /// The property that holds all Minecraft Fabric Server versions

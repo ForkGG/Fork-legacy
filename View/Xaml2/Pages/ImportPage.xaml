@@ -27,31 +27,32 @@
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/VanillaW.png"
                                                 Header="Vanilla" GroupName="serverTypes" Margin="10 10" IsChecked="True" 
                                                 Click="ServerTypeVanilla_Click"/>
-                <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/SnapshotD.png" 
-                                                HoverIconSource="pack://application:,,,/View/Resources/images/Icons/SnapshotW.png"
-                                                 Header="Snapshot" GroupName="serverTypes" Margin="10 10" IsEnabled="False"
-                                                Click="ServerTypeSnapshot_Click"/>
                 <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/PaperD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/PaperW.png"
                                                  Header="Paper" GroupName="serverTypes" Margin="10 10"
-                                                Click="ServerTypePaper_Click"/>
-                <!--controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/PurpurD.png" 
+                                                Click="ServerTypePaper_Click"/>                                                
+                <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/SnapshotD.png"
+                                                HoverIconSource="pack://application:,,,/View/Resources/images/Icons/SnapshotW.png"
+                                                 Header="Snapshot" GroupName="serverTypes" Margin="10 10"
+                                                Click="ServerTypeSnapshot_Click"/>
+                <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/PurpurD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/PurpurW.png"
                                                  Header="Purpur" GroupName="serverTypes" Margin="10 10"
                                                 Click="ServerTypePurpur_Click"/>
                 <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/FabricD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/FabricW.png"
-                                                 Header="Fabric" GroupName="serverTypes" Margin="10 10" IsEnabled="False"
+                                                 Header="Fabric" GroupName="serverTypes" Margin="10 10"
                                                 Click="ServerTypeFabric_Click"/>
-                <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/BukkitD.png" 
+                <!--controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/BukkitD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/BukkitW.png"
                                                  Header="Bukkit" GroupName="serverTypes" Margin="10 10" IsEnabled="False"/>
-                <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/BungeeCordD.png" 
-                                                HoverIconSource="pack://application:,,,/View/Resources/images/Icons/BungeeCordW.png"
-                                                 Header="BungeeCord" GroupName="serverTypes" Margin="10 10" IsEnabled="False"/>
                 <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/WaterfallD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/WaterfallW.png"
-                                                 Header="Waterfall" GroupName="serverTypes" Margin="10 10" IsEnabled="False"/-->
+                                                 Header="Waterfall" GroupName="serverTypes" Margin="10 10"   
+                <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/BungeeCordD.png" 
+                                                HoverIconSource="pack://application:,,,/View/Resources/images/Icons/BungeeCordW.png"
+                                                 Header="BungeeCord" GroupName="serverTypes" Margin="10 10" IsEnabled="False"/-->
+
             </WrapPanel>
         </StackPanel>
                 <Border.Style>

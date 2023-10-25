@@ -8,6 +8,7 @@
             Snapshot,
             Paper,
             Purpur,
+            Spigot,
             Fabric,
             Waterfall,
             BungeeCord

@@ -699,16 +699,16 @@ namespace Fork.Logic.Manager
                                                         " on Vanilla servers");
                     }
                 case ServerVersion.VersionType.Snapshot:
+                case ServerVersion.VersionType.Spigot:
                     switch (dimension)
                     {
                         case MinecraftDimension.Nether:
-                            return new DirectoryInfo(Path.Combine(worldFolder, "DIM-1"));
+                            return new DirectoryInfo(worldFolder + "_nether");
                         case MinecraftDimension.End:
-                            return new DirectoryInfo(
-                                Path.Combine(worldFolder, "DIM1"));
+                            return new DirectoryInfo(worldFolder + "_the_end");
                         default:
                             throw new ArgumentException("No implementation for deletion of dimension " + dimension +
-                                                        " on Snapshot servers");
+                                                        " on Spigot servers");
                     }
                 case ServerVersion.VersionType.Paper:
                 case ServerVersion.VersionType.Purpur:
@@ -721,7 +721,7 @@ namespace Fork.Logic.Manager
                             return new DirectoryInfo(worldFolder + "_the_end");
                         default:
                             throw new ArgumentException("No implementation for deletion of dimension " + dimension +
-                                                        " on Paper servers");
+                                                        " on Fabric servers");
                     }
                 default:
                     throw new ArgumentException("No implementation for deletion of " + server.Version.Type +

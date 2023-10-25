@@ -76,6 +76,11 @@ namespace Fork.Logic.Manager
             return await new PurpurWebRequester().RequestPurpurVersions();
         }
 
+        public async Task<List<ServerVersion>> GetSpigotVersions()
+        {
+            return await new SpigotWebRequester().RequestSpigotVersions();
+        }
+
         public async Task<List<ServerVersion>> GetFabricVersions()
         {
             return await new FabricWebRequester().RequestFabricVersions();

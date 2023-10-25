@@ -79,6 +79,10 @@ namespace Fork.ViewModel
             {
                 Versions = VersionManager.Instance.PurpurVersions;
             } 
+            else if (Server.Version.Type == ServerVersion.VersionType.Spigot)
+            {
+                Versions = VersionManager.Instance.SpigotVersions;
+            } 
             else if (Server.Version.Type == ServerVersion.VersionType.Fabric)
             {
                 Versions = VersionManager.Instance.FabricVersions;

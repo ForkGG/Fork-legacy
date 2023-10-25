@@ -14,6 +14,7 @@ namespace Fork.Logic.Model
             Snapshot,
             Paper,
             Purpur,
+            Spigot,
             Fabric,
             Waterfall,
             BungeeCord

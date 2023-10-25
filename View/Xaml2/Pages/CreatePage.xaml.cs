@@ -37,17 +37,29 @@ namespace Fork.View.Xaml2.Pages
             versionComboBox.SelectedIndex = 0;
         }
 
-        private void ServerTypeSnapshot_Click(object sender, RoutedEventArgs e)
-        {
-            UnSelectProxyType();
-            versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.SnapshotServerVersions });
-            versionComboBox.SelectedIndex = 0;
-        }
-
         private void ServerTypePaper_Click(object sender, RoutedEventArgs e)
         {
             UnSelectProxyType();
             versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.PaperVersions });
+            versionComboBox.SelectedIndex = 0;
+        }  
+
+        private void ServerTypeWaterfall_Click(object sender, RoutedEventArgs e)
+        {
+            SelectProxyType();
+            proxyType = ServerVersion.VersionType.Waterfall;
+        }
+
+        private void ServerTypeBungeeCord_Click(object sender, RoutedEventArgs e)
+        {
+            SelectProxyType();
+            proxyType = ServerVersion.VersionType.BungeeCord;
+        }        
+        
+        private void ServerTypeSnapshot_Click(object sender, RoutedEventArgs e)
+        {
+            UnSelectProxyType();
+            versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.SnapshotServerVersions });
             versionComboBox.SelectedIndex = 0;
         }
 
@@ -63,18 +75,6 @@ namespace Fork.View.Xaml2.Pages
             UnSelectProxyType();
             versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.FabricServerVersions });
             versionComboBox.SelectedIndex = 0;
-        }
-        
-        private void ServerTypeBungeeCord_Click(object sender, RoutedEventArgs e)
-        {
-            SelectProxyType();
-            proxyType = ServerVersion.VersionType.BungeeCord;
-        }
-        
-        private void ServerTypeWaterfall_Click(object sender, RoutedEventArgs e)
-        {
-            SelectProxyType();
-            proxyType = ServerVersion.VersionType.Waterfall;
         }
 
         private void SelectProxyType()

@@ -185,6 +185,9 @@ namespace Fork.ViewModel
                     case ServerVersion.VersionType.Purpur:
                         bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/Purpur.png");
                         break;
+                    case ServerVersion.VersionType.Spigot:
+                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/Spigot.png");
+                        break;
                     case ServerVersion.VersionType.Fabric:
                         bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/Fabric.png");
                         break;
@@ -222,6 +225,9 @@ namespace Fork.ViewModel
                         break;
                     case ServerVersion.VersionType.Purpur:
                         bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/PurpurW.png");
+                        break;
+                    case ServerVersion.VersionType.Spigot:
+                        bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/SpigotW.png");
                         break;
                     case ServerVersion.VersionType.Fabric:
                         bi3.UriSource = new Uri("pack://application:,,,/View/Resources/images/Icons/FabricW.png");

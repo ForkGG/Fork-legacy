@@ -55,6 +55,7 @@ namespace Fork.Logic.BackgroundWorker
             new Regex(@"\[([0-9]+:*)+ INFO\]: ([0-9a-zA-Z_]+) joined the game$");
         private Regex playerJoinPaper2 =
             new Regex(@"\[([0-9]+:*)+ INFO\]: ([A-Za-z0-9_]+)\[.*\] logged in with entity id [0-9]+ at \(.*\)$");
+        private Regex playerJoinSpigot = new Regex(@"\[([0-9]+:*)+\] \[Server thread\/INFO\]: ([0-9a-zA-Z_]+)\[.*\] logged in with entity id [0-9]+ at .*$");
         private Regex playerJoinFabric = new Regex(@"\[([0-9]+:*)+\] \[Server thread\/INFO\]: ([0-9a-zA-Z_]+)\[.*\] logged in with entity id [0-9]+ at .*$");
 
         private Regex playerLeave =
@@ -83,6 +84,10 @@ namespace Fork.Logic.BackgroundWorker
                     case ServerVersion.VersionType.Purpur:
                         HandlePlayerJoinLeave(line, viewModel, playerJoinPurpur, playerLeavePurpur);
                         //HandlePlayerJoinLeave(line,viewModel, playerJoinPurpur2, playerLeavePurpur);
+                        break;
+                    case ServerVersion.VersionType.Spigot:
+                        HandlePlayerJoinLeave(line, viewModel, playerJoinSpigot, playerLeave);
+                        //HandlePlayerJoinLeave(line,viewModel, playerJoinSpigot, playerLeave);
                         break;
                     case ServerVersion.VersionType.Fabric:
                         HandlePlayerJoinLeave(line, viewModel, playerJoinFabric, playerLeave);
