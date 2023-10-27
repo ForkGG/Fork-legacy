@@ -11,13 +11,13 @@ namespace Fork.Logic.Model
         public enum VersionType
         {
             Vanilla,
-            Snapshot,
             Paper,
-            Purpur,
             Spigot,
-            Fabric,
             Waterfall,
-            BungeeCord
+            BungeeCord,
+            Snapshot,
+            Purpur,
+            Fabric,
         }
 
         private Regex nonNumeric = new Regex(@"[^\d.]");

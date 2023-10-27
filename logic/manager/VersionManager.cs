@@ -28,13 +28,13 @@ namespace Fork.Logic.Manager
             Task.Run(async () =>
             {
                 List<ServerVersion> versions =
-                    WebRequestManager.Instance.GetVanillaVersions(Manifest.VersionType.release);
+                   await WebRequestManager.Instance.GetVanillaVersions(Manifest.VersionType.release);
                 foreach (var version in versions)
                 {
                     Application.Current?.Dispatcher?.InvokeAsync(() => vanillaVersions.Add(version),
                         DispatcherPriority.Background);
                 }
-                versions = await WebRequestManager.Instance.GetSnapshotVersions();
+                versions = await WebRequestManager.Instance.GetVanillaVersions(Manifest.VersionType.snapshot);
                 foreach (var version in versions)
                 {
                     Application.Current?.Dispatcher?.InvokeAsync(() => snapshotVersions.Add(version));

@@ -32,9 +32,9 @@ namespace Fork.Logic.Manager
         private Dictionary<Manifest.VersionType,List<ServerVersion>> vanillaDict = new Dictionary<Manifest.VersionType, List<ServerVersion>>();
         private Dictionary<Manifest.VersionType, DateTime> vanillaCacheAge = new Dictionary<Manifest.VersionType, DateTime>();
 
-        public List<ServerVersion> GetVanillaVersions(Manifest.VersionType type)
+        public async Task<List<ServerVersion>> GetVanillaVersions(Manifest.VersionType type)
         {
-            return GetVanillaVersionsFromCache(type);
+            return await GetVanillaVersionsFromCache(type);
         }
 
         public async Task<List<ServerVersion>> GetPaperVersions()
@@ -62,10 +62,6 @@ namespace Fork.Logic.Manager
         }
 
 
-        public async Task<List<ServerVersion>> GetSnapshotVersions()
-        {
-            return await new SnapshotWebRequester().RequestSnapshotVersions();
-        }
         public async Task<int> GetLatestPaperBuild(string version)
         {
             return await new PaperWebRequester().RequestLatestBuildId(version);
@@ -134,7 +130,7 @@ namespace Fork.Logic.Manager
             }
         }
 
-        private List<ServerVersion> GetVanillaVersionsFromCache(Manifest.VersionType versionType)
+        private async Task<List<ServerVersion>> GetVanillaVersionsFromCache(Manifest.VersionType versionType)
         {
             if (vanillaDict.ContainsKey(versionType)&&VanillaCacheUpToDate(versionType))
             {
@@ -145,14 +141,13 @@ namespace Fork.Logic.Manager
             {
                 try
                 {
-                    string json = File.ReadAllText(path,Encoding.UTF8);
+                    string json = await File.ReadAllTextAsync(path,Encoding.UTF8);
                     VanillaVersionCache versionCache = JsonSerializer.Deserialize<VanillaVersionCache>(json);
                     if (DateTime.Now.Subtract(versionCache.CacheCreation).TotalHours < 12)
                     {
                         return versionCache.Versions;
                     }
-                    //TODO update visual list after updating
-                    UpdateVanillaVersionsAsync(versionType);
+                    await UpdateVanillaVersions(versionType);
                     return versionCache.Versions;
                 }
                 catch (Exception e)
@@ -161,23 +156,21 @@ namespace Fork.Logic.Manager
                     Console.WriteLine("Error while reading Vanilla version cache. Skipping...");
                 }
             }
-            UpdateVanillaVersions(versionType);
-            return GetVanillaVersionsFromCache(versionType);
+            await UpdateVanillaVersions(versionType);
+            return await GetVanillaVersionsFromCache(versionType);
         }
 
-        private void UpdateVanillaVersions(Manifest.VersionType versionType)
+        private async Task UpdateVanillaVersions(Manifest.VersionType versionType)
         {
             Uri uri = new Uri("https://launchermeta.mojang.com/mc/game/version_manifest.json");
             HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uri);
             string json;
             try
             {
-                using (var response = request.GetResponse())
-                using (Stream stream = response.GetResponseStream())
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    json = reader.ReadToEnd();
-                }
+                using var response = await request.GetResponseAsync();
+                await using Stream stream = response.GetResponseStream();
+                using StreamReader reader = new StreamReader(stream);
+                json = await reader.ReadToEndAsync();
             } catch(WebException e)
             {
                 ErrorLogger.Append(e);
@@ -207,9 +200,9 @@ namespace Fork.Logic.Manager
 
         private void UpdateVanillaVersionsAsync(Manifest.VersionType versionType)
         {
-            new Thread(() =>
+            new Thread(async () =>
             {
-                UpdateVanillaVersions(versionType);
+                await UpdateVanillaVersions(versionType);
             }){IsBackground = true}.Start();
         }
 

@@ -5,13 +5,13 @@
         public enum JarVersionType
         {
             Vanilla,
-            Snapshot,
             Paper,
-            Purpur,
             Spigot,
-            Fabric,
             Waterfall,
-            BungeeCord
+            BungeeCord,
+            Snapshot,
+            Purpur,
+            Fabric,
         }
         
         public JarVersionType VersionType { get; set; }
