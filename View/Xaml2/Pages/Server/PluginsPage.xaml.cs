@@ -3,11 +3,17 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Animation;
 using Fork.Logic.Manager;
 using Fork.logic.model.PluginModels;
 using Fork.View.Xaml2.Controls;
 using Fork.ViewModel;
+using Fork.Logic.Logging;
+using System;
+using ICSharpCode.SharpZipLib.Zip;
+using YamlDotNet.Serialization;
+using Fork.Logic.Utils;
+using Fork.Logic.Persistence;
+using System.Linq;
 
 namespace Fork.View.Xaml2.Pages.Server
 {
@@ -21,6 +27,126 @@ namespace Fork.View.Xaml2.Pages.Server
             viewModel = pluginViewModel;
             InitializeComponent();
             DataContext = viewModel;
+        }
+
+        private async void InstallLocal_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog
+            {
+                Filter = "Jar file|*.jar",
+                Multiselect = true,
+                InitialDirectory = System.Convert.ToString(
+                    Microsoft.Win32.Registry.GetValue(
+                         @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders"
+                        , "{374DE290-123F-4565-9164-39C4925E467B}"
+                        , String.Empty
+                    )
+                )
+            };
+
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string path = Path.Combine(App.ServerPath, viewModel.EntityViewModel.Entity.Name, "plugins");
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
+                string[] selected = dialog.FileNames;
+
+                foreach (string selectedElement in selected)
+                {
+                    string pluginName = ReadPluginName(selectedElement);
+                    string fileName = Path.GetFileName(selectedElement);
+                    string targetName = pluginName ?? StringUtils.BeautifyPluginName(fileName[..^4]);
+
+                    string destination = Path.Combine(path, $"{targetName}.jar");
+
+                    try
+                    {
+                        File.Copy(selectedElement, destination, true);
+                        
+                        if (pluginName != null)
+                        {
+                            Console.WriteLine($"Checking data folder for {pluginName}");
+                            string pluginDataFolder = Path.Combine(selectedElement[..^fileName.Length], pluginName);
+                            string localData = Path.Combine(path, pluginDataFolder);
+                            
+                            if (Directory.Exists(pluginDataFolder) && !Directory.Exists(localData))
+                            {
+                                File.Copy(pluginDataFolder, localData);
+                            }
+
+                            InstalledPlugin ip = new InstalledPlugin
+                            {
+                                LocalId = new Random().Next() * new Random().Next(),
+                                Name = targetName,
+                                IsSpigetPlugin = false,
+                                IsDownloaded = true,
+                                LocalPlugin = new Fork.Logic.Model.PluginModels.File {
+                                    type = "jar",
+                                    actualType = "jar",
+                                    size = new FileInfo(selectedElement).Length,
+                                    sizeUnit = "bytes",
+                                    url = destination
+                                }
+                            };
+
+                            //InstalledPluginSerializer.Instance.StoreInstalledPlugins(viewModel.InstalledPlugins.ToList(), viewModel.EntityViewModel);
+                            viewModel.InstalledPlugins.Add(ip);
+                            //viewModel.Plugins.Add(ip.Plugin);
+                            viewModel.EnablePlugin(ip);
+                            await PluginManager.Instance.EnablePluginAsync(ip, viewModel);
+                        } else
+                        {
+                            Console.WriteLine($"Possible non plugin file {destination} was moved to plugins folder");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ErrorLogger.Append(ex);
+                        Console.WriteLine($"Failed to copy file ${fileName} to ${destination}");
+                    }
+                }
+            }
+        }
+
+        private string ReadPluginName(string file)
+        {
+            try
+            {
+                using (ZipFile zip = new ZipFile(file))
+                {
+                    ZipEntry entry = zip.GetEntry("bungee.yml");
+                    if (entry == null)
+                    {
+                        entry = zip.GetEntry("paper-plugin.yml");
+                        if (entry == null)
+                        {
+                            entry = zip.GetEntry("plugin.yml");
+                        }
+                    }
+
+                    if (entry != null)
+                    {
+                        using (Stream stream = zip.GetInputStream(entry))
+                        using (StreamReader sr = new StreamReader(stream))
+                        {
+                            string rawYaml = sr.ReadToEnd();
+                            dynamic yaml = new DeserializerBuilder().Build().Deserialize(new StringReader(rawYaml));
+
+                            return yaml["name"];
+                        }
+                    }
+                }
+            } 
+            catch (Exception ex)
+            {
+                ErrorLogger.Append(ex);
+                Console.WriteLine($"Failed to read {file} contents");
+            } 
+
+            return null;
         }
 
         private void OpenExplorer_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

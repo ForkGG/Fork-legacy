@@ -183,7 +183,15 @@ namespace Fork.Logic.Manager
 
                 Application.Current.Dispatcher?.Invoke(() => viewModel.InstalledPlugins.Remove(plugin));
                 //Check if plugin is in loaded list currently (in that case change it to downlaodable)
-                viewModel.CheckForDeletedPlugin(plugin.Plugin);
+                if (plugin.LocalPlugin == null)
+                {
+                    viewModel.CheckForDeletedPlugin(plugin.Plugin);
+                } else
+                {
+                    viewModel.InstalledPlugins.Remove(plugin);
+                    InstalledPluginSerializer.Instance.StoreInstalledPlugins(viewModel.InstalledPlugins.ToList(), viewModel.EntityViewModel);
+                }
+                
                 Console.WriteLine("Deleted Plugin " + plugin.Name);
                 return true;
             }
