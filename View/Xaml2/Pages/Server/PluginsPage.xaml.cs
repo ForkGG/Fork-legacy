@@ -70,11 +70,20 @@ namespace Fork.View.Xaml2.Pages.Server
                         {
                             Console.WriteLine($"Checking data folder for {pluginName}");
                             string pluginDataFolder = Path.Combine(selectedElement[..^fileName.Length], pluginName);
-                            string localData = Path.Combine(path, pluginDataFolder);
-                            
-                            if (Directory.Exists(pluginDataFolder) && !Directory.Exists(localData))
+                            string localData = Path.Combine(path, pluginName);
+
+                            try
                             {
-                                File.Copy(pluginDataFolder, localData);
+                                if (Directory.Exists(pluginDataFolder) && !Directory.Exists(localData))
+                                {
+                                    Directory.CreateDirectory(localData);
+                                    Console.WriteLine($"Copying {pluginDataFolder} to {localData}");
+                                    CopyFilesRecursively(pluginDataFolder, localData);
+                                }
+                            } catch (Exception ex)
+                            {
+                                ErrorLogger.Append(ex);
+                                Console.WriteLine($"Failed to copy directory from {pluginDataFolder} to {localData}");
                             }
 
                             InstalledPlugin ip = new InstalledPlugin
@@ -105,9 +114,22 @@ namespace Fork.View.Xaml2.Pages.Server
                     catch (Exception ex)
                     {
                         ErrorLogger.Append(ex);
-                        Console.WriteLine($"Failed to copy file ${fileName} to ${destination}");
+                        Console.WriteLine($"Failed to copy file {fileName} to {destination}");
                     }
                 }
+            }
+        }
+
+        private static void CopyFilesRecursively(string sourcePath, string targetPath)
+        {
+            foreach (string dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
+            {
+                Directory.CreateDirectory(dirPath.Replace(sourcePath, targetPath));
+            }
+
+            foreach (string newPath in Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories))
+            {
+                File.Copy(newPath, newPath.Replace(sourcePath, targetPath), true);
             }
         }
 

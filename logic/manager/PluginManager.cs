@@ -173,6 +173,11 @@ namespace Fork.Logic.Manager
                     viewModel.EntityViewModel.Name, folder, StringUtils.PluginNameToJarName(plugin.Name) + ".jar"));
                 if (!jarFile.Exists)
                 {
+                    jarFile = new FileInfo(Path.Combine(App.ServerPath, viewModel.EntityViewModel.Name, folder, $"{plugin.Name}"));
+                }
+
+                if (!jarFile.Exists)
+                {
                     ErrorLogger.Append(new ArgumentException(
                         ".jar for plugin " + plugin.Name + " was not found. Removing it from the list..."));
                 }

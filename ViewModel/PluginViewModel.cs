@@ -147,6 +147,7 @@ namespace Fork.ViewModel
 
         public void CheckForDeletedPlugin(Plugin plugin)
         {
+            if (plugin == null) return;
             foreach (Plugin plugin1 in Plugins)
             {
                 if (plugin1.id == plugin.id)
