@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
-using System.Windows.Threading;
 using Fork.Logic.ApplicationConsole;
 using Fork.Logic.Logging;
 using Fork.Logic.Manager;
 using Fork.Logic.Persistence;
-using Microsoft.Win32.SafeHandles;
 
 namespace Fork
 {
