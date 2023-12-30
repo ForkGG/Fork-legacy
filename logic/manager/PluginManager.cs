@@ -146,6 +146,14 @@ namespace Fork.Logic.Manager
                     Console.WriteLine("Error installing plugin: Plugin " + plugin.name + " is already installed.");
                     return false;
                 }
+
+                Console.WriteLine(iPlugin.Name);
+                Console.WriteLine(plugin.name);
+                if (iPlugin.Name == plugin.name && iPlugin.LocalPlugin != null)
+                {
+                    Console.WriteLine($"Removing locally installed plugin {iPlugin.Name} because downloading remotely");
+                    DeletePlugin(iPlugin, pluginViewModel);
+                }
             }
 
             PluginWebRequester webRequester = new PluginWebRequester();
@@ -159,7 +167,7 @@ namespace Fork.Logic.Manager
             Application.Current.Dispatcher?.Invoke(() => pluginViewModel.InstalledPlugins.Add(installedPlugin));
             installedPlugin.AfterInit(new StreamingContext());
             //TODO attach something to update event
-            Console.WriteLine("Installed Plugin " + installedPlugin.Name);
+            Console.WriteLine("Installed Plugin " + installedPlugin.Name + " version " + installedPlugin.Plugin.rating);
 
             return DownloadPlugin(installedPlugin, pluginViewModel.EntityViewModel).Result;
         }

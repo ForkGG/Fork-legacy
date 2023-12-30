@@ -49,15 +49,20 @@ namespace Fork.Logic.BackgroundWorker
 
         private Regex playerJoin =
             new Regex(@"\[([0-9]+:*)+\] \[Server thread/INFO\]: ([0-9a-zA-Z_]+) joined the game$");
+        private Regex playerJoinPurpur =
+            new Regex(@"\[([0-9]+:*)+ INFO\]: ([0-9a-zA-Z_]+) joined the game$");
         private Regex playerJoinPaper =
             new Regex(@"\[([0-9]+:*)+ INFO\]: ([0-9a-zA-Z_]+) joined the game$");
         private Regex playerJoinPaper2 =
             new Regex(@"\[([0-9]+:*)+ INFO\]: ([A-Za-z0-9_]+)\[.*\] logged in with entity id [0-9]+ at \(.*\)$");
         private Regex playerJoinSpigot = new Regex(@"\[([0-9]+:*)+\] \[Server thread\/INFO\]: ([0-9a-zA-Z_]+)\[.*\] logged in with entity id [0-9]+ at .*$");
+        private Regex playerJoinFabric = new Regex(@"\[([0-9]+:*)+\] \[Server thread\/INFO\]: ([0-9a-zA-Z_]+)\[.*\] logged in with entity id [0-9]+ at .*$");
 
         private Regex playerLeave =
             new Regex(@"\[([0-9]+:*)+\] \[Server thread/INFO\]: ([0-9a-zA-Z_]+) left the game$");
         private Regex playerLeavePaper =
+            new Regex(@"\[([0-9]+:*)+ INFO\]: ([0-9a-zA-Z_]+) left the game$");
+        private Regex playerLeavePurpur =
             new Regex(@"\[([0-9]+:*)+ INFO\]: ([0-9a-zA-Z_]+) left the game$");
 
         private async void HandleConsoleWrite(string line, EntityViewModel entityViewModel)
@@ -69,12 +74,23 @@ namespace Fork.Logic.BackgroundWorker
                     case ServerVersion.VersionType.Vanilla:
                         HandlePlayerJoinLeave(line, viewModel, playerJoin, playerLeave);
                         break;
+                    case ServerVersion.VersionType.Snapshot:
+                        HandlePlayerJoinLeave(line, viewModel, playerJoin, playerLeave);
+                        break;
                     case ServerVersion.VersionType.Paper:
                         HandlePlayerJoinLeave(line, viewModel, playerJoinPaper, playerLeavePaper);
                         //HandlePlayerJoinLeave(line,viewModel, playerJoinPaper2, playerLeavePaper);
                         break;
+                    case ServerVersion.VersionType.Purpur:
+                        HandlePlayerJoinLeave(line, viewModel, playerJoinPurpur, playerLeavePurpur);
+                        //HandlePlayerJoinLeave(line,viewModel, playerJoinPurpur2, playerLeavePurpur);
+                        break;
                     case ServerVersion.VersionType.Spigot:
                         HandlePlayerJoinLeave(line, viewModel, playerJoinSpigot, playerLeave);
+                        //HandlePlayerJoinLeave(line,viewModel, playerJoinSpigot, playerLeave);
+                        break;
+                    case ServerVersion.VersionType.Fabric:
+                        HandlePlayerJoinLeave(line, viewModel, playerJoinFabric, playerLeave);
                         break;
                     default:
                         throw new Exception("Handle Player join/leave function does not implement "+viewModel.Server.Version.Type);

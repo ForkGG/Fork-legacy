@@ -14,7 +14,10 @@ namespace Fork.Logic.Model
             Paper,
             Spigot,
             Waterfall,
-            BungeeCord
+            BungeeCord,
+            Snapshot,
+            Purpur,
+            Fabric,
         }
 
         private Regex nonNumeric = new Regex(@"[^\d.]");
@@ -26,9 +29,7 @@ namespace Fork.Logic.Model
         public string JarLink { get; set; }
         [JsonIgnore] public bool IsProxy => Type == VersionType.Waterfall;
         [JsonIgnore] public bool SupportBuilds => Type == VersionType.Paper;
-
-        [JsonIgnore]
-        public bool HasPlugins => Type == VersionType.Paper || Type == VersionType.Spigot;
+        [JsonIgnore] public bool HasPlugins => Type == VersionType.Paper || Type == VersionType.Purpur || Type == VersionType.Spigot;
 
         public ServerVersion()
         {

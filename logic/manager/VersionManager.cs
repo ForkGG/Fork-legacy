@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -28,11 +29,16 @@ namespace Fork.Logic.Manager
             Task.Run(async () =>
             {
                 List<ServerVersion> versions =
-                    WebRequestManager.Instance.GetVanillaVersions(Manifest.VersionType.release);
+                   await WebRequestManager.Instance.GetVanillaVersions(Manifest.VersionType.release);
                 foreach (var version in versions)
                 {
                     Application.Current?.Dispatcher?.InvokeAsync(() => vanillaVersions.Add(version),
                         DispatcherPriority.Background);
+                }
+                versions = await WebRequestManager.Instance.GetVanillaVersions(Manifest.VersionType.snapshot);
+                foreach (var version in versions)
+                {
+                    Application.Current?.Dispatcher?.InvokeAsync(() => snapshotVersions.Add(version));
                 }
 
                 versions = await WebRequestManager.Instance.GetPaperVersions();
@@ -41,10 +47,22 @@ namespace Fork.Logic.Manager
                     Application.Current?.Dispatcher?.InvokeAsync(() => paperVersions.Add(version));
                 }
 
+                versions = await WebRequestManager.Instance.GetPurpurVersions();
+                foreach (var version in versions)
+                {
+                    Application.Current?.Dispatcher?.InvokeAsync(() => purpurVersions.Add(version));
+                }
+
                 versions = await WebRequestManager.Instance.GetSpigotVersions();
                 foreach (var version in versions)
                 {
                     Application.Current?.Dispatcher?.InvokeAsync(() => spigotVersions.Add(version));
+                }
+
+                versions = await WebRequestManager.Instance.GetFabricVersions();
+                foreach (var version in versions)
+                {
+                    Application.Current?.Dispatcher?.InvokeAsync(() => fabricVersions.Add(version));
                 }
             });
         }
@@ -60,8 +78,11 @@ namespace Fork.Logic.Manager
         }
 
         private ObservableCollection<ServerVersion> vanillaVersions = new ObservableCollection<ServerVersion>();
+        private ObservableCollection<ServerVersion> snapshotVersions = new ObservableCollection<ServerVersion>();
         private ObservableCollection<ServerVersion> spigotVersions = new ObservableCollection<ServerVersion>();
+        private ObservableCollection<ServerVersion> fabricVersions = new ObservableCollection<ServerVersion>();
         private ObservableCollection<ServerVersion> paperVersions = new ObservableCollection<ServerVersion>();
+        private ObservableCollection<ServerVersion> purpurVersions = new ObservableCollection<ServerVersion>();
 
 
         /// <summary>
@@ -70,14 +91,29 @@ namespace Fork.Logic.Manager
         public ObservableCollection<ServerVersion> VanillaVersions => vanillaVersions;
 
         /// <summary>
+        /// The property that holds all Minecraft Snapshot Server versions
+        /// </summary>
+        public ObservableCollection<ServerVersion> SnapshotVersions => snapshotVersions;
+
+        /// <summary>
         /// The property that holds all PaperMC Server versions
         /// </summary>
         public ObservableCollection<ServerVersion> PaperVersions => paperVersions;
 
         /// <summary>
+        /// The property that holds all PurpurMC Server versions
+        /// </summary>
+        public ObservableCollection<ServerVersion> PurpurVersions => purpurVersions;
+
+        /// <summary>
         /// The property that holds all Minecraft Spigot Server versions
         /// </summary>
         public ObservableCollection<ServerVersion> SpigotVersions => spigotVersions;
+
+        /// <summary>
+        /// The property that holds all Minecraft Fabric Server versions
+        /// </summary>
+        public ObservableCollection<ServerVersion> FabricVersions => fabricVersions;
 
         public ServerVersion WaterfallVersion;
 
@@ -94,10 +130,10 @@ namespace Fork.Logic.Manager
             {
                 case ServerVersion.VersionType.Paper:
                     return await WebRequestManager.Instance.GetLatestPaperBuild(version.Version);
-                //TODO Spigot
                 default:
                     return 0;
             }
+            
         }
     }
 }

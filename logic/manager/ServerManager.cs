@@ -685,6 +685,7 @@ namespace Fork.Logic.Manager
             switch (server.Version.Type)
             {
                 case ServerVersion.VersionType.Vanilla:
+                case ServerVersion.VersionType.Snapshot:
                     switch (dimension)
                     {
                         case MinecraftDimension.Nether:
@@ -696,8 +697,10 @@ namespace Fork.Logic.Manager
                             throw new ArgumentException("No implementation for deletion of dimension " + dimension +
                                                         " on Vanilla servers");
                     }
-                case ServerVersion.VersionType.Paper:
                 case ServerVersion.VersionType.Spigot:
+                case ServerVersion.VersionType.Paper:
+                case ServerVersion.VersionType.Purpur:
+                case ServerVersion.VersionType.Fabric:
                     switch (dimension)
                     {
                         case MinecraftDimension.Nether:
@@ -705,8 +708,7 @@ namespace Fork.Logic.Manager
                         case MinecraftDimension.End:
                             return new DirectoryInfo(worldFolder + "_the_end");
                         default:
-                            throw new ArgumentException("No implementation for deletion of dimension " + dimension +
-                                                        " on Paper servers");
+                            throw new ArgumentException($"No implementation for deletion of dimension {dimension} on {server.Version.Type} servers");
                     }
                 default:
                     throw new ArgumentException("No implementation for deletion of " + server.Version.Type +

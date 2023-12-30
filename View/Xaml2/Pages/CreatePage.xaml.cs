@@ -50,17 +50,38 @@ namespace Fork.View.Xaml2.Pages
             versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.SpigotServerVersions });
             versionComboBox.SelectedIndex = 0;
         }
-        
-        private void ServerTypeBungeeCord_Click(object sender, RoutedEventArgs e)
-        {
-            SelectProxyType();
-            proxyType = ServerVersion.VersionType.BungeeCord;
-        }
-        
+
         private void ServerTypeWaterfall_Click(object sender, RoutedEventArgs e)
         {
             SelectProxyType();
             proxyType = ServerVersion.VersionType.Waterfall;
+        }
+
+        private void ServerTypeBungeeCord_Click(object sender, RoutedEventArgs e)
+        {
+            SelectProxyType();
+            proxyType = ServerVersion.VersionType.BungeeCord;
+        }        
+        
+        private void ServerTypeSnapshot_Click(object sender, RoutedEventArgs e)
+        {
+            UnSelectProxyType();
+            versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.SnapshotServerVersions });
+            versionComboBox.SelectedIndex = 0;
+        }
+
+        private void ServerTypePurpur_Click(object sender, RoutedEventArgs e)
+        {
+            UnSelectProxyType();
+            versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.PurpurVersions });
+            versionComboBox.SelectedIndex = 0;
+        }
+
+        private void ServerTypeFabric_Click(object sender, RoutedEventArgs e)
+        {
+            UnSelectProxyType();
+            versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.FabricServerVersions });
+            versionComboBox.SelectedIndex = 0;
         }
 
         private void SelectProxyType()
