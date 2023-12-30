@@ -47,7 +47,7 @@ namespace Fork.Logic.WebRequesters
                     }
 
                     Collection<string> groupVersions = new Collection<string>();
-                    Regex spRegex = new Regex("^[0-9]+\\.[0-9]+\\.[0-9]+$");
+                    Regex spRegex = new Regex("^[0-9]+\\.[0-9]+(\\.[0-9])?+$");
 
                     foreach (HtmlNode link in links)
                     {
@@ -94,7 +94,7 @@ namespace Fork.Logic.WebRequesters
                 ServerVersion serverVersion = new ServerVersion();
                 serverVersion.Type = ServerVersion.VersionType.Spigot;
                 serverVersion.Version = version;
-                serverVersion.JarLink = $"https://download.getbukkit.org/spigot/spigot-{version}.jar";
+                serverVersion.JarLink = $"https://cdn.getbukkit.org/spigot/spigot-{version}-SNAPSHOT-latest.jar";
                 result.Add(serverVersion);
             }
 
