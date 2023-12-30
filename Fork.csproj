@@ -57,6 +57,15 @@
     <None Remove="View\Resources\images\Icons\Paper.png" />
     <None Remove="View\Resources\images\Icons\PaperD.png" />
     <None Remove="View\Resources\images\Icons\PaperW.png" />
+    <None Remove="View\Resources\images\Icons\Spigot.png" />
+    <None Remove="View\Resources\images\Icons\SpigotD.png" />
+    <None Remove="View\Resources\images\Icons\SpigotW.png" />
+    <None Remove="View\Resources\images\Icons\Purpur.png" />
+    <None Remove="View\Resources\images\Icons\PurpurD.png" />
+    <None Remove="View\Resources\images\Icons\PurpurW.png" />
+    <None Remove="View\Resources\images\Icons\Fabric.png" />
+    <None Remove="View\Resources\images\Icons\FabricD.png" />
+    <None Remove="View\Resources\images\Icons\FabricW.png" />
     <None Remove="View\Resources\images\Icons\PlayerList.png" />
     <None Remove="View\Resources\images\Icons\PlayerListW.png" />
     <None Remove="View\Resources\images\Icons\Plugins.png" />
@@ -66,9 +75,6 @@
     <None Remove="View\Resources\images\Icons\Settings.png" />
     <None Remove="View\Resources\images\Icons\SettingsD.png" />
     <None Remove="View\Resources\images\Icons\SettingsW.png" />
-    <None Remove="View\Resources\images\Icons\Spigot.png" />
-    <None Remove="View\Resources\images\Icons\SpigotD.png" />
-    <None Remove="View\Resources\images\Icons\SpigotW.png" />
     <None Remove="View\Resources\images\Icons\Start.png" />
     <None Remove="View\Resources\images\Icons\StartW.png" />
     <None Remove="View\Resources\images\Icons\Stop.png" />
@@ -78,6 +84,9 @@
     <None Remove="View\Resources\images\Icons\Vanilla.png" />
     <None Remove="View\Resources\images\Icons\VanillaD.png" />
     <None Remove="View\Resources\images\Icons\VanillaW.png" />
+    <None Remove="View\Resources\images\Icons\Snapshot.png" />
+    <None Remove="View\Resources\images\Icons\SnapshotD.png" />
+    <None Remove="View\Resources\images\Icons\SnapshotW.png" />
     <None Remove="View\Resources\images\Icons\Waterfall.png" />
     <None Remove="View\Resources\images\Icons\WaterfallD.png" />
     <None Remove="View\Resources\images\Icons\WaterfallW.png" />
@@ -96,7 +105,6 @@
     <None Remove="View\Resources\images\Server-Icons\forkBoi.png" />
     <None Remove="View\Resources\images\Server-Icons\forkChristmas.png" />
     <None Remove="View\Resources\images\Server-Icons\Icon1.png" />
-    <None Remove="View\Resources\images\spigotSymbol.png" />
     <None Remove="View\Resources\images\Splash.png" />
     <None Remove="View\Resources\images\title.png" />
     <None Remove="View\Resources\images\vanillaSymbol.png" />
@@ -119,6 +127,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="gong-wpf-dragdrop" Version="2.2.0" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.57" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="5.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.2" />
@@ -177,6 +186,15 @@
     <Resource Include="View\Resources\images\Icons\Paper.png" />
     <Resource Include="View\Resources\images\Icons\PaperD.png" />
     <Resource Include="View\Resources\images\Icons\PaperW.png" />
+    <Resource Include="View\Resources\images\Icons\Spigot.png" />
+    <Resource Include="View\Resources\images\Icons\SpigotD.png" />
+    <Resource Include="View\Resources\images\Icons\SpigotW.png" />
+    <Resource Include="View\Resources\images\Icons\Purpur.png" />
+    <Resource Include="View\Resources\images\Icons\PurpurD.png" />
+    <Resource Include="View\Resources\images\Icons\PurpurW.png" />
+    <Resource Include="View\Resources\images\Icons\Fabric.png" />
+    <Resource Include="View\Resources\images\Icons\FabricD.png" />
+    <Resource Include="View\Resources\images\Icons\FabricW.png" />
     <Resource Include="View\Resources\images\Icons\PlayerList.png" />
     <Resource Include="View\Resources\images\Icons\PlayerListW.png" />
     <Resource Include="View\Resources\images\Icons\Plugins.png" />
@@ -186,9 +204,6 @@
     <Resource Include="View\Resources\images\Icons\Settings.png" />
     <Resource Include="View\Resources\images\Icons\SettingsD.png" />
     <Resource Include="View\Resources\images\Icons\SettingsW.png" />
-    <Resource Include="View\Resources\images\Icons\Spigot.png" />
-    <Resource Include="View\Resources\images\Icons\SpigotD.png" />
-    <Resource Include="View\Resources\images\Icons\SpigotW.png" />
     <Resource Include="View\Resources\images\Icons\Start.png" />
     <Resource Include="View\Resources\images\Icons\StartW.png" />
     <Resource Include="View\Resources\images\Icons\Stop.png" />
@@ -198,6 +213,9 @@
     <Resource Include="View\Resources\images\Icons\Vanilla.png" />
     <Resource Include="View\Resources\images\Icons\VanillaD.png" />
     <Resource Include="View\Resources\images\Icons\VanillaW.png" />
+    <Resource Include="View\Resources\images\Icons\Snapshot.png" />
+    <Resource Include="View\Resources\images\Icons\SnapshotD.png" />
+    <Resource Include="View\Resources\images\Icons\SnapshotW.png" />
     <Resource Include="View\Resources\images\Icons\Waterfall.png" />
     <Resource Include="View\Resources\images\Icons\WaterfallD.png" />
     <Resource Include="View\Resources\images\Icons\WaterfallW.png" />

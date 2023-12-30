@@ -67,13 +67,25 @@ namespace Fork.ViewModel
             {
                 Versions = VersionManager.Instance.VanillaVersions;
             }
+            else if (Server.Version.Type == ServerVersion.VersionType.Snapshot)
+            {
+                Versions = VersionManager.Instance.SnapshotVersions;
+            }
             else if (Server.Version.Type == ServerVersion.VersionType.Paper)
             {
                 Versions = VersionManager.Instance.PaperVersions;
             }
+            else if (Server.Version.Type == ServerVersion.VersionType.Purpur)
+            {
+                Versions = VersionManager.Instance.PurpurVersions;
+            } 
             else if (Server.Version.Type == ServerVersion.VersionType.Spigot)
             {
                 Versions = VersionManager.Instance.SpigotVersions;
+            } 
+            else if (Server.Version.Type == ServerVersion.VersionType.Fabric)
+            {
+                Versions = VersionManager.Instance.FabricVersions;
             }
 
             Application.Current.Dispatcher.Invoke(new Action(() => EntityPage = new ServerPage(this)));

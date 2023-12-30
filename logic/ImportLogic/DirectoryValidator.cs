@@ -50,6 +50,9 @@ namespace Fork.Logic.ImportLogic
                     serverValInfo.BukkitYml = true;
                 }else if (name.Equals("paper.yml"))
                 {
+                    serverValInfo.PurpurYml = true;
+                }else if (name.Equals("purpur.yml"))
+                {
                     serverValInfo.PaperYml = true;
                 }else if (name.Equals("spigot.yml"))
                 {
@@ -122,6 +125,7 @@ namespace Fork.Logic.ImportLogic
         public bool Banlist { get; set; }
         public bool BukkitYml { get; set; }
         public bool PaperYml { get; set; }
+        public bool PurpurYml { get; set; }
         public bool SpigotYml { get; set; }
         public bool IsValid => Worlds.Count != 0;
     }

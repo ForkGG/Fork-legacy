@@ -8,7 +8,10 @@
             Paper,
             Spigot,
             Waterfall,
-            BungeeCord
+            BungeeCord,
+            Snapshot,
+            Purpur,
+            Fabric,
         }
         
         public JarVersionType VersionType { get; set; }

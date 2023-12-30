@@ -159,6 +159,8 @@ namespace Fork.Logic.Model.Settings
                     return 0;
                 case "paper.yml":
                     return 1;
+                case "purpur.yml":
+                    return 1;
                 case "waterfall.yml":
                     return 1;
                 case "spigot.yml":
