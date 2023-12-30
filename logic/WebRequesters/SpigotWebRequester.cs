@@ -47,7 +47,7 @@ namespace Fork.Logic.WebRequesters
                     }
 
                     Collection<string> groupVersions = new Collection<string>();
-                    Regex spRegex = new Regex("^[0-9]+\\.[0-9]+(\\.[0-9])?+$");
+                    Regex spRegex = new Regex("^[0-9]+\\.[0-9]+(\\.[0-9]+)?$");
 
                     foreach (HtmlNode link in links)
                     {
@@ -69,6 +69,8 @@ namespace Fork.Logic.WebRequesters
 
                     json = JsonConvert.SerializeObject(vResponse, Formatting.Indented);
                     ResponseCache.Instance.CacheResponse(url, json);
+
+                    Console.WriteLine(json);
                 }
                 catch (WebException e)
                 {
