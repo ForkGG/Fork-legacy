@@ -120,8 +120,6 @@ namespace Fork.Logic.WebRequesters
                 serverVersion.Version = version;
                 serverVersion.JarLink = downloadURL.Replace("{version}", version);
                 result.Add(serverVersion);
-
-                Console.WriteLine(downloadURL.Replace("{version}", version));
             }
 
             return result;
