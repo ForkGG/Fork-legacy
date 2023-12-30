@@ -17,12 +17,13 @@ using System.Linq;
 using Fork.Logic.Model;
 using Fork.Logic.Model.ServerConsole;
 using System.Threading.Tasks;
+using Fork.logic.Utils;
 
 namespace Fork.View.Xaml2.Pages.Server
 {
     public partial class PluginsPage : Page
     {
-        private PluginViewModel viewModel;
+        public PluginViewModel viewModel;
         private bool isLoadingMore = false;
         
         public PluginsPage(PluginViewModel pluginViewModel)
@@ -68,7 +69,7 @@ namespace Fork.View.Xaml2.Pages.Server
 
                 foreach (string selectedElement in selected)
                 {
-                    string pluginName = ReadPluginName(selectedElement);
+                    string pluginName = LocalPluginUtils.ReadPluginName(selectedElement);
                     string fileName = Path.GetFileName(selectedElement);
                     string targetName = pluginName ?? StringUtils.BeautifyPluginName(fileName[..^4]);
 
@@ -103,7 +104,7 @@ namespace Fork.View.Xaml2.Pages.Server
                             if (notInstall)
                             {
                                 viewModel.EntityViewModel.AddToConsole(
-                                    new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Denied to install {pluginName} because it's already installed"));
+                                    new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Not installing {pluginName} because it's already installed", ConsoleMessage.MessageLevel.WARN));
                                 return;
                             }
 
@@ -117,118 +118,44 @@ namespace Fork.View.Xaml2.Pages.Server
                                 {
                                     Directory.CreateDirectory(localData);
                                     viewModel.EntityViewModel.AddToConsole(
-                                        new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Copying {pluginDataFolder} to plugins/{pluginName}"));
-                                    CopyFilesRecursively(pluginDataFolder, localData);
+                                        new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Copying {pluginDataFolder} to plugins/{pluginName}", ConsoleMessage.MessageLevel.INFO));
+                                    LocalPluginUtils.CopyFilesRecursively(pluginDataFolder, localData);
                                 }
                             }
                             catch (Exception ex)
                             {
                                 ErrorLogger.Append(ex);
                                 viewModel.EntityViewModel.AddToConsole(
-                                        new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Failed to copy directory from {pluginDataFolder} to plugins/{pluginName}"));
+                                        new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Failed to copy directory from {pluginDataFolder} to plugins/{pluginName}", ConsoleMessage.MessageLevel.ERROR));
                             }
                         }
                         else
                         {
                             viewModel.EntityViewModel.AddToConsole(
-                                        new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Possible non plugin file installed {fileName}"));
+                                        new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Possible non plugin file installed {fileName}", ConsoleMessage.MessageLevel.WARN));
                         }
 
-                        bool loaded = await DoVirtualLoading(viewModel, targetName, selectedElement, destination);
+                        bool loaded = await LocalPluginUtils.DoVirtualLoading(viewModel, targetName, selectedElement, destination);
                         if (loaded)
                         {
                             viewModel.EntityViewModel.AddToConsole(
-                                        new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Successfully installed locally {fileName}"));
+                                        new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Successfully installed locally {fileName}", ConsoleMessage.MessageLevel.SUCCESS));
                         }
                         else
                         {
                             viewModel.EntityViewModel.AddToConsole(
-                                        new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Failed while installing locally {fileName}"));
+                                        new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Failed while installing locally {fileName}", ConsoleMessage.MessageLevel.ERROR));
                         }
                     }
                     catch (Exception ex)
                     {
                         ErrorLogger.Append(ex);
                         viewModel.EntityViewModel.AddToConsole(
-                                    new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Failed while installing {fileName}"));
+                                    new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Failed while installing {fileName}", ConsoleMessage.MessageLevel.ERROR));
                         Console.WriteLine($"Failed to copy file {fileName} to {destination}");
                     }
                 }
             }
-        }
-
-        private static async Task<bool> DoVirtualLoading(PluginViewModel viewModel, string targetName, string selectedElement, string destination)
-        {
-            InstalledPlugin ip = new InstalledPlugin
-            {
-                LocalId = new Random().Next() * new Random().Next(),
-                Name = targetName,
-                IsSpigetPlugin = false,
-                IsDownloaded = true,
-                LocalPlugin = new Fork.Logic.Model.PluginModels.File
-                {
-                    type = "jar",
-                    actualType = "jar",
-                    size = new FileInfo(selectedElement).Length,
-                    sizeUnit = "bytes",
-                    url = destination
-                }
-            };
-
-            viewModel.InstalledPlugins.Add(ip);
-            viewModel.EnablePlugin(ip);
-            return await PluginManager.Instance.EnablePluginAsync(ip, viewModel);
-        }
-
-        private static void CopyFilesRecursively(string sourcePath, string targetPath)
-        {
-            foreach (string dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
-            {
-                Directory.CreateDirectory(dirPath.Replace(sourcePath, targetPath));
-            }
-
-            foreach (string newPath in Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories))
-            {
-                File.Copy(newPath, newPath.Replace(sourcePath, targetPath), true);
-            }
-        }
-
-        private string ReadPluginName(string file)
-        {
-            try
-            {
-                using (ZipFile zip = new ZipFile(file))
-                {
-                    ZipEntry entry = zip.GetEntry("bungee.yml");
-                    if (entry == null)
-                    {
-                        entry = zip.GetEntry("paper-plugin.yml");
-                        if (entry == null)
-                        {
-                            entry = zip.GetEntry("plugin.yml");
-                        }
-                    }
-
-                    if (entry != null)
-                    {
-                        using (Stream stream = zip.GetInputStream(entry))
-                        using (StreamReader sr = new StreamReader(stream))
-                        {
-                            string rawYaml = sr.ReadToEnd();
-                            dynamic yaml = new DeserializerBuilder().Build().Deserialize(new StringReader(rawYaml));
-
-                            return yaml["name"];
-                        }
-                    }
-                }
-            } 
-            catch (Exception ex)
-            {
-                ErrorLogger.Append(ex);
-                Console.WriteLine($"Failed to read {file} contents");
-            } 
-
-            return null;
         }
 
         private void OpenExplorer_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
