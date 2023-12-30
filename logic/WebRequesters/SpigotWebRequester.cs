@@ -69,8 +69,6 @@ namespace Fork.Logic.WebRequesters
 
                     json = JsonConvert.SerializeObject(vResponse, Formatting.Indented);
                     ResponseCache.Instance.CacheResponse(url, json);
-
-                    Console.WriteLine(json);
                 }
                 catch (WebException e)
                 {
