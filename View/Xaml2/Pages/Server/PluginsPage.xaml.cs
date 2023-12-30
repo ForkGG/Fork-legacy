@@ -31,18 +31,27 @@ namespace Fork.View.Xaml2.Pages.Server
 
         private async void InstallLocal_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog
+            string downloadsDirectory = null;
+            try
             {
-                Filter = "Jar file|*.jar",
-                Multiselect = true,
-                InitialDirectory = System.Convert.ToString(
+                downloadsDirectory = System.Convert.ToString(
                     Microsoft.Win32.Registry.GetValue(
                          @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders"
                         , "{374DE290-123F-4565-9164-39C4925E467B}"
                         , String.Empty
                     )
-                )
+                );
+            } catch (Exception) { }
+
+            System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog
+            {
+                Filter = "Jar file|*.jar",
+                Multiselect = true
             };
+            if (downloadsDirectory != null)
+            {
+                dialog.InitialDirectory = downloadsDirectory;
+            }
 
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {

@@ -632,7 +632,7 @@ namespace Fork.ViewModel
             DownloadCompleted = false;
             Entity.Initialized = false;
             EntitySerializer.Instance.StoreEntities();
-            Console.WriteLine("Starting server.jar download for server " + Entity);
+            Console.WriteLine($"Starting server.jar download for {Entity}");
             raisePropertyChanged(nameof(Server));
             raisePropertyChanged(nameof(ReadyToUse));
         }
