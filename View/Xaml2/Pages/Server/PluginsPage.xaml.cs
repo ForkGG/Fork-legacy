@@ -14,6 +14,9 @@ using YamlDotNet.Serialization;
 using Fork.Logic.Utils;
 using Fork.Logic.Persistence;
 using System.Linq;
+using Fork.Logic.Model;
+using Fork.Logic.Model.ServerConsole;
+using System.Threading.Tasks;
 
 namespace Fork.View.Xaml2.Pages.Server
 {
@@ -74,31 +77,33 @@ namespace Fork.View.Xaml2.Pages.Server
                     try
                     {
                         File.Copy(selectedElement, destination, true);
-                        
+
                         if (pluginName != null)
                         {
-                            bool install = true;
+                            bool notInstall = false;
                             foreach (InstalledPlugin iPlugin in viewModel.InstalledPlugins)
                             {
                                 string iName;
                                 if (iPlugin.Plugin == null)
                                 {
                                     iName = iPlugin.Name;
-                                } else
+                                }
+                                else
                                 {
                                     iName = iPlugin.Plugin.name;
                                 }
 
                                 if (iName.Equals(pluginName))
                                 {
-                                    install = false;
+                                    notInstall = true;
                                     break;
                                 }
                             }
 
-                            if (!install)
+                            if (notInstall)
                             {
-                                Console.WriteLine($"Denied to install {pluginName} because it's already installed");
+                                viewModel.EntityViewModel.AddToConsole(
+                                    new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Denied to install {pluginName} because it's already installed"));
                                 return;
                             }
 
@@ -111,45 +116,68 @@ namespace Fork.View.Xaml2.Pages.Server
                                 if (Directory.Exists(pluginDataFolder) && !Directory.Exists(localData))
                                 {
                                     Directory.CreateDirectory(localData);
-                                    Console.WriteLine($"Copying {pluginDataFolder} to {localData}");
+                                    viewModel.EntityViewModel.AddToConsole(
+                                        new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Copying {pluginDataFolder} to plugins/{pluginName}"));
                                     CopyFilesRecursively(pluginDataFolder, localData);
                                 }
-                            } catch (Exception ex)
+                            }
+                            catch (Exception ex)
                             {
                                 ErrorLogger.Append(ex);
-                                Console.WriteLine($"Failed to copy directory from {pluginDataFolder} to {localData}");
+                                viewModel.EntityViewModel.AddToConsole(
+                                        new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Failed to copy directory from {pluginDataFolder} to plugins/{pluginName}"));
                             }
-
-                            InstalledPlugin ip = new InstalledPlugin
-                            {
-                                LocalId = new Random().Next() * new Random().Next(),
-                                Name = targetName,
-                                IsSpigetPlugin = false,
-                                IsDownloaded = true,
-                                LocalPlugin = new Fork.Logic.Model.PluginModels.File {
-                                    type = "jar",
-                                    actualType = "jar",
-                                    size = new FileInfo(selectedElement).Length,
-                                    sizeUnit = "bytes",
-                                    url = destination
-                                }
-                            };
-
-                            viewModel.InstalledPlugins.Add(ip);
-                            viewModel.EnablePlugin(ip);
-                            await PluginManager.Instance.EnablePluginAsync(ip, viewModel);
-                        } else
+                        }
+                        else
                         {
-                            Console.WriteLine($"Possible non plugin file {destination} was moved to plugins folder");
+                            viewModel.EntityViewModel.AddToConsole(
+                                        new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Possible non plugin file installed {fileName}"));
+                        }
+
+                        bool loaded = await DoVirtualLoading(viewModel, targetName, selectedElement, destination);
+                        if (loaded)
+                        {
+                            viewModel.EntityViewModel.AddToConsole(
+                                        new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Successfully installed locally {fileName}"));
+                        }
+                        else
+                        {
+                            viewModel.EntityViewModel.AddToConsole(
+                                        new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Failed while installing locally {fileName}"));
                         }
                     }
                     catch (Exception ex)
                     {
                         ErrorLogger.Append(ex);
+                        viewModel.EntityViewModel.AddToConsole(
+                                    new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Failed while installing {fileName}"));
                         Console.WriteLine($"Failed to copy file {fileName} to {destination}");
                     }
                 }
             }
+        }
+
+        private static async Task<bool> DoVirtualLoading(PluginViewModel viewModel, string targetName, string selectedElement, string destination)
+        {
+            InstalledPlugin ip = new InstalledPlugin
+            {
+                LocalId = new Random().Next() * new Random().Next(),
+                Name = targetName,
+                IsSpigetPlugin = false,
+                IsDownloaded = true,
+                LocalPlugin = new Fork.Logic.Model.PluginModels.File
+                {
+                    type = "jar",
+                    actualType = "jar",
+                    size = new FileInfo(selectedElement).Length,
+                    sizeUnit = "bytes",
+                    url = destination
+                }
+            };
+
+            viewModel.InstalledPlugins.Add(ip);
+            viewModel.EnablePlugin(ip);
+            return await PluginManager.Instance.EnablePluginAsync(ip, viewModel);
         }
 
         private static void CopyFilesRecursively(string sourcePath, string targetPath)
