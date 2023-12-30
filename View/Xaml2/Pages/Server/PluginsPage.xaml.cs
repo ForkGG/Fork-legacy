@@ -77,6 +77,31 @@ namespace Fork.View.Xaml2.Pages.Server
                         
                         if (pluginName != null)
                         {
+                            bool install = true;
+                            foreach (InstalledPlugin iPlugin in viewModel.InstalledPlugins)
+                            {
+                                string iName;
+                                if (iPlugin.Plugin == null)
+                                {
+                                    iName = iPlugin.Name;
+                                } else
+                                {
+                                    iName = iPlugin.Plugin.name;
+                                }
+
+                                if (iName.Equals(pluginName))
+                                {
+                                    install = false;
+                                    break;
+                                }
+                            }
+
+                            if (!install)
+                            {
+                                Console.WriteLine($"Denied to install {pluginName} because it's already installed");
+                                return;
+                            }
+
                             Console.WriteLine($"Checking data folder for {pluginName}");
                             string pluginDataFolder = Path.Combine(selectedElement[..^fileName.Length], pluginName);
                             string localData = Path.Combine(path, pluginName);
@@ -110,9 +135,7 @@ namespace Fork.View.Xaml2.Pages.Server
                                 }
                             };
 
-                            //InstalledPluginSerializer.Instance.StoreInstalledPlugins(viewModel.InstalledPlugins.ToList(), viewModel.EntityViewModel);
                             viewModel.InstalledPlugins.Add(ip);
-                            //viewModel.Plugins.Add(ip.Plugin);
                             viewModel.EnablePlugin(ip);
                             await PluginManager.Instance.EnablePluginAsync(ip, viewModel);
                         } else
