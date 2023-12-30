@@ -15,8 +15,6 @@ using Fork.Logic.Persistence;
 using Fork.Logic.Utils;
 using Fork.ViewModel;
 using Websocket.Client;
-using Websocket.Client.Models;
-using Timer = System.Timers.Timer;
 
 namespace Fork.Logic.WebRequesters
 {
