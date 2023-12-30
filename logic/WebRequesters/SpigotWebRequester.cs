@@ -94,7 +94,7 @@ namespace Fork.Logic.WebRequesters
                 ServerVersion serverVersion = new ServerVersion();
                 serverVersion.Type = ServerVersion.VersionType.Spigot;
                 serverVersion.Version = version;
-                serverVersion.JarLink = $"https://cdn.getbukkit.org/spigot/spigot-{version}-SNAPSHOT-latest.jar";
+                serverVersion.JarLink = $"https://cdn.getbukkit.org/spigot/spigot-{version}-R0.1-SNAPSHOT-latest.jar";
                 result.Add(serverVersion);
             }
 
