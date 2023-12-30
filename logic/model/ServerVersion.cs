@@ -28,8 +28,8 @@ namespace Fork.Logic.Model
         public int Build { get; set; } = 0;
         public string JarLink { get; set; }
         [JsonIgnore] public bool IsProxy => Type == VersionType.Waterfall;
-        [JsonIgnore] public bool SupportBuilds => Type == VersionType.Paper || Type == VersionType.Purpur;
-        public bool HasPlugins => Type == VersionType.Paper || Type == VersionType.Purpur;
+        [JsonIgnore] public bool SupportBuilds => Type == VersionType.Paper;
+        [JsonIgnore] public bool HasPlugins => Type == VersionType.Paper || Type == VersionType.Purpur;
 
         public ServerVersion()
         {

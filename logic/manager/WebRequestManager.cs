@@ -186,7 +186,7 @@ namespace Fork.Logic.Manager
                 if (version.type == versionType)
                 {
                     ServerVersion internalVersion = new ServerVersion();
-                    internalVersion.Type = ServerVersion.VersionType.Vanilla;
+                    internalVersion.Type = versionType == Manifest.VersionType.release ? ServerVersion.VersionType.Vanilla : ServerVersion.VersionType.Snapshot;
                     internalVersion.Version = version.id;
                     internalVersion.JarLink = GetJarURL(version.url);
                     if (internalVersion.JarLink!=null)

@@ -42,7 +42,14 @@ namespace Fork.View.Xaml2.Pages
             UnSelectProxyType();
             versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.PaperVersions });
             versionComboBox.SelectedIndex = 0;
-        }  
+        }
+
+        private void ServerTypeSpigot_Click(object sender, RoutedEventArgs e)
+        {
+            UnSelectProxyType();
+            versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.SpigotServerVersions });
+            versionComboBox.SelectedIndex = 0;
+        }
 
         private void ServerTypeWaterfall_Click(object sender, RoutedEventArgs e)
         {

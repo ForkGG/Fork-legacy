@@ -710,8 +710,7 @@ namespace Fork.Logic.Manager
                         case MinecraftDimension.End:
                             return new DirectoryInfo(worldFolder + "_the_end");
                         default:
-                            throw new ArgumentException("No implementation for deletion of dimension " + dimension +
-                                                        " on Fabric servers");
+                            throw new ArgumentException($"No implementation for deletion of dimension {dimension} on {server.Version.Type} servers");
                     }
                 default:
                     throw new ArgumentException("No implementation for deletion of " + server.Version.Type +
