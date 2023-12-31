@@ -19,7 +19,7 @@ namespace Fork.logic.Utils
         {
             InstalledPlugin ip = new InstalledPlugin
             {
-                LocalId = new Random().Next() * new Random().Next(),
+                LocalId = new Random().Next(),
                 Name = targetName,
                 IsSpigetPlugin = false,
                 IsDownloaded = true,
