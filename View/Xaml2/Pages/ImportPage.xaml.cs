@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -40,43 +41,48 @@ namespace Fork.View.Xaml2.Pages
         
         private void ServerTypeVanilla_Click(object sender, RoutedEventArgs e)
         {
-            versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.VanillaServerVersions });
-            versionComboBox.SelectedIndex = 0;
+            ApplyVersion(viewModel.VanillaServerVersions);
         }
 
         private void ServerTypeSnapshot_Click(object sender, RoutedEventArgs e)
         {
-            versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.SnapshotServerVersions });
-            versionComboBox.SelectedIndex = 0;
+            ApplyVersion(viewModel.SnapshotServerVersions);
         }
 
         private void ServerTypeSpigot_Click(object sender, RoutedEventArgs e)
         {
-            versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.SpigotVersions });
-            versionComboBox.SelectedIndex = 0;
+            ApplyVersion(viewModel.SpigotVersions);
         }
 
         private void ServerTypePaper_Click(object sender, RoutedEventArgs e)
         {
-            versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.PaperVersions });
-            versionComboBox.SelectedIndex = 0;
+            ApplyVersion(viewModel.PaperVersions);
         }
 
         private void ServerTypePurpur_Click(object sender, RoutedEventArgs e)
         {
-            versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.PurpurVersions });
-            versionComboBox.SelectedIndex = 0;
+            ApplyVersion(viewModel.PurpurVersions);
         }
 
         private void ServerTypeFabric_Click(object sender, RoutedEventArgs e)
         {
-            versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = viewModel.FabricServerVersions });
+            ApplyVersion(viewModel.FabricServerVersions);
+        }
+
+        private void ApplyVersion(Collection<ServerVersion> VersionList)
+        {
+            versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = VersionList });
             versionComboBox.SelectedIndex = 0;
+            ImportConfirmButton.IsEnabled = lastPath != null;
         }
         
         private async void BtnApply_Click(object sender, RoutedEventArgs e)
         {
-            ServerVersion selectedVersion = (ServerVersion)versionComboBox.SelectedValue;
+            ServerVersion selectedVersion = (ServerVersion) versionComboBox.SelectedValue;
+            if (selectedVersion == null)
+            {
+
+            }
             //TODO check if inputs are valid / server not existing
 
             if (lastPath == null )
@@ -91,58 +97,59 @@ namespace Fork.View.Xaml2.Pages
             bool createServerSuccess = await ServerManager.Instance.ImportServerAsync(selectedVersion, validationInfo, oldDir.FullName, serverName);
             ServerViewModel viewModel = ApplicationManager.Instance.MainViewModel.SelectedEntity as ServerViewModel;
 
-            System.Timers.Timer timer = new System.Timers.Timer();
+            string serverPath = Path.Combine(App.ServerPath, serverName);
+            string pluginsFolder = Path.Combine(serverPath, "plugins");
+            string fromPluginsFolder = Path.Combine(lastPath, "plugins");
+
+            if (Directory.Exists(fromPluginsFolder))
+            {
+                viewModel.AddToConsole(
+                            new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Loading plugins", ConsoleMessage.MessageLevel.INFO));
+
+                string[] files = Directory.GetFiles(fromPluginsFolder);
+                List<string> jarFiles = files
+                    .Where(archivo => Path.GetExtension(archivo).Equals(".jar", StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
+                PluginsPage pluginsPage = viewModel.PluginsPage as PluginsPage;
+
+                foreach (string file in jarFiles)
+                {
+                    string pluginName = LocalPluginUtils.ReadPluginName(file);
+                    string fileName = Path.GetFileName(file);
+                    string targetName = pluginName ?? StringUtils.BeautifyPluginName(fileName[..^4]);
+                    string destination = Path.Combine(pluginsFolder, fileName);
+
+                    if (pluginName == null)
+                    {
+                        viewModel.AddToConsole(
+                            new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Possible non plugin file installed {fileName}", ConsoleMessage.MessageLevel.WARN));
+                    }
+
+                    bool added = await LocalPluginUtils.DoVirtualLoading(pluginsPage.viewModel, targetName, file, destination);
+                    if (added)
+                    {
+                        viewModel.AddToConsole(
+                            new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Loaded plugin from imported server {targetName}",
+                            ConsoleMessage.MessageLevel.SUCCESS));
+                    }
+                    else
+                    {
+                        viewModel.AddToConsole(
+                            new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Failed to load plugin from imported server {targetName}",
+                            ConsoleMessage.MessageLevel.ERROR));
+                    }
+                }
+            }
+
+            /*System.Timers.Timer timer = new System.Timers.Timer();
             timer.Elapsed += async(e, a) =>
             {
-                string serverPath = Path.Combine(App.ServerPath, serverName);
-                string pluginsFolder = Path.Combine(serverPath, "plugins");
-
-                if (Directory.Exists(pluginsFolder))
-                {
-                    viewModel.AddToConsole(
-                                new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Loading plugins", ConsoleMessage.MessageLevel.INFO));
-
-                    string[] files = Directory.GetFiles(pluginsFolder);
-                    List<string> jarFiles = files
-                        .Where(archivo => Path.GetExtension(archivo).Equals(".jar", StringComparison.OrdinalIgnoreCase))
-                        .ToList();
-
-                    PluginsPage pluginsPage = viewModel.PluginsPage as PluginsPage;
-
-                    Application.Current.Dispatcher.Invoke(async() =>
-                    {
-                        foreach (string file in jarFiles)
-                        {
-                            string pluginName = LocalPluginUtils.ReadPluginName(file);
-                            string fileName = Path.GetFileName(file);
-                            string targetName = pluginName ?? StringUtils.BeautifyPluginName(fileName[..^4]);
-
-                            if (pluginName == null)
-                            {
-                                viewModel.AddToConsole(
-                                    new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Possible non plugin file installed {fileName}", ConsoleMessage.MessageLevel.WARN));
-                            }
-
-                            bool added = await LocalPluginUtils.DoVirtualLoading(pluginsPage.viewModel, targetName, file, file);
-                            if (added)
-                            {
-                                viewModel.AddToConsole(
-                                    new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Loaded plugin from imported server {targetName}",
-                                    ConsoleMessage.MessageLevel.SUCCESS));
-                            }
-                            else
-                            {
-                                viewModel.AddToConsole(
-                                    new ConsoleMessage($"[LOCAL PLUGIN INSTALLATION] Failed to load plugin from imported server {targetName}",
-                                    ConsoleMessage.MessageLevel.ERROR));
-                            }
-                        }
-                    });
-                }
+                
             };
             timer.AutoReset = false;
             timer.Interval = 1000;
-            timer.Start();
+            timer.Start();*/
             /*
              * So, apparently, if we try to load the plugins right
              * after the server has been imported, it messes up with
@@ -154,6 +161,7 @@ namespace Fork.View.Xaml2.Pages
              */
 
             //TODO Do something if creating fails
+            lastPath = null;
         }
 
         private void ServerDirPath_MouseDown(object sender, MouseButtonEventArgs e)
@@ -186,7 +194,7 @@ namespace Fork.View.Xaml2.Pages
                 else
                 {
                     serverPathBgr.Background = (Brush) Application.Current.FindResource("tabSelected");
-                    ImportConfirmButton.IsEnabled = true;
+                    ImportConfirmButton.IsEnabled = versionComboBox.SelectedValue != null;
                 }
             }
         }

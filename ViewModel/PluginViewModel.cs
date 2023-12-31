@@ -200,6 +200,7 @@ namespace Fork.ViewModel
 
         private void RemoveInstalledPluginsFromList()
         {
+            if (Plugins == null) return;
             foreach (Plugin plugin in Plugins)
             {
                 foreach (InstalledPlugin installedPlugin in InstalledPlugins)
