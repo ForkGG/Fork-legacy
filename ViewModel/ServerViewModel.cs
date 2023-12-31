@@ -53,7 +53,7 @@ namespace Fork.ViewModel
 
         public Page WorldsPage { get; set; }
 
-        
+
         public ServerViewModel(Server server) : base(server)
         {
             if (Server == null)
@@ -78,11 +78,11 @@ namespace Fork.ViewModel
             else if (Server.Version.Type == ServerVersion.VersionType.Purpur)
             {
                 Versions = VersionManager.Instance.PurpurVersions;
-            } 
+            }
             else if (Server.Version.Type == ServerVersion.VersionType.Spigot)
             {
                 Versions = VersionManager.Instance.SpigotVersions;
-            } 
+            }
             else if (Server.Version.Type == ServerVersion.VersionType.Fabric)
             {
                 Versions = VersionManager.Instance.FabricVersions;
@@ -184,8 +184,7 @@ namespace Fork.ViewModel
                 NextAutomationName = "Starting";
             }
 
-            TimeSpan timeSpan =
-                TimeSpan.FromMilliseconds(ServerAutomationManager.Instance.CalculateTime(automationTime));
+            TimeSpan timeSpan = TimeSpan.FromMilliseconds(ServerAutomationManager.Instance.CalculateTime(automationTime));
             AutomationEnabled = true;
             NextAutomationHours = timeSpan.Hours.ToString();
             NextAutomationMinutes = timeSpan.Minutes.ToString();
@@ -193,70 +192,46 @@ namespace Fork.ViewModel
 
             new Thread(() =>
             {
-                restartTimer = new Timer {Interval = 1000};
+                restartTimer = new Timer { Interval = 1000 };
                 restartTimer.Elapsed += (sender, args) =>
                 {
                     timeSpan = timeSpan.Subtract(TimeSpan.FromMilliseconds(1000));
+                    if (timeSpan.Hours < 0 || timeSpan.Minutes < 0 || timeSpan.Seconds < 0)
+                    {
+                        timeSpan = TimeSpan.FromMilliseconds(ServerAutomationManager.Instance.CalculateTime(automationTime));
+                        //Update time stamp if we are restarting?
+                    }
+
                     AutomationEnabled = true;
                     NextAutomationHours = timeSpan.Hours.ToString();
                     NextAutomationMinutes = timeSpan.Minutes.ToString();
                     NextAutomationSeconds = timeSpan.Seconds.ToString();
-                    if (timeSpan.Hours == 0 && timeSpan.Minutes == 30 && timeSpan.Seconds == 0)
+                    if (timeSpan.Hours == 0)
                     {
-                        WriteAutomationInfo(automationTime, "30 minutes");
-                    }
-                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 5 && timeSpan.Seconds == 0)
-                    {
-                        WriteAutomationInfo(automationTime, "5 minutes");
-                    }
-                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 1 && timeSpan.Seconds == 0)
-                    {
-                        WriteAutomationInfo(automationTime, "1 minute");
-                    }
-                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 10)
-                    {
-                        WriteAutomationInfo(automationTime, "10 seconds");
-                    }
-                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 9)
-                    {
-                        WriteAutomationInfo(automationTime, "9 seconds");
-                    }
-                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 8)
-                    {
-                        WriteAutomationInfo(automationTime, "8 seconds");
-                    }
-                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 7)
-                    {
-                        WriteAutomationInfo(automationTime, "7 seconds");
-                    }
-                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 6)
-                    {
-                        WriteAutomationInfo(automationTime, "6 seconds");
-                    }
-                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 5)
-                    {
-                        WriteAutomationInfo(automationTime, "5 seconds");
-                    }
-                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 4)
-                    {
-                        WriteAutomationInfo(automationTime, "4 seconds");
-                    }
-                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 3)
-                    {
-                        WriteAutomationInfo(automationTime, "3 seconds");
-                    }
-                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 2)
-                    {
-                        WriteAutomationInfo(automationTime, "2 seconds");
-                    }
-                    else if (timeSpan.Hours == 0 && timeSpan.Minutes == 0 && timeSpan.Seconds == 1)
-                    {
-                        WriteAutomationInfo(automationTime, "1 seconds");
+                        if (timeSpan.Minutes > 0)
+                        {
+                            if (timeSpan.Minutes == 30 || timeSpan.Minutes == 1 || (timeSpan.Minutes <= 15 && timeSpan.Minutes % 5 == 0))
+                            {
+                                if (timeSpan.Seconds == 0)
+                                {
+                                    WriteAutomationInfo(automationTime, $"{timeSpan.Minutes} minutes");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (timeSpan.Seconds == 30 || (timeSpan.Seconds <= 10 && timeSpan.Seconds > 0))
+                            {
+                                WriteAutomationInfo(automationTime, $"{timeSpan.Seconds} seconds");
+                            }
+                        }
                     }
                 };
+
                 restartTimer.AutoReset = true;
                 restartTimer.Enabled = true;
-            }) {IsBackground = true}.Start();
+            })
+            { IsBackground = true }.Start();
         }
 
         public async Task SaveProperties()
