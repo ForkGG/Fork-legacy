@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
@@ -20,14 +21,15 @@ namespace Fork.logic.model.PluginModels
         public bool IsEnabled { get; set; } = true;
 
         [Newtonsoft.Json.JsonIgnore, JsonIgnore]
-        public Plugin Plugin { get; private set; }
+        public Plugin Plugin { get; protected set; }
 
         [Newtonsoft.Json.JsonIgnore, JsonIgnore]
-        public long LatestVersion { get; private set; }
+        public long LatestVersion { get; protected set; }
 
         [Newtonsoft.Json.JsonIgnore, JsonIgnore]
-        public bool Initialized { get; private set; } = false;
-
+        public bool Initialized { get; protected set; } = false;
+        public int LocalId { get; set; }
+        public File LocalPlugin { get; set; }
 
         #region events
 
@@ -55,6 +57,14 @@ namespace Fork.logic.model.PluginModels
                 t.Enabled = true;
                 Initialized = true;
                 PluginInitializedEvent?.Invoke();
+            } else if (LocalPlugin != null)
+            {
+                Plugin = new Plugin
+                {
+                    id = LocalId,
+                    name = Name,
+                    file = LocalPlugin,
+                };
             }
         }
 

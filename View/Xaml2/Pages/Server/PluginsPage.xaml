@@ -20,7 +20,10 @@
             <Grid DockPanel.Dock="Right" Width="230">
                 <Border Background="{DynamicResource backgroundDark}" Margin="0 0 0 0" CornerRadius="5 0 0 5"/>
                 <DockPanel Panel.ZIndex="1">
-                    <TextBlock Text="Open in File Explorer" DockPanel.Dock="Bottom" TextAlignment="Center" Margin="10 10 10 10" 
+                    <TextBlock Text="Install from local" DockPanel.Dock="Bottom" TextAlignment="Center" Margin="10 10 10 10" 
+                        PreviewMouseLeftButtonDown="InstallLocal_PreviewMouseLeftButtonDown" Cursor="Hand" Foreground="{DynamicResource textLink}">
+                    </TextBlock>
+                    <TextBlock Text="Open in File Explorer" DockPanel.Dock="Bottom" TextAlignment="Center" Margin="10 10 10 0" 
                            PreviewMouseLeftButtonDown="OpenExplorer_PreviewMouseLeftButtonDown" Cursor="Hand" Foreground="{DynamicResource textLink}">
                     </TextBlock>
                     <DockPanel Panel.ZIndex="1">

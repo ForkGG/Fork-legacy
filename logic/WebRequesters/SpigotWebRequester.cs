@@ -37,13 +37,6 @@ namespace Fork.Logic.WebRequesters
                         raw = await reader.ReadToEndAsync();
                     }
 
-                    /*dynamic fullResponse = JsonConvert.DeserializeObject(json);
-                    if (!fullResponse.status.ToString().Equals("success"))
-                    {
-                        throw new Exception("Invalid response from serverjars.com. No or wrong status found!");
-                    }
-                    ResponseCache.Instance.CacheResponse(url, json);*/
-
                     HtmlDocument doc = new HtmlDocument();
                     doc.LoadHtml(raw);
 
@@ -54,7 +47,7 @@ namespace Fork.Logic.WebRequesters
                     }
 
                     Collection<string> groupVersions = new Collection<string>();
-                    Regex spRegex = new Regex("^[0-9]+\\.[0-9]+\\.[0-9]+$");
+                    Regex spRegex = new Regex("^[0-9]+\\.[0-9]+(\\.[0-9]+)?$");
 
                     foreach (HtmlNode link in links)
                     {
@@ -96,12 +89,36 @@ namespace Fork.Logic.WebRequesters
             dynamic dyn = JsonConvert.DeserializeObject(json);
             dyn = dyn.response;
             List<ServerVersion> result = new ();
-            foreach (dynamic version in dyn)
+            Version snapshotMaxVersion = new Version("1.10.2");
+            Version getbukkitMinVersion = new Version("1.16.5");
+
+            /*
+             * So apparently, this is the latest version in where spigot
+             * used -snapshot thing when downloading. Regardless of the
+             * -snapshot prefix, you are alaways downloading the latest
+             * build
+             */
+
+            string downloadURL = "https://download.getbukkit.org/spigot/spigot-{version}.jar";
+            foreach (string version in dyn)
             {
+                Version current = new Version(version);
+                var legacyComp = current.CompareTo(snapshotMaxVersion);
+                var bukkitComp = current.CompareTo(getbukkitMinVersion);
+                if (legacyComp <= 0)
+                {
+                    //Legacy with prefix and CDN
+                    downloadURL = "https://cdn.getbukkit.org/spigot/spigot-{version}-R0.1-SNAPSHOT-latest.jar";
+                }
+                if (bukkitComp <= 0 && legacyComp == 1)
+                {
+                    downloadURL = "https://cdn.getbukkit.org/spigot/spigot-{version}.jar";
+                }
+
                 ServerVersion serverVersion = new ServerVersion();
                 serverVersion.Type = ServerVersion.VersionType.Spigot;
                 serverVersion.Version = version;
-                serverVersion.JarLink = $"https://download.getbukkit.org/spigot/spigot-{version}.jar";
+                serverVersion.JarLink = downloadURL.Replace("{version}", version);
                 result.Add(serverVersion);
             }
 

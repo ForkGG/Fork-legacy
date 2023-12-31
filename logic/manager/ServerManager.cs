@@ -21,14 +21,12 @@ using Fork.Logic.CustomConsole;
 using Fork.Logic.ImportLogic;
 using Fork.Logic.Logging;
 using Fork.Logic.Model;
-using Fork.logic.model.PluginModels;
 using Fork.Logic.Model.ProxyModels;
 using Fork.Logic.Model.ServerConsole;
 using Fork.Logic.Persistence;
 using Fork.Logic.Utils;
 using Fork.Logic.WebRequesters;
 using Fork.ViewModel;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace Fork.Logic.Manager
