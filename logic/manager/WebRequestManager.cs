@@ -74,7 +74,8 @@ namespace Fork.Logic.Manager
 
         public async Task<List<ServerVersion>> GetSpigotVersions()
         {
-            return await new SpigotWebRequester().RequestSpigotVersions();
+            return new List<ServerVersion>();
+            //return await new SpigotWebRequester().RequestSpigotVersions();
         }
 
         public async Task<List<ServerVersion>> GetFabricVersions()

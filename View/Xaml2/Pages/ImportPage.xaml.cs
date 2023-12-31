@@ -73,7 +73,7 @@ namespace Fork.View.Xaml2.Pages
         {
             versionComboBox.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = VersionList });
             versionComboBox.SelectedIndex = 0;
-            ImportConfirmButton.IsEnabled = lastPath != null;
+            ImportConfirmButton.IsEnabled = lastPath != null && versionComboBox.SelectedValue != null;
         }
         
         private async void BtnApply_Click(object sender, RoutedEventArgs e)
