@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using System.Timers;
 using Fork.Annotations;
+using Fork.Logic.Manager;
 using Fork.Logic.Model.PluginModels;
 using Fork.Logic.WebRequesters;
 using Timer = System.Timers.Timer;

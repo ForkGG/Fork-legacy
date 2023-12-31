@@ -91,7 +91,6 @@ namespace Fork.Logic.WebRequesters
             List<ServerVersion> result = new ();
             Version snapshotMaxVersion = new Version("1.10.2");
             Version getbukkitMinVersion = new Version("1.16.5");
-
             /*
              * So apparently, this is the latest version in where spigot
              * used -snapshot thing when downloading. Regardless of the

@@ -134,10 +134,19 @@ namespace Fork.Logic.Manager
 
         private bool InstallPlugin(Plugin plugin, PluginViewModel pluginViewModel)
         {
+            Collection<InstalledPlugin> removeTarget = new Collection<InstalledPlugin>();
             foreach (InstalledPlugin iPlugin in pluginViewModel.InstalledPlugins)
             {
+                
                 if (iPlugin.Plugin == null)
                 {
+                    if (iPlugin.Name.Equals(plugin.name))
+                    {
+                        Console.WriteLine($"{iPlugin.Name} marked for deletion");
+                        removeTarget.Add(iPlugin);
+
+                        pluginViewModel.DisablePlugin(iPlugin);
+                    }
                     continue;
                 }
 
@@ -146,6 +155,11 @@ namespace Fork.Logic.Manager
                     Console.WriteLine("Error installing plugin: Plugin " + plugin.name + " is already installed.");
                     return false;
                 }
+            }
+            foreach (InstalledPlugin iPlugin in removeTarget)
+            {
+                Console.WriteLine($"Removing locally installed plugin {iPlugin.Name} because installing remotely");
+                DeletePlugin(iPlugin, pluginViewModel);
             }
 
             PluginWebRequester webRequester = new PluginWebRequester();

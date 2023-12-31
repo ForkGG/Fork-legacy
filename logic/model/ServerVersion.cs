@@ -29,7 +29,7 @@ namespace Fork.Logic.Model
         public string JarLink { get; set; }
         [JsonIgnore] public bool IsProxy => Type == VersionType.Waterfall;
         [JsonIgnore] public bool SupportBuilds => Type == VersionType.Paper;
-        [JsonIgnore] public bool HasPlugins => Type == VersionType.Paper || Type == VersionType.Purpur;
+        [JsonIgnore] public bool HasPlugins => Type == VersionType.Paper || Type == VersionType.Purpur || Type == VersionType.Spigot;
 
         public ServerVersion()
         {

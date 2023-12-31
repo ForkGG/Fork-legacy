@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -45,6 +46,7 @@ namespace Fork.Logic.Manager
                 {
                     Application.Current?.Dispatcher?.InvokeAsync(() => paperVersions.Add(version));
                 }
+
                 versions = await WebRequestManager.Instance.GetPurpurVersions();
                 foreach (var version in versions)
                 {
