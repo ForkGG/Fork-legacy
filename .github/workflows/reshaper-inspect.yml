@@ -24,6 +24,8 @@ jobs:
         with:
           solution: ./Fork.sln
           tool-version: 2023.3.2
+          exclude: /packages/*
+          sEverity: ERROR
 
     permissions:
       security-events: write
