@@ -23,6 +23,7 @@ jobs:
         uses: JetBrains/ReSharper-InspectCode@v0.3
         with:
           solution: ./Fork.sln
+          tool-version: 2023.3.2
 
     permissions:
       security-events: write
