@@ -108,7 +108,95 @@ namespace Fork.ViewModel
 
             if (!contains)
             {
-                Application.Current.Dispatcher?.Invoke(() => Servers.Insert(index, networkForkServer));
+                string pattern = $"^{networkForkServer.Name}(?<match>[0-9]+)?$";
+                System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(pattern);
+
+                long lastlyAdded = 0;
+                bool rename = false;
+                Collection<string> toRemove = new Collection<string>();
+                foreach (string storedName in Network.Config.servers.Keys)
+                {
+                    Fork.Logic.Model.Settings.Server net = Network.Config.servers[storedName];
+                    if (net.address == networkForkServer.Address)
+                    {
+                        if (net.ForkServer)
+                        {
+                            AddToConsole(new Logic.Model.ServerConsole.ConsoleMessage($"Refused to add server {networkForkServer.Name} because it's already on the network",
+                                Logic.Model.ServerConsole.ConsoleMessage.MessageLevel.ERROR));
+                            return;
+                        }
+                        else
+                        {
+                            toRemove.Add(storedName);
+                        }
+                        break;
+                    }
+
+                    System.Text.RegularExpressions.Match match = regex.Match(storedName);
+                    if (match.Success)
+                    {
+                        string num = match.Groups["match"].Value;
+                        if (num != null && num.Trim().Length > 0)
+                        {
+                            long value = long.Parse(num);
+                            if (value > lastlyAdded)
+                            {
+                                lastlyAdded = value;
+                            }
+                        }
+
+                        rename = true;
+                    }
+                }
+
+                if (toRemove.Count > 0)
+                {
+                    foreach (string net in toRemove)
+                    {
+                        try
+                        {
+                            Network.Config.servers.Remove(net);
+                            NetworkServer ?sv = null;
+                            foreach (NetworkServer networkServer in Servers)
+                            {
+                                if (networkServer.Name.Equals(net))
+                                {
+                                    sv = networkServer;
+                                    break;
+                                }
+                            }
+
+                            if (sv != null)
+                            {
+                                RemoveServer(sv);
+                            }
+
+                            AddToConsole(new Logic.Model.ServerConsole.ConsoleMessage($"Removing non-fork server {net} because a Fork server with the same information has been added",
+                                Logic.Model.ServerConsole.ConsoleMessage.MessageLevel.WARN));
+                        } catch (KeyNotFoundException)
+                        {
+
+                        }
+                    }
+                }
+
+                if (rename)
+                {
+                    string newName = $"{networkForkServer.Name}{lastlyAdded + 1}";
+                    networkForkServer.Name = newName;
+                }
+
+                Application.Current.Dispatcher?.Invoke(() =>
+                {
+                    try
+                    {
+                        Servers.Insert(index, networkForkServer);
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        Servers.Add(networkForkServer);
+                    }
+                });
                 SaveSettings();
             }
         }
@@ -268,7 +356,11 @@ namespace Fork.ViewModel
             settings.servers = new Dictionary<string, Logic.Model.Settings.Server>();
             foreach (NetworkServer networkServer in Servers)
             {
-                settings.servers.Add(networkServer.Name, networkServer.ProxyServer);
+                try
+                {
+                    settings.servers.Add(networkServer.Name, networkServer.ProxyServer);
+                }
+                catch (ArgumentException) { }
             }
 
             if (settings.listeners.Count < 1)
