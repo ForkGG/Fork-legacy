@@ -245,12 +245,12 @@
 
                     
                     
-                    <!-- Patreon area -->
+                    <!-- Supporter area -->
                     <Border CornerRadius="10" Margin="5">
                         <StackPanel Background="Transparent" Margin="0 10">
-                            <TextBlock Text="Patreon Supporters" Foreground="{DynamicResource textHeader}" FontFamily="{StaticResource Montserrat-SemiBold}" FontSize="23" Margin="15 0 5 20"/>
+                            <TextBlock Text="Supporters" Foreground="{DynamicResource textHeader}" FontFamily="{StaticResource Montserrat-SemiBold}" FontSize="23" Margin="15 0 5 20"/>
                             <StackPanel Margin="25 0">
-                                <ItemsControl ItemsSource="{Binding Patrons}">
+                                <ItemsControl ItemsSource="{Binding Supporters}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel/>
@@ -259,14 +259,14 @@
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <Border Margin="10" Background="{DynamicResource backgroundPatron}" CornerRadius="6">
-                                                <TextBlock Text="{Binding}" Foreground="{DynamicResource textPatron}" Margin="30 10" 
+                                                <TextBlock Text="{Binding}" Foreground="{DynamicResource textSupporter}" Margin="30 10" 
                                                            FontFamily="{DynamicResource Montserrat-Bold}" FontSize="16"/>
                                             </Border>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Content="Become a Patron" Style="{DynamicResource BecomePatronBtn}" Click="BecomePatron_Click"/>
+                                    <Button Content="Become a Supporter" Style="{DynamicResource BecomeSupporterBtn}" Click="BecomeSupporter_Click"/>
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>

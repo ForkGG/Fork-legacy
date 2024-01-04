@@ -130,9 +130,9 @@ namespace Fork.View.Xaml2.Pages
             serverPathBgr.Background = (Brush) Application.Current.FindResource("buttonBgrDefault");
         }
 
-        private void BecomePatron_Click(object sender, RoutedEventArgs e)
+        private void BecomeSupporter_Click(object sender, RoutedEventArgs e)
         {
-            string url = "https://www.patreon.com/forkgg";
+            string url = "https://www.ko-fi.com/forkgg";
             //hack for windows only https://github.com/dotnet/corefx/issues/10361
             Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") {CreateNoWindow = true});
         }

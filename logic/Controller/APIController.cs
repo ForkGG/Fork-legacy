@@ -65,7 +65,7 @@ namespace Fork.Logic.Controller
             }
         }
 
-        public List<string> GetPatrons()
+        public List<string> GetSupporters()
         {
             if (!IsAPIAvailable())
             {
@@ -74,9 +74,16 @@ namespace Fork.Logic.Controller
             }
             try
             {
-                var response = RequestRawResponse(apiBaseURL + "patrons");
-                string patronsJson = RetrieveResponseBody(response);
-                return JsonConvert.DeserializeObject<List<string>>(patronsJson);
+                // Patrons are still shown in the app until the support is completely removed.
+                var patronResponse = RequestRawResponse(apiBaseURL + "patrons");
+                string patronResponseBody = RetrieveResponseBody(patronResponse);
+                List<string> patrons = JsonConvert.DeserializeObject<List<string>>(patronResponseBody);
+                
+                var response = RequestRawResponse(apiBaseURL + "supporters");
+                string responseBody = RetrieveResponseBody(response);
+                List<string> result = JsonConvert.DeserializeObject<List<string>>(responseBody);
+                //result.AddRange(patrons);
+                return result;
             }
             catch (Exception e)
             {

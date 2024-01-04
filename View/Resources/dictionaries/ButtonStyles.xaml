@@ -94,12 +94,12 @@
         </Setter>
     </Style>
 
-    <Style x:Key="BecomePatronBtn" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+    <Style x:Key="BecomeSupporterBtn" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border Margin="10" Background="{DynamicResource buttonPatron}" CornerRadius="6">
-                        <TextBlock Text="{TemplateBinding Content}" Foreground="{DynamicResource textPatron}" Margin="30 10" 
+                    <Border Margin="10" Background="{DynamicResource buttonSupporter}" CornerRadius="6">
+                        <TextBlock Text="{TemplateBinding Content}" Foreground="{DynamicResource textSupporter}" Margin="30 10" 
                             FontFamily="{DynamicResource Montserrat-Bold}" FontSize="16" x:Name="text"/>
                     </Border>
                     <ControlTemplate.Triggers>

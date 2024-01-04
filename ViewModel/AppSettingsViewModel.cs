@@ -39,7 +39,7 @@ namespace Fork.ViewModel
         public string DiscordGuildName { get; set; } = "";
         public AppSettingsPage AppSettingsPage { get; }
         public MainViewModel MainViewModel { get; }
-        public ObservableCollection<string> Patrons { get; set; }
+        public ObservableCollection<string> Supporters { get; set; }
 
         public AppSettingsViewModel(MainViewModel mainViewModel)
         {
@@ -58,7 +58,7 @@ namespace Fork.ViewModel
             
             MainViewModel = mainViewModel;
             AppSettingsPage = new AppSettingsPage(this);
-            Patrons = new ObservableCollection<string>(new APIController().GetPatrons());
+            Supporters = new ObservableCollection<string>(new APIController().GetSupporters());
         }
 
         public async Task OpenAppSettingsPage()
@@ -128,8 +128,8 @@ namespace Fork.ViewModel
             {
                 try
                 {
-                    var patronsNew = new ObservableCollection<string>(new APIController().GetPatrons());
-                    Application.Current.Dispatcher.InvokeAsync(() => { Patrons = patronsNew; });
+                    var patronsNew = new ObservableCollection<string>(new APIController().GetSupporters());
+                    Application.Current.Dispatcher.InvokeAsync(() => { Supporters = patronsNew; });
                     AppSettingsSerializer.Instance.ReadSettings();
                     return true;
                 }
