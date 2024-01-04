@@ -82,7 +82,7 @@ namespace Fork.Logic.Controller
                 var response = RequestRawResponse(apiBaseURL + "supporters");
                 string responseBody = RetrieveResponseBody(response);
                 List<string> result = JsonConvert.DeserializeObject<List<string>>(responseBody);
-                //result.AddRange(patrons);
+                result.AddRange(patrons);
                 return result;
             }
             catch (Exception e)
