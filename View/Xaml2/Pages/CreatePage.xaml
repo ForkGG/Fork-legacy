@@ -33,6 +33,11 @@
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/VanillaW.png"
                                                 Header="Vanilla" GroupName="createServerTypes" Margin="10 10" IsChecked="True" 
                                                 Click="ServerTypeVanilla_Click"/>
+                                <controls:ServerTypeRadioButton
+                                    IconSource="pack://application:,,,/View/Resources/images/Icons/SnapshotD.png"
+                                    HoverIconSource="pack://application:,,,/View/Resources/images/Icons/SnapshotW.png"
+                                    Header="Snapshot" GroupName="createServerTypes" Margin="10 10"
+                                    Click="ServerTypeSnapshot_Click" />     
                                 <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/PaperD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/PaperW.png"
                                                  Header="Paper" GroupName="createServerTypes" Margin="10 10"
@@ -41,8 +46,6 @@
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/WaterfallW.png"
                                                  Header="Waterfall" GroupName="createServerTypes" Margin="10 10"
                                                 Click="ServerTypeWaterfall_Click"/>
-                            </WrapPanel>
-                            <WrapPanel Margin="20 5" Orientation="Horizontal">
                                 <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/SpigotD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/SpigotW.png"
                                                  Header="Spigot" GroupName="createServerTypes" Margin="10 10"
@@ -62,12 +65,6 @@
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/FabricW.png"
                                                  Header="Fabric" GroupName="createServerTypes" Margin="10 10"
                                                 Click="ServerTypeFabric_Click"/>     
-                            </WrapPanel>
-                            <WrapPanel Margin="20 5" Orientation="Horizontal">
-                                <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/SnapshotD.png" 
-                                                HoverIconSource="pack://application:,,,/View/Resources/images/Icons/SnapshotW.png"
-                                                 Header="Snapshot" GroupName="createServerTypes" Margin="10 10"
-                                                Click="ServerTypeSnapshot_Click"/>                                                                                                
                             </WrapPanel>
                         </StackPanel>
                         <Border.Style>

@@ -27,25 +27,25 @@
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/VanillaW.png"
                                                 Header="Vanilla" GroupName="serverTypes" Margin="10 10" IsChecked="True" 
                                                 Click="ServerTypeVanilla_Click"/>
+                <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/SnapshotD.png"
+                                                HoverIconSource="pack://application:,,,/View/Resources/images/Icons/SnapshotW.png"
+                                                Header="Snapshot" GroupName="serverTypes" Margin="10 10"
+                                                Click="ServerTypeSnapshot_Click" />
                 <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/SpigotD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/SpigotW.png"
                                                 Header="Spigot" GroupName="serverTypes" Margin="10 10"
                                                 Click="ServerTypeSpigot_Click"/>
                 <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/PaperD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/PaperW.png"
-                                                 Header="Paper" GroupName="serverTypes" Margin="10 10"
-                                                Click="ServerTypePaper_Click"/>                                                
-                <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/SnapshotD.png"
-                                                HoverIconSource="pack://application:,,,/View/Resources/images/Icons/SnapshotW.png"
-                                                 Header="Snapshot" GroupName="serverTypes" Margin="10 10"
-                                                Click="ServerTypeSnapshot_Click"/>
+                                                Header="Paper" GroupName="serverTypes" Margin="10 10"
+                                                Click="ServerTypePaper_Click"/>
                 <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/PurpurD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/PurpurW.png"
-                                                 Header="Purpur" GroupName="serverTypes" Margin="10 10"
+                                                Header="Purpur" GroupName="serverTypes" Margin="10 10"
                                                 Click="ServerTypePurpur_Click"/>
                 <controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/FabricD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/FabricW.png"
-                                                 Header="Fabric" GroupName="serverTypes" Margin="10 10"
+                                                Header="Fabric" GroupName="serverTypes" Margin="10 10"
                                                 Click="ServerTypeFabric_Click"/>
                 <!--controls:ServerTypeRadioButton IconSource="pack://application:,,,/View/Resources/images/Icons/BukkitD.png" 
                                                 HoverIconSource="pack://application:,,,/View/Resources/images/Icons/BukkitW.png"
