@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Linq;
 using System.Windows;
 using Fork.Logic.Persistence;
 
@@ -20,6 +21,11 @@ namespace Fork.Logic.Logging
             {
                 Exception e = eventArgs.ExceptionObject as Exception;
                 string errorMessage = e?.GetType() + "\n" + e?.Message + "\n" + e?.StackTrace;
+                while (e?.InnerException != null)
+                {
+                    e = e.InnerException;
+                    errorMessage += ($"\nInner Exception: {e.GetType()}\n{e.Message}\n{e.StackTrace}");
+                }
 #if DEBUG
                 Console.WriteLine(errorMessage);
 #endif
