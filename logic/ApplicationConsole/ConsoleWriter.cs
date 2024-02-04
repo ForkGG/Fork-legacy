@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using Fork.Logic.Manager;
@@ -22,13 +23,7 @@ namespace Fork.Logic.ApplicationConsole
         {
             if (appStarted)
             {
-                DateTime now = DateTime.Now;
-                value = "[" + now + "] " + value;
-                //ApplicationManager.Instance.ConsoleViewModel.WriteLine(value);
-                using (StreamWriter sw = logFile.AppendText())
-                {
-                    sw.WriteLine(value);
-                }
+                WriteLine(value, 0);
             }
             else
             {
@@ -36,6 +31,36 @@ namespace Fork.Logic.ApplicationConsole
             }
         }
 
+        private void WriteLine(string value, int retries)
+        {
+            try
+            {
+                using StreamWriter sw = logFile.AppendText();
+                DateTime now = DateTime.Now;
+                string toWrite = "[" + now + "] " + value;
+                sw.WriteLine(toWrite);
+            }
+            catch (IOException)
+            {
+                retries++;
+                if (retries < 200)
+                {
+                    Thread thread = new (() =>
+                    {
+                        Thread.Sleep(500);
+                        WriteLine(value, retries);
+                    });
+                    thread.IsBackground = true;
+                    thread.Start();
+                }
+                // No more retries? Give up!
+            }
+            catch (Exception)
+            {
+                // Should not fail the app
+            }
+        }
+        
         public void AppStarted()
         {
             logFile = new FileInfo(Path.Combine(App.ApplicationPath, "logs", "consoleLog.txt"));
@@ -50,10 +75,12 @@ namespace Fork.Logic.ApplicationConsole
             }
             
             appStarted = true;
+            string toAdd = "";
             foreach (string s in preCachedList)
             {
-                WriteLine(s);
+                toAdd += $"\n{s}";
             }
+            WriteLine(toAdd);
         }
     }
 }
