@@ -38,6 +38,6 @@
 ## Credits
 This project wouldn't be possible without:
 - [Newt Welch](https://www.reddit.com/user/Newt_Welch/) being a mad lad and deciding to create one of the best UIs ever
-- [The Patrons](https://www.patreon.com/forkgg) who help cover the costs for this project
+- [The Supporters](https://ko-fi.com/forkgg) who help cover the costs for this project
 - [BukkitGUI](https://github.com/Bertware/bukkitgui2) the inspiration for this project
 
