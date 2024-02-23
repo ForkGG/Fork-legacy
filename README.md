@@ -32,9 +32,6 @@
 - Website: [Fork.gg](https://www.Fork.gg)
 - Discord: [Fork Discord Server](https://discord.gg/dbqH6x8)
 
-## Roadmap
-[Fork Trello Board](https://trello.com/b/uCtDgilW/Fork)
-
 ## Credits
 This project wouldn't be possible without:
 - [Newt Welch](https://www.reddit.com/user/Newt_Welch/) being a mad lad and deciding to create one of the best UIs ever
