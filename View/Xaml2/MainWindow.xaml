@@ -52,6 +52,12 @@
                                              IconSource="pack://application:,,,/View/Resources/images/Icons/DiscordD.png"
                                              HoverIconSource="pack://application:,,,/View/Resources/images/Icons/DiscordW.png"
                                              HoverBackground="{DynamicResource buttonBgrDefault}" Click="DiscordOpen_Click"/>
+                        <controls:IconButton Margin="10 0" Background="{DynamicResource buttonBgrDefault}" Height="35"
+                                             Width="50" IconHeight="25" IconWidth="100"
+                                             IconSource="pack://application:,,,/View/Resources/images/Icons/KoFiLogoD.png"
+                                             HoverIconSource="pack://application:,,,/View/Resources/images/Icons/KoFiLogoW.png"
+                                             HoverBackground="{DynamicResource buttonBgrDefault}"
+                                             Click="KoFiOpen_Click" />
                     </StackPanel>
                     <Grid Grid.Row="2" VerticalAlignment="Center" MinWidth="243">
                         <Border Background="{DynamicResource backgroundDark}" Margin="0 0 5 0" />

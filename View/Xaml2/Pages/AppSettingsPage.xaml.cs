@@ -10,6 +10,7 @@ using System.Windows.Media;
 using Fork.Logic.Logging;
 using Fork.Logic.Manager;
 using Fork.Logic.Persistence;
+using Fork.logic.Utils;
 using Fork.ViewModel;
 using Application = System.Windows.Application;
 using CheckBox = System.Windows.Controls.CheckBox;
@@ -133,15 +134,13 @@ namespace Fork.View.Xaml2.Pages
         private void BecomeSupporter_Click(object sender, RoutedEventArgs e)
         {
             string url = "https://www.ko-fi.com/forkgg";
-            //hack for windows only https://github.com/dotnet/corefx/issues/10361
-            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") {CreateNoWindow = true});
+            ForkUtils.OpenUrl(url);
         }
 
         private void InviteDiscordBot_Click(object sender, MouseButtonEventArgs e)
         {
             string url = "https://bot.fork.gg";
-            //hack for windows only https://github.com/dotnet/corefx/issues/10361
-            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") {CreateNoWindow = true});
+            ForkUtils.OpenUrl(url);
         }
 
         private async void CopyDiscordToken_Click(object sender, MouseButtonEventArgs e)

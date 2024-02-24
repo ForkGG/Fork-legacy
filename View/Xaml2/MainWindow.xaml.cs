@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using Fork.Logic.Manager;
 using Fork.Logic.Model;
+using Fork.logic.Utils;
 using Fork.ViewModel;
 using Brush = System.Windows.Media.Brush;
 
@@ -112,8 +113,13 @@ namespace Fork.View.Xaml2
         private void DiscordOpen_Click(object sender, RoutedEventArgs e)
         {
             string url = "https://discord.fork.gg";
-            //hack for windows only https://github.com/dotnet/corefx/issues/10361
-            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+            ForkUtils.OpenUrl(url);
+        }
+        
+        private void KoFiOpen_Click(object sender, RoutedEventArgs e)
+        {
+            string url = "https://ko-fi.com/forkgg";
+            ForkUtils.OpenUrl(url);
         }
 
         private void OnMainWindowClose(object sender, CancelEventArgs e)
@@ -497,8 +503,7 @@ namespace Fork.View.Xaml2
             if (sender is TextBlock textBlock)
             {
                 string url = textBlock.Text;
-                //hack for windows only https://github.com/dotnet/corefx/issues/10361
-                Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+                ForkUtils.OpenUrl(url);
             }
         }
 
@@ -516,8 +521,7 @@ namespace Fork.View.Xaml2
         private void NewVersion_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             string url = viewModel.LatestForkVersion.URL;
-            //hack for windows only https://github.com/dotnet/corefx/issues/10361
-            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+            ForkUtils.OpenUrl(url);
         }
     }
 }
