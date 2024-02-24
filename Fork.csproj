@@ -236,6 +236,11 @@
     <Resource Include="View\Resources\images\Server-Icons\Icon1.png" />
     <Resource Include="View\Resources\SyntaxHighlighting\Python.xshd" />
     <Resource Include="View\Resources\SyntaxHighlighting\YAML.xshd" />
+    <None Remove="View\Resources\images\Icons\KoFiLogo.png" />
+    <None Remove="View\Resources\images\Icons\KoFiLogoD.png" />
+    <Resource Include="View\Resources\images\Icons\KoFiLogoD.png" />
+    <None Remove="View\Resources\images\Icons\KoFiLogoW.png" />
+    <Resource Include="View\Resources\images\Icons\KoFiLogoW.png" />
   </ItemGroup>
 
   <ItemGroup>

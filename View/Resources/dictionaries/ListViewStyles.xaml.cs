@@ -11,6 +11,7 @@ using Fork.Logic.Manager;
 using Fork.Logic.Model;
 using Fork.Logic.Model.PluginModels;
 using Fork.Logic.Model.ProxyModels;
+using Fork.logic.Utils;
 using Fork.View.Xaml2.Controls;
 using Fork.ViewModel;
 
@@ -56,8 +57,7 @@ namespace Fork.View.Resources.dictionaries
                     string pluginUrl = plugin.file.url.Substring(0, 
                         plugin.file.url.IndexOf("/download?", StringComparison.Ordinal));
                     string url = "https://www.spigotmc.org/"+pluginUrl;
-                    //hack for windows only https://github.com/dotnet/corefx/issues/10361
-                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+                    ForkUtils.OpenUrl(url);
                 }
             }
         }
