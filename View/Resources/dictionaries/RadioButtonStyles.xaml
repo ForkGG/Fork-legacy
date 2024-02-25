@@ -29,7 +29,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" Margin="0 5">
                         <Rectangle x:Name="indicator" Width="17" Height="17" Fill="{DynamicResource backgroundDarker}" Margin="0 0 10 0"/>
                         <ContentPresenter/>
                     </StackPanel>

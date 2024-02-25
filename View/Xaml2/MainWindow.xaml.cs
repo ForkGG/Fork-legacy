@@ -11,14 +11,17 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using Fork.Logic.Manager;
 using Fork.Logic.Model;
+using Fork.Logic.Persistence;
 using Fork.logic.Utils;
 using Fork.ViewModel;
+using Application = System.Windows.Application;
 using Brush = System.Windows.Media.Brush;
 
 namespace Fork.View.Xaml2
@@ -29,10 +32,13 @@ namespace Fork.View.Xaml2
         private object lastSelected;
         private bool importOpen;
         private bool createOpen;
-        
+        private NotifyIcon systemTrayIcon;
+
         public MainWindow()
         {
             InitializeComponent();
+            InitializeSystemTrayNotifyIcon();
+            StateChanged += OnMainWindowStateChange;
             Closing += OnMainWindowClose;
             viewModel = ApplicationManager.Instance.MainViewModel;
             DataContext = viewModel;
@@ -122,9 +128,53 @@ namespace Fork.View.Xaml2
             ForkUtils.OpenUrl(url);
         }
 
+        private void InitializeSystemTrayNotifyIcon()
+        {
+            systemTrayIcon = new NotifyIcon();
+            systemTrayIcon.Icon = new Icon("icon.ico");
+            systemTrayIcon.Visible = false;
+            systemTrayIcon.DoubleClick += delegate { ShowApplication(); };
+            systemTrayIcon.Text = $"Fork";
+
+            ContextMenuStrip contextMenuStrip = new();
+            contextMenuStrip.Items.Add("Open", null, delegate { ShowApplication(); });
+            contextMenuStrip.Items.Add("Close", null, delegate { Application.Current.Shutdown(); });
+
+            systemTrayIcon.ContextMenuStrip = contextMenuStrip;
+        }
+
+        private void ShowApplication()
+        {
+            Show();
+            WindowState = WindowState.Normal;
+            systemTrayIcon.Visible = false;
+        }
+
         private void OnMainWindowClose(object sender, CancelEventArgs e)
         {
+            if (AppSettingsSerializer.Instance.AppSettings.SystemTrayOptions == SystemTrayOptions.WhenClose ||
+                AppSettingsSerializer.Instance.AppSettings.SystemTrayOptions ==
+                SystemTrayOptions.WhenMinimizeOrClose)
+            {
+                e.Cancel = true;
+                Hide();
+                systemTrayIcon.Visible = true;
+                return;
+            }
+
             Application.Current.Shutdown();
+        }
+
+        private void OnMainWindowStateChange(object sender, EventArgs e)
+        {
+            if (WindowState == WindowState.Minimized &&
+                (AppSettingsSerializer.Instance.AppSettings.SystemTrayOptions == SystemTrayOptions.WhenMinimize ||
+                 AppSettingsSerializer.Instance.AppSettings.SystemTrayOptions ==
+                 SystemTrayOptions.WhenMinimizeOrClose))
+            {
+                Hide();
+                systemTrayIcon.Visible = true;
+            }
         }
 
         private void OpenCreateServer()
