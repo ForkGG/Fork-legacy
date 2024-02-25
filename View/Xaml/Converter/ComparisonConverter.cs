@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using Fork.Annotations;
 
 namespace Fork.View.Xaml.Converter;
 

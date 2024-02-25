@@ -1,38 +1,48 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Fork.Logic.Model.ProxyModels
+namespace Fork.Logic.Model.ProxyModels;
+
+public class Group
 {
-    public class Group
+    public Group(string user, ObservableCollection<string> groups)
     {
-        public string User { get; set; }
-        public ObservableCollection<string> Groups { get; set; }
+        User = user;
+        Groups = groups;
+    }
 
-        public Group(string user, ObservableCollection<string> groups)
+    public string User { get; set; }
+    public ObservableCollection<string> Groups { get; set; }
+
+    protected bool Equals(Group other)
+    {
+        return User == other.User && Equals(Groups, other.Groups);
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (ReferenceEquals(null, obj))
         {
-            User = user;
-            Groups = groups;
+            return false;
         }
 
-        protected bool Equals(Group other)
+        if (ReferenceEquals(this, obj))
         {
-            return User == other.User && Equals(Groups, other.Groups);
+            return true;
         }
 
-        public override bool Equals(object obj)
+        if (obj.GetType() != GetType())
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((Group) obj);
+            return false;
         }
 
-        public override int GetHashCode()
+        return Equals((Group)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
         {
-            unchecked
-            {
-                return ((User != null ? User.GetHashCode() : 0) * 397) ^ (Groups != null ? Groups.GetHashCode() : 0);
-            }
+            return ((User != null ? User.GetHashCode() : 0) * 397) ^ (Groups != null ? Groups.GetHashCode() : 0);
         }
     }
 }

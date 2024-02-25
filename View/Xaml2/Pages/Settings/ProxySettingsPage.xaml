@@ -1,23 +1,23 @@
 ﻿<Page x:Class="Fork.View.Xaml2.Pages.Settings.ProxySettingsPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:controls="clr-namespace:Fork.View.Xaml2.Controls"
       xmlns:dd="urn:gong-wpf-dragdrop"
-      xmlns:local="clr-namespace:Fork.View.Xaml2.Pages.Settings"
-      mc:Ignorable="d" 
+      mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ProxySettingsPage">
 
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="0"/><!-- 60 -->
-                <RowDefinition/>
-                <RowDefinition Height="20"/>
+                <RowDefinition Height="0" /><!-- 60 -->
+                <RowDefinition />
+                <RowDefinition Height="20" />
             </Grid.RowDefinitions>
-            <Button Content="Text Editor" HorizontalAlignment="Right" Margin="0 20 20 0" Style="{DynamicResource RoundedTextButton}" Width="120"/>
+            <Button Content="Text Editor" HorizontalAlignment="Right" Margin="0 20 20 0"
+                    Style="{DynamicResource RoundedTextButton}" Width="120" />
 
             <ScrollViewer Grid.Row="1" Margin="10 0 5 10" Style="{DynamicResource SettingsScrollViewer}">
                 <controls:StretchyWrapPanel>
@@ -25,79 +25,96 @@
                     <Border CornerRadius="10" Margin="5 5 10 5">
                         <StackPanel Background="Transparent" Margin="0 10 0 20" Width="720" HorizontalAlignment="Left">
                             <TextBlock Text="Listener" Foreground="{DynamicResource textHeader}"
-                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="95 0 5 0" />
+                                       FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23"
+                                       Margin="95 0 5 0" />
                             <Grid Margin="0 0 20 0">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1.2*"/>
-                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="1.2*" />
+                                    <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
                                 <StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="110 20 0 0" HorizontalAlignment="Right">
-                                        <TextBlock Text="Player Slots" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
+                                    <StackPanel Orientation="Horizontal" Margin="110 20 0 0"
+                                                HorizontalAlignment="Right">
+                                        <TextBlock Text="Player Slots" VerticalAlignment="Center" Margin="10 0"
+                                                   FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18" />
                                         <Border CornerRadius="3" MinWidth="66" DockPanel.Dock="Right" Height="26"
-                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
-                                            <TextBox Margin="5 0" Text="{Binding Network.Config.listeners[0].max_players}"
-                                         Background="{DynamicResource textBackground}" BorderThickness="0"
-                                         Foreground="{DynamicResource backgroundDark}"
-                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                         FontSize="16" Height="18" MaxWidth="300"/>
+                                                Background="{DynamicResource textBackground}" Margin="0 0 10 0">
+                                            <TextBox Margin="5 0"
+                                                     Text="{Binding Network.Config.listeners[0].max_players}"
+                                                     Background="{DynamicResource textBackground}" BorderThickness="0"
+                                                     Foreground="{DynamicResource backgroundDark}"
+                                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                                     FontSize="16" Height="18" MaxWidth="300" />
                                         </Border>
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="110 10 0 0" HorizontalAlignment="Right">
-                                        <TextBlock Text="Tab-List Size" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
+                                    <StackPanel Orientation="Horizontal" Margin="110 10 0 0"
+                                                HorizontalAlignment="Right">
+                                        <TextBlock Text="Tab-List Size" VerticalAlignment="Center" Margin="10 0"
+                                                   FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18" />
                                         <Border CornerRadius="3" MinWidth="66" DockPanel.Dock="Right" Height="26"
-                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
+                                                Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                             <TextBox Margin="5 0" Text="{Binding Network.Config.listeners[0].tab_size}"
-                                         Background="{DynamicResource textBackground}" BorderThickness="0"
-                                         Foreground="{DynamicResource backgroundDark}"
-                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                         FontSize="16" Height="18" MaxWidth="300"/>
+                                                     Background="{DynamicResource textBackground}" BorderThickness="0"
+                                                     Foreground="{DynamicResource backgroundDark}"
+                                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                                     FontSize="16" Height="18" MaxWidth="300" />
                                         </Border>
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="110 10 0 0" HorizontalAlignment="Right">
-                                        <TextBlock Text="Server Port" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
+                                    <StackPanel Orientation="Horizontal" Margin="110 10 0 0"
+                                                HorizontalAlignment="Right">
+                                        <TextBlock Text="Server Port" VerticalAlignment="Center" Margin="10 0"
+                                                   FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18" />
                                         <Border CornerRadius="3" MinWidth="66" DockPanel.Dock="Right" Height="26"
-                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
+                                                Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                             <TextBox Margin="5 0" Text="{Binding Network.Port}"
-                                         Background="{DynamicResource textBackground}" BorderThickness="0"
-                                         Foreground="{DynamicResource backgroundDark}"
-                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                         FontSize="16" Height="18" MaxWidth="300"/>
+                                                     Background="{DynamicResource textBackground}" BorderThickness="0"
+                                                     Foreground="{DynamicResource backgroundDark}"
+                                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                                     FontSize="16" Height="18" MaxWidth="300" />
                                         </Border>
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="110 10 0 0" HorizontalAlignment="Right">
-                                        <TextBlock Text="Query Port" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
+                                    <StackPanel Orientation="Horizontal" Margin="110 10 0 0"
+                                                HorizontalAlignment="Right">
+                                        <TextBlock Text="Query Port" VerticalAlignment="Center" Margin="10 0"
+                                                   FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18" />
                                         <Border CornerRadius="3" MinWidth="66" DockPanel.Dock="Right" Height="26"
-                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
-                                            <TextBox Margin="5 0" Text="{Binding Network.Config.listeners[0].query_port}"
-                                         Background="{DynamicResource textBackground}" BorderThickness="0"
-                                         Foreground="{DynamicResource backgroundDark}"
-                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                         FontSize="16" Height="18" MaxWidth="300"/>
+                                                Background="{DynamicResource textBackground}" Margin="0 0 10 0">
+                                            <TextBox Margin="5 0"
+                                                     Text="{Binding Network.Config.listeners[0].query_port}"
+                                                     Background="{DynamicResource textBackground}" BorderThickness="0"
+                                                     Foreground="{DynamicResource backgroundDark}"
+                                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                                     FontSize="16" Height="18" MaxWidth="300" />
                                         </Border>
                                     </StackPanel>
                                     <DockPanel Height="40" Margin="120 7 8 0">
                                         <ComboBox DockPanel.Dock="Right" Width="160" HorizontalAlignment="Left"
-                                      ItemContainerStyle="{DynamicResource DefaultComboBoxItem}"
-                                      FontFamily="{DynamicResource Montserrat-Bold}" FontSize="15"
-                                      VerticalAlignment="Center"
-                                      ItemsSource="{Binding Network.Config.TabListTypes}"
-                                      SelectedItem="{Binding Network.Config.listeners[0].tab_list}" />
+                                                  ItemContainerStyle="{DynamicResource DefaultComboBoxItem}"
+                                                  FontFamily="{DynamicResource Montserrat-Bold}" FontSize="15"
+                                                  VerticalAlignment="Center"
+                                                  ItemsSource="{Binding Network.Config.TabListTypes}"
+                                                  SelectedItem="{Binding Network.Config.listeners[0].tab_list}" />
                                         <TextBlock Text="Tab-List" TextAlignment="Right" FontSize="18"
-                                       Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
+                                                   Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
                                     </DockPanel>
                                 </StackPanel>
                                 <StackPanel Grid.Column="1" Margin="20 0 0 0">
-                                    <CheckBox Content="Ping Passthrough" IsChecked="{Binding Network.Config.listeners[0].ping_passthrough}" 
-                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 20 0 0"/>
-                                    <CheckBox Content="Force Default Server" IsChecked="{Binding Network.Config.listeners[0].force_default_server}" 
-                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 10 0 0"/>
-                                    <CheckBox Content="Proxy Protocol" IsChecked="{Binding Network.Config.listeners[0].proxy_protocol}" 
-                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 10 0 0" Checked="CheckBox_Checked"/>
-                                    <CheckBox Content="Bind Local Address" IsChecked="{Binding Network.Config.listeners[0].bind_local_address}" 
-                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 10 0 0"/>
-                                    <CheckBox Content="Enable Query" IsChecked="{Binding Network.Config.listeners[0].query_enabled}" 
-                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 10 0 0"/>
+                                    <CheckBox Content="Ping Passthrough"
+                                              IsChecked="{Binding Network.Config.listeners[0].ping_passthrough}"
+                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 20 0 0" />
+                                    <CheckBox Content="Force Default Server"
+                                              IsChecked="{Binding Network.Config.listeners[0].force_default_server}"
+                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 10 0 0" />
+                                    <CheckBox Content="Proxy Protocol"
+                                              IsChecked="{Binding Network.Config.listeners[0].proxy_protocol}"
+                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 10 0 0"
+                                              Checked="CheckBox_Checked" />
+                                    <CheckBox Content="Bind Local Address"
+                                              IsChecked="{Binding Network.Config.listeners[0].bind_local_address}"
+                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 10 0 0" />
+                                    <CheckBox Content="Enable Query"
+                                              IsChecked="{Binding Network.Config.listeners[0].query_enabled}"
+                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 10 0 0" />
                                 </StackPanel>
                             </Grid>
                         </StackPanel>
@@ -105,32 +122,39 @@
                             <Style TargetType="Border">
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="{DynamicResource backgroundHover}"/>
+                                        <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
                         </Border.Style>
                     </Border>
-                    
+
                     <!-- Servers -->
                     <Border CornerRadius="10" Margin="5 5 10 5">
                         <StackPanel Background="Transparent" Margin="0 10 0 20" Width="720" HorizontalAlignment="Left">
                             <TextBlock Text="Servers" Foreground="{DynamicResource textHeader}"
-                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="95 0 5 0" />
-                            <ListView ItemsSource="{Binding Servers}" Style="{DynamicResource NetworkServerListView}" Margin="110 10 20 10" ItemContainerStyle="{DynamicResource NetworkServerListItem}"
-                                      dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" dd:DragDrop.DropHandler="{Binding DropHandler}"/>
+                                       FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23"
+                                       Margin="95 0 5 0" />
+                            <ListView ItemsSource="{Binding Servers}" Style="{DynamicResource NetworkServerListView}"
+                                      Margin="110 10 20 10"
+                                      ItemContainerStyle="{DynamicResource NetworkServerListItem}"
+                                      dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
+                                      dd:DragDrop.DropHandler="{Binding DropHandler}" />
                             <ListView Margin="120 0 0 0" Style="{DynamicResource NetworkServerListView}">
-                                <ListViewItem dd:DragDrop.IsDropTarget="True" dd:DragDrop.DropHandler="{Binding DropHandler}">
+                                <ListViewItem dd:DragDrop.IsDropTarget="True"
+                                              dd:DragDrop.DropHandler="{Binding DropHandler}">
                                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                         <TextBlock Text="Drag a Fork Server here to add it or " />
-                                        <TextBlock Text="add an External Server" Foreground="{DynamicResource textLink}" Cursor="Hand" PreviewMouseDown="AddExternalServer_Click"/>
+                                        <TextBlock Text="add an External Server"
+                                                   Foreground="{DynamicResource textLink}" Cursor="Hand"
+                                                   PreviewMouseDown="AddExternalServer_Click" />
                                     </StackPanel>
                                     <ListViewItem.Style>
                                         <Style TargetType="ListViewItem">
                                             <Setter Property="Template">
                                                 <Setter.Value>
                                                     <ControlTemplate TargetType="ListViewItem">
-                                                        <ContentPresenter/>
+                                                        <ContentPresenter />
                                                     </ControlTemplate>
                                                 </Setter.Value>
                                             </Setter>
@@ -138,13 +162,14 @@
                                     </ListViewItem.Style>
                                 </ListViewItem>
                             </ListView>
-                            <TextBlock Margin="120 10 0 0" Text="The order of the servers represents their join priority (lobby server should be first)"/>
+                            <TextBlock Margin="120 10 0 0"
+                                       Text="The order of the servers represents their join priority (lobby server should be first)" />
                         </StackPanel>
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="{DynamicResource backgroundHover}"/>
+                                        <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -155,87 +180,103 @@
                     <Border CornerRadius="10" Margin="5 5 10 5">
                         <StackPanel Background="Transparent" Margin="0 10 0 20" HorizontalAlignment="Left" Width="720">
                             <TextBlock Text="Bungee Settings" Foreground="{DynamicResource textHeader}"
-                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="95 0 5 0" />
+                                       FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23"
+                                       Margin="95 0 5 0" />
                             <Grid Margin="0 5 0 0">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1.3*"/>
-                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="1.3*" />
+                                    <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
                                 <StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="110 20 0 0" HorizontalAlignment="Right">
-                                        <TextBlock Text="Connection Throttle" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
+                                    <StackPanel Orientation="Horizontal" Margin="110 20 0 0"
+                                                HorizontalAlignment="Right">
+                                        <TextBlock Text="Connection Throttle" VerticalAlignment="Center" Margin="10 0"
+                                                   FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18" />
                                         <Border CornerRadius="3" MinWidth="66" DockPanel.Dock="Right" Height="26"
-                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
+                                                Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                             <TextBox Margin="5 0" Text="{Binding Network.Config.connection_throttle}"
-                                         Background="{DynamicResource textBackground}" BorderThickness="0"
-                                         Foreground="{DynamicResource backgroundDark}"
-                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                         FontSize="16" Height="18" MaxWidth="300"/>
+                                                     Background="{DynamicResource textBackground}" BorderThickness="0"
+                                                     Foreground="{DynamicResource backgroundDark}"
+                                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                                     FontSize="16" Height="18" MaxWidth="300" />
                                         </Border>
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="110 10 0 0" HorizontalAlignment="Right">
-                                        <TextBlock Text="Connection Throttle Limit" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="16"/>
+                                    <StackPanel Orientation="Horizontal" Margin="110 10 0 0"
+                                                HorizontalAlignment="Right">
+                                        <TextBlock Text="Connection Throttle Limit" VerticalAlignment="Center"
+                                                   Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}"
+                                                   FontSize="16" />
                                         <Border CornerRadius="3" MinWidth="66" DockPanel.Dock="Right" Height="26"
-                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
-                                            <TextBox Margin="5 0" Text="{Binding Network.Config.connection_throttle_limit}"
-                                         Background="{DynamicResource textBackground}" BorderThickness="0"
-                                         Foreground="{DynamicResource backgroundDark}"
-                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                         FontSize="16" Height="18" MaxWidth="300"/>
+                                                Background="{DynamicResource textBackground}" Margin="0 0 10 0">
+                                            <TextBox Margin="5 0"
+                                                     Text="{Binding Network.Config.connection_throttle_limit}"
+                                                     Background="{DynamicResource textBackground}" BorderThickness="0"
+                                                     Foreground="{DynamicResource backgroundDark}"
+                                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                                     FontSize="16" Height="18" MaxWidth="300" />
                                         </Border>
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="110 10 0 0" HorizontalAlignment="Right">
-                                        <TextBlock Text="Timeout" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
+                                    <StackPanel Orientation="Horizontal" Margin="110 10 0 0"
+                                                HorizontalAlignment="Right">
+                                        <TextBlock Text="Timeout" VerticalAlignment="Center" Margin="10 0"
+                                                   FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18" />
                                         <Border CornerRadius="3" MinWidth="66" DockPanel.Dock="Right" Height="26"
-                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
+                                                Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                             <TextBox Margin="5 0" Text="{Binding Network.Config.timeout}"
-                                         Background="{DynamicResource textBackground}" BorderThickness="0"
-                                         Foreground="{DynamicResource backgroundDark}"
-                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                         FontSize="16" Height="18" MaxWidth="300"/>
+                                                     Background="{DynamicResource textBackground}" BorderThickness="0"
+                                                     Foreground="{DynamicResource backgroundDark}"
+                                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                                     FontSize="16" Height="18" MaxWidth="300" />
                                         </Border>
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="110 10 0 0" HorizontalAlignment="Right">
-                                        <TextBlock Text="Remote Ping Cache" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
+                                    <StackPanel Orientation="Horizontal" Margin="110 10 0 0"
+                                                HorizontalAlignment="Right">
+                                        <TextBlock Text="Remote Ping Cache" VerticalAlignment="Center" Margin="10 0"
+                                                   FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18" />
                                         <Border CornerRadius="3" MinWidth="66" DockPanel.Dock="Right" Height="26"
-                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
+                                                Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                             <TextBox Margin="5 0" Text="{Binding Network.Config.remote_ping_cache}"
-                                         Background="{DynamicResource textBackground}" BorderThickness="0"
-                                         Foreground="{DynamicResource backgroundDark}"
-                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                         FontSize="16" Height="18" MaxWidth="300"/>
+                                                     Background="{DynamicResource textBackground}" BorderThickness="0"
+                                                     Foreground="{DynamicResource backgroundDark}"
+                                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                                     FontSize="16" Height="18" MaxWidth="300" />
                                         </Border>
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="110 10 0 0" HorizontalAlignment="Right">
-                                        <TextBlock Text="Remote Ping Timeout" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
+                                    <StackPanel Orientation="Horizontal" Margin="110 10 0 0"
+                                                HorizontalAlignment="Right">
+                                        <TextBlock Text="Remote Ping Timeout" VerticalAlignment="Center" Margin="10 0"
+                                                   FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18" />
                                         <Border CornerRadius="3" MinWidth="66" DockPanel.Dock="Right" Height="26"
-                                        Background="{DynamicResource textBackground}" Margin="0 0 10 0">
+                                                Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                                             <TextBox Margin="5 0" Text="{Binding Network.Config.remote_ping_timeout}"
-                                         Background="{DynamicResource textBackground}" BorderThickness="0"
-                                         Foreground="{DynamicResource backgroundDark}"
-                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                         FontSize="16" Height="18" MaxWidth="300"/>
+                                                     Background="{DynamicResource textBackground}" BorderThickness="0"
+                                                     Foreground="{DynamicResource backgroundDark}"
+                                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                                     FontSize="16" Height="18" MaxWidth="300" />
                                         </Border>
                                     </StackPanel>
                                 </StackPanel>
                                 <StackPanel Grid.Column="1">
-                                    <CheckBox Content="IP Forwarding" IsChecked="{Binding Network.Config.ip_forward}" 
-                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 10 0 0"/>
-                                    <CheckBox Content="Online Mode" IsChecked="{Binding Network.Config.online_mode}" 
-                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 5 0 0"/>
-                                    <CheckBox Content="Forge Support" IsChecked="{Binding Network.Config.forge_support}" 
-                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 5 0 0"/>
-                                    <CheckBox Content="Inject Commands" IsChecked="{Binding Network.Config.inject_commands}" 
-                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 5 0 0"/>
-                                    <CheckBox Content="Log Pings" IsChecked="{Binding Network.Config.log_pings}" 
-                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 5 0 0"/>
-                                    <CheckBox Content="Log Commands" IsChecked="{Binding Network.Config.log_commands}" 
-                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 5 0 0"/>
-                                    <CheckBox IsChecked="{Binding Network.Config.prevent_proxy_connections}" 
-                                              Style="{DynamicResource DefaultCheckBox}" FontSize="19" Margin="20 5 0 0" HorizontalAlignment="Left">
+                                    <CheckBox Content="IP Forwarding" IsChecked="{Binding Network.Config.ip_forward}"
+                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 10 0 0" />
+                                    <CheckBox Content="Online Mode" IsChecked="{Binding Network.Config.online_mode}"
+                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 5 0 0" />
+                                    <CheckBox Content="Forge Support"
+                                              IsChecked="{Binding Network.Config.forge_support}"
+                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 5 0 0" />
+                                    <CheckBox Content="Inject Commands"
+                                              IsChecked="{Binding Network.Config.inject_commands}"
+                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 5 0 0" />
+                                    <CheckBox Content="Log Pings" IsChecked="{Binding Network.Config.log_pings}"
+                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 5 0 0" />
+                                    <CheckBox Content="Log Commands" IsChecked="{Binding Network.Config.log_commands}"
+                                              Style="{DynamicResource TextCheckBox}" FontSize="19" Margin="20 5 0 0" />
+                                    <CheckBox IsChecked="{Binding Network.Config.prevent_proxy_connections}"
+                                              Style="{DynamicResource DefaultCheckBox}" FontSize="19" Margin="20 5 0 0"
+                                              HorizontalAlignment="Left">
                                         <StackPanel>
-                                            <TextBlock Text="Prevent Proxy"/>
-                                            <TextBlock Text="Connections"/>
+                                            <TextBlock Text="Prevent Proxy" />
+                                            <TextBlock Text="Connections" />
                                         </StackPanel>
                                     </CheckBox>
                                 </StackPanel>
@@ -245,51 +286,69 @@
                             <Style TargetType="Border">
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="{DynamicResource backgroundHover}"/>
+                                        <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
                         </Border.Style>
                     </Border>
-                    
-                    
+
+
                     <!-- Permissions and Groups -->
                     <Border CornerRadius="10" Margin="5 5 10 5">
                         <StackPanel Background="Transparent" Margin="0 10 0 20" Width="720" HorizontalAlignment="Left">
-                            
+
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="470"/>
-                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="470" />
+                                    <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition Height="30px"/>
+                                    <RowDefinition />
+                                    <RowDefinition Height="30px" />
                                 </Grid.RowDefinitions>
                                 <StackPanel>
                                     <TextBlock Text="Groups" Foreground="{DynamicResource textHeader}"
-                                           FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="95 0 5 0" />
-                                    <ListView ItemsSource="{Binding Permissions}" Style="{DynamicResource NetworkServerListView}" ItemContainerStyle="{DynamicResource NetworkPermissionItem}" Margin="110 10 20 10"  />
+                                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23"
+                                               Margin="95 0 5 0" />
+                                    <ListView ItemsSource="{Binding Permissions}"
+                                              Style="{DynamicResource NetworkServerListView}"
+                                              ItemContainerStyle="{DynamicResource NetworkPermissionItem}"
+                                              Margin="110 10 20 10" />
                                 </StackPanel>
-                                <controls:IconButton Grid.Row="1" Margin="110 0 10 0" IconSource="pack://application:,,,/view/resources/images/icons/Add.png" IconHeight="18" IconWidth="20" Background="{DynamicResource buttonBgrDefault}"
-                                                     Height="30" Width="30" HoverBackground="{DynamicResource buttonBgrGreen}" HoverIconSource="pack://application:,,,/view/resources/images/icons/AddW.png"
-                                                     Click="AddGroup_Click"/>
-                                
+                                <controls:IconButton Grid.Row="1" Margin="110 0 10 0"
+                                                     IconSource="pack://application:,,,/view/resources/images/icons/Add.png"
+                                                     IconHeight="18" IconWidth="20"
+                                                     Background="{DynamicResource buttonBgrDefault}"
+                                                     Height="30" Width="30"
+                                                     HoverBackground="{DynamicResource buttonBgrGreen}"
+                                                     HoverIconSource="pack://application:,,,/view/resources/images/icons/AddW.png"
+                                                     Click="AddGroup_Click" />
+
                                 <StackPanel Grid.Column="1" HorizontalAlignment="Left">
                                     <TextBlock Text="Users" Foreground="{DynamicResource textHeader}"
-                                            FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="0 0 5 0" />
-                                    <ListView ItemsSource="{Binding Groups}" Style="{DynamicResource NetworkServerListView}" ItemContainerStyle="{DynamicResource NetworkGroupItem}" Margin="20 10 20 10"  />
+                                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23"
+                                               Margin="0 0 5 0" />
+                                    <ListView ItemsSource="{Binding Groups}"
+                                              Style="{DynamicResource NetworkServerListView}"
+                                              ItemContainerStyle="{DynamicResource NetworkGroupItem}"
+                                              Margin="20 10 20 10" />
                                 </StackPanel>
-                                <controls:IconButton Grid.Row="1" Grid.Column="1" Margin="0 0 10 0" IconSource="pack://application:,,,/view/resources/images/icons/Add.png" IconHeight="18" IconWidth="20" Background="{DynamicResource buttonBgrDefault}"
-                                                     Height="30" Width="30" HoverBackground="{DynamicResource buttonBgrGreen}" HoverIconSource="pack://application:,,,/view/resources/images/icons/AddW.png"
-                                                     Click="AddUser_Click"/>
+                                <controls:IconButton Grid.Row="1" Grid.Column="1" Margin="0 0 10 0"
+                                                     IconSource="pack://application:,,,/view/resources/images/icons/Add.png"
+                                                     IconHeight="18" IconWidth="20"
+                                                     Background="{DynamicResource buttonBgrDefault}"
+                                                     Height="30" Width="30"
+                                                     HoverBackground="{DynamicResource buttonBgrGreen}"
+                                                     HoverIconSource="pack://application:,,,/view/resources/images/icons/AddW.png"
+                                                     Click="AddUser_Click" />
                             </Grid>
                         </StackPanel>
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="{DynamicResource backgroundHover}"/>
+                                        <Setter Property="Background" Value="{DynamicResource backgroundHover}" />
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -301,102 +360,118 @@
             <TextBlock Grid.Row="2" Text="All Changes will be saved automatically" HorizontalAlignment="Center" />
         </Grid>
         <Grid Visibility="Collapsed" x:Name="AddOverlay">
-            <Border CornerRadius="10" Background="#1F2234" Opacity="0.96"/>
+            <Border CornerRadius="10" Background="#1F2234" Opacity="0.96" />
             <StackPanel Margin="100 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Add an External Server to " FontFamily="{DynamicResource Montserrat-Bold}" FontSize="23" Foreground="{DynamicResource textSelected}"/>
-                    <TextBlock Text="{Binding Network.Name}" FontFamily="{DynamicResource Montserrat-Bold}" FontSize="23" Foreground="{DynamicResource textLink}"/>
+                    <TextBlock Text="Add an External Server to " FontFamily="{DynamicResource Montserrat-Bold}"
+                               FontSize="23" Foreground="{DynamicResource textSelected}" />
+                    <TextBlock Text="{Binding Network.Name}" FontFamily="{DynamicResource Montserrat-Bold}"
+                               FontSize="23" Foreground="{DynamicResource textLink}" />
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Center">
                     <StackPanel Orientation="Horizontal" Margin="0 30 0 0" HorizontalAlignment="Right">
-                        <TextBlock Text="Name" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
+                        <TextBlock Text="Name" VerticalAlignment="Center" Margin="10 0"
+                                   FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18" />
                         <Border CornerRadius="3" MinWidth="200" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource textBackground}" Margin="0 0 10 0">
+                                Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                             <TextBox Margin="5 0" Name="newServerName"
-                                         Background="{DynamicResource textBackground}" BorderThickness="0"
-                                         Foreground="{DynamicResource backgroundDark}"
-                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                         FontSize="16" Height="18" MaxWidth="300"/>
+                                     Background="{DynamicResource textBackground}" BorderThickness="0"
+                                     Foreground="{DynamicResource backgroundDark}"
+                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                     FontSize="16" Height="18" MaxWidth="300" />
                         </Border>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0 20 0 0"  HorizontalAlignment="Right">
-                        <TextBlock Text="Address" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
+                    <StackPanel Orientation="Horizontal" Margin="0 20 0 0" HorizontalAlignment="Right">
+                        <TextBlock Text="Address" VerticalAlignment="Center" Margin="10 0"
+                                   FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18" />
                         <Border CornerRadius="3" MinWidth="200" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource textBackground}" Margin="0 0 10 0">
+                                Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                             <TextBox Margin="5 0" Name="newServerAddress"
-                                         Background="{DynamicResource textBackground}" BorderThickness="0"
-                                         Foreground="{DynamicResource backgroundDark}"
-                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                         FontSize="16" Height="18" MaxWidth="300"/>
+                                     Background="{DynamicResource textBackground}" BorderThickness="0"
+                                     Foreground="{DynamicResource backgroundDark}"
+                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                     FontSize="16" Height="18" MaxWidth="300" />
                         </Border>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0 20 0 0"  HorizontalAlignment="Right">
-                        <TextBlock Text="MOTD" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
+                    <StackPanel Orientation="Horizontal" Margin="0 20 0 0" HorizontalAlignment="Right">
+                        <TextBlock Text="MOTD" VerticalAlignment="Center" Margin="10 0"
+                                   FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18" />
                         <Border CornerRadius="3" MinWidth="200" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource textBackground}" Margin="0 0 10 0">
+                                Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                             <TextBox Margin="5 0" Name="newServerMotd"
-                                         Background="{DynamicResource textBackground}" BorderThickness="0"
-                                         Foreground="{DynamicResource backgroundDark}"
-                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                         FontSize="16" Height="18" MaxWidth="300"/>
+                                     Background="{DynamicResource textBackground}" BorderThickness="0"
+                                     Foreground="{DynamicResource backgroundDark}"
+                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                     FontSize="16" Height="18" MaxWidth="300" />
                         </Border>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0 30 0 0" HorizontalAlignment="Center">
-                    <Button Content="Cancel" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="15 0" Click="AddServerCancel_Click"/>
-                    <Button Content="Create" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="15 0" Click="AddServerApply_Click"/>
+                    <Button Content="Cancel" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="15 0"
+                            Click="AddServerCancel_Click" />
+                    <Button Content="Create" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="15 0"
+                            Click="AddServerApply_Click" />
                 </StackPanel>
             </StackPanel>
         </Grid>
         <Grid Visibility="Collapsed" x:Name="AddGroupOverlay">
-            <Border CornerRadius="10" Background="#1F2234" Opacity="0.96"/>
+            <Border CornerRadius="10" Background="#1F2234" Opacity="0.96" />
             <StackPanel Margin="100 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Add new Permission-Group to " FontFamily="{DynamicResource Montserrat-Bold}" FontSize="23"/>
-                    <TextBlock Text="{Binding Network.Name}" FontFamily="{DynamicResource Montserrat-Bold}" FontSize="23" Foreground="{DynamicResource tabSelected}"/>
+                    <TextBlock Text="Add new Permission-Group to " FontFamily="{DynamicResource Montserrat-Bold}"
+                               FontSize="23" />
+                    <TextBlock Text="{Binding Network.Name}" FontFamily="{DynamicResource Montserrat-Bold}"
+                               FontSize="23" Foreground="{DynamicResource tabSelected}" />
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Center">
                     <StackPanel Orientation="Horizontal" Margin="0 30 0 0" HorizontalAlignment="Right">
-                        <TextBlock Text="Name" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
+                        <TextBlock Text="Name" VerticalAlignment="Center" Margin="10 0"
+                                   FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18" />
                         <Border CornerRadius="3" MinWidth="200" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource textBackground}" Margin="0 0 10 0">
+                                Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                             <TextBox Margin="5 0" Name="newGroupName"
-                                         Background="{DynamicResource textBackground}" BorderThickness="0"
-                                         Foreground="{DynamicResource backgroundDark}"
-                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                         FontSize="16" Height="18" MaxWidth="300"/>
+                                     Background="{DynamicResource textBackground}" BorderThickness="0"
+                                     Foreground="{DynamicResource backgroundDark}"
+                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                     FontSize="16" Height="18" MaxWidth="300" />
                         </Border>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0 30 0 0" HorizontalAlignment="Center">
-                    <Button Content="Cancel" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="15 0" Click="AddGroupCancel_Click"/>
-                    <Button Content="Create" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="15 0" Click="AddGroupApply_Click"/>
+                    <Button Content="Cancel" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="15 0"
+                            Click="AddGroupCancel_Click" />
+                    <Button Content="Create" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="15 0"
+                            Click="AddGroupApply_Click" />
                 </StackPanel>
             </StackPanel>
         </Grid>
         <Grid Visibility="Collapsed" x:Name="AddUserOverlay">
-            <Border CornerRadius="10" Background="#1F2234" Opacity="0.96"/>
+            <Border CornerRadius="10" Background="#1F2234" Opacity="0.96" />
             <StackPanel Margin="100 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Add new User to " FontFamily="{DynamicResource Montserrat-Bold}" FontSize="23"/>
-                    <TextBlock Text="{Binding Network.Name}" FontFamily="{DynamicResource Montserrat-Bold}" FontSize="23" Foreground="{DynamicResource tabSelected}"/>
+                    <TextBlock Text="Add new User to " FontFamily="{DynamicResource Montserrat-Bold}" FontSize="23" />
+                    <TextBlock Text="{Binding Network.Name}" FontFamily="{DynamicResource Montserrat-Bold}"
+                               FontSize="23" Foreground="{DynamicResource tabSelected}" />
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Center">
                     <StackPanel Orientation="Horizontal" Margin="0 30 0 0" HorizontalAlignment="Right">
-                        <TextBlock Text="Name" VerticalAlignment="Center" Margin="10 0" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18"/>
+                        <TextBlock Text="Name" VerticalAlignment="Center" Margin="10 0"
+                                   FontFamily="{DynamicResource Montserrat-Medium}" FontSize="18" />
                         <Border CornerRadius="3" MinWidth="200" DockPanel.Dock="Right" Height="26"
-                                    Background="{DynamicResource textBackground}" Margin="0 0 10 0">
+                                Background="{DynamicResource textBackground}" Margin="0 0 10 0">
                             <TextBox Margin="5 0" Name="newUserName"
-                                         Background="{DynamicResource textBackground}" BorderThickness="0"
-                                         Foreground="{DynamicResource backgroundDark}"
-                                         FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                         FontSize="16" Height="18" MaxWidth="300"/>
+                                     Background="{DynamicResource textBackground}" BorderThickness="0"
+                                     Foreground="{DynamicResource backgroundDark}"
+                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                     FontSize="16" Height="18" MaxWidth="300" />
                         </Border>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0 30 0 0" HorizontalAlignment="Center">
-                    <Button Content="Cancel" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="15 0" Click="AddUserCancel_Click"/>
-                    <Button Content="Create" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="15 0" Click="AddUserApply_Click"/>
+                    <Button Content="Cancel" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="15 0"
+                            Click="AddUserCancel_Click" />
+                    <Button Content="Create" Style="{DynamicResource RoundedTextButton}" Width="100" Margin="15 0"
+                            Click="AddUserApply_Click" />
                 </StackPanel>
             </StackPanel>
         </Grid>

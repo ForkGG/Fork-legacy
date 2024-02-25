@@ -1,41 +1,38 @@
 using System;
-using System.Data;
-using System.Linq;
-using System.Windows;
 using Fork.Logic.Persistence;
 
-namespace Fork.Logic.Logging
+namespace Fork.Logic.Logging;
+
+public class ErrorLogger
 {
-    public class ErrorLogger
+    private static readonly FileWriter fileWriter = new();
+
+    public ErrorLogger()
     {
-        private static FileWriter fileWriter = new FileWriter();
-        
-        public ErrorLogger()
+        /*AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
         {
-            /*AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
-            {
-                fileWriter.AppendToErrorLog("["+DateTime.Now+"] [FirstChanceException] " +eventArgs.Exception.StackTrace+"\n");
-            };*/
+            fileWriter.AppendToErrorLog("["+DateTime.Now+"] [FirstChanceException] " +eventArgs.Exception.StackTrace+"\n");
+        };*/
 
-            AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
+        AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
+        {
+            Exception e = eventArgs.ExceptionObject as Exception;
+            string errorMessage = e?.GetType() + "\n" + e?.Message + "\n" + e?.StackTrace;
+            while (e?.InnerException != null)
             {
-                Exception e = eventArgs.ExceptionObject as Exception;
-                string errorMessage = e?.GetType() + "\n" + e?.Message + "\n" + e?.StackTrace;
-                while (e?.InnerException != null)
-                {
-                    e = e.InnerException;
-                    errorMessage += ($"\nInner Exception: {e.GetType()}\n{e.Message}\n{e.StackTrace}");
-                }
+                e = e.InnerException;
+                errorMessage += $"\nInner Exception: {e.GetType()}\n{e.Message}\n{e.StackTrace}";
+            }
 #if DEBUG
-                Console.WriteLine(errorMessage);
+            Console.WriteLine(errorMessage);
 #endif
-                fileWriter.AppendToErrorLog("["+DateTime.Now+"] [UnhandledException] "+errorMessage+"\n");
-            };
-        }
+            fileWriter.AppendToErrorLog("[" + DateTime.Now + "] [UnhandledException] " + errorMessage + "\n");
+        };
+    }
 
-        public static void Append(Exception e)
-        {
-            fileWriter.AppendToErrorLog("["+DateTime.Now+"] [HandledException] "+e?.GetType()+"\n" +e?.Message+"\n" +e?.StackTrace+"\n");
-        }
+    public static void Append(Exception e)
+    {
+        fileWriter.AppendToErrorLog("[" + DateTime.Now + "] [HandledException] " + e?.GetType() + "\n" + e?.Message +
+                                    "\n" + e?.StackTrace + "\n");
     }
 }

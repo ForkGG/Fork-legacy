@@ -1,7 +1,8 @@
-namespace Fork.Logic.RoleManagement
+namespace Fork.Logic.RoleManagement;
+
+public enum RoleType
 {
-    public enum RoleType
-    {
-        WHITELIST, OP_LIST, BAN_LIST
-    }
+    WHITELIST,
+    OP_LIST,
+    BAN_LIST
 }

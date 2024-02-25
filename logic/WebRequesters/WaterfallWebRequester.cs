@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -9,94 +8,94 @@ using Fork.Logic.Manager;
 using Fork.Logic.Model;
 using Newtonsoft.Json;
 
-namespace Fork.Logic.WebRequesters
+namespace Fork.Logic.WebRequesters;
+
+public class WaterfallWebRequester
 {
-    public class WaterfallWebRequester
+    public async Task<ServerVersion> RequestLatestWaterfallVersion()
     {
-        public async Task<ServerVersion> RequestLatestWaterfallVersion()
+        string url = "https://papermc.io/api/v2/projects/waterfall";
+        string json = ResponseCache.Instance.UncacheResponse(url);
+        if (json == null)
         {
-            string url = "https://papermc.io/api/v2/projects/waterfall";
-            string json = ResponseCache.Instance.UncacheResponse(url);
-            if (json == null)
+            try
             {
-                try
-                {
-                    Uri uri = new Uri(url);
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-                    request.UserAgent = ApplicationManager.UserAgent;
-                    using (var response = request.GetResponse())
-                    using (Stream stream = response.GetResponseStream())
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        json = await reader.ReadToEndAsync();
-                    }
+                Uri uri = new(url);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+                request.UserAgent = ApplicationManager.UserAgent;
+                using (WebResponse response = request.GetResponse())
+                using (Stream stream = response.GetResponseStream())
+                using (StreamReader reader = new(stream))
+                    json = await reader.ReadToEndAsync();
 
-                    ResponseCache.Instance.CacheResponse(url, json);
-                } catch(WebException e)
-                {
-                    ErrorLogger.Append(e);
-                    Console.WriteLine("WebException while requesting latest Waterfall Version (Either papermc.io is down or your internet connection is not working)");
-                    return null;
-                }                
+                ResponseCache.Instance.CacheResponse(url, json);
             }
-
-            WaterfallVersions waterfallVersions = JsonConvert.DeserializeObject<WaterfallVersions>(json);
-            if (waterfallVersions == null || !waterfallVersions.project_id.Equals("waterfall"))
+            catch (WebException e)
             {
+                ErrorLogger.Append(e);
+                Console.WriteLine(
+                    "WebException while requesting latest Waterfall Version (Either papermc.io is down or your internet connection is not working)");
                 return null;
             }
-            
-            string version = waterfallVersions.versions.Reverse().FirstOrDefault();
-            int build = await RequestLatestBuildId(version);
-            ServerVersion waterfallVersion = new ServerVersion();
-            waterfallVersion.Type = ServerVersion.VersionType.Waterfall;
-            waterfallVersion.Version = version;
-            waterfallVersion.JarLink = "https://thatstupidpaperremovedv1api.madebyitoncek.repl.co/api/v1/waterfall/" + waterfallVersions.versions[0] + "/latest/download";
-            waterfallVersion.JarLink =
-                $"https://papermc.io/api/v2/projects/waterfall/versions/{version}/builds/{build}/downloads/waterfall-{version}-{build}.jar";
-
-
-            return waterfallVersion;
         }
 
-        private async Task<int> RequestLatestBuildId(string version)
+        WaterfallVersions waterfallVersions = JsonConvert.DeserializeObject<WaterfallVersions>(json);
+        if (waterfallVersions == null || !waterfallVersions.project_id.Equals("waterfall"))
         {
-            string url = "https://papermc.io/api/v2/projects/waterfall/versions/" + version;
+            return null;
+        }
+
+        string version = waterfallVersions.versions.Reverse().FirstOrDefault();
+        int build = await RequestLatestBuildId(version);
+        ServerVersion waterfallVersion = new();
+        waterfallVersion.Type = ServerVersion.VersionType.Waterfall;
+        waterfallVersion.Version = version;
+        waterfallVersion.JarLink = "https://thatstupidpaperremovedv1api.madebyitoncek.repl.co/api/v1/waterfall/" +
+                                   waterfallVersions.versions[0] + "/latest/download";
+        waterfallVersion.JarLink =
+            $"https://papermc.io/api/v2/projects/waterfall/versions/{version}/builds/{build}/downloads/waterfall-{version}-{build}.jar";
+
+
+        return waterfallVersion;
+    }
+
+    private async Task<int> RequestLatestBuildId(string version)
+    {
+        string url = "https://papermc.io/api/v2/projects/waterfall/versions/" + version;
+        {
+            try
             {
-                try
-                {
-                    HttpWebRequest request = WebRequest.CreateHttp(url);
-                    request.UserAgent = ApplicationManager.UserAgent;
-                    using var response = request.GetResponse();
-                    await using Stream stream = response.GetResponseStream();
-                    using StreamReader reader = new StreamReader(stream);
-                    string json = await reader.ReadToEndAsync();
-                    WaterfallVersion obj = JsonConvert.DeserializeObject<WaterfallVersion>(json);
-                    return obj.builds.LastOrDefault();
-                }
-                catch (Exception e)
-                {
-                    ErrorLogger.Append(e);
-                    Console.WriteLine("Could not get latest build id for paper version " + version);
-                    return 0;
-                }
+                HttpWebRequest request = WebRequest.CreateHttp(url);
+                request.UserAgent = ApplicationManager.UserAgent;
+                using WebResponse response = request.GetResponse();
+                await using Stream stream = response.GetResponseStream();
+                using StreamReader reader = new(stream);
+                string json = await reader.ReadToEndAsync();
+                WaterfallVersion obj = JsonConvert.DeserializeObject<WaterfallVersion>(json);
+                return obj.builds.LastOrDefault();
+            }
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
+                Console.WriteLine("Could not get latest build id for paper version " + version);
+                return 0;
             }
         }
-        
-        private class WaterfallVersions
-        {
-            public string project_id;
-            public string project_name;
-            public string[] version_groups;
-            public string[] versions;
-        }
+    }
 
-        private class WaterfallVersion
-        {
-            public string project_id;
-            public string project_name;
-            public string version;
-            public int[] builds;
-        }
+    private class WaterfallVersions
+    {
+        public string project_id;
+        public string project_name;
+        public string[] version_groups;
+        public string[] versions;
+    }
+
+    private class WaterfallVersion
+    {
+        public int[] builds;
+        public string project_id;
+        public string project_name;
+        public string version;
     }
 }

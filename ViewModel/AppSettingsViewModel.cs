@@ -12,137 +12,137 @@ using Fork.Logic.Persistence;
 using Fork.View.Xaml2.Pages;
 using Websocket.Client;
 
-namespace Fork.ViewModel
+namespace Fork.ViewModel;
+
+public class AppSettingsViewModel : BaseViewModel
 {
-    public class AppSettingsViewModel : BaseViewModel
+    private string oldDefaultJavaPath;
+    private readonly Timer retryTimer = new() { Interval = 1000, AutoReset = true, Enabled = false };
+
+    public AppSettingsViewModel(MainViewModel mainViewModel)
     {
-        private string oldDefaultJavaPath;
-        private Timer retryTimer = new Timer {Interval = 1000, AutoReset = true, Enabled = false};
-        
-        public AppSettings AppSettings => AppSettingsSerializer.Instance.AppSettings;
-
-        public string DiscordSocketStateMessage
+        retryTimer.Elapsed += (sender, e) =>
         {
-            get
+            if (RetrySeconds > 0)
             {
-                if (!IsDiscordBotConnected)
-                {
-                    return "Disconnected";
-                }
-                return !IsDiscordLinked ? "Waiting for token" : "Connected";
+                RetrySeconds--;
             }
+        };
+
+        if (AppSettings.EnableDiscordBot)
+        {
+            ApplicationManager.StartDiscordWebSocket();
         }
 
-        public bool IsDiscordBotConnected { get; set; } = false;
-        public bool IsDiscordLinked { get; set; } = false;
-        public int RetrySeconds { get; set; } = 30;
-        public string DiscordGuildName { get; set; } = "";
-        public AppSettingsPage AppSettingsPage { get; }
-        public MainViewModel MainViewModel { get; }
-        public ObservableCollection<string> Supporters { get; set; }
+        MainViewModel = mainViewModel;
+        AppSettingsPage = new AppSettingsPage(this);
+        Supporters = new ObservableCollection<string>(new APIController().GetSupporters());
+    }
 
-        public AppSettingsViewModel(MainViewModel mainViewModel)
+    public AppSettings AppSettings => AppSettingsSerializer.Instance.AppSettings;
+
+    public string DiscordSocketStateMessage
+    {
+        get
         {
-            retryTimer.Elapsed += (sender, e) =>
+            if (!IsDiscordBotConnected)
             {
-                if (RetrySeconds > 0)
-                {
-                    RetrySeconds--;
-                }
-            };
-
-            if (AppSettings.EnableDiscordBot)
-            {
-                ApplicationManager.StartDiscordWebSocket();
+                return "Disconnected";
             }
-            
-            MainViewModel = mainViewModel;
-            AppSettingsPage = new AppSettingsPage(this);
-            Supporters = new ObservableCollection<string>(new APIController().GetSupporters());
+
+            return !IsDiscordLinked ? "Waiting for token" : "Connected";
+        }
+    }
+
+    public bool IsDiscordBotConnected { get; set; }
+    public bool IsDiscordLinked { get; set; }
+    public int RetrySeconds { get; set; } = 30;
+    public string DiscordGuildName { get; set; } = "";
+    public AppSettingsPage AppSettingsPage { get; }
+    public MainViewModel MainViewModel { get; }
+    public ObservableCollection<string> Supporters { get; set; }
+
+    public async Task OpenAppSettingsPage()
+    {
+        await ReadAppSettingsAsync();
+        oldDefaultJavaPath = AppSettings.DefaultJavaPath;
+    }
+
+    public async Task CloseAppSettingsPage()
+    {
+        if (oldDefaultJavaPath != null && !oldDefaultJavaPath.Equals(AppSettings.DefaultJavaPath))
+        {
+            foreach (EntityViewModel entityViewModel in MainViewModel.Entities)
+                entityViewModel.UpdateDefaultJavaPath(oldDefaultJavaPath, AppSettings.DefaultJavaPath);
         }
 
-        public async Task OpenAppSettingsPage()
-        {
-            await ReadAppSettingsAsync();
-            oldDefaultJavaPath = AppSettings.DefaultJavaPath;
-        }
+        await WriteAppSettingsAsync();
+    }
 
-        public async Task CloseAppSettingsPage()
+    public void UpdateDiscordWebSocketState(ReconnectionType type)
+    {
+        IsDiscordBotConnected = true;
+        retryTimer.Stop();
+        RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(DiscordSocketStateMessage)));
+    }
+
+    public void UpdateDiscordWebSocketState(DisconnectionType type)
+    {
+        IsDiscordBotConnected = false;
+        IsDiscordLinked = false;
+        RetrySeconds = 30;
+        retryTimer.Start();
+        RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(DiscordSocketStateMessage)));
+    }
+
+    public void DiscordLinkStatusUpdate(string status, string guildName = "")
+    {
+        IsDiscordLinked = status.ToLower().Equals("linked");
+        DiscordGuildName = guildName;
+        RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(DiscordSocketStateMessage)));
+    }
+
+    public async Task<bool> WriteAppSettingsAsync()
+    {
+        Task<bool> t = new(() =>
         {
-            if (oldDefaultJavaPath!=null && !oldDefaultJavaPath.Equals(AppSettings.DefaultJavaPath))
+            try
             {
-                foreach (EntityViewModel entityViewModel in MainViewModel.Entities)
-                {
-                    entityViewModel.UpdateDefaultJavaPath(oldDefaultJavaPath, AppSettings.DefaultJavaPath);
-                }
+                AppSettingsSerializer.Instance.SaveSettings();
+                return true;
             }
-            await WriteAppSettingsAsync();
-        }
-
-        public void UpdateDiscordWebSocketState(ReconnectionType type)
-        {
-            IsDiscordBotConnected = true;
-            retryTimer.Stop();
-            RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(DiscordSocketStateMessage)));
-        }
-        
-        public void UpdateDiscordWebSocketState(DisconnectionType type)
-        {
-            IsDiscordBotConnected = false;
-            IsDiscordLinked = false;
-            RetrySeconds = 30;
-            retryTimer.Start();
-            RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(DiscordSocketStateMessage)));
-        }
-
-        public void DiscordLinkStatusUpdate(string status, string guildName = "")
-        {
-            IsDiscordLinked = status.ToLower().Equals("linked");
-            DiscordGuildName = guildName;
-            RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(DiscordSocketStateMessage)));
-        }
-
-        public async Task<bool> WriteAppSettingsAsync()
-        {
-            Task<bool> t = new Task<bool>(() =>
+            catch (Exception e)
             {
-                try
-                {
-                    AppSettingsSerializer.Instance.SaveSettings();
-                    return true;
-                }
-                catch (Exception e)
-                {
-                    ErrorLogger.Append(e);
-                    return false;
-                }
-            });
-            t.Start();
-            bool r = await t;
-            return r;
-        }
+                ErrorLogger.Append(e);
+                return false;
+            }
+        });
+        t.Start();
+        bool r = await t;
+        return r;
+    }
 
-        private async Task<bool> ReadAppSettingsAsync()
+    private async Task<bool> ReadAppSettingsAsync()
+    {
+        Task<bool> t = new(() =>
         {
-            Task<bool> t = new Task<bool>(() =>
+            try
             {
-                try
-                {
-                    var patronsNew = new ObservableCollection<string>(new APIController().GetSupporters());
-                    Application.Current.Dispatcher.InvokeAsync(() => { Supporters = patronsNew; });
-                    AppSettingsSerializer.Instance.ReadSettings();
-                    return true;
-                }
-                catch (Exception e)
-                {
-                    ErrorLogger.Append(e);
-                    return false;
-                }
-            });
-            t.Start();
-            bool r = await t;
-            RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(AppSettings)));
-            return r;
-        }
+                ObservableCollection<string> patronsNew =
+                    new ObservableCollection<string>(new APIController().GetSupporters());
+                Application.Current.Dispatcher.InvokeAsync(() => { Supporters = patronsNew; });
+                AppSettingsSerializer.Instance.ReadSettings();
+                return true;
+            }
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
+                return false;
+            }
+        });
+        t.Start();
+        bool r = await t;
+        RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(AppSettings)));
+        return r;
     }
 }

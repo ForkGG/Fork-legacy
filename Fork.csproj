@@ -1,270 +1,270 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <UseWPF>true</UseWPF>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <UseWindowsForms>true</UseWindowsForms>
-    <Version>0.7.0</Version>
-    <StartupObject>Fork.App</StartupObject>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageProjectUrl>https://fork.gg</PackageProjectUrl>
-    <PackageIcon>icon.ico</PackageIcon>
-    <RepositoryUrl>https://github.com/ForkGG/fork</RepositoryUrl>
-    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
-    <LangVersion>12</LangVersion>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <UseWPF>true</UseWPF>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <UseWindowsForms>true</UseWindowsForms>
+        <Version>0.7.0</Version>
+        <StartupObject>Fork.App</StartupObject>
+        <ApplicationIcon>icon.ico</ApplicationIcon>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageProjectUrl>https://fork.gg</PackageProjectUrl>
+        <PackageIcon>icon.ico</PackageIcon>
+        <RepositoryUrl>https://github.com/ForkGG/fork</RepositoryUrl>
+        <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+        <LangVersion>12</LangVersion>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="View\Resources\Fonts\MaterialIcons-Regular.ttf" />
-    <None Remove="View\Resources\Fonts\Montserrat-Bold.ttf" />
-    <None Remove="View\Resources\Fonts\Montserrat-Medium.ttf" />
-    <None Remove="View\Resources\Fonts\Montserrat-SemiBold.ttf" />
-    <None Remove="View\Resources\images\close.png" />
-    <None Remove="View\Resources\images\DeafultHead.png" />
-    <None Remove="View\Resources\images\Icons\Add.png" />
-    <None Remove="View\Resources\images\Icons\AddW.png" />
-    <None Remove="View\Resources\images\Icons\Banned.png" />
-    <None Remove="View\Resources\images\Icons\BannedW.png" />
-    <None Remove="View\Resources\images\Icons\Boi.png" />
-    <None Remove="View\Resources\images\Icons\BoiHover.png" />
-    <None Remove="View\Resources\images\Icons\BoiTransparent.png" />
-    <None Remove="View\Resources\images\Icons\BoiTransparentHover.png" />
-    <None Remove="View\Resources\images\Icons\Bukkit.png" />
-    <None Remove="View\Resources\images\Icons\BukkitD.png" />
-    <None Remove="View\Resources\images\Icons\BukkitW.png" />
-    <None Remove="View\Resources\images\Icons\BungeeCord.png" />
-    <None Remove="View\Resources\images\Icons\BungeeCordD.png" />
-    <None Remove="View\Resources\images\Icons\BungeeCordW.png" />
-    <None Remove="View\Resources\images\Icons\Cancel.png" />
-    <None Remove="View\Resources\images\Icons\CancelW.png" />
-    <None Remove="View\Resources\images\Icons\Create.png" />
-    <None Remove="View\Resources\images\Icons\CreateW.png" />
-    <None Remove="View\Resources\images\Icons\Delete.png" />
-    <None Remove="View\Resources\images\Icons\DeleteW.png" />
-    <None Remove="View\Resources\images\Icons\DiscordD.png" />
-    <None Remove="View\Resources\images\Icons\DiscordW.png" />
-    <None Remove="View\Resources\images\Icons\Download.png" />
-    <None Remove="View\Resources\images\Icons\DownloadW.png" />
-    <None Remove="View\Resources\images\Icons\DudeSelected.png" />
-    <None Remove="View\Resources\images\Icons\DudeSelectedHover.png" />
-    <None Remove="View\Resources\images\Icons\dudeSmall.png" />
-    <None Remove="View\Resources\images\Icons\FolderD.png" />
-    <None Remove="View\Resources\images\Icons\FolderW.png" />
-    <None Remove="View\Resources\images\Icons\Import.png" />
-    <None Remove="View\Resources\images\Icons\ImportW.png" />
-    <None Remove="View\Resources\images\Icons\Paper.png" />
-    <None Remove="View\Resources\images\Icons\PaperD.png" />
-    <None Remove="View\Resources\images\Icons\PaperW.png" />
-    <None Remove="View\Resources\images\Icons\Spigot.png" />
-    <None Remove="View\Resources\images\Icons\SpigotD.png" />
-    <None Remove="View\Resources\images\Icons\SpigotW.png" />
-    <None Remove="View\Resources\images\Icons\Purpur.png" />
-    <None Remove="View\Resources\images\Icons\PurpurD.png" />
-    <None Remove="View\Resources\images\Icons\PurpurW.png" />
-    <None Remove="View\Resources\images\Icons\Fabric.png" />
-    <None Remove="View\Resources\images\Icons\FabricD.png" />
-    <None Remove="View\Resources\images\Icons\FabricW.png" />
-    <None Remove="View\Resources\images\Icons\PlayerList.png" />
-    <None Remove="View\Resources\images\Icons\PlayerListW.png" />
-    <None Remove="View\Resources\images\Icons\Plugins.png" />
-    <None Remove="View\Resources\images\Icons\PluginsW.png" />
-    <None Remove="View\Resources\images\Icons\Restart.png" />
-    <None Remove="View\Resources\images\Icons\RestartW.png" />
-    <None Remove="View\Resources\images\Icons\Settings.png" />
-    <None Remove="View\Resources\images\Icons\SettingsD.png" />
-    <None Remove="View\Resources\images\Icons\SettingsW.png" />
-    <None Remove="View\Resources\images\Icons\Start.png" />
-    <None Remove="View\Resources\images\Icons\StartW.png" />
-    <None Remove="View\Resources\images\Icons\Stop.png" />
-    <None Remove="View\Resources\images\Icons\StopW.png" />
-    <None Remove="View\Resources\images\Icons\Terminal.png" />
-    <None Remove="View\Resources\images\Icons\TerminalW.png" />
-    <None Remove="View\Resources\images\Icons\Vanilla.png" />
-    <None Remove="View\Resources\images\Icons\VanillaD.png" />
-    <None Remove="View\Resources\images\Icons\VanillaW.png" />
-    <None Remove="View\Resources\images\Icons\Snapshot.png" />
-    <None Remove="View\Resources\images\Icons\SnapshotD.png" />
-    <None Remove="View\Resources\images\Icons\SnapshotW.png" />
-    <None Remove="View\Resources\images\Icons\Waterfall.png" />
-    <None Remove="View\Resources\images\Icons\WaterfallD.png" />
-    <None Remove="View\Resources\images\Icons\WaterfallW.png" />
-    <None Remove="View\Resources\images\Icons\WhiteList.png" />
-    <None Remove="View\Resources\images\Icons\WhiteListW.png" />
-    <None Remove="View\Resources\images\Icons\World.png" />
-    <None Remove="View\Resources\images\Icons\WorldW.png" />
-    <None Remove="View\Resources\images\Icons\XMasBoiTransparent.png" />
-    <None Remove="View\Resources\images\Icons\XMasBoiTransparentHover.png" />
-    <None Remove="View\Resources\images\ImportServer.png" />
-    <None Remove="View\Resources\images\maximize1.png" />
-    <None Remove="View\Resources\images\maximize2.png" />
-    <None Remove="View\Resources\images\minimize.png" />
-    <None Remove="View\Resources\images\paperSymbol.png" />
-    <None Remove="View\Resources\images\Server-Icons\Default.png" />
-    <None Remove="View\Resources\images\Server-Icons\forkBoi.png" />
-    <None Remove="View\Resources\images\Server-Icons\forkChristmas.png" />
-    <None Remove="View\Resources\images\Server-Icons\Icon1.png" />
-    <None Remove="View\Resources\images\Splash.png" />
-    <None Remove="View\Resources\images\title.png" />
-    <None Remove="View\Resources\images\vanillaSymbol.png" />
-    <None Remove="View\Resources\SyntaxHighlighting\Python.xshd" />
-    <None Remove="View\Resources\SyntaxHighlighting\YAML.xshd" />
-    <None Include="icon.ico">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
+    <ItemGroup>
+        <None Remove="View\Resources\Fonts\MaterialIcons-Regular.ttf"/>
+        <None Remove="View\Resources\Fonts\Montserrat-Bold.ttf"/>
+        <None Remove="View\Resources\Fonts\Montserrat-Medium.ttf"/>
+        <None Remove="View\Resources\Fonts\Montserrat-SemiBold.ttf"/>
+        <None Remove="View\Resources\images\close.png"/>
+        <None Remove="View\Resources\images\DeafultHead.png"/>
+        <None Remove="View\Resources\images\Icons\Add.png"/>
+        <None Remove="View\Resources\images\Icons\AddW.png"/>
+        <None Remove="View\Resources\images\Icons\Banned.png"/>
+        <None Remove="View\Resources\images\Icons\BannedW.png"/>
+        <None Remove="View\Resources\images\Icons\Boi.png"/>
+        <None Remove="View\Resources\images\Icons\BoiHover.png"/>
+        <None Remove="View\Resources\images\Icons\BoiTransparent.png"/>
+        <None Remove="View\Resources\images\Icons\BoiTransparentHover.png"/>
+        <None Remove="View\Resources\images\Icons\Bukkit.png"/>
+        <None Remove="View\Resources\images\Icons\BukkitD.png"/>
+        <None Remove="View\Resources\images\Icons\BukkitW.png"/>
+        <None Remove="View\Resources\images\Icons\BungeeCord.png"/>
+        <None Remove="View\Resources\images\Icons\BungeeCordD.png"/>
+        <None Remove="View\Resources\images\Icons\BungeeCordW.png"/>
+        <None Remove="View\Resources\images\Icons\Cancel.png"/>
+        <None Remove="View\Resources\images\Icons\CancelW.png"/>
+        <None Remove="View\Resources\images\Icons\Create.png"/>
+        <None Remove="View\Resources\images\Icons\CreateW.png"/>
+        <None Remove="View\Resources\images\Icons\Delete.png"/>
+        <None Remove="View\Resources\images\Icons\DeleteW.png"/>
+        <None Remove="View\Resources\images\Icons\DiscordD.png"/>
+        <None Remove="View\Resources\images\Icons\DiscordW.png"/>
+        <None Remove="View\Resources\images\Icons\Download.png"/>
+        <None Remove="View\Resources\images\Icons\DownloadW.png"/>
+        <None Remove="View\Resources\images\Icons\DudeSelected.png"/>
+        <None Remove="View\Resources\images\Icons\DudeSelectedHover.png"/>
+        <None Remove="View\Resources\images\Icons\dudeSmall.png"/>
+        <None Remove="View\Resources\images\Icons\FolderD.png"/>
+        <None Remove="View\Resources\images\Icons\FolderW.png"/>
+        <None Remove="View\Resources\images\Icons\Import.png"/>
+        <None Remove="View\Resources\images\Icons\ImportW.png"/>
+        <None Remove="View\Resources\images\Icons\Paper.png"/>
+        <None Remove="View\Resources\images\Icons\PaperD.png"/>
+        <None Remove="View\Resources\images\Icons\PaperW.png"/>
+        <None Remove="View\Resources\images\Icons\Spigot.png"/>
+        <None Remove="View\Resources\images\Icons\SpigotD.png"/>
+        <None Remove="View\Resources\images\Icons\SpigotW.png"/>
+        <None Remove="View\Resources\images\Icons\Purpur.png"/>
+        <None Remove="View\Resources\images\Icons\PurpurD.png"/>
+        <None Remove="View\Resources\images\Icons\PurpurW.png"/>
+        <None Remove="View\Resources\images\Icons\Fabric.png"/>
+        <None Remove="View\Resources\images\Icons\FabricD.png"/>
+        <None Remove="View\Resources\images\Icons\FabricW.png"/>
+        <None Remove="View\Resources\images\Icons\PlayerList.png"/>
+        <None Remove="View\Resources\images\Icons\PlayerListW.png"/>
+        <None Remove="View\Resources\images\Icons\Plugins.png"/>
+        <None Remove="View\Resources\images\Icons\PluginsW.png"/>
+        <None Remove="View\Resources\images\Icons\Restart.png"/>
+        <None Remove="View\Resources\images\Icons\RestartW.png"/>
+        <None Remove="View\Resources\images\Icons\Settings.png"/>
+        <None Remove="View\Resources\images\Icons\SettingsD.png"/>
+        <None Remove="View\Resources\images\Icons\SettingsW.png"/>
+        <None Remove="View\Resources\images\Icons\Start.png"/>
+        <None Remove="View\Resources\images\Icons\StartW.png"/>
+        <None Remove="View\Resources\images\Icons\Stop.png"/>
+        <None Remove="View\Resources\images\Icons\StopW.png"/>
+        <None Remove="View\Resources\images\Icons\Terminal.png"/>
+        <None Remove="View\Resources\images\Icons\TerminalW.png"/>
+        <None Remove="View\Resources\images\Icons\Vanilla.png"/>
+        <None Remove="View\Resources\images\Icons\VanillaD.png"/>
+        <None Remove="View\Resources\images\Icons\VanillaW.png"/>
+        <None Remove="View\Resources\images\Icons\Snapshot.png"/>
+        <None Remove="View\Resources\images\Icons\SnapshotD.png"/>
+        <None Remove="View\Resources\images\Icons\SnapshotW.png"/>
+        <None Remove="View\Resources\images\Icons\Waterfall.png"/>
+        <None Remove="View\Resources\images\Icons\WaterfallD.png"/>
+        <None Remove="View\Resources\images\Icons\WaterfallW.png"/>
+        <None Remove="View\Resources\images\Icons\WhiteList.png"/>
+        <None Remove="View\Resources\images\Icons\WhiteListW.png"/>
+        <None Remove="View\Resources\images\Icons\World.png"/>
+        <None Remove="View\Resources\images\Icons\WorldW.png"/>
+        <None Remove="View\Resources\images\Icons\XMasBoiTransparent.png"/>
+        <None Remove="View\Resources\images\Icons\XMasBoiTransparentHover.png"/>
+        <None Remove="View\Resources\images\ImportServer.png"/>
+        <None Remove="View\Resources\images\maximize1.png"/>
+        <None Remove="View\Resources\images\maximize2.png"/>
+        <None Remove="View\Resources\images\minimize.png"/>
+        <None Remove="View\Resources\images\paperSymbol.png"/>
+        <None Remove="View\Resources\images\Server-Icons\Default.png"/>
+        <None Remove="View\Resources\images\Server-Icons\forkBoi.png"/>
+        <None Remove="View\Resources\images\Server-Icons\forkChristmas.png"/>
+        <None Remove="View\Resources\images\Server-Icons\Icon1.png"/>
+        <None Remove="View\Resources\images\Splash.png"/>
+        <None Remove="View\Resources\images\title.png"/>
+        <None Remove="View\Resources\images\vanillaSymbol.png"/>
+        <None Remove="View\Resources\SyntaxHighlighting\Python.xshd"/>
+        <None Remove="View\Resources\SyntaxHighlighting\YAML.xshd"/>
+        <None Include="icon.ico">
+            <Pack>True</Pack>
+            <PackagePath></PackagePath>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="LICENSE">
+            <Pack>True</Pack>
+            <PackagePath></PackagePath>
+        </None>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="DiscordRichPresence" Version="1.2.1.24" />
-    <PackageReference Include="Fody" Version="6.8.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="gong-wpf-dragdrop" Version="3.2.1" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.57" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
-    <PackageReference Include="SharpZipLib" Version="1.4.2" />
-    <PackageReference Include="Websocket.Client" Version="5.0.0" />
-    <PackageReference Include="YamlDotNet" Version="13.7.1" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="DiscordRichPresence" Version="1.2.1.24"/>
+        <PackageReference Include="Fody" Version="6.8.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="gong-wpf-dragdrop" Version="3.2.1"/>
+        <PackageReference Include="HtmlAgilityPack" Version="1.11.57"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.1"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.1"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+        <PackageReference Include="PropertyChanged.Fody" Version="4.1.0"/>
+        <PackageReference Include="SharpZipLib" Version="1.4.2"/>
+        <PackageReference Include="Websocket.Client" Version="5.0.0"/>
+        <PackageReference Include="YamlDotNet" Version="13.7.1"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="ICSharpCode.AvalonEdit">
-      <HintPath>minecraft\packages\AvalonEdit\net45\ICSharpCode.AvalonEdit.dll</HintPath>
-    </Reference>
-  </ItemGroup>
+    <ItemGroup>
+        <Reference Include="ICSharpCode.AvalonEdit">
+            <HintPath>minecraft\packages\AvalonEdit\net45\ICSharpCode.AvalonEdit.dll</HintPath>
+        </Reference>
+    </ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="View\Resources\Fonts\MaterialIcons-Regular.ttf" />
-    <Resource Include="View\Resources\Fonts\Montserrat-Bold.ttf" />
-    <Resource Include="View\Resources\Fonts\Montserrat-Medium.ttf" />
-    <Resource Include="View\Resources\Fonts\Montserrat-SemiBold.ttf" />
-    <Resource Include="View\Resources\images\close.png" />
-    <Resource Include="View\Resources\images\DeafultHead.png" />
-    <Resource Include="View\Resources\images\Icons\Add.png" />
-    <Resource Include="View\Resources\images\Icons\AddW.png" />
-    <Resource Include="View\Resources\images\Icons\Banned.png" />
-    <Resource Include="View\Resources\images\Icons\BannedW.png" />
-    <Resource Include="View\Resources\images\Icons\Bukkit.png" />
-    <Resource Include="View\Resources\images\Icons\BukkitD.png" />
-    <Resource Include="View\Resources\images\Icons\BukkitW.png" />
-    <Resource Include="View\Resources\images\Icons\BungeeCord.png" />
-    <Resource Include="View\Resources\images\Icons\BungeeCordD.png" />
-    <Resource Include="View\Resources\images\Icons\BungeeCordW.png" />
-    <Resource Include="View\Resources\images\Icons\Cancel.png" />
-    <Resource Include="View\Resources\images\Icons\CancelW.png" />
-    <Resource Include="View\Resources\images\Icons\Create.png" />
-    <Resource Include="View\Resources\images\Icons\CreateW.png" />
-    <Resource Include="View\Resources\images\Icons\Delete.png" />
-    <Resource Include="View\Resources\images\Icons\DeleteW.png" />
-    <Resource Include="View\Resources\images\Icons\DiscordD.png" />
-    <Resource Include="View\Resources\images\Icons\DiscordW.png" />
-    <Resource Include="View\Resources\images\Icons\Download.png" />
-    <Resource Include="View\Resources\images\Icons\DownloadW.png" />
-    <Resource Include="View\Resources\images\Icons\BoiTransparent.png" />
-    <Resource Include="View\Resources\images\Icons\BoiTransparentHover.png" />
-    <Resource Include="View\Resources\images\Icons\Boi.png" />
-    <Resource Include="View\Resources\images\Icons\BoiHover.png" />
-    <Resource Include="View\Resources\images\Icons\FolderD.png" />
-    <Resource Include="View\Resources\images\Icons\FolderW.png" />
-    <Resource Include="View\Resources\images\Icons\Import.png" />
-    <Resource Include="View\Resources\images\Icons\ImportW.png" />
-    <Resource Include="View\Resources\images\Icons\Paper.png" />
-    <Resource Include="View\Resources\images\Icons\PaperD.png" />
-    <Resource Include="View\Resources\images\Icons\PaperW.png" />
-    <Resource Include="View\Resources\images\Icons\Spigot.png" />
-    <Resource Include="View\Resources\images\Icons\SpigotD.png" />
-    <Resource Include="View\Resources\images\Icons\SpigotW.png" />
-    <Resource Include="View\Resources\images\Icons\Purpur.png" />
-    <Resource Include="View\Resources\images\Icons\PurpurD.png" />
-    <Resource Include="View\Resources\images\Icons\PurpurW.png" />
-    <Resource Include="View\Resources\images\Icons\Fabric.png" />
-    <Resource Include="View\Resources\images\Icons\FabricD.png" />
-    <Resource Include="View\Resources\images\Icons\FabricW.png" />
-    <Resource Include="View\Resources\images\Icons\PlayerList.png" />
-    <Resource Include="View\Resources\images\Icons\PlayerListW.png" />
-    <Resource Include="View\Resources\images\Icons\Plugins.png" />
-    <Resource Include="View\Resources\images\Icons\PluginsW.png" />
-    <Resource Include="View\Resources\images\Icons\Restart.png" />
-    <Resource Include="View\Resources\images\Icons\RestartW.png" />
-    <Resource Include="View\Resources\images\Icons\Settings.png" />
-    <Resource Include="View\Resources\images\Icons\SettingsD.png" />
-    <Resource Include="View\Resources\images\Icons\SettingsW.png" />
-    <Resource Include="View\Resources\images\Icons\Start.png" />
-    <Resource Include="View\Resources\images\Icons\StartW.png" />
-    <Resource Include="View\Resources\images\Icons\Stop.png" />
-    <Resource Include="View\Resources\images\Icons\StopW.png" />
-    <Resource Include="View\Resources\images\Icons\Terminal.png" />
-    <Resource Include="View\Resources\images\Icons\TerminalW.png" />
-    <Resource Include="View\Resources\images\Icons\Vanilla.png" />
-    <Resource Include="View\Resources\images\Icons\VanillaD.png" />
-    <Resource Include="View\Resources\images\Icons\VanillaW.png" />
-    <Resource Include="View\Resources\images\Icons\Snapshot.png" />
-    <Resource Include="View\Resources\images\Icons\SnapshotD.png" />
-    <Resource Include="View\Resources\images\Icons\SnapshotW.png" />
-    <Resource Include="View\Resources\images\Icons\Waterfall.png" />
-    <Resource Include="View\Resources\images\Icons\WaterfallD.png" />
-    <Resource Include="View\Resources\images\Icons\WaterfallW.png" />
-    <Resource Include="View\Resources\images\Icons\WhiteList.png" />
-    <Resource Include="View\Resources\images\Icons\WhiteListW.png" />
-    <Resource Include="View\Resources\images\Icons\World.png" />
-    <Resource Include="View\Resources\images\Icons\WorldW.png" />
-    <Resource Include="View\Resources\images\Icons\XMasBoiTransparent.png" />
-    <Resource Include="View\Resources\images\Icons\XMasBoiTransparentHover.png" />
-    <Resource Include="View\Resources\images\maximize1.png" />
-    <Resource Include="View\Resources\images\maximize2.png" />
-    <Resource Include="View\Resources\images\minimize.png" />
-    <Resource Include="View\Resources\images\Server-Icons\Default.png" />
-    <Resource Include="View\Resources\images\Server-Icons\forkBoi.png" />
-    <Resource Include="View\Resources\images\Server-Icons\forkChristmas.png" />
-    <Resource Include="View\Resources\images\Server-Icons\Icon1.png" />
-    <Resource Include="View\Resources\SyntaxHighlighting\Python.xshd" />
-    <Resource Include="View\Resources\SyntaxHighlighting\YAML.xshd" />
-    <None Remove="View\Resources\images\Icons\KoFiLogo.png" />
-    <None Remove="View\Resources\images\Icons\KoFiLogoD.png" />
-    <Resource Include="View\Resources\images\Icons\KoFiLogoD.png" />
-    <None Remove="View\Resources\images\Icons\KoFiLogoW.png" />
-    <Resource Include="View\Resources\images\Icons\KoFiLogoW.png" />
-  </ItemGroup>
+    <ItemGroup>
+        <Resource Include="View\Resources\Fonts\MaterialIcons-Regular.ttf"/>
+        <Resource Include="View\Resources\Fonts\Montserrat-Bold.ttf"/>
+        <Resource Include="View\Resources\Fonts\Montserrat-Medium.ttf"/>
+        <Resource Include="View\Resources\Fonts\Montserrat-SemiBold.ttf"/>
+        <Resource Include="View\Resources\images\close.png"/>
+        <Resource Include="View\Resources\images\DeafultHead.png"/>
+        <Resource Include="View\Resources\images\Icons\Add.png"/>
+        <Resource Include="View\Resources\images\Icons\AddW.png"/>
+        <Resource Include="View\Resources\images\Icons\Banned.png"/>
+        <Resource Include="View\Resources\images\Icons\BannedW.png"/>
+        <Resource Include="View\Resources\images\Icons\Bukkit.png"/>
+        <Resource Include="View\Resources\images\Icons\BukkitD.png"/>
+        <Resource Include="View\Resources\images\Icons\BukkitW.png"/>
+        <Resource Include="View\Resources\images\Icons\BungeeCord.png"/>
+        <Resource Include="View\Resources\images\Icons\BungeeCordD.png"/>
+        <Resource Include="View\Resources\images\Icons\BungeeCordW.png"/>
+        <Resource Include="View\Resources\images\Icons\Cancel.png"/>
+        <Resource Include="View\Resources\images\Icons\CancelW.png"/>
+        <Resource Include="View\Resources\images\Icons\Create.png"/>
+        <Resource Include="View\Resources\images\Icons\CreateW.png"/>
+        <Resource Include="View\Resources\images\Icons\Delete.png"/>
+        <Resource Include="View\Resources\images\Icons\DeleteW.png"/>
+        <Resource Include="View\Resources\images\Icons\DiscordD.png"/>
+        <Resource Include="View\Resources\images\Icons\DiscordW.png"/>
+        <Resource Include="View\Resources\images\Icons\Download.png"/>
+        <Resource Include="View\Resources\images\Icons\DownloadW.png"/>
+        <Resource Include="View\Resources\images\Icons\BoiTransparent.png"/>
+        <Resource Include="View\Resources\images\Icons\BoiTransparentHover.png"/>
+        <Resource Include="View\Resources\images\Icons\Boi.png"/>
+        <Resource Include="View\Resources\images\Icons\BoiHover.png"/>
+        <Resource Include="View\Resources\images\Icons\FolderD.png"/>
+        <Resource Include="View\Resources\images\Icons\FolderW.png"/>
+        <Resource Include="View\Resources\images\Icons\Import.png"/>
+        <Resource Include="View\Resources\images\Icons\ImportW.png"/>
+        <Resource Include="View\Resources\images\Icons\Paper.png"/>
+        <Resource Include="View\Resources\images\Icons\PaperD.png"/>
+        <Resource Include="View\Resources\images\Icons\PaperW.png"/>
+        <Resource Include="View\Resources\images\Icons\Spigot.png"/>
+        <Resource Include="View\Resources\images\Icons\SpigotD.png"/>
+        <Resource Include="View\Resources\images\Icons\SpigotW.png"/>
+        <Resource Include="View\Resources\images\Icons\Purpur.png"/>
+        <Resource Include="View\Resources\images\Icons\PurpurD.png"/>
+        <Resource Include="View\Resources\images\Icons\PurpurW.png"/>
+        <Resource Include="View\Resources\images\Icons\Fabric.png"/>
+        <Resource Include="View\Resources\images\Icons\FabricD.png"/>
+        <Resource Include="View\Resources\images\Icons\FabricW.png"/>
+        <Resource Include="View\Resources\images\Icons\PlayerList.png"/>
+        <Resource Include="View\Resources\images\Icons\PlayerListW.png"/>
+        <Resource Include="View\Resources\images\Icons\Plugins.png"/>
+        <Resource Include="View\Resources\images\Icons\PluginsW.png"/>
+        <Resource Include="View\Resources\images\Icons\Restart.png"/>
+        <Resource Include="View\Resources\images\Icons\RestartW.png"/>
+        <Resource Include="View\Resources\images\Icons\Settings.png"/>
+        <Resource Include="View\Resources\images\Icons\SettingsD.png"/>
+        <Resource Include="View\Resources\images\Icons\SettingsW.png"/>
+        <Resource Include="View\Resources\images\Icons\Start.png"/>
+        <Resource Include="View\Resources\images\Icons\StartW.png"/>
+        <Resource Include="View\Resources\images\Icons\Stop.png"/>
+        <Resource Include="View\Resources\images\Icons\StopW.png"/>
+        <Resource Include="View\Resources\images\Icons\Terminal.png"/>
+        <Resource Include="View\Resources\images\Icons\TerminalW.png"/>
+        <Resource Include="View\Resources\images\Icons\Vanilla.png"/>
+        <Resource Include="View\Resources\images\Icons\VanillaD.png"/>
+        <Resource Include="View\Resources\images\Icons\VanillaW.png"/>
+        <Resource Include="View\Resources\images\Icons\Snapshot.png"/>
+        <Resource Include="View\Resources\images\Icons\SnapshotD.png"/>
+        <Resource Include="View\Resources\images\Icons\SnapshotW.png"/>
+        <Resource Include="View\Resources\images\Icons\Waterfall.png"/>
+        <Resource Include="View\Resources\images\Icons\WaterfallD.png"/>
+        <Resource Include="View\Resources\images\Icons\WaterfallW.png"/>
+        <Resource Include="View\Resources\images\Icons\WhiteList.png"/>
+        <Resource Include="View\Resources\images\Icons\WhiteListW.png"/>
+        <Resource Include="View\Resources\images\Icons\World.png"/>
+        <Resource Include="View\Resources\images\Icons\WorldW.png"/>
+        <Resource Include="View\Resources\images\Icons\XMasBoiTransparent.png"/>
+        <Resource Include="View\Resources\images\Icons\XMasBoiTransparentHover.png"/>
+        <Resource Include="View\Resources\images\maximize1.png"/>
+        <Resource Include="View\Resources\images\maximize2.png"/>
+        <Resource Include="View\Resources\images\minimize.png"/>
+        <Resource Include="View\Resources\images\Server-Icons\Default.png"/>
+        <Resource Include="View\Resources\images\Server-Icons\forkBoi.png"/>
+        <Resource Include="View\Resources\images\Server-Icons\forkChristmas.png"/>
+        <Resource Include="View\Resources\images\Server-Icons\Icon1.png"/>
+        <Resource Include="View\Resources\SyntaxHighlighting\Python.xshd"/>
+        <Resource Include="View\Resources\SyntaxHighlighting\YAML.xshd"/>
+        <None Remove="View\Resources\images\Icons\KoFiLogo.png"/>
+        <None Remove="View\Resources\images\Icons\KoFiLogoD.png"/>
+        <Resource Include="View\Resources\images\Icons\KoFiLogoD.png"/>
+        <None Remove="View\Resources\images\Icons\KoFiLogoW.png"/>
+        <Resource Include="View\Resources\images\Icons\KoFiLogoW.png"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <SplashScreen Include="View\Resources\images\Splash.png" />
-  </ItemGroup>
+    <ItemGroup>
+        <SplashScreen Include="View\Resources\images\Splash.png"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Update="Properties\Settings.Designer.cs">
+            <DesignTimeSharedInput>True</DesignTimeSharedInput>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Settings.settings</DependentUpon>
+        </Compile>
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
+    <ItemGroup>
+        <None Update="Properties\Settings.settings">
+            <Generator>SettingsSingleFileGenerator</Generator>
+            <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+        </None>
+    </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="logic\BackupLogic" />
-  </ItemGroup>
+    <ItemGroup>
+        <Folder Include="logic\BackupLogic"/>
+    </ItemGroup>
 
 </Project>

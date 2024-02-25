@@ -1,40 +1,39 @@
 using System.IO;
 using Fork.ViewModel;
 
-namespace Fork.Logic.Model
-{
-    public class World
-    {
-        private bool isActive;
-        private ServerViewModel viewModel;
-        
-        public string Name { get; set; }
-        public DirectoryInfo Directory { get; set; }
+namespace Fork.Logic.Model;
 
-        public bool IsActive
+public class World
+{
+    private bool isActive;
+    private readonly ServerViewModel viewModel;
+
+    public World(string name, ServerViewModel viewModel, DirectoryInfo directory)
+    {
+        Name = name;
+        this.viewModel = viewModel;
+        Directory = directory;
+    }
+
+    public string Name { get; set; }
+    public DirectoryInfo Directory { get; set; }
+
+    public bool IsActive
+    {
+        get => isActive;
+        set
         {
-            get { return isActive; }
-            set
+            isActive = value;
+            if (value)
             {
-                isActive = value;
-                if (value)
-                {
-                    viewModel.UpdateActiveWorld(this);
-                }
+                viewModel.UpdateActiveWorld(this);
             }
         }
-
-        public World(string name, ServerViewModel viewModel, DirectoryInfo directory)
-        {
-            Name = name;
-            this.viewModel = viewModel;
-            Directory = directory;
-        }
+    }
 
 
-        public override string ToString()
-        {
-            return Name;
-        }
+    public override string ToString()
+    {
+        return Name;
     }
 }

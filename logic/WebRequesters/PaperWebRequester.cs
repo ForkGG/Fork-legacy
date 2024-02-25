@@ -8,86 +8,86 @@ using Fork.Logic.Logging;
 using Fork.Logic.Manager;
 using Newtonsoft.Json;
 
-namespace Fork.Logic.WebRequesters
+namespace Fork.Logic.WebRequesters;
+
+public class PaperWebRequester
 {
-    public class PaperWebRequester
+    public List<string> RequestPaperVersions()
     {
-        public List<string> RequestPaperVersions()
+        string url = "https://papermc.io/api/v2/projects/paper";
+        string json = ResponseCache.Instance.UncacheResponse(url);
+        if (json == null)
         {
-            string url = "https://papermc.io/api/v2/projects/paper";
-            string json = ResponseCache.Instance.UncacheResponse(url);
-            if (json == null)
+            try
             {
-                try
-                {
-                    Uri uri = new Uri(url);
-                    HttpWebRequest request = WebRequest.CreateHttp(uri);
-                    request.UserAgent = ApplicationManager.UserAgent;
-                    using (var response = request.GetResponse())
-                    using (Stream stream = response.GetResponseStream())
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        json = reader.ReadToEnd();
-                    }
+                Uri uri = new(url);
+                HttpWebRequest request = WebRequest.CreateHttp(uri);
+                request.UserAgent = ApplicationManager.UserAgent;
+                using (WebResponse response = request.GetResponse())
+                using (Stream stream = response.GetResponseStream())
+                using (StreamReader reader = new(stream))
+                    json = reader.ReadToEnd();
 
-                    ResponseCache.Instance.CacheResponse(url, json);
-                } catch(WebException e)
-                {
-                    ErrorLogger.Append(e);
-                    Console.WriteLine("Could not receive Paper Versions (either papermc.io is down or your Internet connection is not working)");
-                    return new List<string>();
-                }                                
+                ResponseCache.Instance.CacheResponse(url, json);
             }
-
-            PaperVersions paperVersions = JsonConvert.DeserializeObject<PaperVersions>(json);
-
-            if (paperVersions == null || !paperVersions.project_id.Equals("paper"))
+            catch (WebException e)
             {
-                return null;
-            }
-
-            return paperVersions.versions.Reverse().ToList();
-        }
-
-        public async Task<int> RequestLatestBuildId(string version)
-        {
-            string url = "https://papermc.io/api/v2/projects/paper/versions/" + version;
-            {
-                try
-                {
-                    HttpWebRequest request = WebRequest.CreateHttp(url);
-                    request.UserAgent = ApplicationManager.UserAgent;
-                    using var response = request.GetResponse();
-                    await using Stream stream = response.GetResponseStream();
-                    using StreamReader reader = new StreamReader(stream);
-                    string json = await reader.ReadToEndAsync();
-                    PaperVersion obj = JsonConvert.DeserializeObject<PaperVersion>(json); ;
-                    return obj.builds.LastOrDefault();
-                }
-                catch (Exception e)
-                {
-                    ErrorLogger.Append(e);
-                    Console.WriteLine("Could not get latest build id for paper version "+version);
-                    return 0;
-                }
+                ErrorLogger.Append(e);
+                Console.WriteLine(
+                    "Could not receive Paper Versions (either papermc.io is down or your Internet connection is not working)");
+                return new List<string>();
             }
         }
 
+        PaperVersions paperVersions = JsonConvert.DeserializeObject<PaperVersions>(json);
 
-        private class PaperVersions
+        if (paperVersions == null || !paperVersions.project_id.Equals("paper"))
         {
-            public string project_id;
-            public string project_name;
-            public string[] version_groups;
-            public string[] versions;
+            return null;
         }
 
-        private class PaperVersion
+        return paperVersions.versions.Reverse().ToList();
+    }
+
+    public async Task<int> RequestLatestBuildId(string version)
+    {
+        string url = "https://papermc.io/api/v2/projects/paper/versions/" + version;
         {
-            public string project_id;
-            public string project_name;
-            public string version;
-            public int[] builds;
+            try
+            {
+                HttpWebRequest request = WebRequest.CreateHttp(url);
+                request.UserAgent = ApplicationManager.UserAgent;
+                using WebResponse response = request.GetResponse();
+                await using Stream stream = response.GetResponseStream();
+                using StreamReader reader = new(stream);
+                string json = await reader.ReadToEndAsync();
+                PaperVersion obj = JsonConvert.DeserializeObject<PaperVersion>(json);
+                ;
+                return obj.builds.LastOrDefault();
+            }
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
+                Console.WriteLine("Could not get latest build id for paper version " + version);
+                return 0;
+            }
         }
+    }
+
+
+    private class PaperVersions
+    {
+        public string project_id;
+        public string project_name;
+        public string[] version_groups;
+        public string[] versions;
+    }
+
+    private class PaperVersion
+    {
+        public int[] builds;
+        public string project_id;
+        public string project_name;
+        public string version;
     }
 }

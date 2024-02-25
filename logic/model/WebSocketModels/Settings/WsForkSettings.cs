@@ -1,7 +1,5 @@
-﻿namespace Fork.Logic.Model.WebSocketModels.Settings
+﻿namespace Fork.Logic.Model.WebSocketModels.Settings;
+
+public class WsForkSettings
 {
-    public class WsForkSettings
-    {
-        
-    }
 }

@@ -3,52 +3,51 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Fork.View.Xaml.Converter
+namespace Fork.View.Xaml.Converter;
+
+[ValueConversion(typeof(bool), typeof(Visibility))]
+public class BoolToVisibilityConverter : IValueConverter
 {
-    [ValueConversion(typeof(bool), typeof(Visibility))]
-    public class BoolToVisibilityConverter : IValueConverter
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        if (targetType != typeof(Visibility))
         {
-            if (targetType != typeof(Visibility))
-            {
-                throw new ArgumentException("This converter can only convert bools to Visibility");
-            }
-
-            if ((bool)value)
-            {
-                return Visibility.Visible;
-            }
-
-            return Visibility.Collapsed;
+            throw new ArgumentException("This converter can only convert bools to Visibility");
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        if ((bool)value)
         {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class InverseBoolToVisibilityConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (targetType != typeof(Visibility))
-            {
-                throw new ArgumentException("This converter can only convert bools to Visibility");
-            }
-
-            if ((bool)value)
-            {
-                return Visibility.Collapsed;
-            }
-
             return Visibility.Visible;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        return Visibility.Collapsed;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+public class InverseBoolToVisibilityConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (targetType != typeof(Visibility))
         {
-            throw new NotImplementedException();
+            throw new ArgumentException("This converter can only convert bools to Visibility");
         }
+
+        if ((bool)value)
+        {
+            return Visibility.Collapsed;
+        }
+
+        return Visibility.Visible;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
     }
 }
