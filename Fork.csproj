@@ -123,6 +123,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="AvalonEdit" Version="6.3.0.90" />
         <PackageReference Include="DiscordRichPresence" Version="1.2.1.24"/>
         <PackageReference Include="Fody" Version="6.8.0">
             <PrivateAssets>all</PrivateAssets>
@@ -143,12 +144,6 @@
         <PackageReference Include="SharpZipLib" Version="1.4.2"/>
         <PackageReference Include="Websocket.Client" Version="5.0.0"/>
         <PackageReference Include="YamlDotNet" Version="13.7.1"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Reference Include="ICSharpCode.AvalonEdit">
-            <HintPath>minecraft\packages\AvalonEdit\net45\ICSharpCode.AvalonEdit.dll</HintPath>
-        </Reference>
     </ItemGroup>
 
     <ItemGroup>

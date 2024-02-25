@@ -24,7 +24,7 @@ public partial class DefaultSettingsPage : Page, ISettingsPage
         InitializeComponent();
         SettingsFile = settingsFile;
         text.Text = settingsFile.Text;
-        text.TextArea.TextView.LineSpacing = 1.45d;
+        //text.TextArea.TextView.LineSpacing = 1.45d;
 
         using (Stream s = new MemoryStream(Properties.Resources.YAML))
         using (XmlTextReader reader = new(s))
