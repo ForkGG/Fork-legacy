@@ -20,9 +20,9 @@ namespace Fork.Logic.Utils
             
             rpcClient = new DiscordRpcClient("795015105061847111");
 #if DEBUG
-            rpcClient.Logger = new ConsoleLogger(LogLevel.Error); // When debugging set this to `Trace`
+            rpcClient.Logger = new ConsoleLogger(LogLevel.None); // When debugging set this to `Error` or `Trace`
 #else
-            rpcClient.Logger = new ConsoleLogger(LogLevel.Error);
+            rpcClient.Logger = new ConsoleLogger(LogLevel.None);
 #endif
             rpcClient.Initialize();
             
