@@ -1,19 +1,18 @@
 ﻿<Page x:Class="Fork.View.Xaml2.Pages.Settings.ForkNetworkSettingsPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Fork.View.Xaml2.Pages.Settings"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:controls="clr-namespace:Fork.View.Xaml2.Controls"
-      mc:Ignorable="d" 
+      mc:Ignorable="d"
       d:DesignHeight="1000" d:DesignWidth="800"
       Title="ForkNetworkSettingsPage">
 
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="20"/>
+                <RowDefinition />
+                <RowDefinition Height="20" />
             </Grid.RowDefinitions>
 
             <ScrollViewer Margin="10 0 5 10" Style="{DynamicResource SettingsScrollViewer}">
@@ -22,49 +21,56 @@
                     <Border CornerRadius="10" Margin="5 5 10 5">
                         <StackPanel Background="Transparent" Margin="0 10" Width="720" HorizontalAlignment="Left">
                             <TextBlock Text="Java and Networking" Foreground="{DynamicResource textHeader}"
-                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="95 0 5 0" />
+                                       FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23"
+                                       Margin="95 0 5 0" />
                             <StackPanel Margin="110 10 50 10" HorizontalAlignment="Left">
 
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="Max Ram " TextAlignment="Right"
-                                   Style="{DynamicResource CreateServerTextBlock}" Margin="0 5 10 5" />
-                                    <Border  CornerRadius="4" Width="100" Height="26"
-                                Background="{DynamicResource textBackground}" Margin="0 5 0 5">
+                                               Style="{DynamicResource CreateServerTextBlock}" Margin="0 5 10 5" />
+                                    <Border CornerRadius="4" Width="100" Height="26"
+                                            Background="{DynamicResource textBackground}" Margin="0 5 0 5">
                                         <TextBox Margin="5 0" Text="{Binding Network.JavaSettings.MaxRam}"
-                                     Background="{DynamicResource textBackground}" BorderThickness="0"
-                                     Foreground="{DynamicResource backgroundDark}"
-                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                     FontSize="17" Height="20" />
+                                                 Background="{DynamicResource textBackground}" BorderThickness="0"
+                                                 Foreground="{DynamicResource backgroundDark}"
+                                                 FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                                 FontSize="17" Height="20" />
                                     </Border>
                                     <TextBlock Text=" MB" Style="{DynamicResource CreateServerTextBlock}" />
                                 </StackPanel>
 
                                 <StackPanel Margin="0 20 0 0">
                                     <TextBlock Text="Custom Java Executable Path"
-                                        Style="{DynamicResource CreateServerTextBlock}"
-                                        Margin="0 5 10 5" />
+                                               Style="{DynamicResource CreateServerTextBlock}"
+                                               Margin="0 5 10 5" />
                                     <StackPanel Height="40" Orientation="Horizontal">
-                                        <Border x:Name="javaPathBgr" CornerRadius="4" Height="26" Background="{DynamicResource textBackground}">
-                                            <TextBlock Margin="10 0" Text="{Binding Network.JavaSettings.JavaPath, Mode=TwoWay}" Background="Transparent"
-                                            Foreground="{DynamicResource backgroundDark}" FontFamily="{DynamicResource Montserrat-SemiBold}" Width="400"
-                                            FontSize="17" Height="20" PreviewMouseDown="JavaPath_MouseDown" Cursor="IBeam" x:Name="ServerJavaPath"/>
+                                        <Border x:Name="javaPathBgr" CornerRadius="4" Height="26"
+                                                Background="{DynamicResource textBackground}">
+                                            <TextBlock Margin="10 0"
+                                                       Text="{Binding Network.JavaSettings.JavaPath, Mode=TwoWay}"
+                                                       Background="Transparent"
+                                                       Foreground="{DynamicResource backgroundDark}"
+                                                       FontFamily="{DynamicResource Montserrat-SemiBold}" Width="400"
+                                                       FontSize="17" Height="20" PreviewMouseDown="JavaPath_MouseDown"
+                                                       Cursor="IBeam" x:Name="ServerJavaPath" />
                                         </Border>
-                                        <controls:IconButton Background="{DynamicResource buttonBgrDefault}" HoverBackground="{DynamicResource buttonBgrDefault}"
-                                                         IconSource="pacK://application:,,,/View/Resources/images/Icons/Restart.png"
-                                                         HoverIconSource="pacK://application:,,,/View/Resources/images/Icons/RestartW.png"
-                                                         Height="25" Width="25" IconHeight="100" IconWidth="15"
-                                                         Margin="10 0" Click="DefaultJavaDirReset_Click"/>
+                                        <controls:IconButton Background="{DynamicResource buttonBgrDefault}"
+                                                             HoverBackground="{DynamicResource buttonBgrDefault}"
+                                                             IconSource="pacK://application:,,,/View/Resources/images/Icons/Restart.png"
+                                                             HoverIconSource="pacK://application:,,,/View/Resources/images/Icons/RestartW.png"
+                                                             Height="25" Width="25" IconHeight="100" IconWidth="15"
+                                                             Margin="10 0" Click="DefaultJavaDirReset_Click" />
                                     </StackPanel>
 
                                     <TextBlock Text="Custom Startup Parameters"
-                                        Style="{DynamicResource CreateServerTextBlock}" Margin="0 15 10 5" />
-                                    <Border Grid.Column="1" CornerRadius="4" Width="420" Height="26" HorizontalAlignment="Left"
-                                        Background="{DynamicResource textBackground}" Margin="0 5 0 5">
+                                               Style="{DynamicResource CreateServerTextBlock}" Margin="0 15 10 5" />
+                                    <Border CornerRadius="4" Width="420" Height="26" HorizontalAlignment="Left"
+                                            Background="{DynamicResource textBackground}" Margin="0 5 0 5">
                                         <TextBox Margin="5 0" Text="{Binding Network.JavaSettings.StartupParameters}"
-                                            Background="{DynamicResource textBackground}" BorderThickness="0"
-                                            Foreground="{DynamicResource backgroundDark}"
-                                            FontFamily="{DynamicResource Montserrat-SemiBold}"
-                                            FontSize="17" Height="20" />
+                                                 Background="{DynamicResource textBackground}" BorderThickness="0"
+                                                 Foreground="{DynamicResource backgroundDark}"
+                                                 FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                                 FontSize="17" Height="20" />
                                     </Border>
                                 </StackPanel>
                             </StackPanel>
@@ -79,31 +85,36 @@
                             </Style>
                         </Border.Style>
                     </Border>
-                    
+
                     <!-- Appearance -->
                     <Border CornerRadius="10" Margin="5 5 10 5">
                         <StackPanel Background="Transparent" Margin="0 10" Width="720" HorizontalAlignment="Left">
                             <TextBlock Text="Network Appearance" Foreground="{DynamicResource textHeader}"
-                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="95 0 5 0" />
+                                       FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23"
+                                       Margin="95 0 5 0" />
                             <StackPanel Margin="110 10 50 10" HorizontalAlignment="Left">
                                 <StackPanel Margin="0 0 0 20">
                                     <TextBlock Text="MOTD" Style="{DynamicResource CreateServerTextBlock}"
-                                           Margin="0 0 20 10"/>
-                                    <Border Margin="5 0" CornerRadius="4" Width="550" DockPanel.Dock="Right" Height="50"
-                                        Background="{DynamicResource textBackground}">
+                                               Margin="0 0 20 10" />
+                                    <Border Margin="5 0" CornerRadius="4" Width="550" DockPanel.Dock="Right"
+                                            Height="50"
+                                            Background="{DynamicResource textBackground}">
                                         <TextBox Text="{Binding Network.Config.listeners[0].motdUnescaped}"
-                                             Background="{DynamicResource textBackground}" BorderThickness="0"
-                                             Foreground="{DynamicResource backgroundDark}" MaxLines="2"
-                                             FontFamily="{DynamicResource Montserrat-SemiBold}" Margin="5 0"
-                                             FontSize="17" TextWrapping="NoWrap" AcceptsReturn="True" AcceptsTab="True"
-                                             Height="40" />
+                                                 Background="{DynamicResource textBackground}" BorderThickness="0"
+                                                 Foreground="{DynamicResource backgroundDark}" MaxLines="2"
+                                                 FontFamily="{DynamicResource Montserrat-SemiBold}" Margin="5 0"
+                                                 FontSize="17" TextWrapping="NoWrap" AcceptsReturn="True"
+                                                 AcceptsTab="True"
+                                                 Height="40" />
                                     </Border>
                                 </StackPanel>
                                 <StackPanel HorizontalAlignment="Left" Margin="0 0 0 0">
                                     <TextBlock Text="Server Icon" Style="{DynamicResource CreateServerTextBlock}"
-                                           Margin="0 0 20 5" />
-                                    <ListBox ItemsSource="{Binding ServerIcons}" Style="{DynamicResource ServerIconListBox}" 
-                                         ItemContainerStyle="{DynamicResource ServerIconListBoxItem}" SelectedItem="{Binding SelectedServerIcon}"/>
+                                               Margin="0 0 20 5" />
+                                    <ListBox ItemsSource="{Binding ServerIcons}"
+                                             Style="{DynamicResource ServerIconListBox}"
+                                             ItemContainerStyle="{DynamicResource ServerIconListBoxItem}"
+                                             SelectedItem="{Binding SelectedServerIcon}" />
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
@@ -122,11 +133,15 @@
                     <Border CornerRadius="10" Margin="5 5 10 5">
                         <StackPanel Background="Transparent" Margin="0 10" Width="720" HorizontalAlignment="Left">
                             <TextBlock Text="Advanced" Foreground="{DynamicResource textHeader}"
-                               FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23" Margin="95 0 5 0" />
+                                       FontFamily="{DynamicResource Montserrat-SemiBold}" FontSize="23"
+                                       Margin="95 0 5 0" />
                             <StackPanel Margin="110 10 50 10" HorizontalAlignment="Left">
-                                <CheckBox Content="Start/Stop Servers with the Network" Style="{DynamicResource TextCheckBox}" FontSize="18" IsChecked="{Binding Network.SyncServers}"/>
-                                <CheckBox Content="Start Network with Fork" Style="{DynamicResource TextCheckBox}" FontSize="18" IsChecked="{Binding Network.StartWithFork}" Margin="0 5 0 0"/>
-                            </StackPanel> 
+                                <CheckBox Content="Start/Stop Servers with the Network"
+                                          Style="{DynamicResource TextCheckBox}" FontSize="18"
+                                          IsChecked="{Binding Network.SyncServers}" />
+                                <CheckBox Content="Start Network with Fork" Style="{DynamicResource TextCheckBox}"
+                                          FontSize="18" IsChecked="{Binding Network.StartWithFork}" Margin="0 5 0 0" />
+                            </StackPanel>
                         </StackPanel>
                         <Border.Style>
                             <Style TargetType="Border">

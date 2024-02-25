@@ -1,80 +1,78 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using ICSharpCode.AvalonEdit.Document;
 
-namespace Fork.View.Resources.Folding
+namespace Fork.View.Resources.Folding;
+
+public class ActualDocument
 {
-    public class ActualDocument
+    private ActualDocument(IEnumerable<ActualLine> lines, TextDocument document)
     {
-        public LinkedList<ActualLine> Lines { get; }
-        public TextDocument Document { get; }
+        Lines = new LinkedList<ActualLine>(lines);
+        Document = document;
+    }
 
-        private ActualDocument(IEnumerable<ActualLine> lines, TextDocument document)
+    public LinkedList<ActualLine> Lines { get; }
+    public TextDocument Document { get; }
+
+    public static ActualDocument BuildActualDocument(TextDocument document)
+    {
+        List<ActualLine> lines = new();
+        foreach (DocumentLine line in document.Lines)
         {
-            Lines = new LinkedList<ActualLine>(lines);
-            Document = document;
+            string l = LineToString(line, document);
+            ActualLine actualLine = new(l, LineOffset(l), line);
+            lines.Add(actualLine);
         }
 
-        public static ActualDocument BuildActualDocument(TextDocument document)
+        return new ActualDocument(lines, document);
+    }
+
+    private static string LineToString(DocumentLine line, TextDocument document)
+    {
+        char[] chars = new char[line.Length];
+        int docOffset = line.Offset;
+        for (int i = 0; i < line.Length; i++)
         {
-            List<ActualLine> lines = new List<ActualLine>();
-            foreach (DocumentLine line in document.Lines)
-            {
-                string l = LineToString(line, document);
-                ActualLine actualLine = new ActualLine(l, LineOffset(l), line);
-                lines.Add(actualLine);
-            }
-            return new ActualDocument(lines, document);
-        }
-        
-        private static string LineToString(DocumentLine line, TextDocument document)
-        {
-            char[] chars = new char[line.Length];
-            int docOffset = line.Offset;
-            for (int i = 0; i < line.Length; i++)
-            {
-                chars[i] = document.GetCharAt(docOffset + i);
-            }
-            
-            string result = new string(chars);
-            return result;
+            chars[i] = document.GetCharAt(docOffset + i);
         }
 
-        private static int LineOffset(string line)
+        string result = new(chars);
+        return result;
+    }
+
+    private static int LineOffset(string line)
+    {
+        int offset = 0;
+        if (!string.IsNullOrEmpty(line))
         {
-            int offset = 0;
-            if (!string.IsNullOrEmpty(line))
-            {
-                foreach (char c in line)
+            foreach (char c in line)
+                switch (c)
                 {
-                    switch (c)
-                    {
-                        case ' ':
-                            offset++;
-                            break;
-                        case '\t':
-                            offset += 2;
-                            break;
-                        default:
-                            return offset;
-                    }
+                    case ' ':
+                        offset++;
+                        break;
+                    case '\t':
+                        offset += 2;
+                        break;
+                    default:
+                        return offset;
                 }
-            }
-            return offset;
         }
 
-        public class ActualLine
+        return offset;
+    }
+
+    public class ActualLine
+    {
+        public ActualLine(string line, int frontOffset, DocumentLine documentLine)
         {
-            public string Line { get; }
-            public int FrontOffset { get; }
-            public DocumentLine DocumentLine { get; }
-
-            public ActualLine(string line, int frontOffset, DocumentLine documentLine)
-            {
-                Line = line;
-                FrontOffset = frontOffset;
-                DocumentLine = documentLine;
-            }
+            Line = line;
+            FrontOffset = frontOffset;
+            DocumentLine = documentLine;
         }
+
+        public string Line { get; }
+        public int FrontOffset { get; }
+        public DocumentLine DocumentLine { get; }
     }
 }

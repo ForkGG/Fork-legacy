@@ -5,50 +5,49 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
 
-namespace Fork.View.Xaml.Converter
+namespace Fork.View.Xaml.Converter;
+
+[ValueConversion(typeof(ObservableCollection<string>), typeof(string))]
+public class ListToStringConverter : IValueConverter
 {
-    [ValueConversion(typeof(ObservableCollection<string>), typeof(string))]
-    public class ListToStringConverter : IValueConverter
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        if (targetType != typeof(string))
         {
-            if (targetType != typeof(string))
-            {
-                throw new InvalidOperationException("Target of conversion must be string");
-            }
+            throw new InvalidOperationException("Target of conversion must be string");
+        }
 
-            ObservableCollection<string> valueCol = value as ObservableCollection<string>;
-            try
-            {
-                var strings = valueCol?.ToList();
+        ObservableCollection<string> valueCol = value as ObservableCollection<string>;
+        try
+        {
+            List<string> strings = valueCol?.ToList();
 
-                if (strings == null)
-                {
-                    return "";
-                }
-                return String.Join("\n", strings);
-            } catch(ArgumentException e)
+            if (strings == null)
             {
-                Console.WriteLine("Argument Exception while Converting List to String (List probably changed while converting)");
                 return "";
-            }            
-        }
+            }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            return string.Join("\n", strings);
+        }
+        catch (ArgumentException e)
         {
-            if (targetType != typeof(ObservableCollection<string>))
-            {
-                throw new InvalidOperationException("Target of conversion must be ObservableCollection<string>");
-            }
-
-            string valueString = (string)value;
-            List<string> strings = new List<string>(valueString.Split('\n'));
-            List<string> cleanStrings = new List<string>();
-            foreach (string s in strings)
-            {
-                cleanStrings.Add(s.Replace("\n","").Replace("\r",""));
-            }
-            return new ObservableCollection<string>(cleanStrings);
+            Console.WriteLine(
+                "Argument Exception while Converting List to String (List probably changed while converting)");
+            return "";
         }
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (targetType != typeof(ObservableCollection<string>))
+        {
+            throw new InvalidOperationException("Target of conversion must be ObservableCollection<string>");
+        }
+
+        string valueString = (string)value;
+        List<string> strings = new(valueString.Split('\n'));
+        List<string> cleanStrings = new();
+        foreach (string s in strings) cleanStrings.Add(s.Replace("\n", "").Replace("\r", ""));
+        return new ObservableCollection<string>(cleanStrings);
     }
 }

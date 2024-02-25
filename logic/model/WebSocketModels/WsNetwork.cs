@@ -1,7 +1,5 @@
-﻿namespace Fork.Logic.Model.WebSocketModels
+﻿namespace Fork.Logic.Model.WebSocketModels;
+
+public class WsNetwork
 {
-    public class WsNetwork
-    {
-        
-    }
 }

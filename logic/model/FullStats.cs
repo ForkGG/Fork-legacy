@@ -2,72 +2,68 @@ using System.Collections.Generic;
 using System.Linq;
 using Fork.Logic.Utils;
 
-namespace Fork.Logic.Model
+namespace Fork.Logic.Model;
+
+public class FullStats
 {
-    public class FullStats
+    //public FullStats() {}
+
+    public FullStats(byte[] data)
     {
-        public string Motd { get; }
-        public string GameMode { get; }
-        public string MapName { get; }
-        public string HostIP { get; }
-        public string GameID { get; }
-        public string Version{ get; }
-        public string ServerInfo { get; set; }
-        public int OnlinePlayers{ get; }
-        public int MaxPlayers{ get; }
-        public int HostPort{ get; }
-        public List<string> PlayerList{ get; set; }
-        public List<string> PluginList{ get; set; }
-        
-        //public FullStats() {}
+        List<string> datos = ByteUtils.SplitByteArray(data);
 
-        public FullStats(byte[] data)
+        Motd = datos[3];
+        GameMode = datos[5];
+        GameID = datos[7];
+        Version = datos[9];
+        MapName = datos[13];
+        OnlinePlayers = int.Parse(datos[15]);
+        MaxPlayers = int.Parse(datos[17]);
+        HostPort = int.Parse(datos[19]);
+        HostIP = datos[21];
+
+        SetPluginList(datos[11]);
+        SetPlayerList(datos);
+    }
+
+    public string Motd { get; }
+    public string GameMode { get; }
+    public string MapName { get; }
+    public string HostIP { get; }
+    public string GameID { get; }
+    public string Version { get; }
+    public string ServerInfo { get; set; }
+    public int OnlinePlayers { get; }
+    public int MaxPlayers { get; }
+    public int HostPort { get; }
+    public List<string> PlayerList { get; set; }
+    public List<string> PluginList { get; set; }
+
+    private void SetPlayerList(List<string> players)
+    {
+        PlayerList = new List<string>();
+
+        for (int i = 25; i < players.Count; i++)
         {
-            List<string> datos = ByteUtils.SplitByteArray(data);
-
-            Motd = datos[3];
-            GameMode = datos[5];
-            GameID = datos[7];
-            Version = datos[9];
-            MapName = datos[13];
-            OnlinePlayers = int.Parse(datos[15]);
-            MaxPlayers = int.Parse(datos[17]);
-            HostPort = int.Parse(datos[19]);
-            HostIP = datos[21];
-
-            SetPluginList(datos[11]);
-            SetPlayerList(datos);
+            PlayerList.Add(players[i]);
         }
-        
-        private void SetPlayerList(List<string> players)
-        {
-            PlayerList = new List<string>();
+    }
 
-            for (int i = 25; i < players.Count; i++)
-            {
-                PlayerList.Add(players[i]);
-            }
+    private void SetPluginList(string pluginInfo)
+    {
+        PluginList = new List<string>();
+        if (string.IsNullOrEmpty(pluginInfo))
+        {
+            ServerInfo = "Vanilla";
         }
-
-        private void SetPluginList(string pluginInfo)
+        else
         {
-            PluginList = new List<string>();
-            if (string.IsNullOrEmpty(pluginInfo))
-            {
-                ServerInfo = "Vanilla";
-            }
-            else
-            {
-                string[] infoPlugins = pluginInfo.Split(':');
-                string[] plugins = infoPlugins.Last().Split(';');
+            string[] infoPlugins = pluginInfo.Split(':');
+            string[] plugins = infoPlugins.Last().Split(';');
 
-                ServerInfo = infoPlugins.First();
-                
-                foreach (string plugin in plugins)
-                {
-                    PluginList.Add(plugin.Trim());
-                }
-            }
+            ServerInfo = infoPlugins.First();
+
+            foreach (string plugin in plugins) PluginList.Add(plugin.Trim());
         }
     }
 }

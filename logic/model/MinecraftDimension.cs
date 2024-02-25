@@ -1,7 +1,7 @@
-namespace Fork.Logic.Model
+namespace Fork.Logic.Model;
+
+public enum MinecraftDimension
 {
-    public enum MinecraftDimension
-    {
-        Nether, End
-    }
+    Nether,
+    End
 }

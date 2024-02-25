@@ -1,71 +1,90 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Fork.Annotations;
 using Fork.ViewModel;
 
-namespace Fork.Logic.Model
+namespace Fork.Logic.Model;
+
+public class ServerPlayer : IComparable<ServerPlayer>, IEquatable<ServerPlayer>, INotifyPropertyChanged
 {
-    public class ServerPlayer : IComparable<ServerPlayer>, IEquatable<ServerPlayer>, INotifyPropertyChanged
+    public ServerPlayer(Player player, ServerViewModel viewModel, bool isOp, bool isOnline)
     {
-        public Player Player { get; set; }
-        public ServerViewModel ServerViewModel { get; set; }
-        public bool IsOP { get; set; }
-        public bool IsOnline { get; set; }
+        Player = player;
+        ServerViewModel = viewModel;
+        IsOP = isOp;
+        IsOnline = isOnline;
+    }
 
-        public ServerPlayer(Player player, ServerViewModel viewModel, bool isOp, bool isOnline)
+    public Player Player { get; set; }
+    public ServerViewModel ServerViewModel { get; set; }
+    public bool IsOP { get; set; }
+    public bool IsOnline { get; set; }
+
+
+    public int CompareTo(ServerPlayer other)
+    {
+        int onlineCompare = other.IsOnline.CompareTo(IsOnline);
+        if (onlineCompare != 0)
         {
-            Player = player;
-            ServerViewModel = viewModel;
-            IsOP = isOp;
-            IsOnline = isOnline;
+            return onlineCompare;
         }
 
-
-        public int CompareTo(ServerPlayer other)
+        int opCompare = other.IsOP.CompareTo(IsOP);
+        if (opCompare != 0)
         {
-            int onlineCompare = other.IsOnline.CompareTo(IsOnline);
-            if (onlineCompare != 0)
-            {
-                return onlineCompare;
-            }
-
-            int opCompare = other.IsOP.CompareTo(IsOP);
-            if (opCompare != 0)
-            {
-                return opCompare;
-            }
-
-            return string.Compare(Player.Name, other.Player.Name, StringComparison.Ordinal);
+            return opCompare;
         }
 
-        public bool Equals(ServerPlayer other)
+        return string.Compare(Player.Name, other.Player.Name, StringComparison.Ordinal);
+    }
+
+    public bool Equals(ServerPlayer other)
+    {
+        if (ReferenceEquals(null, other))
         {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return Equals(Player, other.Player) && Equals(ServerViewModel, other.ServerViewModel) && IsOP == other.IsOP && IsOnline == other.IsOnline;
+            return false;
         }
 
-        public override bool Equals(object obj)
+        if (ReferenceEquals(this, other))
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((ServerPlayer) obj);
+            return true;
         }
 
-        public override int GetHashCode()
+        return Equals(Player, other.Player) && Equals(ServerViewModel, other.ServerViewModel) && IsOP == other.IsOP &&
+               IsOnline == other.IsOnline;
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    public override bool Equals(object obj)
+    {
+        if (ReferenceEquals(null, obj))
         {
-            return HashCode.Combine(Player, ServerViewModel, IsOP, IsOnline);
+            return false;
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        if (ReferenceEquals(this, obj))
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            return true;
         }
+
+        if (obj.GetType() != GetType())
+        {
+            return false;
+        }
+
+        return Equals((ServerPlayer)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Player, ServerViewModel, IsOP, IsOnline);
+    }
+
+    [NotifyPropertyChangedInvocator]
+    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

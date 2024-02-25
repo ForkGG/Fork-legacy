@@ -6,67 +6,71 @@ using System.Linq;
 using System.Threading;
 using Fork.ViewModel;
 
-namespace Fork.Logic.BackgroundWorker.Performance
+namespace Fork.Logic.BackgroundWorker.Performance;
+
+public class CPUTracker
 {
-    public class CPUTracker
+    private bool interrupted;
+    private readonly List<Thread> threads = new();
+
+    public void TrackTotal(Process p, EntityViewModel viewModel)
     {
-        private bool interrupted = false;
-        private List<Thread> threads = new List<Thread>();
-
-        public void TrackTotal(Process p, EntityViewModel viewModel)
+        PerformanceCounter cpuCounter = new()
         {
-            PerformanceCounter cpuCounter = new PerformanceCounter
+            CategoryName = "Processor",
+            CounterName = "% Processor Time",
+            InstanceName = "_Total"
+        };
+        Thread t = new(() =>
+        {
+            while (!interrupted && !p.HasExited)
             {
-                CategoryName = "Processor",
-                CounterName = "% Processor Time",
-                InstanceName = "_Total"
-            };
-            Thread t = new Thread(() =>
-            {
-                while (!interrupted && !p.HasExited)
+                try
                 {
-                    try
-                    {
-                        viewModel.CPUValueUpdate(cpuCounter.NextValue());
-                    } catch(Exception e) { break; }
-                    Thread.Sleep(500);
+                    viewModel.CPUValueUpdate(cpuCounter.NextValue());
                 }
-                viewModel.CPUValueUpdate(0.0);
-                viewModel.CPUValueUpdate(0.0);
-                viewModel.CPUValueUpdate(0.0);
-            }){IsBackground = true};
-            t.Start();
-            threads.Add(t);
-        }
-
-        private string GetProcessInstanceName(int processId)
-        {
-            var process = Process.GetProcessById(processId);
-            string processName = Path.GetFileNameWithoutExtension(process.ProcessName);
-
-            PerformanceCounterCategory cat = new PerformanceCounterCategory("Process");
-            string[] instances = cat.GetInstanceNames()
-                .Where(inst => inst.StartsWith(processName))
-                .ToArray();
-
-            foreach (string instance in instances)
-            {
-                using (PerformanceCounter cnt = new PerformanceCounter("Process",
-                    "ID Process", instance, true))
+                catch (Exception e)
                 {
-                    int val = (int)cnt.RawValue;
-                    if (val == processId)
-                    {
-                        return instance;
-                    }
+                    break;
+                }
+
+                Thread.Sleep(500);
+            }
+
+            viewModel.CPUValueUpdate(0.0);
+            viewModel.CPUValueUpdate(0.0);
+            viewModel.CPUValueUpdate(0.0);
+        }) { IsBackground = true };
+        t.Start();
+        threads.Add(t);
+    }
+
+    private string GetProcessInstanceName(int processId)
+    {
+        Process process = Process.GetProcessById(processId);
+        string processName = Path.GetFileNameWithoutExtension(process.ProcessName);
+
+        PerformanceCounterCategory cat = new("Process");
+        string[] instances = cat.GetInstanceNames()
+            .Where(inst => inst.StartsWith(processName))
+            .ToArray();
+
+        foreach (string instance in instances)
+            using (PerformanceCounter cnt = new("Process",
+                       "ID Process", instance, true))
+            {
+                int val = (int)cnt.RawValue;
+                if (val == processId)
+                {
+                    return instance;
                 }
             }
-            return null;
-        }
 
-        public void StopThreads()
-        {
-            interrupted = true;
-        }
+        return null;
+    }
+
+    public void StopThreads()
+    {
+        interrupted = true;
     }
 }

@@ -1,10 +1,9 @@
-using System.ComponentModel;
+namespace Fork.Logic.Model;
 
-namespace Fork.Logic.Model
+//TODO rename to EntityStatus
+public enum ServerStatus
 {
-    //TODO rename to EntityStatus
-    public enum ServerStatus
-    {
-        STARTING, RUNNING, STOPPED
-    }
+    STARTING,
+    RUNNING,
+    STOPPED
 }

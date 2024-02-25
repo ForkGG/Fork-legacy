@@ -5,5 +5,5 @@ public enum SystemTrayOptions
     None,
     WhenMinimize,
     WhenClose,
-    WhenMinimizeOrClose,
+    WhenMinimizeOrClose
 }

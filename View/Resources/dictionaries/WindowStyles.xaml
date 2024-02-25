@@ -2,7 +2,7 @@
                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style x:Key="DefaultWindowV2" TargetType="{x:Type Window}">
-        <Setter Property="FontFamily" Value="{StaticResource Montserrat-Medium}"/>
+        <Setter Property="FontFamily" Value="{StaticResource Montserrat-Medium}" />
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
                 <WindowChrome CaptionHeight="30"
@@ -19,12 +19,14 @@
                     <Border Background="{DynamicResource backgroundDarker}">
                         <Border.Style>
                             <Style TargetType="{x:Type Border}">
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="BorderBrush" Value="{DynamicResource outerBorder}"/>
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="BorderBrush" Value="{DynamicResource outerBorder}" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=WindowState}" Value="Maximized">
-                                        <Setter Property="BorderThickness" Value="8"/>
-                                        <Setter Property="BorderBrush" Value="{x:Null}"/>
+                                    <DataTrigger
+                                        Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=WindowState}"
+                                        Value="Maximized">
+                                        <Setter Property="BorderThickness" Value="8" />
+                                        <Setter Property="BorderBrush" Value="{x:Null}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -39,7 +41,8 @@
                                     Margin="5 0 0 0"
                                     Source="pack://application:,,,/View/Resources/images/Icons/dudeSmall.png"
                                     RenderOptions.BitmapScalingMode="Linear"/-->
-                                <TextBlock Text="Fork" DockPanel.Dock="Left" Margin="10 1" VerticalAlignment="Center" FontSize="14"/>
+                                <TextBlock Text="Fork" DockPanel.Dock="Left" Margin="10 1" VerticalAlignment="Center"
+                                           FontSize="14" />
 
                                 <!--Menu Margin="10 0 0 0" IsMainMenu="True" Height="21" Background="{DynamicResource backgroundDefault}" WindowChrome.IsHitTestVisibleInChrome="True">
                                     <MenuItem Header="Advanced" Foreground="{DynamicResource foregroundDefault}">
@@ -50,19 +53,25 @@
 
                                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
                                     <!-- Minimize Button -->
-                                    <Button Style="{DynamicResource Borderless}" Width="30" Click="BtnMinimizeClick" WindowChrome.IsHitTestVisibleInChrome="True">
+                                    <Button Style="{DynamicResource Borderless}" Width="30" Click="BtnMinimizeClick"
+                                            WindowChrome.IsHitTestVisibleInChrome="True">
                                         <Image Width="10" Height="10" Source="/View/Resources/images/minimize.png" />
                                     </Button>
 
                                     <!-- Maximize Button -->
-                                    <Button Style="{DynamicResource Borderless}" Width="30" Click="BtnMaximizeClick" WindowChrome.IsHitTestVisibleInChrome="True">
+                                    <Button Style="{DynamicResource Borderless}" Width="30" Click="BtnMaximizeClick"
+                                            WindowChrome.IsHitTestVisibleInChrome="True">
                                         <Image Width="10" Height="10">
                                             <Image.Style>
                                                 <Style TargetType="{x:Type Image}">
-                                                    <Setter Property="Source" Value="/View/Resources/images/maximize2.png" />
+                                                    <Setter Property="Source"
+                                                            Value="/View/Resources/images/maximize2.png" />
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=WindowState}" Value="Maximized">
-                                                            <Setter Property="Source" Value="/View/Resources/images/maximize1.png"/>
+                                                        <DataTrigger
+                                                            Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=WindowState}"
+                                                            Value="Maximized">
+                                                            <Setter Property="Source"
+                                                                    Value="/View/Resources/images/maximize1.png" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
@@ -71,7 +80,8 @@
                                     </Button>
 
                                     <!-- Close Button -->
-                                    <Button Style="{DynamicResource CloseButton}" Width="30" Click="BtnCloseClick" WindowChrome.IsHitTestVisibleInChrome="True">
+                                    <Button Style="{DynamicResource CloseButton}" Width="30" Click="BtnCloseClick"
+                                            WindowChrome.IsHitTestVisibleInChrome="True">
                                         <Image Width="10" Height="10" Source="/View/Resources/images/close.png" />
                                     </Button>
                                 </StackPanel>
@@ -84,7 +94,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style x:Key="DefaultWindow" TargetType="{x:Type Window}">
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
@@ -102,12 +112,14 @@
                     <Border Background="{DynamicResource backgroundDefault}">
                         <Border.Style>
                             <Style TargetType="{x:Type Border}">
-                                <Setter Property="BorderThickness" Value="1"/>
-                                <Setter Property="BorderBrush" Value="{DynamicResource outerBorder}"/>
+                                <Setter Property="BorderThickness" Value="1" />
+                                <Setter Property="BorderBrush" Value="{DynamicResource outerBorder}" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=WindowState}" Value="Maximized">
-                                        <Setter Property="BorderThickness" Value="8"/>
-                                        <Setter Property="BorderBrush" Value="{x:Null}"/>
+                                    <DataTrigger
+                                        Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=WindowState}"
+                                        Value="Maximized">
+                                        <Setter Property="BorderThickness" Value="8" />
+                                        <Setter Property="BorderBrush" Value="{x:Null}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -120,30 +132,38 @@
                                     Width="auto"
                                     Height="20"
                                     Margin="5"
-                                    Source="/View/Resources/images/title.png"/>
+                                    Source="/View/Resources/images/title.png" />
 
-                                <Menu Margin="10 0 0 0" IsMainMenu="True" Height="21" Background="{DynamicResource backgroundDefault}" WindowChrome.IsHitTestVisibleInChrome="True">
+                                <Menu Margin="10 0 0 0" IsMainMenu="True" Height="21"
+                                      Background="{DynamicResource backgroundDefault}"
+                                      WindowChrome.IsHitTestVisibleInChrome="True">
                                     <MenuItem Header="Advanced" Foreground="{DynamicResource foregroundDefault}">
-                                        <MenuItem Header="Show Console" Foreground="Black" Click="BtnShowConsoleClick"></MenuItem>
-                                        <MenuItem Header="Settings" Foreground="Black" IsEnabled="False"></MenuItem>
+                                        <MenuItem Header="Show Console" Foreground="Black" Click="BtnShowConsoleClick" />
+                                        <MenuItem Header="Settings" Foreground="Black" IsEnabled="False" />
                                     </MenuItem>
                                 </Menu>
 
                                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
                                     <!-- Minimize Button -->
-                                    <Button Style="{DynamicResource Borderless}" Width="50" Click="BtnMinimizeClick" WindowChrome.IsHitTestVisibleInChrome="True">
+                                    <Button Style="{DynamicResource Borderless}" Width="50" Click="BtnMinimizeClick"
+                                            WindowChrome.IsHitTestVisibleInChrome="True">
                                         <Image Width="10" Height="10" Source="/View/Resources/images/minimize.png" />
                                     </Button>
 
                                     <!-- Maximize Button -->
-                                    <Button Style="{DynamicResource Borderless}" Width="50" Click="BtnMaximizeClick" WindowChrome.IsHitTestVisibleInChrome="True">
+                                    <Button Style="{DynamicResource Borderless}" Width="50" Click="BtnMaximizeClick"
+                                            WindowChrome.IsHitTestVisibleInChrome="True">
                                         <Image Width="10" Height="10">
                                             <Image.Style>
                                                 <Style TargetType="{x:Type Image}">
-                                                    <Setter Property="Source" Value="/View/Resources/images/maximize2.png" />
+                                                    <Setter Property="Source"
+                                                            Value="/View/Resources/images/maximize2.png" />
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=WindowState}" Value="Maximized">
-                                                            <Setter Property="Source" Value="/View/Resources/images/maximize1.png"/>
+                                                        <DataTrigger
+                                                            Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=WindowState}"
+                                                            Value="Maximized">
+                                                            <Setter Property="Source"
+                                                                    Value="/View/Resources/images/maximize1.png" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
@@ -152,7 +172,8 @@
                                     </Button>
 
                                     <!-- Close Button -->
-                                    <Button Style="{DynamicResource CloseButton}" Width="50" Click="BtnCloseClick" WindowChrome.IsHitTestVisibleInChrome="True">
+                                    <Button Style="{DynamicResource CloseButton}" Width="50" Click="BtnCloseClick"
+                                            WindowChrome.IsHitTestVisibleInChrome="True">
                                         <Image Width="10" Height="10" Source="/View/Resources/images/close.png" />
                                     </Button>
                                 </StackPanel>
@@ -184,7 +205,8 @@
                         <DockPanel Background="{DynamicResource backgroundDefault}">
                             <DockPanel Height="30" DockPanel.Dock="Top" LastChildFill="False">
                                 <!-- Close Button -->
-                                <Button Style="{DynamicResource CloseButton}" DockPanel.Dock="Right" Width="50" Click="BtnCloseClick" WindowChrome.IsHitTestVisibleInChrome="True">
+                                <Button Style="{DynamicResource CloseButton}" DockPanel.Dock="Right" Width="50"
+                                        Click="BtnCloseClick" WindowChrome.IsHitTestVisibleInChrome="True">
                                     <Image Width="10" Height="10" Source="/View/Resources/images/close.png" />
                                 </Button>
                             </DockPanel>
@@ -212,8 +234,7 @@
                 <ControlTemplate TargetType="{x:Type Window}">
                     <Border BorderThickness="1" BorderBrush="{DynamicResource outerBorder}">
                         <DockPanel Background="{DynamicResource backgroundDefault}">
-                            <DockPanel Height="10" DockPanel.Dock="Top" LastChildFill="False">
-                            </DockPanel>
+                            <DockPanel Height="10" DockPanel.Dock="Top" LastChildFill="False" />
                             <ContentPresenter Content="{TemplateBinding Content}" />
                         </DockPanel>
                     </Border>
