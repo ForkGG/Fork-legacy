@@ -6,6 +6,7 @@
       xmlns:controls="clr-namespace:Fork.View.Xaml2.Controls"
       xmlns:converter="clr-namespace:Fork.View.Xaml.Converter"
       xmlns:local="clr-namespace:Fork.View.Xaml2.Pages"
+      xmlns:model="clr-namespace:Fork.Logic.Model"
       mc:Ignorable="d" 
       d:DesignHeight="850" d:DesignWidth="800"
       Title="AppSettingsPage">
@@ -139,6 +140,35 @@
                                                FontSize="14" Margin="0 5 0 0" Foreground="{DynamicResource buttonBgrRed}"/>
                                     <TextBlock x:Name="restartNotice" Visibility="Collapsed" Text="Restart the Fork Launcher to apply this change" 
                                                FontSize="14" Margin="0 5 0 0"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Margin="35 15 35 0">
+                                <TextBlock Text="Minimize Fork to system tray"
+                                           FontFamily="{StaticResource Montserrat-SemiBold}" FontSize="20" />
+                                <StackPanel Margin="10 0 0 0">
+                                    <StackPanel.Resources>
+                                        <converter:ComparisonConverter x:Key="ComparisonConverter" />
+                                    </StackPanel.Resources>
+                                    <RadioButton Style="{DynamicResource DefaultRadioButton}"
+                                                 IsChecked="{Binding Path=AppSettings.SystemTrayOptions, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static model:SystemTrayOptions.None}}">
+                                        <TextBlock Text="Never"
+                                                   FontSize="18" />
+                                    </RadioButton>
+                                    <RadioButton Style="{DynamicResource DefaultRadioButton}"
+                                                 IsChecked="{Binding Path=AppSettings.SystemTrayOptions, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static model:SystemTrayOptions.WhenMinimize}}">
+                                        <TextBlock Text="When minimizing Fork"
+                                                   FontSize="18" />
+                                    </RadioButton>
+                                    <RadioButton Style="{DynamicResource DefaultRadioButton}"
+                                                 IsChecked="{Binding Path=AppSettings.SystemTrayOptions, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static model:SystemTrayOptions.WhenClose}}">
+                                        <TextBlock Text="When closing Fork"
+                                                   FontSize="18" />
+                                    </RadioButton>
+                                    <RadioButton Style="{DynamicResource DefaultRadioButton}"
+                                                 IsChecked="{Binding Path=AppSettings.SystemTrayOptions, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static model:SystemTrayOptions.WhenMinimizeOrClose}}">
+                                        <TextBlock Text="When minimizing or closing Fork"
+                                                   FontSize="18" />
+                                    </RadioButton>
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>

@@ -114,6 +114,7 @@
     <None Include="icon.ico">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="LICENSE">
       <Pack>True</Pack>

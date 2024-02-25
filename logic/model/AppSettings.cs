@@ -14,5 +14,6 @@ namespace Fork.Logic.Model
         public bool ConsoleThrottling { get; set; } = true;
         public bool RichPresence { get; set; } = true;
         public bool SendTelemetry { get; set; } = false;
+        public SystemTrayOptions SystemTrayOptions { get; set; } = SystemTrayOptions.None;
     }
 }
