@@ -63,6 +63,28 @@ public class APIController
         }
     }
 
+    public bool IsServerReachable(string serverUrlPort)
+    {
+        if (!IsAPIAvailable())
+        {
+            ErrorLogger.Append(new WebException("api.Fork.gg is not online or operational"));
+            return false;
+        }
+
+        try
+        {
+            HttpWebResponse response = RequestRawResponse(apiBaseURL + "availability/server/" + serverUrlPort);
+            string versionJson = RetrieveResponseBody(response);
+            dynamic responseDyn = JsonConvert.DeserializeObject(versionJson);
+            return responseDyn?.statusCode == HttpStatusCode.OK;
+        }
+        catch (Exception e)
+        {
+            ErrorLogger.Append(e);
+            return false;
+        }
+    }
+
     public List<string> GetSupporters()
     {
         if (!IsAPIAvailable())

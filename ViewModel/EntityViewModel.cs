@@ -217,6 +217,48 @@ public abstract class EntityViewModel : BaseViewModel
     public string DiskValue => Math.Round(DiskValueRaw, 0) + "%";
     public double DiskValueRaw { get; private set; }
 
+    public AvailabilityCheckResult? LastAvailabilityCheckResult { get; set; } = null;
+    public bool IsAvailabilityCheckEnabled => ServerRunning && LastAvailabilityCheckResult != AvailabilityCheckResult.PENDING;
+
+    public Brush AvailabilityColor
+    {
+        get
+        {
+            return LastAvailabilityCheckResult switch
+            {
+                AvailabilityCheckResult.OK => (Brush)new BrushConverter().ConvertFromString("#5EED80"),
+                AvailabilityCheckResult.FAILED => (Brush)new BrushConverter().ConvertFromString("#ED5E5E"),
+                AvailabilityCheckResult.PENDING => (Brush)new BrushConverter().ConvertFromString("#EBED78"),
+                _ => (Brush)new BrushConverter().ConvertFromString("#565B7A")
+            };
+        }
+    }
+
+    [CanBeNull]
+    public string AvailabilityTooltip
+    {
+        get
+        {
+            if (!IsAvailabilityCheckEnabled)
+            {
+                if (!ServerRunning)
+                {
+                    return $"Start the server to enable availability checks";
+                }
+
+                return $"Checking...";
+            }
+
+            return LastAvailabilityCheckResult switch
+            {
+                AvailabilityCheckResult.OK => "Server is available to users outside your network",
+                AvailabilityCheckResult.FAILED =>
+                    "Server is not reachable outside your network! Check your firewall and port forwarding rules",
+                _ => null
+            };
+        }
+    }
+
     public ICommand ReadConsoleIn
     {
         get
@@ -785,5 +827,10 @@ public abstract class EntityViewModel : BaseViewModel
         }
 
         public event EventHandler CanExecuteChanged;
+    }
+
+    public enum AvailabilityCheckResult
+    {
+        OK, PENDING, FAILED
     }
 }
