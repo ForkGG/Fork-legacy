@@ -98,13 +98,13 @@ public sealed class MainViewModel : INotifyPropertyChanged
             return;
         }
 
-        if (InstalledJavaVersion.VersionComputed < 16)
+        if (InstalledJavaVersion.VersionComputed < 17)
         {
             ShowJavaWarning = !ignoreWarnings;
             JavaWarningMessage =
                 "Old Java installation detected (Version " + InstalledJavaVersion.VersionComputed + ")!" +
                 "\nOlder Java versions will cause problems from Minecraft 1.17 onwards." +
-                "\nWe recommend installing Java version 16 or higher for full support";
+                "\nWe recommend installing Java version 21 or higher for full support and best performance";
             return;
         }
 

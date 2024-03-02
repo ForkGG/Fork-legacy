@@ -590,7 +590,7 @@
                     <TextBlock Text="Oracle: " Margin="0 0 0 5" FontSize="15"
                                Foreground="{DynamicResource textSelected}" LineHeight="28"
                                FontFamily="{DynamicResource Montserrat-SemiBold}" />
-                    <TextBlock Text="https://www.oracle.com/java/technologies/javase-jdk16-downloads.html"
+                    <TextBlock Text="https://www.oracle.com/java/technologies/downloads/"
                                FontSize="15"
                                FontFamily="{DynamicResource Montserrat-SemiBold}" Cursor="Hand"
                                PreviewMouseLeftButtonDown="TextBlock_Link_MouseDown" />
@@ -599,7 +599,16 @@
                     <TextBlock Text="Corretto: " Margin="0 0 0 5" FontSize="15"
                                Foreground="{DynamicResource textSelected}" LineHeight="28"
                                FontFamily="{DynamicResource Montserrat-SemiBold}" />
-                    <TextBlock Text="https://corretto.aws/downloads/latest/amazon-corretto-16-x64-windows-jdk.msi"
+                    <TextBlock Text="https://corretto.aws/downloads/latest/amazon-corretto-21-x64-windows-jdk.msi"
+                               FontSize="15"
+                               FontFamily="{DynamicResource Montserrat-SemiBold}" Cursor="Hand"
+                               PreviewMouseLeftButtonDown="TextBlock_Link_MouseDown" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Microsoft: " Margin="0 0 0 5" FontSize="15"
+                               Foreground="{DynamicResource textSelected}" LineHeight="28"
+                               FontFamily="{DynamicResource Montserrat-SemiBold}" />
+                    <TextBlock Text="https://aka.ms/download-jdk/microsoft-jdk-21.0.2-windows-x64.msi"
                                FontSize="15"
                                FontFamily="{DynamicResource Montserrat-SemiBold}" Cursor="Hand"
                                PreviewMouseLeftButtonDown="TextBlock_Link_MouseDown" />
