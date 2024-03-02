@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using Fork.Logic.Model.Settings;
 using Fork.Logic.Persistence;
+using Fork.logic.Utils;
 using Fork.ViewModel;
 using Path = System.IO.Path;
 
@@ -59,5 +60,10 @@ public partial class VanillaSettingsPage : Page, ISettingsPage
     private void DefaultJavaDirReset_Click(object sender, RoutedEventArgs e)
     {
         ServerJavaPath.Text = AppSettingsSerializer.Instance.AppSettings.DefaultJavaPath;
+    }
+
+    private void OpenMOTDGenerator_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        ForkUtils.OpenUrl("https://minecraft.tools/motd.php");
     }
 }

@@ -57,6 +57,27 @@
                                     <TextBlock Text="Difficulty" TextAlignment="Right"
                                                Style="{DynamicResource CreateServerTextBlock}" Margin="0 0 10 0" />
                                 </DockPanel>
+                                <DockPanel Height="40" Grid.Row="2" Margin="0 0 20 0">
+                                    <Grid DockPanel.Dock="Right">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="110"/>
+                                            <ColumnDefinition Width="40"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Max RAM" TextAlignment="Right"
+                                                   Style="{DynamicResource CreateServerTextBlock}" Margin="0 5 10 5" />
+                                        <Border Grid.Column="1" CornerRadius="4" Width="110" Height="26"
+                                                Background="{DynamicResource textBackground}" Margin="0 5 0 5">
+                                            <TextBox Margin="5 0" Text="{Binding Server.JavaSettings.MaxRam}"
+                                                     Background="{DynamicResource textBackground}" BorderThickness="0"
+                                                     Foreground="{DynamicResource backgroundDark}"
+                                                     FontFamily="{DynamicResource Montserrat-SemiBold}"
+                                                     FontSize="17" Height="20" />
+                                        </Border>
+                                        <TextBlock Grid.Column="2" Text=" MB"
+                                                   Style="{DynamicResource CreateServerTextBlock}" />
+                                    </Grid>
+                                </DockPanel>
                                 <DockPanel Height="40" Grid.Column="1" Margin="20 0 0 0">
                                     <Border CornerRadius="4" Width="100" DockPanel.Dock="Right" Height="26"
                                             Background="{DynamicResource textBackground}">
@@ -261,7 +282,7 @@
 
 
                             <StackPanel HorizontalAlignment="Left" Margin="0 25 0 0">
-                                <TextBlock Text="MOTD" Style="{DynamicResource CreateServerTextBlock}"
+                                <TextBlock Text="Message of the day" Style="{DynamicResource CreateServerTextBlock}"
                                            Margin="0 0 20 10" />
                                 <Border CornerRadius="4" Width="550" DockPanel.Dock="Right" Height="50"
                                         Background="{DynamicResource textBackground}">
@@ -272,6 +293,11 @@
                                              FontSize="17" TextWrapping="NoWrap" AcceptsReturn="True" AcceptsTab="True"
                                              Height="40" />
                                 </Border>
+                                <TextBlock Text="MOTD Generator"
+                                           PreviewMouseLeftButtonDown="OpenMOTDGenerator_PreviewMouseLeftButtonDown"
+                                           FontSize="14" Margin="0 5 0 0"
+                                           Cursor="Hand"
+                                           Foreground="{DynamicResource textLink}" />
                             </StackPanel>
 
                             <StackPanel HorizontalAlignment="Left" Margin="0 25 0 0">
@@ -523,7 +549,7 @@
                                              FontSize="17" Height="20" />
                                 </Border>
 
-                                <TextBlock Grid.Row="3" Text="Max Ram" TextAlignment="Right"
+                                <TextBlock Grid.Row="3" Text="Max RAM" TextAlignment="Right"
                                            Style="{DynamicResource CreateServerTextBlock}" Margin="0 5 10 5" />
                                 <Border Grid.Row="3" Grid.Column="1" CornerRadius="4" Width="100" Height="26"
                                         Background="{DynamicResource textBackground}" Margin="0 5 0 5">
