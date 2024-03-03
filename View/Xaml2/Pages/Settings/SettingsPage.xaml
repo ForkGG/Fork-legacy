@@ -12,6 +12,10 @@
             <Border Background="{DynamicResource backgroundDark}" Margin=" 5 0 0 0" CornerRadius="5 0 0 5" />
             <DockPanel Panel.ZIndex="1">
                 <DockPanel Panel.ZIndex="1">
+                    <TextBlock Text="Open in File Explorer" DockPanel.Dock="Bottom" TextAlignment="Center"
+                               Margin="10 10 10 10"
+                               PreviewMouseLeftButtonDown="OpenExplorer_PreviewMouseLeftButtonDown" Cursor="Hand"
+                               Foreground="{DynamicResource textLink}" />
                     <TextBlock Text="Files" Margin="15 10 10 10" Foreground="{DynamicResource textUnselected}"
                                FontSize="20"
                                FontFamily="{DynamicResource Montserrat-SemiBold}" HorizontalAlignment="Center"

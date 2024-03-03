@@ -1,4 +1,7 @@
-﻿using System.Windows.Controls;
+﻿using System.Diagnostics;
+using System.IO;
+using System.Windows.Controls;
+using System.Windows.Input;
 using Fork.ViewModel;
 
 namespace Fork.View.Xaml2.Pages.Settings;
@@ -30,5 +33,11 @@ public partial class SettingsPage : Page
         }
 
         settingsFrame.Content = settingsPage;
+    }
+
+    private void OpenExplorer_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        string path = Path.Combine(App.ServerPath, viewModel.EntityViewModel.Name);
+        Process.Start("explorer.exe", "-p, " + path);
     }
 }
