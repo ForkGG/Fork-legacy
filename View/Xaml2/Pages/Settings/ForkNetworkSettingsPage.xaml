@@ -26,7 +26,7 @@
                             <StackPanel Margin="110 10 50 10" HorizontalAlignment="Left">
 
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Max Ram " TextAlignment="Right"
+                                    <TextBlock Text="Max RAM " TextAlignment="Right"
                                                Style="{DynamicResource CreateServerTextBlock}" Margin="0 5 10 5" />
                                     <Border CornerRadius="4" Width="100" Height="26"
                                             Background="{DynamicResource textBackground}" Margin="0 5 0 5">

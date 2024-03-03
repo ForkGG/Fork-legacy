@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using Fork.Logic.Controller;
 using Fork.Logic.Manager;
 using Fork.Logic.Model;
 using Fork.ViewModel;
@@ -102,5 +103,14 @@ public partial class NetworkPage : Page
         TerminalTab.IsChecked = true;
         SelectTerminal(this, e);
         ServerManager.Instance.RestartNetworkAsync(viewModel, viewModel.Network.SyncServers);
+    }
+
+    private async void AvailabilityButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        viewModel.LastAvailabilityCheckResult = EntityViewModel.AvailabilityCheckResult.PENDING;
+        bool isAvailable = await Task.Run(() => new APIController().IsServerReachable(viewModel.AddressInfo));
+        viewModel.LastAvailabilityCheckResult = isAvailable
+            ? EntityViewModel.AvailabilityCheckResult.OK
+            : EntityViewModel.AvailabilityCheckResult.FAILED;
     }
 }

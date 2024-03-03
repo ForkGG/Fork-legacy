@@ -34,6 +34,20 @@
                         <TextBlock x:Name="CopyButtonText" Text="Copy" FontSize="20" Margin="3 0"
                                    FontFamily="{DynamicResource Montserrat-Medium}" />
                     </Button>
+                    <Button x:Name="AvailabilityButton" Click="AvailabilityButton_OnClick" Width="230"
+                            ToolTip="{Binding AvailabilityTooltip}" ToolTipService.ShowOnDisabled="True"
+                            ToolTipService.BetweenShowDelay="0"
+                            ToolTipService.InitialShowDelay="0"
+                            Margin="0 0 10 0" IsEnabled="{Binding IsAvailabilityCheckEnabled}"
+                            Style="{DynamicResource TextButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="AvailabilityButtonText" Text="Check Availability" FontSize="20"
+                                       Margin="3 0"
+                                       FontFamily="{DynamicResource Montserrat-Medium}" />
+
+                            <Rectangle Width="15" Height="15" Margin="5 0 5 0" Fill="{Binding AvailabilityColor}" />
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
