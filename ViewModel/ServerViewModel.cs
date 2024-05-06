@@ -178,9 +178,9 @@ public class ServerViewModel : EntityViewModel
 
         TimeSpan timeSpan = TimeSpan.FromMilliseconds(ServerAutomationManager.Instance.CalculateTime(automationTime));
         AutomationEnabled = true;
-        NextAutomationHours = timeSpan.Hours.ToString();
-        NextAutomationMinutes = timeSpan.Minutes.ToString();
-        NextAutomationSeconds = timeSpan.Seconds.ToString();
+        NextAutomationHours = $"{timeSpan.Hours}";
+        NextAutomationMinutes = $"{timeSpan.Minutes:00}";
+        NextAutomationSeconds = $"{timeSpan.Seconds:00}";
 
         new Thread(() =>
             {
@@ -196,9 +196,9 @@ public class ServerViewModel : EntityViewModel
                     }
 
                     AutomationEnabled = true;
-                    NextAutomationHours = timeSpan.Hours.ToString();
-                    NextAutomationMinutes = timeSpan.Minutes.ToString();
-                    NextAutomationSeconds = timeSpan.Seconds.ToString();
+                    NextAutomationHours = $"{timeSpan.Hours}";
+                    NextAutomationMinutes = $"{timeSpan.Minutes:00}";
+                    NextAutomationSeconds = $"{timeSpan.Seconds:00}";
                     if (timeSpan.Hours == 0)
                     {
                         if (timeSpan.Minutes > 0)
