@@ -25,23 +25,30 @@
                 <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Left" Orientation="Horizontal"
                             Margin="0 0 0 15">
                     <Rectangle Width="15" Height="15" Margin="20 0 10 0" Fill="{DynamicResource tabSelected}" />
-                    <Border Background="{DynamicResource backgroundDark}" CornerRadius="3" Height="35">
-                        <TextBlock x:Name="AddressInfoBox" Text="{Binding AddressInfo}" VerticalAlignment="Center"
-                                   FontSize="20" Margin="10 7" />
+                    <Border Background="{DynamicResource backgroundDark}" CornerRadius="3" Height="35"
+                            MouseDown="CopyIP_Click" Margin="0 0 10 0">
+                        <TextBox x:Name="AddressInfoBox" Text="{Binding AddressInfo, Mode=OneWay}"
+                                 VerticalAlignment="Center"
+                                 Background="{DynamicResource backgroundDark}" BorderThickness="0"
+                                 Foreground="{DynamicResource textDefault}"
+                                 FontFamily="{DynamicResource Montserrat-Medium}"
+                                 PreviewMouseLeftButtonDown="CopyIP_Click"
+                                 FontSize="20" Margin="10 7" IsReadOnly="True" />
                     </Border>
-                    <Button x:Name="CopyButton" Click="CopyIP_Click" Width="89" Margin="10 0 10 0"
-                            Style="{DynamicResource TextButton}">
-                        <TextBlock x:Name="CopyButtonText" Text="Copy" FontSize="20" Margin="3 0"
-                                   FontFamily="{DynamicResource Montserrat-Medium}" />
-                    </Button>
-                    <Button x:Name="AvailabilityButton" Click="AvailabilityButton_OnClick" Width="230"
+                    <Popup x:Name="CopyIpPopup" IsOpen="False" Placement="Top" AllowsTransparency="True"
+                           PlacementTarget="{Binding ElementName=AddressInfoBox}" PopupAnimation="Fade">
+                        <Border Background="{DynamicResource backgroundDarker}" CornerRadius="3" Padding="5">
+                            <TextBlock Text="Copied" FontFamily="{DynamicResource Montserrat-Medium}" FontSize="15" />
+                        </Border>
+                    </Popup>
+                    <Button x:Name="AvailabilityButton" Click="AvailabilityButton_OnClick" Width="120"
                             ToolTip="{Binding AvailabilityTooltip}" ToolTipService.ShowOnDisabled="True"
                             ToolTipService.BetweenShowDelay="0"
                             ToolTipService.InitialShowDelay="0"
                             Margin="0 0 10 0" IsEnabled="{Binding IsAvailabilityCheckEnabled}"
                             Style="{DynamicResource TextButton}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock x:Name="AvailabilityButtonText" Text="Check Availability" FontSize="20"
+                            <TextBlock x:Name="AvailabilityButtonText" Text="Check" FontSize="20"
                                        Margin="3 0"
                                        FontFamily="{DynamicResource Montserrat-Medium}" />
 

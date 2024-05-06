@@ -57,14 +57,12 @@ public partial class NetworkPage : Page
         {
             Application.Current.Dispatcher?.Invoke(() =>
             {
-                CopyButtonText.Text = "Copied";
-                CopyButton.IsEnabled = false;
+                CopyIpPopup.IsOpen = true;
             });
             Thread.Sleep(1000);
-            Application.Current.Dispatcher.Invoke(() =>
+            Application.Current.Dispatcher?.Invoke(() =>
             {
-                CopyButtonText.Text = "Copy";
-                CopyButton.IsEnabled = true;
+                CopyIpPopup.IsOpen = false;
             });
         }) { IsBackground = true }.Start();
     }
