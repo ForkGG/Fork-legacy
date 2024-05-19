@@ -1,9 +1,10 @@
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using System.Windows.Threading;
+using Fork.Logic.Logging;
 using Fork.Logic.Model;
 using Fork.Logic.Model.MinecraftVersionModels;
+using Fork.logic.Utils;
 using Fork.Logic.WebRequesters;
 using Application = System.Windows.Application;
 
@@ -30,30 +31,67 @@ public sealed class VersionManager
         });
         Task.Run(async () =>
         {
-            List<ServerVersion> versions =
-                await WebRequestManager.Instance.GetVanillaVersions(Manifest.VersionType.release);
-            foreach (ServerVersion version in versions)
-                Application.Current?.Dispatcher?.InvokeAsync(() => VanillaVersions.Add(version),
-                    DispatcherPriority.Background);
-            versions = await WebRequestManager.Instance.GetVanillaVersions(Manifest.VersionType.snapshot);
-            foreach (ServerVersion version in versions)
-                Application.Current?.Dispatcher?.InvokeAsync(() => SnapshotVersions.Add(version));
+            try
+            {
+                List<ServerVersion> vanillaVersions =
+                    await WebRequestManager.Instance.GetVanillaVersions(Manifest.VersionType.release);
+                Application.Current?.Dispatcher?.InvokeAsync(() => VanillaVersions.AddRange(vanillaVersions));
+            }
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
+            }
 
-            versions = await WebRequestManager.Instance.GetPaperVersions();
-            foreach (ServerVersion version in versions)
-                Application.Current?.Dispatcher?.InvokeAsync(() => PaperVersions.Add(version));
+            try
+            {
+                List<ServerVersion> snapshotVersions =
+                    await WebRequestManager.Instance.GetVanillaVersions(Manifest.VersionType.snapshot);
+                Application.Current?.Dispatcher?.InvokeAsync(() => SnapshotVersions.AddRange(snapshotVersions));
+            }
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
+            }
 
-            versions = await WebRequestManager.Instance.GetPurpurVersions();
-            foreach (ServerVersion version in versions)
-                Application.Current?.Dispatcher?.InvokeAsync(() => PurpurVersions.Add(version));
+            try
+            {
+                List<ServerVersion> paperVersions = await WebRequestManager.Instance.GetPaperVersions();
+                Application.Current?.Dispatcher?.InvokeAsync(() => PaperVersions.AddRange(paperVersions));
+            }
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
+            }
 
-            versions = await WebRequestManager.Instance.GetSpigotVersions();
-            foreach (ServerVersion version in versions)
-                Application.Current?.Dispatcher?.InvokeAsync(() => SpigotVersions.Add(version));
+            try
+            {
+                List<ServerVersion> purpurVersions = await WebRequestManager.Instance.GetPurpurVersions();
+                Application.Current?.Dispatcher?.InvokeAsync(() => PurpurVersions.AddRange(purpurVersions));
+            }
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
+            }
 
-            versions = await WebRequestManager.Instance.GetFabricVersions();
-            foreach (ServerVersion version in versions)
-                Application.Current?.Dispatcher?.InvokeAsync(() => FabricVersions.Add(version));
+            try
+            {
+                List<ServerVersion> spigotVersions = await WebRequestManager.Instance.GetSpigotVersions();
+                Application.Current?.Dispatcher?.InvokeAsync(() => SpigotVersions.AddRange(spigotVersions));
+            }
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
+            }
+
+            try
+            {
+                List<ServerVersion> fabricVersions = await WebRequestManager.Instance.GetFabricVersions();
+                Application.Current?.Dispatcher?.InvokeAsync(() => FabricVersions.AddRange(fabricVersions));
+            }
+            catch (Exception e)
+            {
+                ErrorLogger.Append(e);
+            }
         });
     }
 
@@ -74,32 +112,32 @@ public sealed class VersionManager
     /// <summary>
     ///     The property that holds all Minecraft Vanilla Server versions
     /// </summary>
-    public ObservableCollection<ServerVersion> VanillaVersions { get; } = new();
+    public ObservableRangeCollection<ServerVersion> VanillaVersions { get; } = new();
 
     /// <summary>
     ///     The property that holds all Minecraft Snapshot Server versions
     /// </summary>
-    public ObservableCollection<ServerVersion> SnapshotVersions { get; } = new();
+    public ObservableRangeCollection<ServerVersion> SnapshotVersions { get; } = new();
 
     /// <summary>
     ///     The property that holds all PaperMC Server versions
     /// </summary>
-    public ObservableCollection<ServerVersion> PaperVersions { get; } = new();
+    public ObservableRangeCollection<ServerVersion> PaperVersions { get; } = new();
 
     /// <summary>
     ///     The property that holds all PurpurMC Server versions
     /// </summary>
-    public ObservableCollection<ServerVersion> PurpurVersions { get; } = new();
+    public ObservableRangeCollection<ServerVersion> PurpurVersions { get; } = new();
 
     /// <summary>
     ///     The property that holds all Minecraft Spigot Server versions
     /// </summary>
-    public ObservableCollection<ServerVersion> SpigotVersions { get; } = new();
+    public ObservableRangeCollection<ServerVersion> SpigotVersions { get; } = new();
 
     /// <summary>
     ///     The property that holds all Minecraft Fabric Server versions
     /// </summary>
-    public ObservableCollection<ServerVersion> FabricVersions { get; } = new();
+    public ObservableRangeCollection<ServerVersion> FabricVersions { get; } = new();
 
     public async Task<int> GetLatestBuild(ServerVersion version)
     {
