@@ -15,6 +15,9 @@ internal class ServerTypeRadioButton : RadioButton
     public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register(
         "Header", typeof(string), typeof(ServerTypeRadioButton), new PropertyMetadata(""));
 
+    public static readonly DependencyProperty IsLoadingProperty = DependencyProperty.Register(
+        "IsLoading", typeof(bool), typeof(ServerTypeRadioButton), new PropertyMetadata(false));
+
     static ServerTypeRadioButton()
     {
         DefaultStyleKeyProperty.OverrideMetadata(typeof(ServerTypeRadioButton),
@@ -26,4 +29,6 @@ internal class ServerTypeRadioButton : RadioButton
     public ImageSource HoverIconSource { get; set; }
 
     public string Header { get; set; }
+
+    public bool IsLoading { get; set; }
 }

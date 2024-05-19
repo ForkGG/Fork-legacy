@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:converter="clr-namespace:Fork.View.Xaml.Converter"
       xmlns:controls="clr-namespace:Fork.View.Xaml2.Controls"
       mc:Ignorable="d"
       d:DesignHeight="1200" d:DesignWidth="1000"
@@ -11,6 +12,7 @@
     <Page.Resources>
         <FontFamily x:Key="Montserrat-Bold">pack://application:,,,/View/Resources/Fonts/Montserrat-Bold.ttf#Montserrat</FontFamily>
         <FontFamily x:Key="Montserrat-SemiBold">pack://application:,,,/View/Resources/Fonts/Montserrat-Bold.ttf#Montserrat SemiBold</FontFamily>
+        <converter:InvertBoolConverter x:Key="InvertBoolConverter" />
     </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -36,26 +38,35 @@
                                     IconSource="pack://application:,,,/View/Resources/images/Icons/VanillaD.png"
                                     HoverIconSource="pack://application:,,,/View/Resources/images/Icons/VanillaW.png"
                                     Header="Vanilla" GroupName="createServerTypes" Margin="10 10" IsChecked="True"
+                                    IsLoading="{Binding VanillaVersionsLoading}"
+                                    IsEnabled="{Binding VanillaVersionsLoading, Converter={StaticResource InvertBoolConverter}}"
                                     Click="ServerTypeVanilla_Click" />
                                 <controls:ServerTypeRadioButton
                                     IconSource="pack://application:,,,/View/Resources/images/Icons/SnapshotD.png"
                                     HoverIconSource="pack://application:,,,/View/Resources/images/Icons/SnapshotW.png"
                                     Header="Snapshot" GroupName="createServerTypes" Margin="10 10"
+                                    IsLoading="{Binding SnapshotVersionsLoading}"
+                                    IsEnabled="{Binding SnapshotVersionsLoading, Converter={StaticResource InvertBoolConverter}}"
                                     Click="ServerTypeSnapshot_Click" />
                                 <controls:ServerTypeRadioButton
                                     IconSource="pack://application:,,,/View/Resources/images/Icons/PaperD.png"
                                     HoverIconSource="pack://application:,,,/View/Resources/images/Icons/PaperW.png"
                                     Header="Paper" GroupName="createServerTypes" Margin="10 10"
+                                    IsLoading="{Binding PaperVersionsLoading}"
+                                    IsEnabled="{Binding PaperVersionsLoading, Converter={StaticResource InvertBoolConverter}}"
                                     Click="ServerTypePaper_Click" />
                                 <controls:ServerTypeRadioButton
                                     IconSource="pack://application:,,,/View/Resources/images/Icons/WaterfallD.png"
                                     HoverIconSource="pack://application:,,,/View/Resources/images/Icons/WaterfallW.png"
                                     Header="Waterfall" GroupName="createServerTypes" Margin="10 10"
+                                    IsLoading="False"
                                     Click="ServerTypeWaterfall_Click" />
                                 <controls:ServerTypeRadioButton
                                     IconSource="pack://application:,,,/View/Resources/images/Icons/SpigotD.png"
                                     HoverIconSource="pack://application:,,,/View/Resources/images/Icons/SpigotW.png"
                                     Header="Spigot" GroupName="createServerTypes" Margin="10 10"
+                                    IsLoading="{Binding SpigotVersionsLoading}"
+                                    IsEnabled="{Binding SpigotVersionsLoading, Converter={StaticResource InvertBoolConverter}}"
                                     Click="ServerTypeSpigot_Click" />
                                 <controls:ServerTypeRadioButton
                                     IconSource="pack://application:,,,/View/Resources/images/Icons/BukkitD.png"
@@ -65,16 +76,21 @@
                                     IconSource="pack://application:,,,/View/Resources/images/Icons/BungeeCordD.png"
                                     HoverIconSource="pack://application:,,,/View/Resources/images/Icons/BungeeCordW.png"
                                     Header="BungeeCord" GroupName="createServerTypes" Margin="10 10"
+                                    IsLoading="False"
                                     Click="ServerTypeBungeeCord_Click" />
                                 <controls:ServerTypeRadioButton
                                     IconSource="pack://application:,,,/View/Resources/images/Icons/PurpurD.png"
                                     HoverIconSource="pack://application:,,,/View/Resources/images/Icons/PurpurW.png"
                                     Header="Purpur" GroupName="createServerTypes" Margin="10 10"
+                                    IsLoading="{Binding PurpurVersionsLoading}"
+                                    IsEnabled="{Binding PurpurVersionsLoading, Converter={StaticResource InvertBoolConverter}}"
                                     Click="ServerTypePurpur_Click" />
                                 <controls:ServerTypeRadioButton
                                     IconSource="pack://application:,,,/View/Resources/images/Icons/FabricD.png"
                                     HoverIconSource="pack://application:,,,/View/Resources/images/Icons/FabricW.png"
                                     Header="Fabric" GroupName="createServerTypes" Margin="10 10"
+                                    IsLoading="{Binding FabricVersionsLoading}"
+                                    IsEnabled="{Binding FabricVersionsLoading, Converter={StaticResource InvertBoolConverter}}"
                                     Click="ServerTypeFabric_Click" />
                             </WrapPanel>
                         </StackPanel>

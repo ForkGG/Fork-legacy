@@ -9,6 +9,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/Styles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/WindowStyles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/LoadingSpinner.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/ButtonStyles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/DefaultTheme.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/View/Resources/dictionaries/RadioButtonStyles.xaml" />
