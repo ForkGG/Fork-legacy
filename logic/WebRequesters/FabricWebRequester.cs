@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Fork.Logic.Logging;
@@ -14,7 +15,54 @@ public class FabricWebRequester
 {
     public async Task<List<ServerVersion>> RequestFabricVersions()
     {
-        string url = "https://serverjars.com/api/fetchAll/modded/fabric";
+        string url = "https://meta.fabricmc.net/v2/versions/game";
+        string json = await GetJsonFromUrl(url);
+
+        FabricVersion[] fabricVersions = JsonConvert.DeserializeObject<FabricVersion[]>(json);
+        string installerVersion = await GetLatestInstallerVersion();
+        string loaderVersion = await GetMatchingLoaderVersion();
+
+        List<ServerVersion> serverVersions = new();
+        foreach (FabricVersion fabricVersion in fabricVersions)
+        {
+            if (!fabricVersion.stable)
+            {
+                continue;
+            }
+
+            serverVersions.Add(new ServerVersion
+            {
+                Type = ServerVersion.VersionType.Fabric,
+                Version = fabricVersion.version,
+                JarLink =
+                    $"https://meta.fabricmc.net/v2/versions/loader/{fabricVersion.version}/{loaderVersion}/{installerVersion}/server/jar"
+            });
+        }
+
+        return serverVersions;
+    }
+
+    private async Task<string> GetLatestInstallerVersion()
+    {
+        string url = "https://meta.fabricmc.net/v2/versions/installer/";
+        string json = await GetJsonFromUrl(url);
+
+        FabricInstallerVersion[] installerVersions = JsonConvert.DeserializeObject<FabricInstallerVersion[]>(json);
+        return installerVersions.First(i => i.stable).version;
+    }
+
+    private async Task<string> GetMatchingLoaderVersion()
+    {
+        // TODO Currently all versions are compatible with the latest loader
+        string url = "https://meta.fabricmc.net/v2/versions/loader";
+        string json = await GetJsonFromUrl(url);
+
+        FabricLoaderVersion[] loaderVersions = JsonConvert.DeserializeObject<FabricLoaderVersion[]>(json);
+        return loaderVersions.First(l => l.stable).version;
+    }
+
+    private async Task<string> GetJsonFromUrl(string url)
+    {
         string json = ResponseCache.Instance.UncacheResponse(url);
         if (json == null)
         {
@@ -24,15 +72,9 @@ public class FabricWebRequester
                 HttpWebRequest request = WebRequest.CreateHttp(uri);
                 request.UserAgent = ApplicationManager.UserAgent;
                 using (WebResponse response = request.GetResponse())
-                using (Stream stream = response.GetResponseStream())
+                await using (Stream stream = response.GetResponseStream())
                 using (StreamReader reader = new(stream))
                     json = await reader.ReadToEndAsync();
-
-                dynamic fullResponse = JsonConvert.DeserializeObject(json);
-                if (!fullResponse.status.ToString().Equals("success"))
-                {
-                    throw new Exception("Invalid response from serverjars.com. No or wrong status found!");
-                }
 
                 ResponseCache.Instance.CacheResponse(url, json);
             }
@@ -40,30 +82,38 @@ public class FabricWebRequester
             {
                 ErrorLogger.Append(e);
                 Console.WriteLine(
-                    "Could not receive Fabric Versions (either serverjars.com is down or your Internet connection is not working)");
-                return new List<ServerVersion>();
+                    "Could not receive Fabric Versions (either meta.fabricmc.net is down or your Internet connection is not working)");
+                return null;
             }
             catch (Exception e)
             {
                 ErrorLogger.Append(e);
                 Console.WriteLine(
-                    "Error parsing response from serverjars.com! If you see this report it to a Fork maintainer.");
-                return new List<ServerVersion>();
+                    "Error parsing response from meta.fabricmc.net! If you see this report it to a Fork maintainer.");
+                return null;
             }
         }
 
-        dynamic dyn = JsonConvert.DeserializeObject(json);
-        dyn = dyn.response;
-        List<ServerVersion> result = new();
-        foreach (dynamic version in dyn)
-        {
-            ServerVersion serverVersion = new();
-            serverVersion.Type = ServerVersion.VersionType.Fabric;
-            serverVersion.Version = version.version;
-            serverVersion.JarLink = "https://serverjars.com/api/fetchJar/modded/fabric/" + version.version;
-            result.Add(serverVersion);
-        }
+        return json;
+    }
 
-        return result;
+    private record FabricVersion
+    {
+        public string version { get; set; }
+        public bool stable { get; set; }
+    }
+
+    private record FabricInstallerVersion
+    {
+        public string url { get; set; }
+        public string maven { get; set; }
+        public string version { get; set; }
+        public bool stable { get; set; }
+    }
+
+    private record FabricLoaderVersion
+    {
+        public string version { get; set; }
+        public bool stable { get; set; }
     }
 }
