@@ -125,7 +125,8 @@ public partial class MainWindow : Window
     private void InitializeSystemTrayNotifyIcon()
     {
         systemTrayIcon = new NotifyIcon();
-        systemTrayIcon.Icon = new Icon("icon.ico");
+        systemTrayIcon.Icon =
+            new Icon(Application.GetResourceStream(new Uri("pack://application:,,,/icon.ico")).Stream);
         systemTrayIcon.Visible = false;
         systemTrayIcon.DoubleClick += delegate { ShowApplication(); };
         systemTrayIcon.Text = "Fork";
