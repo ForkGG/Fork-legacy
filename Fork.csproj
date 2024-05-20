@@ -111,11 +111,11 @@
         <None Remove="View\Resources\images\vanillaSymbol.png"/>
         <None Remove="View\Resources\SyntaxHighlighting\Python.xshd"/>
         <None Remove="View\Resources\SyntaxHighlighting\YAML.xshd"/>
-        <None Include="icon.ico">
+        <Resource Include="icon.ico">
             <Pack>True</Pack>
             <PackagePath></PackagePath>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
+        </Resource>
         <None Include="LICENSE">
             <Pack>True</Pack>
             <PackagePath></PackagePath>
