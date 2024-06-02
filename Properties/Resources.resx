@@ -138,8 +138,8 @@
     <value>Fork Client - fork.gg - contact@fork.gg</value>
   </data>
     <data name="VersionBeta" xml:space="preserve">
-    <value>1</value>
-  </data>
+        <value>0</value>
+    </data>
     <data name="VersionMajor" xml:space="preserve">
     <value>0</value>
   </data>
