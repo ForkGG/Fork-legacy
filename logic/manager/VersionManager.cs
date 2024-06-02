@@ -41,7 +41,9 @@ public sealed class VersionManager
             {
                 ErrorLogger.Append(e);
             }
-
+        });
+        Task.Run(async () =>
+        {
             try
             {
                 List<ServerVersion> snapshotVersions =
@@ -52,7 +54,9 @@ public sealed class VersionManager
             {
                 ErrorLogger.Append(e);
             }
-
+        });
+        Task.Run(async () =>
+        {
             try
             {
                 List<ServerVersion> paperVersions = await WebRequestManager.Instance.GetPaperVersions();
@@ -62,7 +66,9 @@ public sealed class VersionManager
             {
                 ErrorLogger.Append(e);
             }
-
+        });
+        Task.Run(async () =>
+        {
             try
             {
                 List<ServerVersion> purpurVersions = await WebRequestManager.Instance.GetPurpurVersions();
@@ -72,7 +78,9 @@ public sealed class VersionManager
             {
                 ErrorLogger.Append(e);
             }
-
+        });
+        Task.Run(async () =>
+        {
             try
             {
                 List<ServerVersion> spigotVersions = await WebRequestManager.Instance.GetSpigotVersions();
@@ -82,7 +90,9 @@ public sealed class VersionManager
             {
                 ErrorLogger.Append(e);
             }
-
+        });
+        Task.Run(async () =>
+        {
             try
             {
                 List<ServerVersion> fabricVersions = await WebRequestManager.Instance.GetFabricVersions();
