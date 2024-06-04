@@ -135,6 +135,13 @@ public class Player : IEquatable<Player>
         NameUid nameUid = JsonConvert.DeserializeObject<NameUid>(nameUidString);
 
         Uid = nameUid.id;
+        if (Uid == null)
+        {
+            Console.WriteLine(
+                $"Failed to retrieve UID with successful Mojang response. (Name: {Name}, Response {nameUidString})");
+            Uid = CalculateOfflineUuid(Name);
+            OfflineChar = true;
+        }
     }
 
     private void CacheProfileJson(FullProfile profile)
