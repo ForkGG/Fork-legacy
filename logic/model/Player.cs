@@ -337,38 +337,38 @@ public class Player : IEquatable<Player>
     private class NameUid
     {
         public string name { get; set; }
-        public string id { get; }
+        public string id { get; set; }
     }
 
     private class FullProfile
     {
-        public string id { get; }
-        public string name { get; }
-        public List<Property> properties { get; }
+        public string id { get; set; }
+        public string name { get; set; }
+        public List<Property> properties { get; set; }
     }
 
     private class Property
     {
         public string name { get; set; }
-        public string value { get; }
+        public string value { get; set; }
     }
 
     private class Profile
     {
         public long timestamp { get; set; }
-        public string profileId { get; }
+        public string profileId { get; set; }
         public string profileName { get; set; }
-        public Textures textures { get; }
+        public Textures textures { get; set; }
     }
 
     private class Textures
     {
-        public Skin SKIN { get; }
+        public Skin SKIN { get; set; }
     }
 
     private class Skin
     {
-        public string url { get; }
+        public string url { get; set; }
     }
 
     private class Cape
