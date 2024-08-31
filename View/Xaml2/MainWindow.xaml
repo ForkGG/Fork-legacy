@@ -448,8 +448,7 @@
                     <Border CornerRadius="4" Width="200" DockPanel.Dock="Right" Height="26"
                             Background="{DynamicResource textBackground}">
                         <TextBox Margin="5 0" Background="{DynamicResource textBackground}"
-                                 x:Name="NewServerName" TextAlignment="Center"
-                                 BorderThickness="0" Text="{Binding SelectedEntity.Name}"
+                                 x:Name="NewServerName" TextAlignment="Center" BorderThickness="0" 
                                  Foreground="{DynamicResource backgroundDark}"
                                  FontFamily="{DynamicResource Montserrat-SemiBold}"
                                  FontSize="17" Height="20" />

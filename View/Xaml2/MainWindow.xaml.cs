@@ -66,6 +66,7 @@ public partial class MainWindow : Window
 
     private void RenameOpen_Click(object sender, RoutedEventArgs e)
     {
+        NewServerName.Text = viewModel.SelectedEntity.Name;
         if (viewModel.SelectedEntity is ServerViewModel)
         {
             RenameServerOverlay.Visibility = Visibility.Visible;
