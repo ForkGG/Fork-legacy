@@ -14,7 +14,7 @@ public class PaperWebRequester
 {
     public List<string> RequestPaperVersions()
     {
-        string url = "https://papermc.io/api/v2/projects/paper";
+        string url = "https://api.papermc.io/v2/projects/paper";
         string json = ResponseCache.Instance.UncacheResponse(url);
         if (json == null)
         {
@@ -51,7 +51,7 @@ public class PaperWebRequester
 
     public async Task<int> RequestLatestBuildId(string version)
     {
-        string url = "https://papermc.io/api/v2/projects/paper/versions/" + version;
+        string url = "https://api.papermc.io/v2/projects/paper/versions/" + version;
         {
             try
             {

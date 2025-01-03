@@ -14,7 +14,7 @@ public class WaterfallWebRequester
 {
     public async Task<ServerVersion> RequestLatestWaterfallVersion()
     {
-        string url = "https://papermc.io/api/v2/projects/waterfall";
+        string url = "https://api.papermc.io/v2/projects/waterfall";
         string json = ResponseCache.Instance.UncacheResponse(url);
         if (json == null)
         {
@@ -53,7 +53,7 @@ public class WaterfallWebRequester
         waterfallVersion.JarLink = "https://thatstupidpaperremovedv1api.madebyitoncek.repl.co/api/v1/waterfall/" +
                                    waterfallVersions.versions[0] + "/latest/download";
         waterfallVersion.JarLink =
-            $"https://papermc.io/api/v2/projects/waterfall/versions/{version}/builds/{build}/downloads/waterfall-{version}-{build}.jar";
+            $"https://api.papermc.io/v2/projects/waterfall/versions/{version}/builds/{build}/downloads/waterfall-{version}-{build}.jar";
 
 
         return waterfallVersion;
@@ -61,7 +61,7 @@ public class WaterfallWebRequester
 
     private async Task<int> RequestLatestBuildId(string version)
     {
-        string url = "https://papermc.io/api/v2/projects/waterfall/versions/" + version;
+        string url = "https://api.papermc.io/v2/projects/waterfall/versions/" + version;
         {
             try
             {
