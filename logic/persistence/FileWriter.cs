@@ -46,7 +46,10 @@ public class FileWriter
 
     public void AppendToErrorLog(string line)
     {
-        FileInfo errorFile = new(Path.Combine(App.ApplicationPath, "logs", "errorLog.txt"));
+        string logDirectory = Path.Combine(App.ApplicationPath, "logs");
+        Directory.CreateDirectory(logDirectory);
+
+        FileInfo errorFile = new(Path.Combine(logDirectory, "errorLog.txt"));
         if (!errorFile.Exists)
         {
             errorFile.Create().Close();
