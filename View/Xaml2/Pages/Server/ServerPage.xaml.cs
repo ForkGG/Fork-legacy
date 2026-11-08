@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -27,6 +28,7 @@ public partial class ServerPage : Page
         subPages.Add(terminalPage);
         subPages.Add(settingsPage);
         subPages.Add(worldsPage);
+        subPages.Add(backupsPage);
         subPages.Add(pluginsPage);
     }
 
@@ -61,7 +63,15 @@ public partial class ServerPage : Page
 
     private void CopyIP_Click(object sender, RoutedEventArgs e)
     {
-        Clipboard.SetText(AddressInfoBox.Text);
+        try
+        {
+            Clipboard.SetText(AddressInfoBox.Text);
+        }
+        catch (COMException)
+        {
+            //The clipboard is busy (held open by another application). Copying failed.
+            return;
+        }
 
         new Thread(() =>
         {
@@ -93,6 +103,12 @@ public partial class ServerPage : Page
     {
         HideAllPages();
         worldsPage.Visibility = Visibility.Visible;
+    }
+
+    private void SelectBackups(object sender, RoutedEventArgs e)
+    {
+        HideAllPages();
+        backupsPage.Visibility = Visibility.Visible;
     }
 
     private void SelectPlugins(object sender, RoutedEventArgs e)

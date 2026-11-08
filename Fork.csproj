@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
@@ -26,6 +26,8 @@
         <None Remove="View\Resources\images\DeafultHead.png"/>
         <None Remove="View\Resources\images\Icons\Add.png"/>
         <None Remove="View\Resources\images\Icons\AddW.png"/>
+        <None Remove="View\Resources\images\Icons\Backup.png"/>
+        <None Remove="View\Resources\images\Icons\BackupW.png"/>
         <None Remove="View\Resources\images\Icons\Banned.png"/>
         <None Remove="View\Resources\images\Icons\BannedW.png"/>
         <None Remove="View\Resources\images\Icons\Boi.png"/>
@@ -155,6 +157,8 @@
         <Resource Include="View\Resources\images\DeafultHead.png"/>
         <Resource Include="View\Resources\images\Icons\Add.png"/>
         <Resource Include="View\Resources\images\Icons\AddW.png"/>
+        <Resource Include="View\Resources\images\Icons\Backup.png"/>
+        <Resource Include="View\Resources\images\Icons\BackupW.png"/>
         <Resource Include="View\Resources\images\Icons\Banned.png"/>
         <Resource Include="View\Resources\images\Icons\BannedW.png"/>
         <Resource Include="View\Resources\images\Icons\Bukkit.png"/>

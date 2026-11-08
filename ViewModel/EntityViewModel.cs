@@ -205,6 +205,7 @@ public abstract class EntityViewModel : BaseViewModel
     public string ConsoleIn { get; set; } = "";
     public ServerStatus CurrentStatus { get; set; }
     public bool ServerRunning => CurrentStatus == ServerStatus.RUNNING;
+    public bool ServerStopped => CurrentStatus == ServerStatus.STOPPED;
 
     public string AddressInfo { get; set; }
 

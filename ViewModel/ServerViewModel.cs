@@ -11,6 +11,7 @@ using Fork.Logic.ImportLogic;
 using Fork.Logic.Manager;
 using Fork.Logic.Model;
 using Fork.Logic.Model.Automation;
+using Fork.Logic.Model.BackupModels;
 using Fork.Logic.Persistence;
 using Fork.Logic.RoleManagement;
 using Fork.View.Xaml2.Pages.Server;
@@ -66,6 +67,7 @@ public class ServerViewModel : EntityViewModel
         Application.Current.Dispatcher.Invoke(new Action(() => EntityPage = new ServerPage(this)));
         Application.Current.Dispatcher.Invoke(new Action(() => ConsolePage = new ConsolePage(this)));
         Application.Current.Dispatcher.Invoke(new Action(() => WorldsPage = new WorldsPage(this)));
+        Application.Current.Dispatcher.Invoke(new Action(() => BackupsPage = new BackupsPage(this)));
         Application.Current.Dispatcher.Invoke(new Action(() =>
             PluginsPage = new PluginsPage(new PluginViewModel(this))));
         Application.Current.Dispatcher.Invoke(new Action(() => SettingsViewModel = new SettingsViewModel(this)));
@@ -77,6 +79,9 @@ public class ServerViewModel : EntityViewModel
 
         Worlds = new ObservableCollection<World>();
         Worlds.CollectionChanged += WorldsChanged;
+
+        Backups = new ObservableCollection<Backup>();
+        Backups.CollectionChanged += BackupsChanged;
 
         InitializeLists(Server);
 
@@ -102,6 +107,7 @@ public class ServerViewModel : EntityViewModel
     public ObservableCollection<Player> WhiteList { get; set; } = new();
     public ObservableCollection<ServerVersion> Versions { get; set; } = new();
     public ObservableCollection<World> Worlds { get; set; }
+    public ObservableCollection<Backup> Backups { get; set; }
 
     public Server Server => Entity as Server;
 
@@ -117,11 +123,22 @@ public class ServerViewModel : EntityViewModel
 
     public Page WorldsPage { get; set; }
 
+    public Page BackupsPage { get; set; }
+
+    public bool BackupInProgress { get; set; }
+
+    public double BackupProgress { get; set; }
+
+    public bool RestoreInProgress { get; set; }
+
+    public double RestoreProgress { get; set; }
+
     public void InitializeLists(Server server)
     {
         Task.Run(async () =>
         {
             InitializeWorldsList();
+            InitializeBackupsList();
             RoleUpdater.InitializeList(RoleType.WHITELIST, WhiteList, Server);
             RoleUpdater.InitializeList(RoleType.BAN_LIST, BanList, Server);
             RoleUpdater.InitializeList(RoleType.OP_LIST, OPList, Server);
@@ -276,6 +293,11 @@ public class ServerViewModel : EntityViewModel
         }
     }
 
+    public void InitializeBackupsList()
+    {
+        BackupManager.Instance.InitializeBackupsList(this);
+    }
+
     public void RefreshPlayerList()
     {
         PlayerList.Sort();
@@ -308,6 +330,11 @@ public class ServerViewModel : EntityViewModel
     private void WorldsChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
         raisePropertyChanged(nameof(Worlds));
+    }
+
+    private void BackupsChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        raisePropertyChanged(nameof(Backups));
     }
 
     private void BanListChanged(object sender, NotifyCollectionChangedEventArgs e)
