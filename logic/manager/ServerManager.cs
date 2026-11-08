@@ -319,6 +319,7 @@ public sealed class ServerManager
             }
 
             directoryInfo.MoveTo(Path.Combine(App.ServerPath, newName));
+            BackupManager.Instance.RenameBackupFolder(viewModel.Name, newName);
 
             viewModel.Name = newName;
             ApplicationManager.Instance.TriggerServerListEvent(this, new EventArgs());
